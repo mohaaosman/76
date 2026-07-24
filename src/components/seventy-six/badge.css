@@ -1,0 +1,23 @@
+/* B23 · Badge — mono category tag. Rectilinear, never a pill. */
+
+@layer sv-components {
+  .sv-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 6px;
+    border: 1px solid var(--sv-line);
+    border-radius: var(--sv-r);
+    background: var(--sv-wall);
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--sv-ink-soft);
+    white-space: nowrap;
+  }
+
+  .sv-badge--seed {
+    border-color: var(--sv-seed-tint);
+    background: var(--sv-seed-tint);
+    color: var(--sv-seed-text);
+  }
+}
