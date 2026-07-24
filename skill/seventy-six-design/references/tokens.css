@@ -96,3 +96,61 @@
     --sv-seed-tint: #FCF0EA;
   }
 }
+
+/* ============================================================
+   Dark mode — the disciplined dark surface (v0.2.0).
+   Light stays the default (light-first). Dark is opt-in via
+   <html data-mode="dark"> and changes ONLY these tokens:
+   the same paper-on-a-wall physics, inverted. Cards stay the
+   lightest surface in view; the band stays the darkest.
+   Functional + seed-as-text steps are re-verified AA on dark
+   paper (#1B1F26). Nothing else may change per mode.
+   ============================================================ */
+
+@layer sv-tokens {
+  :root {
+    color-scheme: light;
+  }
+
+  [data-mode='dark'] {
+    color-scheme: dark;
+
+    /* neutrals — inverted ladder, paper is the LIGHTEST surface */
+    --sv-band:       #0D1014;   /* chrome stays the darkest thing on screen */
+    --sv-band-line:  #232932;
+    --sv-band-soft:  #8A93A2;
+    --sv-wall:       #121519;   /* the wall recedes */
+    --sv-paper:      #1B1F26;   /* cards read as raised paper */
+    --sv-ink:        #E6E9EE;   /* 13.9:1 on dark paper */
+    --sv-ink-soft:   #A7AFBB;   /* 7.4:1 on dark paper — AA */
+    --sv-ink-faint:  #6E7784;   /* never a sole carrier (C2), same as light */
+    --sv-line:       #272D36;
+    --sv-field-line: #3A414C;
+    --sv-compare:    #3C434E;   /* comparison series on dark grids */
+
+    /* functional — brightened to hold AA on dark paper */
+    --sv-ok:         #4CC38A;   /* ≥ 4.5:1 on #1B1F26 */
+    --sv-bad:        #F0705F;   /* ≥ 4.5:1 on #1B1F26 */
+
+    /* seed-as-surface is unchanged (white-on-seed already passed C1);
+       seed-as-text brightens per seed below; tint derives from the seed
+       so every registered seed gets a correct dark tint for free. */
+    --sv-seed-tint:  color-mix(in srgb, var(--sv-seed) 16%, var(--sv-paper));
+
+    --sv-scrim:      rgba(0, 0, 0, 0.55);
+    --sv-shadow:     0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+
+  [data-mode='dark'][data-seed='cobalt'],
+  [data-mode='dark']:not([data-seed]) {
+    --sv-seed-text: #7C9BF2;    /* cobalt as text on dark paper — AA */
+  }
+
+  [data-mode='dark'][data-seed='verdigris'] {
+    --sv-seed-text: #35BFA4;
+  }
+
+  [data-mode='dark'][data-seed='signal'] {
+    --sv-seed-text: #F59A6B;
+  }
+}

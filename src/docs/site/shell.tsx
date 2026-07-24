@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { Band, BandTopbar, BandNav, BandSubTabs } from '@/components/seventy-six';
@@ -12,6 +13,17 @@ import { categories } from '../content';
  */
 export function Shell({ onSearch }: { onSearch: () => void }) {
   const { pathname } = useLocation();
+
+  /* v0.2.0 — the dark surface. Light-first: light is the default,
+     dark is opt-in and persisted. Only tokens change. */
+  const [mode, setMode] = useState<'light' | 'dark'>(
+    () => (localStorage.getItem('sv-mode') === 'dark' ? 'dark' : 'light'),
+  );
+  useEffect(() => {
+    if (mode === 'dark') document.documentElement.dataset.mode = 'dark';
+    else delete document.documentElement.dataset.mode;
+    localStorage.setItem('sv-mode', mode);
+  }, [mode]);
 
   const nav: BandNavItem[] = [
     { label: 'Introduction', href: '/', active: pathname === '/' },
@@ -50,9 +62,19 @@ export function Shell({ onSearch }: { onSearch: () => void }) {
           app="Design System"
           nav={<BandNav items={nav} renderLink={renderLink} />}
           utilities={
+            <>
+            <button
+              type="button"
+              className="site-search sv-mono"
+              aria-pressed={mode === 'dark'}
+              onClick={() => setMode((m) => (m === 'dark' ? 'light' : 'dark'))}
+            >
+              {mode === 'dark' ? 'LIGHT' : 'DARK'}
+            </button>
             <button type="button" className="site-search sv-mono" onClick={onSearch}>
               SEARCH <kbd className="site-kbd">⌘K</kbd>
             </button>
+            </>
           }
         />
         <BandSubTabs items={subtabs} renderLink={renderLink} />
