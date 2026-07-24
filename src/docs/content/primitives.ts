@@ -237,7 +237,7 @@ export const primitives: DocEntry[] = [
     files: ['components/seventy-six/dialog.tsx', 'components/seventy-six/dialog.css'],
     intro: [
       'Built on the platform: <code>showModal()</code> gives us the top layer, focus trapping, Esc handling, and <code>::backdrop</code> without a single dependency. The scrim is flat <code>rgba(27,31,38,.4)</code> — no blur, because glassmorphism is banned.',
-      'Anatomy: 15/700 title, 13/1.55 soft body, right-aligned footer with a ghost cancel and <b>one</b> primary or danger action. 480px max width; forms get 640px via <code>wide</code>. There is no "X" close button as the only path out — the footer always carries a named cancel.',
+      'Anatomy: 15/700 title, 13/1.55 soft body, right-aligned footer with a ghost cancel and <b>one</b> primary or danger action. Three sizes: default 480px, <code>wide</code> 640px for forms, and <code>full</code> — a full-screen takeover for tasks that replace the page (composers, review flows), where the dialog becomes the wall and the work inside stays paper-on-wall. Only the full size gets a close button; smaller dialogs always exit through a named footer cancel.',
       'Destructive confirms follow B10: the dialog title names the object ("Delete ORD-10482?"), and the confirming button is the single place a red fill is legal (<code>data-confirm</code> on a danger Button).',
     ],
     examples: [
@@ -263,6 +263,25 @@ const [open, setOpen] = useState(false);
 >
   The order moves to the archive and leaves the open-orders table.
   You can restore it from Reports → Archive.
+</Dialog>`,
+      },
+      {
+        title: 'Full-screen dialog',
+        description: 'size="full" — the dialog becomes the page: wall background, 1280px container, visible close, no scrim dismissal.',
+        demoKey: 'dialog-full',
+        code: `<Dialog
+  open={open}
+  onClose={() => setOpen(false)}
+  title="Compose purchase order"
+  size="full"
+  footer={
+    <>
+      <Button variant="ghost" onClick={() => setOpen(false)}>Discard</Button>
+      <Button variant="primary" onClick={submit}>Create purchase order</Button>
+    </>
+  }
+>
+  {/* A full working surface: Rows, Cards, Fields */}
 </Dialog>`,
       },
       {
@@ -295,7 +314,8 @@ const [open, setOpen] = useState(false);
           { name: 'open', type: 'boolean', description: 'Controlled visibility; drives showModal()/close().' },
           { name: 'onClose', type: '() => void', description: 'Called on Esc, scrim click (non-destructive), or your cancel button.' },
           { name: 'title', type: 'string', description: 'The 15/700 title; wired to aria-labelledby. Required.' },
-          { name: 'wide', type: 'boolean', defaultValue: 'false', description: '640px max width for forms; default 480px.' },
+          { name: 'size', type: "'default' | 'wide' | 'full'", defaultValue: "'default'", description: '480px · 640px (forms) · full-screen takeover with visible close.' },
+          { name: 'wide', type: 'boolean', defaultValue: 'false', description: 'Deprecated 0.1.x alias for size="wide".' },
           { name: 'destructive', type: 'boolean', defaultValue: 'false', description: 'Scrim click no longer closes; Esc still works unless preventEscape.' },
           { name: 'preventEscape', type: 'boolean', defaultValue: 'false', description: 'Blocks Esc while a destructive action is mid-flight.' },
           { name: 'footer', type: 'ReactNode', description: 'Right-aligned actions: ghost cancel + ONE primary/danger.' },
@@ -329,21 +349,22 @@ const [open, setOpen] = useState(false);
   /* ================================================================ B14 */
   {
     slug: 'toast',
-    name: 'Toast',
+    name: 'Notification',
     book: 'B14',
     category: 'primitives',
-    tagline: 'Bottom-left paper slips for success and neutral info only — errors always render inline at their source.',
-    job: 'Confirm that something finished, without demanding attention.',
-    tags: ['toast', 'notification', 'aria-live', 'auto-dismiss', 'success-feedback'],
+    tagline: 'Bottom-left paper notifications — title, description, icon, four tones, two sizes. Errors still render inline first.',
+    job: 'Report that something happened, without demanding attention.',
+    tags: ['toast', 'notification', 'aria-live', 'auto-dismiss', 'tones', 'title-description'],
     exports: ['ToastProvider', 'useToast'],
     files: ['components/seventy-six/toast.tsx', 'components/seventy-six/toast.css'],
     intro: [
-      'Toasts are the system\'s quietest voice: a paper card with a 2px left rule (seed for info, green for ok), bottom-left, auto-dismissing after 5 seconds with pause-on-hover, at most two stacked. They confirm; they never warn — an error belongs inline next to the field or row that caused it (Firewall A2).',
-      'Wrap the app once in <code>ToastProvider</code>; fire from anywhere with <code>useToast()</code>. A toast may repeat an available action ("Undo" also in context) but must never be the only path to one.',
+      'Notifications are the system\'s quietest voice: a paper card bottom-left with a 2px left tone rule, a 16px tone icon, a 13/700 title, and an optional one-sentence description. Four tones — <code>info</code> (seed), <code>ok</code> (green), <code>warn</code> (ink — no amber enters the system), <code>bad</code> (red) — and two sizes (360px / 440px). ok/info auto-dismiss after 5s with pause-on-hover; warn/bad persist until dismissed and announce assertively.',
+      'The B14 discipline holds: an error ALWAYS renders inline at its source first — a <code>bad</code> notification may echo a failure that happened elsewhere (a background job, another tab), never replace the inline surface (Firewall A2). At most three stack; older ones yield.',
+      'Wrap the app once in <code>ToastProvider</code>; fire <code>notify({…})</code> from anywhere with <code>useToast()</code>. The 0.1.x <code>toast(message, tone)</code> shorthand still works. A notification may repeat an available action but must never be the only path to one.',
     ],
     examples: [
       {
-        title: 'Firing toasts',
+        title: 'Full anatomy — title, description, tone',
         demoKey: 'toast-basic',
         surface: 'paper',
         code: `import { ToastProvider, useToast, Button } from '@/components/seventy-six';
@@ -351,13 +372,15 @@ const [open, setOpen] = useState(false);
 // main.tsx: <ToastProvider><App /></ToastProvider>
 
 function SaveBar() {
-  const { toast } = useToast();
+  const { notify } = useToast();
   return (
     <>
-      <Button variant="ghost" onClick={() => toast('Export started — July orders', 'info')}>
+      <Button variant="ghost"
+        onClick={() => notify({ tone: 'info', title: 'Export started', description: 'July orders — 2,400 rows. We will notify you here when the file is ready.' })}>
         Export July
       </Button>
-      <Button variant="primary" onClick={() => toast('Order ORD-10482 created', 'ok')}>
+      <Button variant="primary"
+        onClick={() => notify({ tone: 'ok', title: 'Order ORD-10482 created', description: '3 lines · Corridor Foods · dispatch queued.' })}>
         Create order
       </Button>
     </>
@@ -365,46 +388,57 @@ function SaveBar() {
 }`,
       },
       {
-        title: 'Even a problem stays calm',
-        description: 'There is no error tone, by design (A2). A partial failure is stated factually on the info slip — no red, no "Oops". If the failure actually blocks the flow it belongs inline or in a Dialog, never in a toast.',
+        title: 'warn and bad — sticky, still calm',
+        description: 'warn/bad persist until dismissed and announce as alerts. They echo a failure whose inline surface exists elsewhere — they never replace it (A2).',
         demoKey: 'toast-error',
         surface: 'paper',
-        code: `const { toast } = useToast();
+        code: `const { notify } = useToast();
 
 <Button variant="ghost"
-  onClick={() => toast('Import finished — 2 of 3 rows added, 1 needs review', 'info')}>
-  Import with issues
+  onClick={() => notify({ tone: 'warn', title: 'Sync degraded', description: 'Prices last updated 42 minutes ago. Orders still submit.' })}>
+  Degrade sync
 </Button>
-<Button variant="primary"
-  onClick={() => toast('Import finished — 3 of 3 rows added', 'ok')}>
-  Import clean
+<Button variant="ghost"
+  onClick={() => notify({ tone: 'bad', title: 'Export failed — storage full', description: 'The July file was not written. Free space in Settings → Storage, then retry.' })}>
+  Fail export
 </Button>`,
       },
     ],
     props: [
       {
-        component: 'useToast → toast()',
+        component: 'useToast → notify(options)',
         rows: [
-          { name: 'message', type: 'string', description: 'Calm, factual, specific. No exclamation marks (A3).' },
-          { name: 'tone', type: "'ok' | 'info'", defaultValue: "'info'", description: 'ok = green left rule; info = seed. There is deliberately no error tone.' },
+          { name: 'title', type: 'string', description: 'Calm, factual, specific. No exclamation marks (A3).' },
+          { name: 'description', type: 'string', description: 'One sentence of context under the title.' },
+          { name: 'tone', type: "'ok' | 'info' | 'warn' | 'bad'", defaultValue: "'info'", description: 'Left rule + icon. warn is ink — no amber in the system.' },
+          { name: 'icon', type: 'ReactNode', description: '16px stroke icon; defaults to the tone icon.' },
+          { name: 'size', type: "'default' | 'lg'", defaultValue: "'default'", description: '360px · 440px for two-line descriptions.' },
+          { name: 'duration', type: 'number', description: 'ms before auto-dismiss. Defaults: 5000 for ok/info; 0 (sticky) for warn/bad.' },
+        ],
+      },
+      {
+        component: 'useToast → toast() (0.1.x shorthand)',
+        rows: [
+          { name: 'message', type: 'string', description: 'Becomes the title of an ok/info notification.' },
+          { name: 'tone', type: "'ok' | 'info'", defaultValue: "'info'", description: 'The shorthand deliberately keeps only the quiet tones.' },
         ],
       },
     ],
     a11y: {
       notes: [
-        'The container is an <code>aria-live="polite"</code> region — announcements never interrupt the user mid-task.',
+        'ok/info render <code>role="status"</code> (polite); warn/bad render <code>role="alert"</code> and persist until dismissed.',
         'Auto-dismiss pauses on hover; the 5s window plus the polite region means content is announced in full before removal.',
         'Never put the only path to an action in a toast; undo must also exist in context.',
       ],
     },
     donts: [
-      'No error toasts — errors render inline at their source.',
-      'No more than two stacked; older toasts yield.',
+      'No bad notification as the ONLY error surface — the inline error at the source comes first (A2).',
+      'No more than three stacked; older notifications yield.',
       'No top-right placement; 76° toasts live bottom-left.',
       'No "Awesome!" / "Oops" copy — a toast speaks like a competent colleague.',
     ],
     faq: [
-      { q: 'How do I show an error?', a: 'Not with a toast. Render the error inline next to its cause — a Field error, a table-row StatusWord, or a Dialog if the failure blocks the flow. Toast tones are ok and info only, by design.' },
+      { q: 'How do I show an error?', a: 'Inline first, always: a Field error, a Banner above the form, a table-row StatusWord. A bad notification is for failures whose surface is elsewhere — a background job, another tab — and it echoes, never replaces.' },
       { q: 'How long do toasts stay?', a: '5 seconds, pausing while hovered, resuming with at least 800ms of grace. Two can stack; a third replaces the oldest.' },
       { q: 'Can I add an action button to a toast?', a: 'Yes, as a duplicate of an action that exists in context — a toast must never be the only path to anything.' },
     ],

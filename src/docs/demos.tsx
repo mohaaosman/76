@@ -2,20 +2,25 @@ import { useState } from 'react';
 import type { ComponentType } from 'react';
 import {
   ActivityList,
+  Badge,
   Band,
   BandNav,
   BandSubTabs,
   BandTopbar,
+  Banner,
   Button,
   ButtonLink,
   Card,
+  Combobox,
   CardHead,
   CardTabs,
   Checkbox,
   DataTable,
   Dialog,
+  Drawer,
   EmptyState,
   Field,
+  MenuButton,
   MeterList,
   PageHero,
   Progress,
@@ -23,6 +28,7 @@ import {
   SearchCommand,
   Select,
   Skeleton,
+  SplitButton,
   StatS1,
   StatusWord,
   Toggle,
@@ -221,13 +227,31 @@ function DialogDestructive() {
 /* ------------------------------------------------ Toast */
 
 function ToastBasic() {
-  const { toast } = useToast();
+  const { notify } = useToast();
   return (
     <div className="demo-row">
-      <Button variant="ghost" onClick={() => toast('Export started — July orders', 'info')}>
+      <Button
+        variant="ghost"
+        onClick={() =>
+          notify({
+            tone: 'info',
+            title: 'Export started',
+            description: 'July orders — 2,400 rows. We will notify you here when the file is ready.',
+          })
+        }
+      >
         Export July
       </Button>
-      <Button variant="primary" onClick={() => toast('Order ORD-10482 created', 'ok')}>
+      <Button
+        variant="primary"
+        onClick={() =>
+          notify({
+            tone: 'ok',
+            title: 'Order ORD-10482 created',
+            description: '3 lines · Corridor Foods · dispatch queued.',
+          })
+        }
+      >
         Create order
       </Button>
     </div>
@@ -235,15 +259,231 @@ function ToastBasic() {
 }
 
 function ToastError() {
-  const { toast } = useToast();
+  const { notify } = useToast();
   return (
     <div className="demo-row">
-      <Button variant="ghost" onClick={() => toast('Import finished — 2 of 3 rows added, 1 needs review', 'info')}>
-        Import with issues
+      <Button
+        variant="ghost"
+        onClick={() =>
+          notify({
+            tone: 'warn',
+            title: 'Sync degraded',
+            description: 'Prices last updated 42 minutes ago. Orders still submit; totals may lag.',
+          })
+        }
+      >
+        Degrade sync
       </Button>
-      <Button variant="primary" onClick={() => toast('Import finished — 3 of 3 rows added', 'ok')}>
-        Import clean
+      <Button
+        variant="ghost"
+        onClick={() =>
+          notify({
+            tone: 'bad',
+            title: 'Export failed — storage full',
+            description: 'The July file was not written. Free space in Settings → Storage, then retry.',
+          })
+        }
+      >
+        Fail export
       </Button>
+    </div>
+  );
+}
+
+/* ------------------------------------------------ v0.2.0 · interaction layer */
+
+const DEMO_CUSTOMERS = [
+  { value: 'c-101', label: 'Almeida Logistics', meta: 'C-101' },
+  { value: 'c-114', label: 'Bantam Freight', meta: 'C-114' },
+  { value: 'c-127', label: 'Corridor Foods', meta: 'C-127' },
+  { value: 'c-133', label: 'Delta Provisions', meta: 'C-133' },
+  { value: 'c-140', label: 'Eastgate Retail', meta: 'C-140' },
+  { value: 'c-152', label: 'Fairline Imports', meta: 'C-152' },
+  { value: 'c-166', label: 'Granary Wholesale', meta: 'C-166' },
+  { value: 'c-171', label: 'Harbor & Sons', meta: 'C-171' },
+  { value: 'c-185', label: 'Interport Trading', meta: 'C-185' },
+  { value: 'c-190', label: 'Junction Foods', meta: 'C-190' },
+  { value: 'c-204', label: 'Keystone Dairy', meta: 'C-204' },
+  { value: 'c-211', label: 'Lattice Supply', meta: 'C-211' },
+];
+
+function ComboboxBasic() {
+  const [customer, setCustomer] = useState<string | null>('c-127');
+  return (
+    <div style={{ maxWidth: 340 }}>
+      <Combobox
+        label="Customer"
+        options={DEMO_CUSTOMERS}
+        value={customer}
+        onChange={(v) => setCustomer(v)}
+        placeholder="Type a name or C-number"
+        hint="Search across 12 accounts by name or ID."
+      />
+    </div>
+  );
+}
+
+function ComboboxError() {
+  const [assignee, setAssignee] = useState<string | null>(null);
+  return (
+    <div style={{ maxWidth: 340 }}>
+      <Combobox
+        label="Assignee"
+        required
+        options={DEMO_CUSTOMERS.slice(0, 5)}
+        value={assignee}
+        onChange={(v) => setAssignee(v)}
+        error={assignee ? undefined : 'Pick an assignee — orders cannot dispatch unassigned.'}
+        emptyText="No one matches. Check the spelling or invite them from Settings → Team."
+      />
+    </div>
+  );
+}
+
+function MenuBasic() {
+  const { notify } = useToast();
+  const say = (title: string) => notify({ tone: 'info', title });
+  return (
+    <div className="demo-row">
+      <MenuButton
+        label="Actions"
+        items={[
+          { label: 'Duplicate order', onSelect: () => say('Order duplicated as ORD-10483') },
+          { label: 'Export as CSV', onSelect: () => say('Export started — ORD-10482'), meta: '⌘E' },
+          'separator',
+          { label: 'Archive order', onSelect: () => say('Archive needs a confirm Dialog'), danger: true },
+        ]}
+      />
+    </div>
+  );
+}
+
+function SplitBasic() {
+  const { notify } = useToast();
+  return (
+    <div className="demo-row">
+      <SplitButton
+        label="Create order"
+        onClick={() => notify({ tone: 'ok', title: 'Order ORD-10484 created' })}
+        items={[
+          { label: 'Create draft order', onSelect: () => notify({ tone: 'info', title: 'Draft order started' }) },
+          { label: 'Create from template', onSelect: () => notify({ tone: 'info', title: 'Pick a template to continue' }) },
+        ]}
+      />
+    </div>
+  );
+}
+
+function DrawerBasic() {
+  const [open, setOpen] = useState(false);
+  const { notify } = useToast();
+  return (
+    <div className="demo-row">
+      <Button variant="ghost" onClick={() => setOpen(true)}>
+        Review ORD-10482
+      </Button>
+      <Drawer
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Order ORD-10482"
+        context="CORRIDOR FOODS · 24 JUL · 3 LINES"
+        footer={
+          <>
+            <Button variant="ghost" onClick={() => setOpen(false)}>
+              Close
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => {
+                setOpen(false);
+                notify({ tone: 'ok', title: 'Order ORD-10482 approved' });
+              }}
+            >
+              Approve order
+            </Button>
+          </>
+        }
+      >
+        <MeterList
+          items={[
+            { label: 'Picked', current: 3, max: 3, value: '100%', subtitle: '3 of 3 lines picked' },
+            { label: 'Packed', current: 2, max: 3, value: '67%', subtitle: '2 of 3 lines packed' },
+            { label: 'Invoiced', current: 0, max: 3, value: '0%', subtitle: '0 of 3 lines invoiced' },
+          ]}
+        />
+      </Drawer>
+    </div>
+  );
+}
+
+function DialogFull() {
+  const [open, setOpen] = useState(false);
+  const { notify } = useToast();
+  return (
+    <div className="demo-row">
+      <Button variant="ghost" onClick={() => setOpen(true)}>
+        Compose purchase order
+      </Button>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Compose purchase order"
+        size="full"
+        footer={
+          <>
+            <Button variant="ghost" onClick={() => setOpen(false)}>
+              Discard
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => {
+                setOpen(false);
+                notify({ tone: 'ok', title: 'Purchase order PO-2291 created' });
+              }}
+            >
+              Create purchase order
+            </Button>
+          </>
+        }
+      >
+        <div style={{ display: 'grid', gap: 'var(--sv-s4)', maxWidth: 480 }}>
+          <Field label="Supplier" placeholder="Granary Wholesale" />
+          <Field label="Reference" placeholder="PO-2291" />
+        </div>
+      </Dialog>
+    </div>
+  );
+}
+
+function BannerTones() {
+  const [showOk, setShowOk] = useState(true);
+  return (
+    <div style={{ display: 'grid', gap: 'var(--sv-s3)' }}>
+      <Banner tone="info" title="Import running">
+        1,204 of 2,400 rows processed. You can keep working — we will notify you here.
+      </Banner>
+      {showOk && (
+        <Banner tone="ok" title="Backup complete" onDismiss={() => setShowOk(false)}>
+          All 14 tables copied to cold storage at 03:00.
+        </Banner>
+      )}
+      <Banner tone="warn" title="Sync degraded" action={<ButtonLink href="#retry">Retry sync</ButtonLink>}>
+        Prices last updated 42 minutes ago. Orders still submit; totals may lag.
+      </Banner>
+      <Banner tone="bad" title="Submit failed — 2 fields need fixes">
+        Quantity must be a whole number above 0. Customer is required.
+      </Banner>
+    </div>
+  );
+}
+
+function BadgeBasic() {
+  return (
+    <div className="demo-row">
+      <Badge>B2B</Badge>
+      <Badge>EU-WEST</Badge>
+      <Badge>V2</Badge>
+      <Badge tone="seed">CURRENT PLAN</Badge>
     </div>
   );
 }
@@ -792,6 +1032,7 @@ export const demos: Record<string, ComponentType> = {
   'status-table': StatusTable,
   'card-basic': CardBasic,
   'dialog-basic': DialogBasic,
+  'dialog-full': DialogFull,
   'dialog-destructive': DialogDestructive,
   'toast-basic': ToastBasic,
   'toast-error': ToastError,
@@ -819,4 +1060,11 @@ export const demos: Record<string, ComponentType> = {
   'band-full': BandFull,
   'form-basic': FormBasic,
   'form-error': FormError,
+  'combobox-basic': ComboboxBasic,
+  'combobox-error': ComboboxError,
+  'menu-basic': MenuBasic,
+  'split-basic': SplitBasic,
+  'drawer-basic': DrawerBasic,
+  'banner-tones': BannerTones,
+  'badge-basic': BadgeBasic,
 };

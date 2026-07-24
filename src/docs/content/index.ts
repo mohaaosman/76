@@ -2,6 +2,7 @@ import type { Category, DocEntry } from './types';
 import { chrome, forms } from './chrome-forms';
 import { widgets } from './widgets';
 import { primitives } from './primitives';
+import { interaction } from './interaction';
 
 export const categories: { id: Category; label: string; note: string }[] = [
   { id: 'chrome', label: 'Chrome', note: 'THE BAND & THE WALL' },
@@ -10,6 +11,6 @@ export const categories: { id: Category; label: string; note: string }[] = [
   { id: 'forms', label: 'Forms', note: 'B11 · HONEST INPUTS' },
 ];
 
-export const entries: DocEntry[] = [...chrome, ...widgets, ...primitives, ...forms];
+export const entries: DocEntry[] = [...chrome, ...widgets, ...primitives, ...interaction, ...forms];
 
 export type { DocEntry } from './types';
