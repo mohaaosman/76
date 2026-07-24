@@ -1,0 +1,83 @@
+/* B19 · Combobox — searchable select. Field chrome comes from field.css. */
+
+@layer sv-components {
+  .sv-combo__anchor {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sv-combo__input {
+    width: 100%;
+    padding-right: var(--sv-s7);
+  }
+
+  /* The listbox is paper: card physics, one shadow, hairline-separated
+     options. It must never render inside an overflow container —
+     lift the field out or use a Dialog form instead (Firewall E). */
+  .sv-combo__list {
+    position: absolute;
+    top: calc(100% + var(--sv-s1));
+    left: 0;
+    right: 0;
+    z-index: var(--sv-z-tip);
+    max-height: 264px;
+    overflow-y: auto;
+    margin: 0;
+    padding: var(--sv-s1);
+    list-style: none;
+    background: var(--sv-paper);
+    border: 1px solid var(--sv-line);
+    border-radius: var(--sv-r);
+    box-shadow: var(--sv-shadow);
+  }
+
+  .sv-combo__option {
+    display: flex;
+    align-items: center;
+    gap: var(--sv-s2);
+    padding: 7px 10px;
+    border-radius: var(--sv-r);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--sv-ink);
+    cursor: pointer;
+  }
+
+  .sv-combo__option--active {
+    background: var(--sv-seed-tint);
+  }
+
+  .sv-combo__option--selected .sv-combo__optlabel {
+    font-weight: 700;
+  }
+
+  .sv-combo__option--disabled {
+    color: var(--sv-ink-faint);
+    cursor: not-allowed;
+  }
+
+  .sv-combo__optlabel {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sv-combo__optmeta {
+    font-size: 10.5px;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-combo__tick {
+    color: var(--sv-seed-text);
+    flex: none;
+  }
+
+  .sv-combo__empty {
+    padding: var(--sv-s3) 10px;
+    font-size: 12.5px;
+    color: var(--sv-ink-soft);
+  }
+}
