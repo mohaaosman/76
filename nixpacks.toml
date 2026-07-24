@@ -1,0 +1,25 @@
+# Nixpacks build for Coolify.
+# Vite builds the docs site + shadcn registry into dist/; Caddy serves it
+# statically (HashRouter, so no SPA rewrite is needed — every request is
+# either / or a real file under dist/, incl. /r/*.json and /llms/*.md).
+providers = ['node']
+
+[variables]
+# playwright is a devDependency (shipgate screenshots only); the site build
+# never uses it, so skip the multi-hundred-MB browser download on npm ci.
+PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = '1'
+# Registry cross-references and docs links are baked at build time. Override
+# in Coolify if you serve the registry from a different host.
+REGISTRY_BASE = 'https://76.zifala.com'
+
+[phases.setup]
+nixPkgs = ['nodejs_22', 'caddy']
+
+[phases.install]
+cmds = ['npm ci']
+
+[phases.build]
+cmds = ['npm run build']
+
+[start]
+cmd = 'caddy run --config Caddyfile --adapter caddyfile'
