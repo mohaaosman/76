@@ -23,7 +23,7 @@ export function TrendPanel() {
               { id: 'ytd', label: 'YTD' },
             ]}
           />
-          <div style={{ padding: 'var(--sv-s2) 18px 18px' }}>
+          <div className="sv-card__body">
             <Trend
               kind="line"
               xLabels={MONTHS}

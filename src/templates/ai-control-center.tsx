@@ -158,13 +158,13 @@ export function AiControlCenter() {
         <Row split="main">
           <Card>
             <CardHead title="Model usage" subtitle="Token draw against daily caps" />
-            <div style={{ padding: '0 18px 18px' }}>
+            <div className="sv-card__body">
               <MeterList items={MODELS} />
             </div>
           </Card>
           <Card>
             <CardHead title="Throughput" subtitle="Tasks completed per hour" />
-            <div style={{ padding: 'var(--sv-s2) 18px 18px' }}>
+            <div className="sv-card__body">
               <Trend
                 kind="line"
                 legend

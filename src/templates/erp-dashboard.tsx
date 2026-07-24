@@ -106,7 +106,7 @@ export function ErpDashboard() {
         <Row split="main">
           <Card>
             <CardHead title="Warehouse utilization" subtitle="Pallet positions by zone" />
-            <div style={{ padding: '0 18px 18px' }}>
+            <div className="sv-card__body">
             <MeterList items={[
               { label: 'Zone A · Ambient', current: 4320, max: 4700, value: '92%', subtitle: '4,320 of 4,700 pallet positions' },
               { label: 'Zone B · Cold', current: 1880, max: 2400, value: '78%', subtitle: '1,880 of 2,400 pallet positions' },

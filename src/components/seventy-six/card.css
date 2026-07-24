@@ -15,6 +15,13 @@
     padding: var(--sv-s4) 18px var(--sv-s3);
   }
 
+  /* Padded body for free content (charts, bars, forms) that carries no
+     inset of its own. Self-padded widgets — DataTable, ActivityList,
+     StatS1, EmptyState — sit directly in the card without this. */
+  .sv-card__body {
+    padding: var(--sv-s2) 18px 18px;
+  }
+
   .sv-card__title {
     font-size: 13.5px;
     font-weight: 700;

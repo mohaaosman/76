@@ -83,11 +83,11 @@ export function PosTerminal() {
               footnote={<>3 items · tax <b>$9.40</b> included</>}
               footnoteText="3 items, tax $9.40 included"
             />
-            <div className="sv-mono sv-num" style={{ display: 'grid', gap: 'var(--sv-s2)', marginTop: 'var(--sv-s5)' }}>
+            <div className="sv-mono sv-num sv-card__body" style={{ display: 'grid', gap: 'var(--sv-s2)' }}>
               <span>SUBTOTAL · $119.00</span>
               <span>TAX 8% · $9.40</span>
             </div>
-            <div style={{ display: 'grid', gap: 'var(--sv-s3)', marginTop: 'var(--sv-s5)' }}>
+            <div className="sv-card__body" style={{ display: 'grid', gap: 'var(--sv-s3)' }}>
               <Button variant="primary" onClick={() => toast('Charging $128.40 to card', 'info')}>Charge $128.40</Button>
               <Button variant="ghost" onClick={() => toast('Discount panel opened', 'info')}>Add discount</Button>
             </div>

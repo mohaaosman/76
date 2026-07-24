@@ -80,7 +80,7 @@ export function CrmPipeline() {
         <Row split="main">
           <Card>
             <CardHead title="Stages" subtitle="Open deals by stage · Q3" />
-            <div style={{ display: 'grid', gap: 'var(--sv-s4)', padding: 'var(--sv-s2) 18px 18px' }}>
+            <div className="sv-card__body" style={{ display: 'grid', gap: 'var(--sv-s4)' }}>
               <Progress title="Qualify" current={620} target={900} format={(c, t) => `$${c}K / $${t}K`}
                 context="18 deals · early discovery" />
               <Progress title="Proposal" current={540} target={700} format={(c, t) => `$${c}K / $${t}K`}
@@ -93,7 +93,7 @@ export function CrmPipeline() {
           </Card>
           <Card>
             <CardHead title="Momentum" subtitle="Weighted pipeline by week" />
-            <div style={{ padding: 'var(--sv-s2) 18px 18px' }}>
+            <div className="sv-card__body">
               <Trend
                 ariaLabel="Weighted pipeline trending up, $1.84M this quarter versus $1.61M last quarter"
                 legend

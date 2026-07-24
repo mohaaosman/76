@@ -68,7 +68,7 @@ export function SettingsAccount() {
         <Row split="full">
           <Card>
             <CardHead title="Profile" subtitle="How your account appears to teammates" />
-            <div style={grid2}>
+            <div className="sv-card__body" style={grid2}>
               <Field label="Full name" defaultValue="Maya Osman" autoComplete="name" />
               <Field label="Email" type="email" required defaultValue="maya@northwind.co" autoComplete="email" />
               <Field label="Job title" defaultValue="Operations Lead" />
@@ -84,13 +84,13 @@ export function SettingsAccount() {
         <Row split="full">
           <Card>
             <CardHead title="Notifications" subtitle="Toggles apply immediately" />
-            <div style={stack}>
+            <div className="sv-card__body" style={stack}>
               <Toggle label="Order updates" defaultChecked />
               <Toggle label="Weekly digest" defaultChecked />
               <Toggle label="Security alerts" defaultChecked />
               <Toggle label="Product news" />
             </div>
-            <fieldset style={{ ...stack, marginTop: 'var(--sv-s4)' }}>
+            <fieldset className="sv-card__body" style={stack}>
               <legend className="sv-mono">DIGEST FREQUENCY</legend>
               <Radio name="freq" label="Daily" value="daily" />
               <Radio name="freq" label="Weekly" value="weekly" defaultChecked />
@@ -102,7 +102,7 @@ export function SettingsAccount() {
         <Row split="full">
           <Card>
             <CardHead title="Security" subtitle="Protect access to this account" />
-            <div style={stack}>
+            <div className="sv-card__body" style={stack}>
               <Field
                 label="Current password"
                 type="password"
