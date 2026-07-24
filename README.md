@@ -2,7 +2,7 @@
 
 The component library and documentation site for the **76° design system**.
 Flat, informational, corporate — paper on a wall. Compiled 1:1 from the
-Component Book (`76-COMPONENT-BOOK.md`): all eighteen specs, B1–B18.
+Component Book (`76-COMPONENT-BOOK.md`): all twenty-three specs, B1–B23.
 
 ## What's inside
 
@@ -48,13 +48,25 @@ constitution), `76-COMPONENT-BOOK.md` (B1–B18 specs), `76-FUNDAMENTALS.md`
 `ECOSYSTEM-DESIGN-DNA.md` (the three-layer model), and
 `DESIGN-STYLE-VOCABULARY.md` (the shared design language).
 
+## The interaction layer (v0.2.0)
+
+Phase 2 closes the gaps that pushed products toward other libraries: a
+**searchable Combobox** (B19, ARIA 1.2, hand-rolled), **Menu + SplitButton**
+(B20, native popover top layer), the **Drawer** slide-over (B21, native
+`<dialog>`, sm/md/lg/full), **full-screen Dialogs** (`size="full"`),
+**notifications** with title + description + icon + four tones + two sizes,
+the inline **Banner** (B22 — where errors actually render), **Badge** (B23),
+and the **dark surface**: opt-in `data-mode="dark"`, tokens-only, AA
+re-verified, per-seed dark text variants, toggle live in the docs band.
+
 ## Zero runtime dependencies
 
-Every component runs on the platform: native `<dialog>` (Dialog,
-SearchCommand), the `popover` attribute (Tooltip), native `<select>`,
-real inputs behind styled proxies (Checkbox/Radio/Toggle), and hand-rolled
-SVG (Trend). React is the only peer. Radix stays in reserve for the day a
-searchable combobox enters the Book.
+Every component runs on the platform: native `<dialog>` (Dialog, Drawer,
+SearchCommand), the `popover` attribute (Tooltip, Menu, SplitButton), native
+`<select>` for short lists with a hand-rolled ARIA 1.2 Combobox for long
+ones, real inputs behind styled proxies (Checkbox/Radio/Toggle), and
+hand-rolled SVG (Trend). React is the only peer — the searchable combobox
+entered the Book and Radix stayed on the bench.
 
 ## Commands
 
