@@ -23,15 +23,17 @@ export function TrendPanel() {
               { id: 'ytd', label: 'YTD' },
             ]}
           />
-          <Trend
-            kind="line"
-            xLabels={MONTHS}
-            ariaLabel="Revenue is running ahead of last year every month, $566K in December versus $495K a year ago"
-            series={[
-              { label: 'This year', data: THIS_YEAR, tone: 'seed' },
-              { label: 'Last year', data: LAST_YEAR, tone: 'compare' },
-            ]}
-          />
+          <div style={{ padding: 'var(--sv-s2) 18px 18px' }}>
+            <Trend
+              kind="line"
+              xLabels={MONTHS}
+              ariaLabel="Revenue is running ahead of last year every month, $566K in December versus $495K a year ago"
+              series={[
+                { label: 'This year', data: THIS_YEAR, tone: 'seed' },
+                { label: 'Last year', data: LAST_YEAR, tone: 'compare' },
+              ]}
+            />
+          </div>
         </Card>
       </Row>
     </Sheet>

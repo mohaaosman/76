@@ -80,7 +80,7 @@ export function CrmPipeline() {
         <Row split="main">
           <Card>
             <CardHead title="Stages" subtitle="Open deals by stage · Q3" />
-            <div style={{ display: 'grid', gap: 'var(--sv-s4)' }}>
+            <div style={{ display: 'grid', gap: 'var(--sv-s4)', padding: 'var(--sv-s2) 18px 18px' }}>
               <Progress title="Qualify" current={620} target={900} format={(c, t) => `$${c}K / $${t}K`}
                 context="18 deals · early discovery" />
               <Progress title="Proposal" current={540} target={700} format={(c, t) => `$${c}K / $${t}K`}
@@ -93,15 +93,17 @@ export function CrmPipeline() {
           </Card>
           <Card>
             <CardHead title="Momentum" subtitle="Weighted pipeline by week" />
-            <Trend
-              ariaLabel="Weighted pipeline trending up, $1.84M this quarter versus $1.61M last quarter"
-              legend
-              xLabels={['WK1', 'WK4', 'WK8', 'WK13']}
-              series={[
-                { label: 'This quarter', data: [1.31, 1.44, 1.52, 1.61, 1.7, 1.84], tone: 'seed' },
-                { label: 'Last quarter', data: [1.2, 1.28, 1.36, 1.42, 1.55, 1.61], tone: 'compare' },
-              ]}
-            />
+            <div style={{ padding: 'var(--sv-s2) 18px 18px' }}>
+              <Trend
+                ariaLabel="Weighted pipeline trending up, $1.84M this quarter versus $1.61M last quarter"
+                legend
+                xLabels={['WK1', 'WK4', 'WK8', 'WK13']}
+                series={[
+                  { label: 'This quarter', data: [1.31, 1.44, 1.52, 1.61, 1.7, 1.84], tone: 'seed' },
+                  { label: 'Last quarter', data: [1.2, 1.28, 1.36, 1.42, 1.55, 1.61], tone: 'compare' },
+                ]}
+              />
+            </div>
           </Card>
         </Row>
 

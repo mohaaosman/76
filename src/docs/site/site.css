@@ -450,7 +450,7 @@
     position: fixed;
     left: var(--sv-s4);
     bottom: var(--sv-s4);
-    z-index: 40;
+    z-index: var(--sv-z-toast);
     background: var(--sv-paper);
     box-shadow: var(--sv-shadow);
   }

@@ -158,17 +158,21 @@ export function AiControlCenter() {
         <Row split="main">
           <Card>
             <CardHead title="Model usage" subtitle="Token draw against daily caps" />
-            <MeterList items={MODELS} />
+            <div style={{ padding: '0 18px 18px' }}>
+              <MeterList items={MODELS} />
+            </div>
           </Card>
           <Card>
             <CardHead title="Throughput" subtitle="Tasks completed per hour" />
-            <Trend
-              kind="line"
-              legend
-              ariaLabel="Throughput trending up, 1,340 tasks/hr today vs 1,180 yesterday"
-              series={THROUGHPUT}
-              xLabels={['00', '04', '08', '12', '16', '20']}
-            />
+            <div style={{ padding: 'var(--sv-s2) 18px 18px' }}>
+              <Trend
+                kind="line"
+                legend
+                ariaLabel="Throughput trending up, 1,340 tasks/hr today vs 1,180 yesterday"
+                series={THROUGHPUT}
+                xLabels={['00', '04', '08', '12', '16', '20']}
+              />
+            </div>
           </Card>
         </Row>
       </Sheet>

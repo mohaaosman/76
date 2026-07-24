@@ -7,6 +7,7 @@ export function MeterPanel() {
       <Row split="full">
         <Card>
           <CardHead title="Warehouse utilization" subtitle="By zone" />
+          <div style={{ padding: '0 18px 18px' }}>
           <MeterList
             items={[
               {
@@ -46,6 +47,7 @@ export function MeterPanel() {
               },
             ]}
           />
+          </div>
         </Card>
       </Row>
     </Sheet>
