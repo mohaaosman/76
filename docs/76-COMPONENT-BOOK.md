@@ -164,6 +164,38 @@ Static `--sv-wall` blocks matching the target component's anatomy (an S1 skeleto
 
 Ink bg, white 11.5 text, radius 4, 6/10 padding, 300ms delay. Supplementary info only — never the sole carrier of a label (Firewall A4). Keyboard-focusable triggers show it on focus.
 
+### B19 · `Combobox` (v0.2.0)
+
+The searchable select. Native `<select>` (B11) stays the default for short, known lists; the Combobox exists when a list passes ~10 options or the user knows the value's NAME faster than its position. ARIA 1.2 pattern, `aria-activedescendant`, focus never leaves the input. B11 field chrome verbatim: label above, error states what and how to fix, empty state names what didn't match. One job: pick ONE value from a list too long to scan. Never inside an `overflow` container; never multi-select; never free-text.
+
+### B20 · `Menu` / `MenuButton` / `SplitButton` (v0.2.0)
+
+An actions dropdown on the native `popover` top layer — light dismiss, Esc, focus return, zero z-index. Items are VERBS naming their object; a danger item turns `--sv-bad` and still confirms in a Dialog. Never navigation (that is the Band), never selection (that is a Select/Combobox). The SplitButton welds ONE primary verb to a chevron holding variants of the SAME job — never unrelated actions. One job: hold the secondary verbs one control cannot.
+
+### B21 · `Drawer` (v0.2.0)
+
+The slide-over: a full-height paper panel from the screen edge on native `<dialog>.showModal()`. Head = 15/700 title + optional mono context + named close; scrolling body; sticky footer = ghost cancel + ONE primary. Sizes sm 360 · md 480 · lg 640 · full, all capped at 100vw. Entry slides 24px, transform-only, 160ms ease-out, 0 under reduced motion; exit is instant. Dialog interrupts for one decision; Drawer opens a workspace beside the work; `Dialog size="full"` replaces the page. One job: inspect or edit ONE record without leaving the sheet.
+
+### B22 · `Banner` (v0.2.0)
+
+The inline notice — the surface B14 sends every error at: in the flow, adjacent to its cause. Paper card, 2px left tone rule, 16px tone icon, 13/700 title, full-sentence body (what happened AND how to fix), at most one text-link action, optional dismiss. Tones: info (seed) · ok (green) · bad (red) · warn in INK — no amber surface enters the system (Law 2). `bad` is `role="alert"`; the rest are polite. Never auto-dismisses; never stacks past the worst condition; never a field error's replacement.
+
+### B23 · `Badge` (v0.2.0)
+
+A small mono uppercase tag for CATEGORY metadata: environment, plan, type, version. Wall-toned, hairline border, rectilinear — never a pill. Seed tone marks the current/active category, one per group. Live state is a StatusWord (dot + word); quantities are stats or cells. If it can change while you watch, it is not a Badge.
+
+### B14 · `Toast` — v0.2.0 amendment
+
+The toast grows into the full notification: 16px tone icon + 13/700 title + optional one-sentence description, tones `ok · info · warn · bad`, sizes 360/440, dismiss control. `warn` renders in ink (no amber, Law 2). ok/info auto-dismiss at 5s, polite; warn/bad persist until dismissed, assertive. The A2 discipline is unchanged: an error ALWAYS renders inline at its source first — a `bad` toast may ECHO a failure whose surface is elsewhere (a background job, another tab), never replace it. Max 3 stacked.
+
+### B13 · `Dialog` — v0.2.0 amendment
+
+`size` replaces `wide` (kept as a deprecated alias): `default` 480 · `wide` 640 · `full` — a takeover where the dialog becomes the wall, the work inside stays paper-on-wall, a visible named close appears, and scrim dismissal is off (there is no scrim to click).
+
+### The dark surface — v0.2.0 amendment
+
+Light-first stands: light is the default, dark is opt-in via `<html data-mode="dark">`. Dark changes ONLY tokens — the same paper-on-a-wall physics, inverted: the band stays the darkest thing on screen, the wall recedes, cards stay the lightest surface in view. Functional and seed-as-text steps are re-verified AA on dark paper; per-seed dark text variants live in tokens.css and nowhere else. No component may branch on the mode.
+
 ---
 
 ## PART C — THE ACCESSIBILITY CONTRACT (WCAG 2.2 AA, non-negotiable)
@@ -206,7 +238,7 @@ Ink bg, white 11.5 text, radius 4, 6/10 padding, 300ms delay. Supplementary info
 
 1. Grep Part A1 patterns — zero hits.
 2. Count colors on the screen: neutrals + one seed + at most both functional colors as words/dots. Anything else fails.
-3. Every widget is a registered type (S1, Progress, Trend, MeterList, DataTable, CardTabs, ActivityList) — if a new type was needed, it is named, single-jobbed, and added to Part B in the same change.
+3. Every widget is a registered type (S1, Progress, Trend, MeterList, DataTable, CardTabs, ActivityList — and from v0.2.0: Combobox, Menu, Drawer, Banner, Badge) — if a new type was needed, it is named, single-jobbed, and added to Part B in the same change.
 4. Every S1 footnote passes the "so what" test (new information, not paraphrase).
 5. Tab through the screen: visible focus everywhere, order sane, skip-link present, ⌘K opens.
 6. Squint test: the page reads as ink band + white paper on a platinum wall; nothing glows, nothing floats, nothing performs.
