@@ -1,9 +1,9 @@
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 /**
- * THE SLOP FIREWALL (Component Book, Part A1) — machine-checkable.
+ * THE SLOP FIREWALL (Component Book, Part A1 + Fundamentals Part E)
+ * — machine-checkable.
  * Scans component + style source; any hit is a defect, and the script
  * exits non-zero so CI can gate on it.
  *
@@ -16,8 +16,9 @@ import { fileURLToPath } from 'node:url';
  *  - width transitions in progress.css / meter-list.css — B4's single
  *    160ms fill transition.
  */
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const SCAN_DIRS = ['src/components', 'src/styles', 'src/docs/site'];
+/* Usage: node slop-firewall.mjs [dir ...]  (dirs relative to cwd; default: src) */
+const root = process.cwd();
+const SCAN_DIRS = process.argv.slice(2).length ? process.argv.slice(2) : ['src'];
 
 const violations = [];
 
@@ -65,6 +66,32 @@ function check(file, source) {
 
     if (/font-family\s*:/.test(line) && !/var\(--sv-font-(ui|mono)\)|inherit/.test(line)) {
       flag('unregistered font-family');
+    }
+
+    /* ---- Part E · fundamentals gates ---- */
+
+    if (/font-style\s*:\s*italic/.test(line)) {
+      flag('italic (E: legal only inside running body copy — never headings)');
+    }
+
+    if (/z-index\s*:\s*\d{3,}/.test(line)) {
+      flag('arbitrary z-index (E: use the --sv-z-* ladder or the top layer)');
+    }
+
+    if (/overflow-x\s*:\s*hidden/.test(line)) {
+      flag('overflow-x hidden (E: use clip; auto/scroll for real scroll regions)');
+    }
+
+    if (/:hover[^{]*\bimg\b|:hover\s*>?\s*img|group-hover:(scale|rotate|translate)/.test(line)) {
+      flag('image motion on hover (E: images never move; tint the row instead)');
+    }
+
+    const bez = line.match(/cubic-bezier\(([^)]+)\)/);
+    if (bez) {
+      const [, y1, , y2] = bez[1].split(',').map((n) => Number(n.trim()));
+      if ([y1, y2].some((y) => Number.isFinite(y) && (y < 0 || y > 1))) {
+        flag('bounce/overshoot easing (E: cubic-bezier y must stay in [0,1])');
+      }
     }
   });
 }

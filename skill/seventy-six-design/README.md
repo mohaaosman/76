@@ -12,18 +12,26 @@ React components, dashboards, ERP/CRM/POS screens, admin panels, forms,
 tables, charts, mockups, and artifacts — whether or not the prompt ever says
 "76°".
 
+Since v0.1.0 the skill also carries a **fundamentals layer**: three working
+verbs (build / audit / redesign), a pre-flight scan for existing projects,
+declared decisions before code, an honest-numbers rule, the 8-state + 4-
+lifecycle-state contract, a 320–1280px responsive hard floor, motion and
+layering physics, and a durable stamp on every screen. The visual system is
+unchanged — the fundamentals govern process and craft, not pixels.
+
 ## What's inside
 
 ```
-SKILL.md                      the Six Laws, tokens, taxonomy, Ship Gate
+SKILL.md                      the Six Laws, tokens, taxonomy, Craft Floor, Ship Gate
 references/
+  fundamentals.md             the discipline layer: verbs · pre-flight · states · floor · physics · stamp
   component-specs.md          B1–B18: anatomy · states · a11y · Don't, per component
-  firewall-and-copy.md        A1–A4 banned-CSS/pattern list + the 9-point Ship Gate
+  firewall-and-copy.md        A1–A4 + Part E fundamentals gates + the 14-point Ship Gate
   library.md                  the seventy-six-ui React library: exports + shadcn install
   system-dials.md             three-layer ecosystem model + per-system seeds (ERP/CRM/POS/health)
   tokens.css                  the canonical token file (copy verbatim into new projects)
 scripts/
-  slop-firewall.mjs           machine-checkable lint — exits non-zero on any violation
+  slop-firewall.mjs           machine-checkable lint (15 rules) — exits non-zero on any violation
 ```
 
 ## Install

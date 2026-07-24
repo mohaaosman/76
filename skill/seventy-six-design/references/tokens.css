@@ -50,6 +50,17 @@
        Both collapse to 0ms under prefers-reduced-motion. */
     --sv-t-fast: 120ms;
     --sv-t:      160ms;
+
+    /* layering — the only z-index ladder (Firewall E). Non-visual.
+       Native <dialog> and [popover] use the browser top layer and
+       need no z-index at all — prefer them. */
+    --sv-z-band:   10;   /* sticky band / topbar */
+    --sv-z-sticky: 20;   /* sticky in-page (table headers) */
+    --sv-z-scrim:  30;   /* dialog scrim (non-native fallback) */
+    --sv-z-dialog: 40;   /* dialog (non-native fallback) */
+    --sv-z-toast:  50;   /* toasts */
+    --sv-z-tip:    60;   /* tooltips (non-popover fallback) */
+    --sv-z-skip:   70;   /* skip link (C4) — first tab stop, wins over all */
   }
 
   @media (prefers-reduced-motion: reduce) {

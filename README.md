@@ -16,12 +16,37 @@ src/
     content/                   pure-data doc entries → site + markdown + registry
     demos.tsx                  live preview components
     site/                      shell, blocks, pages
+docs/                          the 76° documentation set (system · book · dials · fundamentals)
+skill/seventy-six-design/      the agent skill — SKILL.md + references + firewall
 scripts/
   build-registry.mjs           emits public/r/*.json (shadcn-compatible items)
   build-llms.mjs               emits public/llms.txt + public/llms/*.md
-  slop-firewall.mjs            Part A1 as a lint — CI-gateable, exits non-zero
+  slop-firewall.mjs            Parts A1 + E as a lint (15 rules) — CI-gateable, exits non-zero
   shipgate-screens.mjs         Playwright screenshot pass for Part D review
 ```
+
+## The fundamentals layer (v0.1.0)
+
+The system now ships a discipline layer on top of the Six Laws — merged from
+the strongest process rules in Hallmark and Impeccable, with the visual
+system untouched: three working verbs (build / audit / redesign), a
+pre-flight scan and append-only rule for existing projects, declared
+decisions before code, honest internally-consistent numbers, the 8-state +
+4-lifecycle-state contract, a 320–1280px responsive hard floor, motion and
+layering physics (including the `--sv-z-*` ladder in tokens.css), and a
+durable `/* 76° · screen: … */` stamp. Full text in
+`docs/76-FUNDAMENTALS.md` and `skill/seventy-six-design/references/
+fundamentals.md`; the machine-checkable half lives in the firewall (rules
+11–15) and the Ship Gate is now 14 points.
+
+## Documentation (`docs/`)
+
+The canonical 76° documentation set, versioned with the code — see
+`docs/README.md` for the reading order: `76-DESIGN-SYSTEM.md` (the
+constitution), `76-COMPONENT-BOOK.md` (B1–B18 specs), `76-FUNDAMENTALS.md`
+(the discipline layer), `76-UI-LIBRARY.md` (this library),
+`ECOSYSTEM-DESIGN-DNA.md` (the three-layer model), and
+`DESIGN-STYLE-VOCABULARY.md` (the shared design language).
 
 ## Zero runtime dependencies
 

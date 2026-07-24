@@ -1,7 +1,7 @@
 ---
 name: seventy-six-design
 description: "The 76° (Seventy Six Degrees) design system — the binding visual system for every product, screen, component, prototype, or mockup in Max's projects. Use this skill whenever building or reviewing ANY UI: React components, HTML pages, dashboards, ERP/CRM/POS screens, admin panels, forms, tables, charts, landing mockups, or artifacts — even if the user never says 76° or design system. Also use when styling anything with CSS/Tailwind, choosing colors or fonts, or when asked to critique a screen. If the output has pixels, this skill governs it."
-version: 0.0.1
+version: 0.1.0
 ---
 
 # 76° — Seventy Six Degrees
@@ -10,14 +10,30 @@ version: 0.0.1
 tells you information; none of them perform. Light-first, always. The wordmark
 is `76°` — the degree mark is never omitted.
 
+Every request is one of three verbs — **build** (default), **audit** (score
+against the rules, ranked punch list, edit nothing), or **redesign** (re-skin
+to 76° preserving routes, IA, copy intent, and data contracts). Verb behavior
+is defined in `references/fundamentals.md` §1.
+
 Build from this skill in this order:
 
-1. Absorb the Six Laws and tokens below (they decide 90% of choices).
-2. Compose screens ONLY from the widget taxonomy — never invent a hybrid.
-3. For any component's exact anatomy, states, and a11y contract, read
+1. **Pre-flight** (existing projects only): detect framework, tokens.css,
+   fonts, seed, and stamps before touching code; state findings in one block;
+   never clobber an existing global stylesheet — append-only
+   (`references/fundamentals.md` §2).
+2. Absorb the Six Laws and tokens below (they decide 90% of choices).
+3. **Declare before building**: one line naming screen · seed · widgets ·
+   inferred assumptions, so the user can redirect in five seconds instead of
+   after 500 lines (`references/fundamentals.md` §3).
+4. Compose screens ONLY from the widget taxonomy — never invent a hybrid.
+5. For any component's exact anatomy, states, and a11y contract, read
    `references/component-specs.md` before writing it.
-4. Before showing output, run the Ship Gate (bottom of this file). For code,
-   run `scripts/slop-firewall.mjs` against the source when Node is available.
+6. Build to the Craft Floor below — states, responsiveness, honesty, and
+   physics are requirements, not polish.
+7. Before showing output, self-critique (fundamentals §3), then run the Ship
+   Gate (bottom of this file). For code, run `scripts/slop-firewall.mjs`
+   against the source when Node is available. Stamp the output
+   (fundamentals §11).
 
 ## The Six Laws
 
@@ -102,6 +118,35 @@ Card head is universal: bold title + faint subtitle left, ONE seed text-link
 action right. Inventing a new widget type requires naming it, giving it one
 job, and registering it in the Component Book in the same change.
 
+## The Craft Floor (non-negotiable fundamentals)
+
+Full detail in `references/fundamentals.md` — this is the digest:
+
+- **States.** Every interactive element ships all 8 states (default · hover ·
+  focus-visible · active · disabled · loading · error · success); every data
+  region ships all 4 lifecycle states (loading skeleton after 300ms · empty ·
+  inline error · loaded). Hover is enhancement-only. A happy-path-only screen
+  is half a screen. New registered components ship an 8-state preview file.
+- **Honesty.** Mockup numbers are internally consistent (deltas match values,
+  parts sum to totals, tables reconcile with stats). No invented
+  testimonials, logos, or "10× faster" claims. No hand-drawn fake browser/
+  phone chrome — real screenshots or nothing.
+- **Responsive floor.** Verify 320 / 375 / 414 / 768 / 1000 / 1280.
+  `overflow-x: clip` on html/body (never `hidden`); content grid tracks use
+  `minmax(0,1fr)`; no two-line buttons/nav links; `text-wrap: balance` on
+  headings, `pretty` on prose; prose measure 65–75ch; tables scroll, never
+  card-reflow.
+- **Motion physics.** Transform/opacity/color only; ease-out only — no
+  bounce/overshoot (cubic-bezier y within [0,1]); focus ring appears
+  instantly; content never gated on scroll animation; images never move on
+  hover.
+- **Layering.** Native `<dialog>`/`popover` (top layer) first; otherwise the
+  `--sv-z-*` ladder in tokens.css; no 999s; never position a dropdown
+  `absolute` inside an `overflow` container — portal/fixed/popover out.
+- **Type & contrast.** No italic headings ever (weight/seed carry emphasis);
+  input placeholders use `--sv-ink-soft` (faint fails AA) and never replace
+  labels; no paper-on-paper nesting inside cards.
+
 ## Voice (banned copy)
 
 No exclamation marks. No "Oops/Whoops/Something went wrong" without saying
@@ -122,12 +167,17 @@ Honor `prefers-reduced-motion` (all durations → 0; the design loses nothing).
 
 ## Reference files — when to read what
 
+- `references/fundamentals.md` — the discipline layer: verbs (build/audit/
+  redesign), pre-flight, declared decisions, honest content, the 8-state and
+  lifecycle contracts, responsive floor, motion/layering physics, and the
+  stamp. Read when starting work in an existing project, running audit or
+  redesign, or unsure what "done" means for a component.
 - `references/component-specs.md` — condensed B1–B18: anatomy, states, a11y,
   and Don't list per component. Read the relevant section BEFORE implementing
   or reviewing any specific component.
 - `references/firewall-and-copy.md` — the machine-checkable banned-CSS/pattern
-  list (A1–A4) and the full Ship Gate. Read when reviewing code or when unsure
-  whether something is legal.
+  list (A1–A4), the Part E fundamentals gates, and the full Ship Gate. Read
+  when reviewing code or when unsure whether something is legal.
 - `references/library.md` — the built React library (seventy-six-ui): file
   map, imports, registry install, doc-site conventions. Read when working in
   React so you consume the existing components instead of rebuilding them.
@@ -152,3 +202,13 @@ Honor `prefers-reduced-motion` (all durations → 0; the design loses nothing).
    fix.
 8. New colors contrast-checked; new seeds through the seed rule.
 9. Every wordmark reads `76°` — never bare `76`.
+10. State contract: 8 interaction states + 4 lifecycle states per data
+    region; disabled is never bare opacity.
+11. Responsive floor: reasoned through at 320/375/414/768/1000/1280; no
+    horizontal scroll; no two-line clickables.
+12. Honest numbers: mockup data reconciles (deltas, sums, dates); zero
+    invented claims or fake chrome.
+13. Physics: no italic headings, no image hover motion, no bounce easing,
+    no arbitrary z-index, no paper-on-paper.
+14. Output stamped (`/* 76° · screen: … · gate: pass */`) — and the stamp
+    tells the truth.

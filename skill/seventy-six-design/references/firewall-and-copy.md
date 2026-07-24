@@ -20,6 +20,11 @@ The machine-checkable banned-CSS/pattern list (A1–A4), the registered exceptio
 | 8 | **animation > 200ms** | `animation: … <N>ms` where `N > 200`, unless the line contains `sv-rotate` | Long motion performs; 76° motion is functional and brief | Keep ≤200ms; use `var(--sv-t)` (160ms) / `var(--sv-t-fast)` (120ms), both of which collapse to 0ms under `prefers-reduced-motion` |
 | 9 | **transition on layout property** | a `transition:` line naming `width` \| `height` \| `top` \| `left` \| `margin` \| `padding`, unless it's a `width` transition in `progress.css` or `meter-list.css` | Animating layout causes reflow and jank; fades are opacity/color only | Transition `opacity`/`color`/`background` only. Layout is instant |
 | 10 | **unregistered font-family** | a `font-family:` line without `var(--sv-font-ui)`, `var(--sv-font-mono)`, or `inherit` | Two typefaces, no more: one UI, one mono | `var(--sv-font-ui)` (Hanken Grotesk), `var(--sv-font-mono)` (Fragment Mono), or `inherit` |
+| 11 | **italic** | `font-style: italic` | Italic headings/display are a reliable AI tell; Fragment Mono has no italic | Emphasis via weight, the seed, or the band-soft secondary word. Italic survives only inside running body copy |
+| 12 | **arbitrary z-index** | `z-index:` with a 3+-digit literal | `999` wars mean nobody owns the stacking order | The `--sv-z-*` ladder (band 10 · sticky 20 · scrim 30 · dialog 40 · toast 50 · tip 60 · skip 70) — or the browser top layer via native `<dialog>`/`popover`, which needs none |
+| 13 | **overflow-x hidden** | `overflow-x: hidden` | `hidden` silently kills sticky positioning and programmatic scroll | `overflow-x: clip` to clip; `auto`/`scroll` for real scroll regions (B7 tables) |
+| 14 | **image motion on hover** | `:hover` selector targeting `img`, or Tailwind `group-hover:scale/rotate/translate` | The image isn't the action target; animated images "perform" | Hover feedback goes to the row/card: seed-tint background or border shift per spec |
+| 15 | **bounce/overshoot easing** | `cubic-bezier()` with a y-component outside [0, 1] | Bounce is celebration; 76° motion informs | Plain ease-out curves; both durations collapse to 0ms under reduced motion anyway |
 
 ---
 
@@ -54,6 +59,39 @@ These are the 76° laws that a line-by-line lint can't catch — enforced by eye
 
 ---
 
+## E · Fundamentals gates — states, honesty, floor, physics
+
+The review-time rules a line-by-line lint can't fully catch. Full rationale
+and process in `references/fundamentals.md`; these are the pass/fail checks.
+
+- **8 interaction states** on every interactive element: default · hover ·
+  `:focus-visible` · `:active` · disabled · loading · error · success.
+  Disabled is never bare opacity (B10); hover is enhancement-only.
+- **4 lifecycle states** on every data region: loading (B17 skeleton after
+  300ms) · empty (B15) · error (inline at the source, never a toast) ·
+  loaded. A happy-path-only screen is half a screen.
+- **Responsive floor** holds at 320 / 375 / 414 / 768 / 1000 / 1280:
+  `overflow-x: clip` on html/body, content grid tracks `minmax(0,1fr)`,
+  no two-line buttons/nav links, `text-wrap: balance` on headings and
+  `pretty` on prose, 65–75ch prose measure, B7 tables scroll with headers
+  intact.
+- **Honest numbers.** Mockup data reconciles — deltas match the values they
+  compare, MeterList parts sum to totals, tables agree with the S1 stats
+  above them. No invented testimonials, logos, or "10× faster" claims. No
+  re-drawn browser/phone chrome — real screenshots in a `<figure>` or
+  nothing.
+- **Structural honesty.** No paper-on-paper (cards never nest — structure
+  inside a card is hairlines, spacing, type). Colored left-edge rules only
+  in their registered homes (B7 selected row, B14 toast).
+- **Motion physics.** Content never gated on scroll animation (visible by
+  default; motion enhances). Focus ring appears instantly — never animated.
+- **The stamp.** Every screen's entry file opens with
+  `/* 76° · screen: <name> · seed: <product> · widgets: … · gate: pass */`
+  — and it tells the truth. Audits read stamps first; a lying stamp is
+  itself a finding.
+
+---
+
 ## Voice — banned copy
 
 76° speaks like a competent colleague: plain, specific, unhurried. Banned:
@@ -69,7 +107,7 @@ These are the 76° laws that a line-by-line lint can't catch — enforced by eye
 
 ## Ship Gate — run before showing anything
 
-Nine points. All must pass before the work is shown.
+Fourteen points. All must pass before the work is shown.
 
 1. **Zero firewall hits.** `node scripts/slop-firewall.mjs` exits clean.
 2. **Count the colors.** Exactly neutrals + one seed + functional (words/dots) — nothing else. If you can point at a fourth color, it fails.
@@ -80,6 +118,11 @@ Nine points. All must pass before the work is shown.
 7. **Copy audit.** Run the "Voice — banned copy" list above over every string.
 8. **New colors contrast-checked.** New seeds pass the seed rule: **seed-on-white ≥ 4.5:1 AND white-on-seed ≥ 4.5:1** (C1). Functional/neutral additions are contrast-verified too.
 9. **Every wordmark reads `76°`, never bare `76`.** The degree sign is part of the name.
+10. **State contract.** 8 interaction states on every interactive element; 4 lifecycle states on every data region; disabled never bare opacity (Part E).
+11. **Responsive floor.** Reasoned through at 320/375/414/768/1000/1280 — no horizontal scroll, no two-line clickables, `minmax(0,1fr)` content tracks (Part E).
+12. **Honest numbers.** Mockup data reconciles (deltas, sums, dates); zero invented claims, testimonials, or fake chrome (Part E).
+13. **Physics.** No italic headings, no image hover motion, no bounce easing, no arbitrary z-index, no paper-on-paper (A1 rules 11–15 + Part E).
+14. **Stamped.** The entry file opens with the `/* 76° · screen: … · gate: pass */` stamp — and the stamp tells the truth.
 
 ---
 
