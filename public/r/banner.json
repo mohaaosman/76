@@ -1,0 +1,44 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "banner",
+  "type": "registry:ui",
+  "title": "Banner",
+  "description": "The inline notice — where B14 sends every error: in the flow, at the point of relevance. One job: State a condition of THIS place, in this place.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/banner.tsx",
+      "content": "import type { ReactNode } from 'react';\nimport { cx } from '@/lib/cx';\nimport './banner.css';\n\n/**\n * B22 · Banner — the INLINE notice. Where toasts drift, banners sit in\n * the flow at the point of relevance: a form's failed submit, a page's\n * degraded sync, a record's pending approval. This is the surface B14's\n * discipline points errors at. Tones follow the three-color law:\n * ok/bad words, ink for info/warn — no amber surface enters the system.\n */\nexport type BannerTone = 'info' | 'ok' | 'warn' | 'bad';\n\nexport interface BannerProps {\n  tone?: BannerTone;\n  title: string;\n  /** Full sentences: what happened and how to fix it. */\n  children?: ReactNode;\n  /** One text-link action, e.g. \"Retry sync\". */\n  action?: ReactNode;\n  /** Renders a dismiss control. Persistent conditions omit it. */\n  onDismiss?: () => void;\n  className?: string;\n}\n\nconst TONE_ICONS: Record<BannerTone, ReactNode> = {\n  ok: (\n    <svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" aria-hidden=\"true\">\n      <path d=\"M3 8.5l3.2 3L13 4.5\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.8\" strokeLinecap=\"round\" strokeLinejoin=\"round\" />\n    </svg>\n  ),\n  info: (\n    <svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" aria-hidden=\"true\">\n      <circle cx=\"8\" cy=\"8\" r=\"6.5\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.6\" />\n      <path d=\"M8 7.2v4\" stroke=\"currentColor\" strokeWidth=\"1.8\" strokeLinecap=\"round\" />\n      <circle cx=\"8\" cy=\"4.8\" r=\"0.9\" fill=\"currentColor\" />\n    </svg>\n  ),\n  warn: (\n    <svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" aria-hidden=\"true\">\n      <path d=\"M8 2l6.5 11.5h-13L8 2z\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.6\" strokeLinejoin=\"round\" />\n      <path d=\"M8 6.5v3.2\" stroke=\"currentColor\" strokeWidth=\"1.8\" strokeLinecap=\"round\" />\n      <circle cx=\"8\" cy=\"11.6\" r=\"0.9\" fill=\"currentColor\" />\n    </svg>\n  ),\n  bad: (\n    <svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" aria-hidden=\"true\">\n      <circle cx=\"8\" cy=\"8\" r=\"6.5\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.6\" />\n      <path d=\"M5.6 5.6l4.8 4.8M10.4 5.6l-4.8 4.8\" stroke=\"currentColor\" strokeWidth=\"1.6\" strokeLinecap=\"round\" />\n    </svg>\n  ),\n};\n\nexport function Banner({ tone = 'info', title, children, action, onDismiss, className }: BannerProps) {\n  return (\n    <div\n      role={tone === 'bad' ? 'alert' : 'status'}\n      className={cx('sv-banner', `sv-banner--${tone}`, className)}\n    >\n      <span className=\"sv-banner__icon\" aria-hidden=\"true\">\n        {TONE_ICONS[tone]}\n      </span>\n      <div className=\"sv-banner__text\">\n        <p className=\"sv-banner__title\">{title}</p>\n        {children && <div className=\"sv-banner__body\">{children}</div>}\n      </div>\n      {action && <span className=\"sv-banner__action\">{action}</span>}\n      {onDismiss && (\n        <button\n          type=\"button\"\n          className=\"sv-banner__dismiss\"\n          aria-label={`Dismiss: ${title}`}\n          onClick={onDismiss}\n        >\n          <svg viewBox=\"0 0 10 10\" width=\"10\" height=\"10\" aria-hidden=\"true\">\n            <path d=\"M1.5 1.5l7 7M8.5 1.5l-7 7\" stroke=\"currentColor\" strokeWidth=\"1.5\" strokeLinecap=\"round\" />\n          </svg>\n        </button>\n      )}\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/banner.tsx"
+    },
+    {
+      "path": "registry/seventy-six/banner.css",
+      "content": "/* B22 · Banner — inline notice. Paper card, tone rule, no colored surfaces. */\n\n@layer sv-components {\n  .sv-banner {\n    display: flex;\n    align-items: flex-start;\n    gap: var(--sv-s3);\n    padding: var(--sv-s3) var(--sv-s4);\n    background: var(--sv-paper);\n    border: 1px solid var(--sv-line);\n    border-left: 2px solid var(--sv-seed);\n    border-radius: var(--sv-r);\n  }\n\n  .sv-banner--ok   { border-left-color: var(--sv-ok); }\n  .sv-banner--warn { border-left-color: var(--sv-ink-soft); }\n  .sv-banner--bad  { border-left-color: var(--sv-bad); }\n\n  .sv-banner__icon {\n    display: inline-flex;\n    flex: none;\n    margin-top: 1px;\n    color: var(--sv-seed-text);\n  }\n\n  .sv-banner--ok   .sv-banner__icon { color: var(--sv-ok); }\n  .sv-banner--warn .sv-banner__icon { color: var(--sv-ink-soft); }\n  .sv-banner--bad  .sv-banner__icon { color: var(--sv-bad); }\n\n  .sv-banner__text { flex: 1; min-width: 0; }\n\n  .sv-banner__title {\n    font-size: 13px;\n    font-weight: 700;\n    color: var(--sv-ink);\n  }\n\n  .sv-banner__body {\n    margin-top: 2px;\n    font-size: 12.5px;\n    line-height: 1.5;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-banner__action {\n    flex: none;\n    font-size: 12.5px;\n    font-weight: 600;\n  }\n\n  .sv-banner__dismiss {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 22px;\n    height: 22px;\n    flex: none;\n    border: 0;\n    border-radius: var(--sv-r);\n    background: none;\n    color: var(--sv-ink-faint);\n    cursor: pointer;\n    transition: background-color var(--sv-t-fast), color var(--sv-t-fast);\n  }\n\n  .sv-banner__dismiss:hover {\n    background: var(--sv-wall);\n    color: var(--sv-ink);\n  }\n\n  .sv-banner__dismiss:focus-visible {\n    outline: 2px solid var(--sv-seed);\n    outline-offset: 2px;\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/banner.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/banner.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B22",
+    "job": "State a condition of THIS place, in this place.",
+    "tags": [
+      "banner",
+      "alert",
+      "inline-error",
+      "notice",
+      "callout",
+      "status-region"
+    ],
+    "exports": [
+      "Banner"
+    ]
+  }
+}

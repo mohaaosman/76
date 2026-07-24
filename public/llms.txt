@@ -23,11 +23,16 @@
 - [StatusWord](https://76.zifala.com/llms/status-word.md): A 6px currentColor dot + a colored word. The word is the meaning; the dot is rhythm. One job: State the status of one thing, in one word.
 - [Card](https://76.zifala.com/llms/card.md): The paper primitive: one shadow, one radius, zero border. Every widget composes it. One job: Be the sheet of paper a widget is printed on.
 - [Dialog](https://76.zifala.com/llms/dialog.md): Native <dialog> in a paper card on a flat scrim — focus trap, Esc, and top layer for free. One job: Interrupt for one decision or one form.
-- [Toast](https://76.zifala.com/llms/toast.md): Bottom-left paper slips for success and neutral info only — errors always render inline at their source. One job: Confirm that something finished, without demanding attention.
+- [Notification](https://76.zifala.com/llms/toast.md): Bottom-left paper notifications — title, description, icon, four tones, two sizes. Errors still render inline first. One job: Report that something happened, without demanding attention.
 - [Tooltip](https://76.zifala.com/llms/tooltip.md): The popover attribute in the top layer: ink card, 300ms delay, focus-visible triggers included. One job: Add one line of supplementary context to a control.
 - [EmptyState](https://76.zifala.com/llms/empty-state.md): One soft sentence + one primary action. No illustration, no humor, max two lines. One job: Say what would appear here, why it is empty, and the one way forward.
 - [Skeleton](https://76.zifala.com/llms/skeleton.md): Static wall-colored blocks matching the target anatomy. No shimmer, no pulse, 300ms gate. One job: Hold the exact shape of content that is still loading.
 - [SearchCommand](https://76.zifala.com/llms/search-command.md): The ⌘K palette every 76° app ships — dialog anatomy, mono input, grouped results. One job: Be the keyboard front door to everything.
+- [Combobox](https://76.zifala.com/llms/combobox.md): The searchable select — ARIA 1.2 combobox pattern, hand-rolled, zero dependencies. One job: Pick ONE value from a list too long to scan.
+- [Menu](https://76.zifala.com/llms/menu.md): An actions dropdown on the native popover top layer — plus the SplitButton that carries one. One job: Hold the secondary VERBS one control cannot.
+- [Drawer](https://76.zifala.com/llms/drawer.md): The slide-over: a paper panel from the screen edge for detail-in-context, on native <dialog>. One job: Inspect or edit ONE record without leaving the sheet.
+- [Banner](https://76.zifala.com/llms/banner.md): The inline notice — where B14 sends every error: in the flow, at the point of relevance. One job: State a condition of THIS place, in this place.
+- [Badge](https://76.zifala.com/llms/badge.md): A small mono tag for category metadata — never status, never numbers that matter. One job: Name the CATEGORY a thing belongs to.
 - [Forms](https://76.zifala.com/llms/field.md): Field, Select, Checkbox, Radio, Toggle — labels above, seed focus without glow, errors that say how to fix. One job: Collect one value per control, honestly labeled.
 
 ## Blocks

@@ -17,7 +17,7 @@ Manual: copy components/seventy-six/dialog.tsx, components/seventy-six/dialog.cs
 
 Built on the platform: `showModal()` gives us the top layer, focus trapping, Esc handling, and `::backdrop` without a single dependency. The scrim is flat `rgba(27,31,38,.4)` — no blur, because glassmorphism is banned.
 
-Anatomy: 15/700 title, 13/1.55 soft body, right-aligned footer with a ghost cancel and **one** primary or danger action. 480px max width; forms get 640px via `wide`. There is no "X" close button as the only path out — the footer always carries a named cancel.
+Anatomy: 15/700 title, 13/1.55 soft body, right-aligned footer with a ghost cancel and **one** primary or danger action. Three sizes: default 480px, `wide` 640px for forms, and `full` — a full-screen takeover for tasks that replace the page (composers, review flows), where the dialog becomes the wall and the work inside stays paper-on-wall. Only the full size gets a close button; smaller dialogs always exit through a named footer cancel.
 
 Destructive confirms follow B10: the dialog title names the object ("Delete ORD-10482?"), and the confirming button is the single place a red fill is legal (`data-confirm` on a danger Button).
 
@@ -45,6 +45,27 @@ const [open, setOpen] = useState(false);
 >
   The order moves to the archive and leaves the open-orders table.
   You can restore it from Reports → Archive.
+</Dialog>
+```
+
+### Full-screen dialog
+
+size="full" — the dialog becomes the page: wall background, 1280px container, visible close, no scrim dismissal.
+
+```tsx
+<Dialog
+  open={open}
+  onClose={() => setOpen(false)}
+  title="Compose purchase order"
+  size="full"
+  footer={
+    <>
+      <Button variant="ghost" onClick={() => setOpen(false)}>Discard</Button>
+      <Button variant="primary" onClick={submit}>Create purchase order</Button>
+    </>
+  }
+>
+  {/* A full working surface: Rows, Cards, Fields */}
 </Dialog>
 ```
 
@@ -81,7 +102,8 @@ destructive disables scrim-click close; the red fill appears here and nowhere el
 | `open` | `boolean` | — | Controlled visibility; drives showModal()/close(). |
 | `onClose` | `() => void` | — | Called on Esc, scrim click (non-destructive), or your cancel button. |
 | `title` | `string` | — | The 15/700 title; wired to aria-labelledby. Required. |
-| `wide` | `boolean` | `false` | 640px max width for forms; default 480px. |
+| `size` | `'default' | 'wide' | 'full'` | `'default'` | 480px · 640px (forms) · full-screen takeover with visible close. |
+| `wide` | `boolean` | `false` | Deprecated 0.1.x alias for size="wide". |
 | `destructive` | `boolean` | `false` | Scrim click no longer closes; Esc still works unless preventEscape. |
 | `preventEscape` | `boolean` | `false` | Blocks Esc while a destructive action is mid-flight. |
 | `footer` | `ReactNode` | — | Right-aligned actions: ghost cancel + ONE primary/danger. |

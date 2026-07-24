@@ -1,0 +1,44 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "badge",
+  "type": "registry:ui",
+  "title": "Badge",
+  "description": "A small mono tag for category metadata — never status, never numbers that matter. One job: Name the CATEGORY a thing belongs to.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/badge.tsx",
+      "content": "import type { ReactNode } from 'react';\nimport { cx } from '@/lib/cx';\nimport './badge.css';\n\n/**\n * B23 · Badge — a small mono tag for CATEGORY metadata: environment,\n * plan, type, version. Never for live status — status is a StatusWord\n * (dot + word). Never for numbers that matter — those are stats.\n */\nexport interface BadgeProps {\n  children: ReactNode;\n  /** neutral (default) · seed — seed marks the CURRENT/active category. */\n  tone?: 'neutral' | 'seed';\n  className?: string;\n}\n\nexport function Badge({ children, tone = 'neutral', className }: BadgeProps) {\n  return (\n    <span className={cx('sv-badge sv-mono', tone === 'seed' && 'sv-badge--seed', className)}>\n      {children}\n    </span>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/badge.tsx"
+    },
+    {
+      "path": "registry/seventy-six/badge.css",
+      "content": "/* B23 · Badge — mono category tag. Rectilinear, never a pill. */\n\n@layer sv-components {\n  .sv-badge {\n    display: inline-flex;\n    align-items: center;\n    padding: 2px 6px;\n    border: 1px solid var(--sv-line);\n    border-radius: var(--sv-r);\n    background: var(--sv-wall);\n    font-size: 9.5px;\n    letter-spacing: 0.1em;\n    text-transform: uppercase;\n    color: var(--sv-ink-soft);\n    white-space: nowrap;\n  }\n\n  .sv-badge--seed {\n    border-color: var(--sv-seed-tint);\n    background: var(--sv-seed-tint);\n    color: var(--sv-seed-text);\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/badge.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/badge.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B23",
+    "job": "Name the CATEGORY a thing belongs to.",
+    "tags": [
+      "badge",
+      "tag",
+      "chip",
+      "label",
+      "category",
+      "mono"
+    ],
+    "exports": [
+      "Badge"
+    ]
+  }
+}

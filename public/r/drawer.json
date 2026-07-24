@@ -1,0 +1,45 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "drawer",
+  "type": "registry:ui",
+  "title": "Drawer",
+  "description": "The slide-over: a paper panel from the screen edge for detail-in-context, on native <dialog>. One job: Inspect or edit ONE record without leaving the sheet.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/button.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/drawer.tsx",
+      "content": "import { useEffect, useId, useRef } from 'react';\nimport type { MouseEvent, ReactNode } from 'react';\nimport { cx } from '@/lib/cx';\nimport './drawer.css';\n\n/**\n * B21 · Drawer — the slide-over. A paper panel entering from the screen\n * edge for detail-in-context work: inspect a row, edit a record, review\n * before commit — WITHOUT losing the sheet behind it. Built on native\n * <dialog>.showModal(): focus trap, Esc, ::backdrop, top layer for free.\n * Anything that replaces the whole task is a full-screen Dialog instead.\n */\nexport interface DrawerProps {\n  open: boolean;\n  onClose: () => void;\n  title: string;\n  /** Mono context line under the title, e.g. \"ORD-2291 · 24 JUL\". */\n  context?: string;\n  side?: 'right' | 'left';\n  /** sm 360 · md 480 (default) · lg 640 · full — a mobile-style takeover. */\n  size?: 'sm' | 'md' | 'lg' | 'full';\n  /** Footer actions, right-aligned: ghost cancel + ONE primary/danger. */\n  footer?: ReactNode;\n  /** Scrim click closes by default; disable for unsaved-work drawers. */\n  dismissible?: boolean;\n  children: ReactNode;\n}\n\nexport function Drawer({\n  open,\n  onClose,\n  title,\n  context,\n  side = 'right',\n  size = 'md',\n  footer,\n  dismissible = true,\n  children,\n}: DrawerProps) {\n  const ref = useRef<HTMLDialogElement>(null);\n  const titleId = useId();\n\n  useEffect(() => {\n    const el = ref.current;\n    if (!el) return;\n    if (open && !el.open) el.showModal();\n    if (!open && el.open) el.close();\n  }, [open]);\n\n  function handleClick(e: MouseEvent<HTMLDialogElement>) {\n    if (!dismissible) return;\n    if (e.target === ref.current) onClose();\n  }\n\n  return (\n    <dialog\n      ref={ref}\n      className={cx('sv-drawer', `sv-drawer--${side}`, `sv-drawer--${size}`)}\n      aria-labelledby={titleId}\n      onCancel={(e) => {\n        e.preventDefault();\n        onClose();\n      }}\n      onClick={handleClick}\n      onClose={() => open && onClose()}\n    >\n      <div className=\"sv-drawer__panel\">\n        <header className=\"sv-drawer__head\">\n          <div className=\"sv-drawer__titles\">\n            <h2 className=\"sv-drawer__title\" id={titleId}>\n              {title}\n            </h2>\n            {context && <p className=\"sv-drawer__context sv-mono\">{context}</p>}\n          </div>\n          <button\n            type=\"button\"\n            className=\"sv-drawer__close\"\n            aria-label={`Close ${title}`}\n            onClick={onClose}\n          >\n            <svg viewBox=\"0 0 12 12\" width=\"12\" height=\"12\" aria-hidden=\"true\">\n              <path\n                d=\"M2 2l8 8M10 2l-8 8\"\n                stroke=\"currentColor\"\n                strokeWidth=\"1.6\"\n                strokeLinecap=\"round\"\n              />\n            </svg>\n          </button>\n        </header>\n        <div className=\"sv-drawer__body\">{children}</div>\n        {footer && <footer className=\"sv-drawer__footer\">{footer}</footer>}\n      </div>\n    </dialog>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/drawer.tsx"
+    },
+    {
+      "path": "registry/seventy-six/drawer.css",
+      "content": "/* B21 · Drawer — slide-over on native <dialog>. Transform/opacity only;\n   both collapse to 0ms under prefers-reduced-motion via the tokens. */\n\n@layer sv-components {\n  .sv-drawer {\n    position: fixed;\n    inset: 0 0 0 auto;\n    height: 100dvh;\n    max-height: 100dvh;\n    width: min(480px, 100vw);\n    max-width: 100vw;\n    margin: 0;\n    padding: 0;\n    border: 0;\n    border-radius: 0;\n    background: var(--sv-paper);\n    color: var(--sv-ink);\n    box-shadow: var(--sv-shadow);\n  }\n\n  .sv-drawer--left {\n    inset: 0 auto 0 0;\n  }\n\n  .sv-drawer--sm {\n    width: min(360px, 100vw);\n  }\n\n  .sv-drawer--lg {\n    width: min(640px, 100vw);\n  }\n\n  .sv-drawer--full {\n    width: 100vw;\n  }\n\n  .sv-drawer::backdrop {\n    background: var(--sv-scrim);\n  }\n\n  /* Entry: slide from the owning edge. Exit is instant (dialog closes);\n     honest and cheaper than choreographing a close animation. */\n  .sv-drawer[open] {\n    transform: translateX(0);\n    transition: transform var(--sv-t) ease-out;\n  }\n\n  @starting-style {\n    .sv-drawer--right[open] {\n      transform: translateX(24px);\n    }\n\n    .sv-drawer--left[open] {\n      transform: translateX(-24px);\n    }\n  }\n\n  .sv-drawer__panel {\n    display: flex;\n    flex-direction: column;\n    height: 100%;\n    min-height: 0;\n  }\n\n  .sv-drawer__head {\n    display: flex;\n    align-items: flex-start;\n    gap: var(--sv-s3);\n    padding: var(--sv-s5) var(--sv-s6) var(--sv-s4);\n    border-bottom: 1px solid var(--sv-line);\n  }\n\n  .sv-drawer__titles {\n    flex: 1;\n    min-width: 0;\n  }\n\n  .sv-drawer__title {\n    font-size: 15px;\n    font-weight: 700;\n    text-wrap: balance;\n  }\n\n  .sv-drawer__context {\n    margin-top: var(--sv-s1);\n    font-size: 10.5px;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-drawer__close {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 28px;\n    height: 28px;\n    flex: none;\n    border: 0;\n    border-radius: var(--sv-r);\n    background: none;\n    color: var(--sv-ink-soft);\n    cursor: pointer;\n    transition: background-color var(--sv-t-fast), color var(--sv-t-fast);\n  }\n\n  .sv-drawer__close:hover {\n    background: var(--sv-wall);\n    color: var(--sv-ink);\n  }\n\n  .sv-drawer__close:focus-visible {\n    outline: 2px solid var(--sv-seed);\n    outline-offset: 2px;\n  }\n\n  .sv-drawer__body {\n    flex: 1;\n    min-height: 0;\n    overflow-y: auto;\n    padding: var(--sv-s5) var(--sv-s6);\n    font-size: 13px;\n    line-height: 1.55;\n  }\n\n  .sv-drawer__footer {\n    display: flex;\n    justify-content: flex-end;\n    gap: var(--sv-s2);\n    padding: var(--sv-s4) var(--sv-s6);\n    border-top: 1px solid var(--sv-line);\n    background: var(--sv-paper);\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/drawer.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/drawer.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B21",
+    "job": "Inspect or edit ONE record without leaving the sheet.",
+    "tags": [
+      "drawer",
+      "slide-over",
+      "panel",
+      "detail-view",
+      "native-dialog",
+      "side-sheet"
+    ],
+    "exports": [
+      "Drawer"
+    ]
+  }
+}

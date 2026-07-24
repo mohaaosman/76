@@ -267,8 +267,8 @@
     {
       "name": "toast",
       "type": "registry:ui",
-      "title": "Toast",
-      "description": "Bottom-left paper slips for success and neutral info only — errors always render inline at their source. One job: Confirm that something finished, without demanding attention.",
+      "title": "Notification",
+      "description": "Bottom-left paper notifications — title, description, icon, four tones, two sizes. Errors still render inline first. One job: Report that something happened, without demanding attention.",
       "categories": [
         "primitives"
       ],
@@ -355,6 +355,101 @@
         },
         {
           "path": "components/seventy-six/search-command.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "combobox",
+      "type": "registry:ui",
+      "title": "Combobox",
+      "description": "The searchable select — ARIA 1.2 combobox pattern, hand-rolled, zero dependencies. One job: Pick ONE value from a list too long to scan.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/combobox.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/combobox.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "menu",
+      "type": "registry:ui",
+      "title": "Menu",
+      "description": "An actions dropdown on the native popover top layer — plus the SplitButton that carries one. One job: Hold the secondary VERBS one control cannot.",
+      "categories": [
+        "primitives"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/menu.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/menu.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "drawer",
+      "type": "registry:ui",
+      "title": "Drawer",
+      "description": "The slide-over: a paper panel from the screen edge for detail-in-context, on native <dialog>. One job: Inspect or edit ONE record without leaving the sheet.",
+      "categories": [
+        "primitives"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/drawer.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/drawer.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "banner",
+      "type": "registry:ui",
+      "title": "Banner",
+      "description": "The inline notice — where B14 sends every error: in the flow, at the point of relevance. One job: State a condition of THIS place, in this place.",
+      "categories": [
+        "primitives"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/banner.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/banner.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "description": "A small mono tag for category metadata — never status, never numbers that matter. One job: Name the CATEGORY a thing belongs to.",
+      "categories": [
+        "primitives"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/badge.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/badge.css",
           "type": "registry:ui"
         }
       ]
