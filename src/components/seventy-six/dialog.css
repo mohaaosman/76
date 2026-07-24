@@ -1,0 +1,45 @@
+/* B13 · Dialog — native <dialog>, flat scrim, no blur */
+
+@layer sv-components {
+  .sv-dialog {
+    max-width: 480px;
+    width: calc(100vw - var(--sv-s7));
+    padding: 0;
+    border: 0;
+    border-radius: var(--sv-r);
+    background: var(--sv-paper);
+    box-shadow: var(--sv-shadow);
+    color: var(--sv-ink);
+  }
+
+  .sv-dialog--wide {
+    max-width: 640px;
+  }
+
+  .sv-dialog::backdrop {
+    background: var(--sv-scrim);
+  }
+
+  .sv-dialog__panel {
+    padding: var(--sv-s5) var(--sv-s6) var(--sv-s6);
+  }
+
+  .sv-dialog__title {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .sv-dialog__body {
+    margin-top: var(--sv-s3);
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-dialog__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--sv-s2);
+    margin-top: var(--sv-s5);
+  }
+}

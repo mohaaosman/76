@@ -1,0 +1,42 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "empty-state",
+  "type": "registry:ui",
+  "title": "EmptyState",
+  "description": "One soft sentence + one primary action. No illustration, no humor, max two lines. One job: Say what would appear here, why it is empty, and the one way forward.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/empty-state.tsx",
+      "content": "import type { ReactNode } from 'react';\nimport { cx } from '@/lib/cx';\nimport './empty-state.css';\n\n/**\n * B15 · EmptyState — one soft sentence stating what would appear here\n * and why it's empty + one primary action. No illustration, no humor,\n * max 2 lines.\n */\nexport interface EmptyStateProps {\n  /** What would appear here, and why it's empty. Calm, factual, specific. */\n  sentence: string;\n  /** Exactly one primary action (a Button). */\n  action?: ReactNode;\n  className?: string;\n}\n\nexport function EmptyState({ sentence, action, className }: EmptyStateProps) {\n  return (\n    <div className={cx('sv-empty', className)}>\n      <p className=\"sv-empty__sentence\">{sentence}</p>\n      {action && <div className=\"sv-empty__action\">{action}</div>}\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/empty-state.tsx"
+    },
+    {
+      "path": "registry/seventy-six/empty-state.css",
+      "content": "/* B15 · EmptyState */\n\n@layer sv-components {\n  .sv-empty {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    gap: var(--sv-s4);\n    padding: var(--sv-s8) var(--sv-s6);\n    text-align: center;\n  }\n\n  .sv-empty__sentence {\n    max-width: 44ch;\n    font-size: 13px;\n    color: var(--sv-ink-soft);\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/empty-state.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/empty-state.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B15",
+    "job": "Say what would appear here, why it is empty, and the one way forward.",
+    "tags": [
+      "empty-state",
+      "zero-data",
+      "first-run",
+      "call-to-action"
+    ],
+    "exports": [
+      "EmptyState"
+    ]
+  }
+}

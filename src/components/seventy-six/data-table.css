@@ -1,0 +1,104 @@
+/* B7 · DataTable */
+
+@layer sv-components {
+  .sv-table__scroll {
+    overflow-x: auto;
+  }
+
+  .sv-table__table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .sv-table__th {
+    padding: var(--sv-s2) 18px;
+    border-bottom: 1px solid var(--sv-line);
+    text-align: left;
+    color: var(--sv-ink-soft);
+    font-weight: 400;
+  }
+
+  .sv-table__th .sv-mono {
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+  }
+
+  .sv-table__sort {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .sv-table__row {
+    transition: background-color var(--sv-t-fast);
+  }
+
+  .sv-table__row:hover,
+  .sv-table__row:focus-visible {
+    background: var(--sv-seed-tint);
+  }
+
+  /* Selected: seed-tint + 2px seed left rule (the only left-rule use). */
+  .sv-table__row--selected {
+    background: var(--sv-seed-tint);
+    box-shadow: inset 2px 0 0 var(--sv-seed);
+  }
+
+  .sv-table__td {
+    padding: 10.5px 18px;
+    border-bottom: 1px solid var(--sv-line);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .sv-table__row:last-child .sv-table__td {
+    border-bottom: 0;
+  }
+
+  .sv-table__cell--num {
+    text-align: right;
+    font-weight: 600;
+  }
+
+  .sv-table__cell--id {
+    font-family: var(--sv-font-mono);
+    font-size: 11px;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-table__pager {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--sv-s3) 18px;
+    border-top: 1px solid var(--sv-line);
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-table__pager-controls {
+    display: inline-flex;
+    gap: var(--sv-s2);
+  }
+
+  .sv-table__pagebtn {
+    padding: 5px 12px;
+    border: 1px solid var(--sv-line);
+    border-radius: var(--sv-r);
+    background: transparent;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color var(--sv-t-fast);
+  }
+
+  .sv-table__pagebtn:hover:not(:disabled) {
+    border-color: var(--sv-seed);
+  }
+
+  .sv-table__pagebtn:disabled {
+    color: var(--sv-ink-faint);
+    cursor: not-allowed;
+  }
+}

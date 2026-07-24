@@ -1,0 +1,104 @@
+/* ============================================================
+   76° · base.css — reset, typography defaults, focus contract
+   ============================================================ */
+
+@layer sv-base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--sv-wall);
+    color: var(--sv-ink);
+    font-family: var(--sv-font-ui);
+    font-size: 13px;
+    line-height: 1.5;
+    font-weight: 500;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, p, figure, blockquote, dl, dd {
+    margin: 0;
+  }
+
+  img, svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  button, input, select, textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  /* C3 · Focus — every interactive element, no exceptions */
+  :focus-visible {
+    outline: 2px solid var(--sv-seed);
+    outline-offset: 2px;
+  }
+
+  /* On the band, focus is white for contrast */
+  .sv-band :focus-visible {
+    outline-color: var(--sv-paper);
+  }
+
+  /* A4 · numbers that can change are tabular, always */
+  .sv-num {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Mono metadata voice (Law 4) */
+  .sv-mono {
+    font-family: var(--sv-font-mono);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  /* C4 · Skip link — first tab stop, visible on focus over the band */
+  .sv-skip {
+    position: absolute;
+    left: var(--sv-s4);
+    top: var(--sv-s2);
+    z-index: 100;
+    padding: var(--sv-s2) var(--sv-s4);
+    background: var(--sv-paper);
+    color: var(--sv-ink);
+    border-radius: var(--sv-r);
+    box-shadow: var(--sv-shadow);
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transform: translateY(-200%);
+  }
+
+  .sv-skip:focus-visible {
+    transform: none;
+  }
+
+  /* Visually hidden, screen-reader available */
+  .sv-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* C7 · reduced motion — handled at the token layer: every transition
+     in the system uses var(--sv-t) / var(--sv-t-fast), which collapse
+     to 0ms under prefers-reduced-motion (see tokens.css). 76° loses
+     nothing, by design. */
+}

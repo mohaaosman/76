@@ -1,0 +1,17 @@
+/* B18 · Tooltip — popover attribute, ink on white text */
+
+@layer sv-components {
+  .sv-tooltip {
+    position: fixed;
+    margin: 0;
+    padding: 6px 10px;
+    border: 0;
+    border-radius: var(--sv-r);
+    background: var(--sv-band);
+    color: var(--sv-paper);
+    font-family: var(--sv-font-ui);
+    font-size: 11.5px;
+    font-weight: 500;
+    max-width: 260px;
+  }
+}

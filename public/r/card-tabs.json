@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "card-tabs",
+  "type": "registry:ui",
+  "title": "CardTabs",
+  "description": "In-card filter tabs on the card hairline — honest ARIA in both of its two modes. One job: Filter one card's content in place.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/card-tabs.tsx",
+      "content": "import { useId, useRef } from 'react';\nimport type { KeyboardEvent } from 'react';\nimport { cx } from '@/lib/cx';\nimport './card-tabs.css';\n\n/**\n * B8 · CardTabs — in-card filters that change content IN PLACE (unlike\n * BandSubTabs, which navigate). Two honest modes, never mixed:\n * - mode=\"tabs\":    real tablist/tab/tabpanel with arrow keys (client panels)\n * - mode=\"filters\": buttons with aria-pressed (server-side filtering)\n */\nexport interface CardTab {\n  id: string;\n  label: string;\n  /** Optional mono count shown after the label. */\n  count?: number;\n}\n\nexport interface CardTabsProps {\n  tabs: CardTab[];\n  active: string;\n  onChange: (id: string) => void;\n  mode?: 'tabs' | 'filters';\n  /** Ties tabs to their panel: panel must carry id={`${idBase}-panel`}\n      and aria-labelledby={`${idBase}-tab-${active}`} in tabs mode. */\n  idBase?: string;\n  className?: string;\n}\n\nexport function CardTabs({ tabs, active, onChange, mode = 'tabs', idBase, className }: CardTabsProps) {\n  const autoId = useId();\n  const base = idBase ?? autoId;\n  const listRef = useRef<HTMLDivElement>(null);\n\n  function onKeyDown(e: KeyboardEvent) {\n    if (mode !== 'tabs') return;\n    const idx = tabs.findIndex((t) => t.id === active);\n    let next = -1;\n    if (e.key === 'ArrowRight') next = (idx + 1) % tabs.length;\n    if (e.key === 'ArrowLeft') next = (idx - 1 + tabs.length) % tabs.length;\n    if (e.key === 'Home') next = 0;\n    if (e.key === 'End') next = tabs.length - 1;\n    if (next >= 0) {\n      e.preventDefault();\n      onChange(tabs[next].id);\n      const buttons = listRef.current?.querySelectorAll<HTMLButtonElement>('button');\n      buttons?.[next]?.focus();\n    }\n  }\n\n  return (\n    <div\n      ref={listRef}\n      className={cx('sv-cardtabs', className)}\n      role={mode === 'tabs' ? 'tablist' : undefined}\n      onKeyDown={onKeyDown}\n    >\n      {tabs.map((tab) => {\n        const isActive = tab.id === active;\n        const shared = {\n          key: tab.id,\n          className: cx('sv-cardtabs__tab', isActive && 'sv-cardtabs__tab--active'),\n          onClick: () => onChange(tab.id),\n          children: (\n            <>\n              {tab.label}\n              {tab.count !== undefined && (\n                <span className=\"sv-cardtabs__count sv-mono sv-num\">{tab.count}</span>\n              )}\n            </>\n          ),\n        };\n        return mode === 'tabs' ? (\n          <button\n            type=\"button\"\n            {...shared}\n            role=\"tab\"\n            id={`${base}-tab-${tab.id}`}\n            aria-selected={isActive}\n            aria-controls={`${base}-panel`}\n            tabIndex={isActive ? 0 : -1}\n          />\n        ) : (\n          <button type=\"button\" {...shared} aria-pressed={isActive} />\n        );\n      })}\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/card-tabs.tsx"
+    },
+    {
+      "path": "registry/seventy-six/card-tabs.css",
+      "content": "/* B8 · CardTabs */\n\n@layer sv-components {\n  .sv-cardtabs {\n    display: flex;\n    gap: var(--sv-s5);\n    padding: 0 18px;\n    border-bottom: 1px solid var(--sv-line);\n  }\n\n  .sv-cardtabs__tab {\n    position: relative;\n    display: inline-flex;\n    align-items: center;\n    gap: 6px;\n    padding: var(--sv-s2) 0 10px;\n    border: 0;\n    background: transparent;\n    font-size: 13.5px;\n    font-weight: 600;\n    color: var(--sv-ink-soft);\n    cursor: pointer;\n    transition: color var(--sv-t-fast);\n  }\n\n  .sv-cardtabs__tab:hover {\n    color: var(--sv-ink);\n  }\n\n  .sv-cardtabs__tab--active {\n    color: var(--sv-seed-text);\n  }\n\n  /* 2px seed underline sitting ON the card hairline */\n  .sv-cardtabs__tab--active::after {\n    content: '';\n    position: absolute;\n    left: 0;\n    right: 0;\n    bottom: -1px;\n    height: 2px;\n    background: var(--sv-seed);\n  }\n\n  .sv-cardtabs__count {\n    color: var(--sv-ink-faint);\n    letter-spacing: 0.06em;\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/card-tabs.css"
+    }
+  ],
+  "categories": [
+    "widgets"
+  ],
+  "docs": "https://76.zifala.com/llms/card-tabs.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B8",
+    "job": "Filter one card's content in place.",
+    "tags": [
+      "tabs",
+      "filters",
+      "tablist",
+      "aria-pressed",
+      "in-card"
+    ],
+    "exports": [
+      "CardTabs"
+    ]
+  }
+}

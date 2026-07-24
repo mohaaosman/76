@@ -1,0 +1,209 @@
+/* B11 · Forms */
+
+@layer sv-components {
+  .sv-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sv-s1);
+  }
+
+  .sv-field__label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--sv-ink);
+  }
+
+  .sv-field__req {
+    margin-left: var(--sv-s1);
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-field__hint {
+    font-size: 11.5px;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-field__input {
+    padding: 9px 12px;
+    background: var(--sv-paper);
+    border: 1px solid var(--sv-field-line);
+    border-radius: var(--sv-r);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--sv-ink);
+    transition: border-color var(--sv-t-fast);
+  }
+
+  .sv-field__input::placeholder {
+    color: var(--sv-ink-faint);
+  }
+
+  /* Focus: 1.5px seed border, no glow rings. */
+  .sv-field__input:focus-visible {
+    outline: none;
+    border-color: var(--sv-seed);
+    box-shadow: inset 0 0 0 0.5px var(--sv-seed);
+  }
+
+  .sv-field__input--error {
+    border-color: var(--sv-bad);
+  }
+
+  .sv-field__input:disabled {
+    background: var(--sv-wall);
+    cursor: not-allowed;
+  }
+
+  .sv-field__error {
+    font-size: 11.5px;
+    color: var(--sv-bad);
+  }
+
+  .sv-field__selectwrap {
+    position: relative;
+    display: flex;
+  }
+
+  .sv-field__select {
+    appearance: none;
+    width: 100%;
+    padding-right: var(--sv-s7);
+  }
+
+  /* Chevron drawn from tokens — no color literals outside tokens.css (A1). */
+  .sv-field__chevron {
+    position: absolute;
+    right: 13px;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    border-right: 1.5px solid var(--sv-ink-soft);
+    border-bottom: 1.5px solid var(--sv-ink-soft);
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+  }
+
+  /* ---- Checkbox / Radio ---- */
+
+  .sv-check {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sv-s2);
+    cursor: pointer;
+  }
+
+  .sv-check__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .sv-check__box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid var(--sv-ink-soft);
+    border-radius: var(--sv-r);
+    background: var(--sv-paper);
+    color: var(--sv-paper);
+    transition: background-color var(--sv-t-fast), border-color var(--sv-t-fast);
+  }
+
+  .sv-check--radio .sv-check__box {
+    border-radius: 50%;
+  }
+
+  .sv-check__box svg {
+    opacity: 0;
+    transition: opacity var(--sv-t-fast);
+  }
+
+  .sv-check__input:checked + .sv-check__box {
+    background: var(--sv-seed);
+    border-color: var(--sv-seed);
+  }
+
+  .sv-check__input:checked + .sv-check__box svg {
+    opacity: 1;
+  }
+
+  .sv-check__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--sv-paper);
+    opacity: 0;
+    transition: opacity var(--sv-t-fast);
+  }
+
+  .sv-check__input:checked + .sv-check__box .sv-check__dot {
+    opacity: 1;
+  }
+
+  .sv-check__input:focus-visible + .sv-check__box {
+    outline: 2px solid var(--sv-seed);
+    outline-offset: 2px;
+  }
+
+  .sv-check__label {
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* ---- Toggle ---- */
+
+  .sv-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sv-s2);
+    cursor: pointer;
+  }
+
+  .sv-toggle__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  /* Track radius is --sv-r, not a pill: 9999px pills are banned (A1)
+     and squarer reads more serious — the 76° toggle is rectilinear. */
+  .sv-toggle__track {
+    display: inline-flex;
+    align-items: center;
+    width: 32px;
+    height: 18px;
+    padding: 2px;
+    border-radius: var(--sv-r);
+    background: var(--sv-field-line);
+    transition: background-color var(--sv-t-fast);
+  }
+
+  .sv-toggle__thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--sv-paper);
+    transition: transform var(--sv-t-fast);
+  }
+
+  .sv-toggle__input:checked + .sv-toggle__track {
+    background: var(--sv-seed);
+  }
+
+  .sv-toggle__input:checked + .sv-toggle__track .sv-toggle__thumb {
+    transform: translateX(14px);
+  }
+
+  .sv-toggle__input:focus-visible + .sv-toggle__track {
+    outline: 2px solid var(--sv-seed);
+    outline-offset: 2px;
+  }
+}

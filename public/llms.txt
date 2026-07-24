@@ -1,0 +1,38 @@
+# 76° UI — Seventy Six Degrees
+
+> Flat, informational, corporate React components compiled from the 76° Component Book.
+> Source distribution (shadcn-compatible registry at https://76.zifala.com/r/), zero runtime
+> dependencies, WCAG 2.2 AA. Install: npx shadcn@latest add https://76.zifala.com/r/<name>.json
+
+## Foundations
+
+- [Tokens](https://76.zifala.com/r/tokens.json): CSS custom properties — neutrals, per-product seeds, functional colors, geometry, motion.
+
+## Components
+
+- [Band](https://76.zifala.com/llms/band.md): The ink chrome zone: topbar with wordmark and horizontal nav, mono sub-tabs, and the page hero. One job: Carry ALL navigation and page context, so the paper below is 100% work.
+- [Sheet & Row](https://76.zifala.com/llms/sheet.md): The platinum wall and its 12-col grid — including the signature -44px overlap row. One job: Hold the paper: grid, gutters, and the one overlap per page.
+- [StatS1](https://76.zifala.com/llms/stat-s1.md): The signature stat and the only legal KPI card: label + delta, icon tile + value, and a footnote that earns its line. One job: Answer "how much — and so what."
+- [Progress](https://76.zifala.com/llms/progress.md): Value against target with one 3px bar. The numbers are the information; the bar is illustration. One job: Answer "how far along."
+- [Trend](https://76.zifala.com/llms/trend.md): Flat single-weight SVG lines on a hairline grid — seed for now, line-gray for before. No fills, no draw-in. One job: Answer "which direction."
+- [MeterList](https://76.zifala.com/llms/meter-list.md): Named items with 3px bars and mandatory absolute numbers — the donut chart's replacement. One job: Answer "how is each part doing."
+- [DataTable](https://76.zifala.com/llms/data-table.md): The ERP workhorse: mono headers, mono IDs, dot+word statuses, right-aligned tabular numbers, full keyboard contract. One job: Answer "what exactly happened."
+- [CardTabs](https://76.zifala.com/llms/card-tabs.md): In-card filter tabs on the card hairline — honest ARIA in both of its two modes. One job: Filter one card's content in place.
+- [ActivityList](https://76.zifala.com/llms/activity-list.md): A mono timestamp column beside sentence rows with bold entities. Absolute time, always. One job: Answer "what needs me."
+- [Button](https://76.zifala.com/llms/button.md): Native <button> with four registered variants — no shadows, no transforms, one primary per view region. One job: Trigger exactly one named action.
+- [StatusWord](https://76.zifala.com/llms/status-word.md): A 6px currentColor dot + a colored word. The word is the meaning; the dot is rhythm. One job: State the status of one thing, in one word.
+- [Card](https://76.zifala.com/llms/card.md): The paper primitive: one shadow, one radius, zero border. Every widget composes it. One job: Be the sheet of paper a widget is printed on.
+- [Dialog](https://76.zifala.com/llms/dialog.md): Native <dialog> in a paper card on a flat scrim — focus trap, Esc, and top layer for free. One job: Interrupt for one decision or one form.
+- [Toast](https://76.zifala.com/llms/toast.md): Bottom-left paper slips for success and neutral info only — errors always render inline at their source. One job: Confirm that something finished, without demanding attention.
+- [Tooltip](https://76.zifala.com/llms/tooltip.md): The popover attribute in the top layer: ink card, 300ms delay, focus-visible triggers included. One job: Add one line of supplementary context to a control.
+- [EmptyState](https://76.zifala.com/llms/empty-state.md): One soft sentence + one primary action. No illustration, no humor, max two lines. One job: Say what would appear here, why it is empty, and the one way forward.
+- [Skeleton](https://76.zifala.com/llms/skeleton.md): Static wall-colored blocks matching the target anatomy. No shimmer, no pulse, 300ms gate. One job: Hold the exact shape of content that is still loading.
+- [SearchCommand](https://76.zifala.com/llms/search-command.md): The ⌘K palette every 76° app ships — dialog anatomy, mono input, grouped results. One job: Be the keyboard front door to everything.
+- [Forms](https://76.zifala.com/llms/field.md): Field, Select, Checkbox, Radio, Toggle — labels above, seed focus without glow, errors that say how to fix. One job: Collect one value per control, honestly labeled.
+
+## Rules that bind every component
+
+- Three colors per screen: ink, one product seed, functional green/red as words and 6px dots only.
+- One radius (4px), one shadow, no gradients, no glassmorphism, no dark mode.
+- Status is never a filled pill; charts are never donuts; nav is never a sidebar.
+- Every interactive element is keyboard-operable with a visible focus state.

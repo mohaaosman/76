@@ -1,0 +1,44 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tooltip",
+  "type": "registry:ui",
+  "title": "Tooltip",
+  "description": "The popover attribute in the top layer: ink card, 300ms delay, focus-visible triggers included. One job: Add one line of supplementary context to a control.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/tooltip.tsx",
+      "content": "import { cloneElement, useId, useRef } from 'react';\nimport type { ReactElement, RefObject } from 'react';\nimport './tooltip.css';\n\n/**\n * B18 · Tooltip — built on the native popover attribute (top layer, no\n * z-index wars). Supplementary info only — never the sole carrier of a\n * label. 300ms delay; keyboard-focusable triggers show it on focus.\n */\nexport interface TooltipProps {\n  /** The tooltip text. Supplementary — the trigger keeps its own label. */\n  content: string;\n  /** A single focusable element (button, a). Receives describedby. */\n  children: ReactElement<Record<string, unknown>>;\n  delay?: number;\n}\n\nexport function Tooltip({ content, children, delay = 300 }: TooltipProps) {\n  const id = useId();\n  const tipRef: RefObject<HTMLDivElement | null> = useRef(null);\n  const triggerRef: RefObject<HTMLElement | null> = useRef(null);\n  const timer = useRef<number>(0);\n\n  function place() {\n    const tip = tipRef.current;\n    const trigger = triggerRef.current;\n    if (!tip || !trigger) return;\n    tip.showPopover();\n    const t = trigger.getBoundingClientRect();\n    const r = tip.getBoundingClientRect();\n    const left = Math.max(8, Math.min(t.left + t.width / 2 - r.width / 2, window.innerWidth - r.width - 8));\n    const top = t.top - r.height - 6 < 8 ? t.bottom + 6 : t.top - r.height - 6;\n    tip.style.left = `${left}px`;\n    tip.style.top = `${top}px`;\n  }\n\n  function show() {\n    window.clearTimeout(timer.current);\n    timer.current = window.setTimeout(place, delay);\n  }\n\n  function showNow() {\n    window.clearTimeout(timer.current);\n    place();\n  }\n\n  function hide() {\n    window.clearTimeout(timer.current);\n    tipRef.current?.hidePopover();\n  }\n\n  const trigger = cloneElement(children, {\n    'aria-describedby': id,\n    ref: (node: HTMLElement | null) => {\n      triggerRef.current = node;\n    },\n    onMouseEnter: show,\n    onMouseLeave: hide,\n    onFocus: showNow,\n    onBlur: hide,\n  });\n\n  return (\n    <>\n      {trigger}\n      <div ref={tipRef} id={id} className=\"sv-tooltip\" popover=\"manual\" role=\"tooltip\">\n        {content}\n      </div>\n    </>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/tooltip.tsx"
+    },
+    {
+      "path": "registry/seventy-six/tooltip.css",
+      "content": "/* B18 · Tooltip — popover attribute, ink on white text */\n\n@layer sv-components {\n  .sv-tooltip {\n    position: fixed;\n    margin: 0;\n    padding: 6px 10px;\n    border: 0;\n    border-radius: var(--sv-r);\n    background: var(--sv-band);\n    color: var(--sv-paper);\n    font-family: var(--sv-font-ui);\n    font-size: 11.5px;\n    font-weight: 500;\n    max-width: 260px;\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/tooltip.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/tooltip.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B18",
+    "job": "Add one line of supplementary context to a control.",
+    "tags": [
+      "tooltip",
+      "popover-attribute",
+      "top-layer",
+      "hover",
+      "focus",
+      "supplementary"
+    ],
+    "exports": [
+      "Tooltip"
+    ]
+  }
+}

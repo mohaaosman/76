@@ -1,0 +1,22 @@
+/* B12 · StatusWord */
+
+@layer sv-components {
+  .sv-status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sv-s2);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .sv-status__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .sv-status--ok      { color: var(--sv-ok); }
+  .sv-status--neutral { color: var(--sv-ink-soft); }
+  .sv-status--bad     { color: var(--sv-bad); }
+}

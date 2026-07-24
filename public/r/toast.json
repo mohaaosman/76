@@ -1,0 +1,44 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toast",
+  "type": "registry:ui",
+  "title": "Toast",
+  "description": "Bottom-left paper slips for success and neutral info only — errors always render inline at their source. One job: Confirm that something finished, without demanding attention.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/toast.tsx",
+      "content": "import { createContext, useCallback, useContext, useRef, useState } from 'react';\nimport type { ReactNode } from 'react';\nimport { cx } from '@/lib/cx';\nimport './toast.css';\n\n/**\n * B14 · Toast — bottom-left, success and neutral info ONLY. Errors render\n * inline at their source (Firewall A2). Max 2 stacked, 5s auto-dismiss\n * with pause-on-hover. Never the only path to an action.\n */\nexport type ToastTone = 'ok' | 'info';\n\ninterface ToastItem {\n  id: number;\n  tone: ToastTone;\n  message: string;\n}\n\ninterface ToastApi {\n  toast: (message: string, tone?: ToastTone) => void;\n}\n\nconst ToastContext = createContext<ToastApi | null>(null);\n\nexport function useToast(): ToastApi {\n  const ctx = useContext(ToastContext);\n  if (!ctx) throw new Error('useToast requires a <ToastProvider> ancestor.');\n  return ctx;\n}\n\nconst DISMISS_MS = 5000;\n\nexport function ToastProvider({ children }: { children: ReactNode }) {\n  const [items, setItems] = useState<ToastItem[]>([]);\n  const nextId = useRef(1);\n  const timers = useRef(new Map<number, { handle: number; remaining: number; started: number }>());\n\n  const remove = useCallback((id: number) => {\n    setItems((prev) => prev.filter((t) => t.id !== id));\n    const timer = timers.current.get(id);\n    if (timer) {\n      window.clearTimeout(timer.handle);\n      timers.current.delete(id);\n    }\n  }, []);\n\n  const schedule = useCallback(\n    (id: number, ms: number) => {\n      const handle = window.setTimeout(() => remove(id), ms);\n      timers.current.set(id, { handle, remaining: ms, started: Date.now() });\n    },\n    [remove],\n  );\n\n  const toast = useCallback(\n    (message: string, tone: ToastTone = 'info') => {\n      const id = nextId.current++;\n      setItems((prev) => [...prev.slice(-1), { id, tone, message }]); // max 2 stacked\n      schedule(id, DISMISS_MS);\n    },\n    [schedule],\n  );\n\n  function pause(id: number) {\n    const timer = timers.current.get(id);\n    if (!timer) return;\n    window.clearTimeout(timer.handle);\n    timer.remaining -= Date.now() - timer.started;\n  }\n\n  function resume(id: number) {\n    const timer = timers.current.get(id);\n    if (!timer) return;\n    schedule(id, Math.max(timer.remaining, 800));\n  }\n\n  return (\n    <ToastContext.Provider value={{ toast }}>\n      {children}\n      <div className=\"sv-toaster\" aria-live=\"polite\" aria-label=\"Notifications\">\n        {items.map((t) => (\n          <div\n            key={t.id}\n            className={cx('sv-toast', `sv-toast--${t.tone}`)}\n            onMouseEnter={() => pause(t.id)}\n            onMouseLeave={() => resume(t.id)}\n          >\n            {t.message}\n          </div>\n        ))}\n      </div>\n    </ToastContext.Provider>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/toast.tsx"
+    },
+    {
+      "path": "registry/seventy-six/toast.css",
+      "content": "/* B14 · Toast */\n\n@layer sv-components {\n  .sv-toaster {\n    position: fixed;\n    left: var(--sv-s5);\n    bottom: var(--sv-s5);\n    z-index: 60;\n    display: flex;\n    flex-direction: column;\n    gap: var(--sv-s2);\n  }\n\n  .sv-toast {\n    max-width: 360px;\n    padding: var(--sv-s3) var(--sv-s4);\n    background: var(--sv-paper);\n    border-radius: var(--sv-r);\n    box-shadow: var(--sv-shadow);\n    border-left: 2px solid var(--sv-seed);\n    font-size: 13px;\n    font-weight: 500;\n    transition: opacity var(--sv-t);\n  }\n\n  .sv-toast--ok {\n    border-left-color: var(--sv-ok);\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/toast.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/toast.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B14",
+    "job": "Confirm that something finished, without demanding attention.",
+    "tags": [
+      "toast",
+      "notification",
+      "aria-live",
+      "auto-dismiss",
+      "success-feedback"
+    ],
+    "exports": [
+      "ToastProvider",
+      "useToast"
+    ]
+  }
+}

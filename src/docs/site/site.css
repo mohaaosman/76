@@ -1,0 +1,440 @@
+/* ============================================================
+   Docs site chrome — the site is itself a 76° product.
+   Only site-scoped classes here; components own their own CSS.
+   ============================================================ */
+
+@layer sv-site {
+  /* Search trigger in the topbar utility cluster */
+  .site-search {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sv-s2);
+    padding: 6px 10px;
+    border: 1px solid var(--sv-band-line);
+    border-radius: var(--sv-r);
+    background: transparent;
+    color: var(--sv-band-soft);
+    cursor: pointer;
+    transition: color var(--sv-t-fast), border-color var(--sv-t-fast);
+  }
+
+  .site-search:hover {
+    color: var(--sv-paper);
+    border-color: var(--sv-band-soft);
+  }
+
+  .site-kbd {
+    font-family: var(--sv-font-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+  }
+
+  /* ---- Doc prose ---- */
+
+  .site-prose {
+    padding: var(--sv-s4) 18px 18px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--sv-ink-soft);
+    max-width: 72ch;
+  }
+
+  .site-prose p + p {
+    margin-top: var(--sv-s3);
+  }
+
+  .site-prose--tight {
+    padding-top: 0;
+  }
+
+  .site-prose--flush {
+    padding: var(--sv-s1) 0 0;
+  }
+
+  .site-props-group {
+    padding: var(--sv-s2) 18px var(--sv-s1);
+    color: var(--sv-ink-soft);
+  }
+
+  .site-prose b,
+  .site-prose strong {
+    font-weight: 600;
+    color: var(--sv-ink);
+  }
+
+  .site-prose code {
+    font-family: var(--sv-font-mono);
+    font-size: 11px;
+    color: var(--sv-ink);
+    background: var(--sv-wall);
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+
+  /* ---- Preview / Code ---- */
+
+  .site-preview {
+    padding: var(--sv-s6) 18px;
+    background: var(--sv-wall);
+    border-radius: 0 0 var(--sv-r) var(--sv-r);
+  }
+
+  .site-preview--paper {
+    background: var(--sv-paper);
+  }
+
+  .site-preview--band {
+    background: var(--sv-band);
+  }
+
+  .site-code {
+    margin: 0;
+    padding: var(--sv-s4) 18px;
+    overflow-x: auto;
+    background: var(--sv-band);
+    border-radius: 0 0 var(--sv-r) var(--sv-r);
+    color: var(--sv-paper);
+    font-family: var(--sv-font-mono);
+    font-size: 11.5px;
+    line-height: 1.7;
+    letter-spacing: 0;
+    text-transform: none;
+    tab-size: 2;
+  }
+
+  .site-code--framed {
+    margin: 0 18px 18px;
+    border-radius: var(--sv-r);
+  }
+
+  .site-codebar {
+    display: flex;
+    justify-content: flex-end;
+    padding: var(--sv-s2) 18px 0;
+  }
+
+  /* ---- Props table (reuses table voice) ---- */
+
+  .site-props {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .site-props th {
+    padding: var(--sv-s2) 18px;
+    border-bottom: 1px solid var(--sv-line);
+    text-align: left;
+    font-family: var(--sv-font-mono);
+    font-size: 9.5px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--sv-ink-soft);
+  }
+
+  .site-props td {
+    padding: 10px 18px;
+    border-bottom: 1px solid var(--sv-line);
+    font-size: 12.5px;
+    vertical-align: top;
+  }
+
+  .site-props tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .site-props .site-props__name {
+    font-family: var(--sv-font-mono);
+    font-size: 11px;
+    color: var(--sv-ink);
+    white-space: nowrap;
+  }
+
+  .site-props .site-props__type {
+    font-family: var(--sv-font-mono);
+    font-size: 10.5px;
+    color: var(--sv-seed-text);
+  }
+
+  .site-props .site-props__desc {
+    color: var(--sv-ink-soft);
+  }
+
+  /* ---- Keyboard table ---- */
+
+  .site-keys td:first-child {
+    font-family: var(--sv-font-mono);
+    font-size: 11px;
+    white-space: nowrap;
+    color: var(--sv-ink);
+  }
+
+  /* ---- Don't list ---- */
+
+  .site-donts {
+    margin: 0;
+    padding: var(--sv-s2) 18px 18px;
+    list-style: none;
+  }
+
+  .site-donts li {
+    position: relative;
+    padding: 7px 0 7px var(--sv-s5);
+    border-bottom: 1px solid var(--sv-line);
+    font-size: 12.5px;
+    color: var(--sv-ink-soft);
+  }
+
+  .site-donts li:last-child {
+    border-bottom: 0;
+  }
+
+  .site-donts li::before {
+    content: '✕';
+    position: absolute;
+    left: 0;
+    color: var(--sv-bad);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* Laws list reuses the donts rhythm with a counter instead of ✕ */
+  .site-laws {
+    counter-reset: law;
+  }
+
+  .site-laws li::before {
+    counter-increment: law;
+    content: counter(law);
+    color: var(--sv-seed-text);
+    font-family: var(--sv-font-mono);
+    font-size: 10px;
+  }
+
+  /* ---- FAQ (native details) ---- */
+
+  .site-faq {
+    padding: 0 18px var(--sv-s4);
+  }
+
+  .site-faq details {
+    border-bottom: 1px solid var(--sv-line);
+  }
+
+  .site-faq details:last-child {
+    border-bottom: 0;
+  }
+
+  .site-faq summary {
+    padding: var(--sv-s3) 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--sv-ink);
+    cursor: pointer;
+  }
+
+  .site-faq summary:hover {
+    color: var(--sv-seed-text);
+  }
+
+  .site-faq details p {
+    padding: 0 0 var(--sv-s4);
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--sv-ink-soft);
+    max-width: 68ch;
+  }
+
+  /* ---- Component index ---- */
+
+  .site-index-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .site-index-link:hover .sv-card__title {
+    color: var(--sv-seed-text);
+  }
+
+  .site-index-meta {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 18px 14px;
+    color: var(--sv-ink-faint);
+  }
+
+  .site-catstrip__inner {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: var(--sv-s3) 18px;
+    color: var(--sv-ink-soft);
+  }
+
+  .site-catstrip__note {
+    color: var(--sv-ink-faint);
+    letter-spacing: 0.08em;
+  }
+
+  /* ---- Install block ---- */
+
+  .site-install {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sv-s2);
+    padding: var(--sv-s2) 18px 18px;
+  }
+
+  .site-install .site-code {
+    border-radius: var(--sv-r);
+  }
+
+  .site-filelist {
+    margin: 0;
+    padding: 0 18px 14px;
+    list-style: none;
+    font-family: var(--sv-font-mono);
+    font-size: 11px;
+    color: var(--sv-ink-soft);
+  }
+
+  .site-filelist li {
+    padding: 5px 0;
+    border-bottom: 1px solid var(--sv-line);
+  }
+
+  .site-filelist li:last-child {
+    border-bottom: 0;
+  }
+
+  /* ---- Foundations swatches ---- */
+
+  .site-swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 14px;
+    padding: var(--sv-s2) 18px 18px;
+  }
+
+  .site-swatch__chip {
+    height: 44px;
+    border-radius: var(--sv-r);
+    border: 1px solid var(--sv-line);
+  }
+
+  .site-swatch__name {
+    margin-top: var(--sv-s2);
+    font-family: var(--sv-font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sv-ink-soft);
+  }
+
+  .site-swatch__hex {
+    font-family: var(--sv-font-mono);
+    font-size: 10px;
+    color: var(--sv-ink-faint);
+  }
+
+  .site-type-specimen {
+    padding: var(--sv-s2) 18px 18px;
+  }
+
+  .site-type-specimen > div {
+    padding: var(--sv-s3) 0;
+    border-bottom: 1px solid var(--sv-line);
+  }
+
+  .site-type-specimen > div:last-child {
+    border-bottom: 0;
+  }
+
+  /* ---- Demo scaffolding ---- */
+
+  .demo-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sv-s3);
+  }
+
+  .demo-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    max-width: 620px;
+  }
+
+  .demo-narrow {
+    max-width: 320px;
+  }
+
+  .demo-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sv-s4);
+    max-width: 340px;
+  }
+
+  .trend-pad {
+    padding: var(--sv-s2) 18px 18px;
+  }
+
+  .demo-skeleton-card {
+    max-width: 280px;
+  }
+
+  .demo-skeleton-zone {
+    padding: 14px 18px 0;
+  }
+
+  .demo-skeleton-mid {
+    display: flex;
+    align-items: center;
+    gap: var(--sv-s3);
+    padding: var(--sv-s2) 18px 14px;
+  }
+
+  .demo-skeleton-foot {
+    padding: 12px 18px;
+    border-top: 1px solid var(--sv-line);
+  }
+
+  .demo-band-frame {
+    margin: calc(-1 * var(--sv-s6)) -18px;
+  }
+
+  .demo-sheet-mini {
+    position: relative;
+    padding-top: 90px;
+  }
+
+  .demo-sheet-band {
+    position: absolute;
+    inset: 0 -18px auto;
+    height: 88px;
+    background: var(--sv-band);
+  }
+
+  .demo-sheet-mini .sv-row {
+    position: relative;
+  }
+
+  .demo-sheet-card {
+    height: 72px;
+  }
+
+  .demo-sheet-card--tall {
+    height: 110px;
+  }
+
+  /* Footer */
+  .site-footer {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: var(--sv-s6) var(--sv-s8) var(--sv-s8);
+    color: var(--sv-ink-faint);
+  }
+}

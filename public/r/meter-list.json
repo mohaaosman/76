@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "meter-list",
+  "type": "registry:ui",
+  "title": "MeterList",
+  "description": "Named items with 3px bars and mandatory absolute numbers — the donut chart's replacement. One job: Answer \"how is each part doing.\"",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/meter-list.tsx",
+      "content": "import { cx } from '@/lib/cx';\nimport './meter-list.css';\n\n/**\n * B6 · MeterList — named items with 3px bars. The absolute-numbers\n * subtitle is REQUIRED: a percentage alone is a defect. Replaces every\n * donut/gauge (Firewall A2). Answers \"how is each part doing.\"\n */\nexport interface MeterItem {\n  label: string;\n  current: number;\n  max: number;\n  /** Formatted value shown right, e.g. \"92%\". */\n  value: string;\n  /** REQUIRED absolute numbers, e.g. \"4,320 of 4,700 pallet positions\". */\n  subtitle: string;\n}\n\nexport interface MeterListProps {\n  items: MeterItem[];\n  className?: string;\n}\n\nexport function MeterList({ items, className }: MeterListProps) {\n  return (\n    <div className={cx('sv-meters', className)}>\n      {items.map((item) => (\n        <div\n          key={item.label}\n          className=\"sv-meters__row\"\n          role=\"progressbar\"\n          aria-label={`${item.label}: ${item.subtitle}`}\n          aria-valuenow={item.current}\n          aria-valuemin={0}\n          aria-valuemax={item.max}\n        >\n          <div className=\"sv-meters__line\">\n            <span className=\"sv-meters__label\">{item.label}</span>\n            <span className=\"sv-meters__value sv-num\">{item.value}</span>\n          </div>\n          <div className=\"sv-meters__track\">\n            <div\n              className=\"sv-meters__fill\"\n              style={{ width: `${item.max > 0 ? Math.min(100, (item.current / item.max) * 100) : 0}%` }}\n            />\n          </div>\n          <p className=\"sv-meters__subtitle\">{item.subtitle}</p>\n        </div>\n      ))}\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/meter-list.tsx"
+    },
+    {
+      "path": "registry/seventy-six/meter-list.css",
+      "content": "/* B6 · MeterList */\n\n@layer sv-components {\n  .sv-meters {\n    display: flex;\n    flex-direction: column;\n    gap: 13px;\n  }\n\n  .sv-meters__line {\n    display: flex;\n    align-items: baseline;\n    justify-content: space-between;\n    margin-bottom: var(--sv-s1);\n  }\n\n  .sv-meters__label {\n    font-size: 12.5px;\n    font-weight: 500;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-meters__value {\n    font-size: 12.5px;\n    font-weight: 700;\n  }\n\n  .sv-meters__track {\n    height: 3px;\n    border-radius: 2px;\n    background: var(--sv-wall);\n  }\n\n  .sv-meters__fill {\n    height: 100%;\n    border-radius: 2px;\n    background: var(--sv-seed);\n    transition: width var(--sv-t);\n  }\n\n  .sv-meters__subtitle {\n    margin-top: var(--sv-s1);\n    font-size: 11px;\n    color: var(--sv-ink-soft);\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/meter-list.css"
+    }
+  ],
+  "categories": [
+    "widgets"
+  ],
+  "docs": "https://76.zifala.com/llms/meter-list.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B6",
+    "job": "Answer \"how is each part doing.\"",
+    "tags": [
+      "meter",
+      "capacity",
+      "utilization",
+      "donut-replacement",
+      "progressbar-list"
+    ],
+    "exports": [
+      "MeterList"
+    ]
+  }
+}

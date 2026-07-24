@@ -1,0 +1,44 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "card",
+  "type": "registry:ui",
+  "title": "Card",
+  "description": "The paper primitive: one shadow, one radius, zero border. Every widget composes it. One job: Be the sheet of paper a widget is printed on.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/card.tsx",
+      "content": "import type { HTMLAttributes, ReactNode } from 'react';\nimport { cx } from '@/lib/cx';\nimport './card.css';\n\n/**\n * Card — the paper primitive every widget sits on. Exactly one\n * --sv-shadow, radius --sv-r, background --sv-paper, zero border (A4).\n * Not a widget type itself: widgets (S1, Trend, DataTable…) compose it.\n */\nexport interface CardProps extends HTMLAttributes<HTMLElement> {\n  as?: 'div' | 'section' | 'article';\n}\n\nexport function Card({ as: Tag = 'section', className, children, ...rest }: CardProps) {\n  return (\n    <Tag {...rest} className={cx('sv-card', className)}>\n      {children}\n    </Tag>\n  );\n}\n\n/**\n * The universal card head (Law: bold title + faint subtitle left, one\n * seed text-link action right — never icon-only mystery menus).\n */\nexport interface CardHeadProps {\n  title: string;\n  subtitle?: string;\n  /** One action, rendered right. Use ButtonLink or a mono range control. */\n  action?: ReactNode;\n  className?: string;\n}\n\nexport function CardHead({ title, subtitle, action, className }: CardHeadProps) {\n  return (\n    <header className={cx('sv-card__head', className)}>\n      <div>\n        <h3 className=\"sv-card__title\">{title}</h3>\n        {subtitle && <p className=\"sv-card__subtitle\">{subtitle}</p>}\n      </div>\n      {action && <div className=\"sv-card__action\">{action}</div>}\n    </header>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/card.tsx"
+    },
+    {
+      "path": "registry/seventy-six/card.css",
+      "content": "/* Card — the paper primitive (A4: one shadow, one radius, no border) */\n\n@layer sv-components {\n  .sv-card {\n    background: var(--sv-paper);\n    border-radius: var(--sv-r);\n    box-shadow: var(--sv-shadow);\n  }\n\n  .sv-card__head {\n    display: flex;\n    align-items: flex-start;\n    justify-content: space-between;\n    gap: var(--sv-s4);\n    padding: var(--sv-s4) 18px var(--sv-s3);\n  }\n\n  .sv-card__title {\n    font-size: 13.5px;\n    font-weight: 700;\n  }\n\n  .sv-card__subtitle {\n    margin-top: 2px;\n    font-size: 11.5px;\n    font-weight: 400;\n    color: var(--sv-ink-faint);\n  }\n\n  .sv-card__action {\n    flex-shrink: 0;\n    padding-top: 2px;\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/card.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/card.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "A4",
+    "job": "Be the sheet of paper a widget is printed on.",
+    "tags": [
+      "card",
+      "surface",
+      "paper",
+      "card-head",
+      "container"
+    ],
+    "exports": [
+      "Card",
+      "CardHead"
+    ]
+  }
+}

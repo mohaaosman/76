@@ -1,0 +1,13 @@
+/* B17 · Skeleton — static, no shimmer, no pulse */
+
+@layer sv-components {
+  .sv-skeleton {
+    display: block;
+    background: var(--sv-wall);
+    border-radius: var(--sv-r);
+  }
+
+  .sv-skeleton--round {
+    border-radius: 50%;
+  }
+}

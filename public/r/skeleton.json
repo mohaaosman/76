@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton",
+  "type": "registry:ui",
+  "title": "Skeleton",
+  "description": "Static wall-colored blocks matching the target anatomy. No shimmer, no pulse, 300ms gate. One job: Hold the exact shape of content that is still loading.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/skeleton.tsx",
+      "content": "import { useEffect, useState } from 'react';\nimport type { CSSProperties } from 'react';\nimport { cx } from '@/lib/cx';\nimport './skeleton.css';\n\n/**\n * B17 · Skeleton — static --sv-wall blocks matching the target anatomy.\n * No shimmer, no pulse. Appears only after 300ms of waiting.\n */\nexport interface SkeletonProps {\n  width?: number | string;\n  height?: number | string;\n  /** Render as a circle (avatar ghosts). */\n  round?: boolean;\n  className?: string;\n  style?: CSSProperties;\n}\n\nexport function Skeleton({ width = '100%', height = 12, round = false, className, style }: SkeletonProps) {\n  return (\n    <span\n      className={cx('sv-skeleton', round && 'sv-skeleton--round', className)}\n      style={{ width, height, ...style }}\n      aria-hidden=\"true\"\n    />\n  );\n}\n\n/**\n * Delays children by 300ms so skeletons never flash on fast loads.\n * Wrap the skeleton composition, not the loaded content.\n */\nexport function SkeletonGate({ children }: { children: React.ReactNode }) {\n  const [show, setShow] = useState(false);\n  useEffect(() => {\n    const t = setTimeout(() => setShow(true), 300);\n    return () => clearTimeout(t);\n  }, []);\n  return show ? <>{children}</> : null;\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/skeleton.tsx"
+    },
+    {
+      "path": "registry/seventy-six/skeleton.css",
+      "content": "/* B17 · Skeleton — static, no shimmer, no pulse */\n\n@layer sv-components {\n  .sv-skeleton {\n    display: block;\n    background: var(--sv-wall);\n    border-radius: var(--sv-r);\n  }\n\n  .sv-skeleton--round {\n    border-radius: 50%;\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/skeleton.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/skeleton.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B17",
+    "job": "Hold the exact shape of content that is still loading.",
+    "tags": [
+      "skeleton",
+      "loading",
+      "no-shimmer",
+      "static-placeholder"
+    ],
+    "exports": [
+      "Skeleton",
+      "SkeletonGate"
+    ]
+  }
+}

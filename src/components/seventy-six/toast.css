@@ -1,0 +1,29 @@
+/* B14 · Toast */
+
+@layer sv-components {
+  .sv-toaster {
+    position: fixed;
+    left: var(--sv-s5);
+    bottom: var(--sv-s5);
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sv-s2);
+  }
+
+  .sv-toast {
+    max-width: 360px;
+    padding: var(--sv-s3) var(--sv-s4);
+    background: var(--sv-paper);
+    border-radius: var(--sv-r);
+    box-shadow: var(--sv-shadow);
+    border-left: 2px solid var(--sv-seed);
+    font-size: 13px;
+    font-weight: 500;
+    transition: opacity var(--sv-t);
+  }
+
+  .sv-toast--ok {
+    border-left-color: var(--sv-ok);
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button",
+  "type": "registry:ui",
+  "title": "Button",
+  "description": "Native <button> with four registered variants — no shadows, no transforms, one primary per view region. One job: Trigger exactly one named action.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/button.tsx",
+      "content": "import { forwardRef, useLayoutEffect, useRef, useState } from 'react';\nimport type { ButtonHTMLAttributes, AnchorHTMLAttributes, ReactNode } from 'react';\nimport { cx } from '@/lib/cx';\nimport './button.css';\n\n/**\n * B10 · Button — one primary per view region. Buttons never move or\n * resize on state change; destructive actions confirm with a typed object.\n */\nexport type ButtonVariant = 'primary' | 'ghost' | 'danger' | 'link';\n\ninterface ButtonOwnProps {\n  variant?: ButtonVariant;\n  /** POS anatomy: same bones at >=48px height, press feedback <100ms. */\n  pos?: boolean;\n  /** Swaps the label and locks width to the pre-loading size. */\n  isLoading?: boolean;\n  /** Label shown while loading, e.g. \"Saving…\". Required if isLoading is used. */\n  loadingLabel?: string;\n  /** 16px stroke icon before the label. Icon-only buttons need aria-label. */\n  iconLeading?: ReactNode;\n  children?: ReactNode;\n}\n\nexport type ButtonProps = ButtonOwnProps & ButtonHTMLAttributes<HTMLButtonElement>;\n\nexport const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(\n  {\n    variant = 'primary',\n    pos = false,\n    isLoading = false,\n    loadingLabel = 'Working…',\n    iconLeading,\n    className,\n    children,\n    disabled,\n    ...rest\n  },\n  ref,\n) {\n  const innerRef = useRef<HTMLButtonElement | null>(null);\n  const [lockedWidth, setLockedWidth] = useState<number>();\n\n  /* B10: width locked to pre-loading size while loading. */\n  useLayoutEffect(() => {\n    if (isLoading && innerRef.current && lockedWidth === undefined) {\n      setLockedWidth(innerRef.current.offsetWidth);\n    }\n    if (!isLoading && lockedWidth !== undefined) {\n      setLockedWidth(undefined);\n    }\n  }, [isLoading, lockedWidth]);\n\n  return (\n    <button\n      {...rest}\n      ref={(node) => {\n        innerRef.current = node;\n        if (typeof ref === 'function') ref(node);\n        else if (ref) ref.current = node;\n      }}\n      className={cx('sv-btn', `sv-btn--${variant}`, pos && 'sv-btn--pos', className)}\n      style={lockedWidth !== undefined ? { ...rest.style, width: lockedWidth } : rest.style}\n      disabled={disabled || isLoading}\n      aria-busy={isLoading || undefined}\n    >\n      {isLoading ? (\n        <>\n          <svg className=\"sv-btn__spinner\" viewBox=\"0 0 12 12\" width=\"12\" height=\"12\" aria-hidden=\"true\">\n            <circle cx=\"6\" cy=\"6\" r=\"5\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.5\" strokeDasharray=\"23\" strokeDashoffset=\"8\" strokeLinecap=\"round\" />\n          </svg>\n          <span>{loadingLabel}</span>\n        </>\n      ) : (\n        <>\n          {iconLeading != null && (\n            <span className=\"sv-btn__icon\" aria-hidden=\"true\">\n              {iconLeading}\n            </span>\n          )}\n          {children}\n        </>\n      )}\n    </button>\n  );\n});\n\n/** Text-link that looks like a button action (B10 \"text link action\"). */\nexport type ButtonLinkProps = AnchorHTMLAttributes<HTMLAnchorElement>;\n\nexport function ButtonLink({ className, children, ...rest }: ButtonLinkProps) {\n  return (\n    <a {...rest} className={cx('sv-btn sv-btn--link', className)}>\n      {children}\n    </a>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/button.tsx"
+    },
+    {
+      "path": "registry/seventy-six/button.css",
+      "content": "/* B10 · Button */\n\n@layer sv-components {\n  .sv-btn {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    gap: var(--sv-s2);\n    padding: var(--sv-s2) var(--sv-s4);\n    border: 1px solid transparent;\n    border-radius: var(--sv-r);\n    font-size: 12.5px;\n    font-weight: 700;\n    line-height: 1.4;\n    cursor: pointer;\n    text-decoration: none;\n    transition: background-color var(--sv-t-fast), border-color var(--sv-t-fast), color var(--sv-t-fast);\n  }\n\n  .sv-btn--primary {\n    background: var(--sv-seed);\n    color: var(--sv-paper);\n  }\n\n  .sv-btn--primary:hover:not(:disabled),\n  .sv-btn--primary:active:not(:disabled) {\n    background: var(--sv-seed-deep);\n  }\n\n  .sv-btn--ghost {\n    background: transparent;\n    border-color: var(--sv-line);\n    color: var(--sv-ink);\n  }\n\n  .sv-band .sv-btn--ghost {\n    border-color: var(--sv-band-line);\n    color: var(--sv-paper);\n  }\n\n  .sv-btn--ghost:hover:not(:disabled) {\n    border-color: var(--sv-seed);\n  }\n\n  /* Danger = ghost anatomy with bad text. Never a red fill outside a\n     dialog's final confirm (use data-confirm on that one button). */\n  .sv-btn--danger {\n    background: transparent;\n    border-color: var(--sv-line);\n    color: var(--sv-bad);\n  }\n\n  .sv-btn--danger:hover:not(:disabled) {\n    border-color: var(--sv-bad);\n  }\n\n  .sv-btn--danger[data-confirm] {\n    background: var(--sv-bad);\n    border-color: transparent;\n    color: var(--sv-paper);\n  }\n\n  .sv-btn--link {\n    padding: 0;\n    border: 0;\n    background: transparent;\n    color: var(--sv-seed-text);\n    font-size: 12px;\n    font-weight: 600;\n  }\n\n  .sv-btn--link:hover {\n    text-decoration: underline;\n  }\n\n  .sv-btn:disabled {\n    background: var(--sv-wall);\n    border-color: transparent;\n    color: var(--sv-ink-faint);\n    cursor: not-allowed;\n  }\n\n  /* POS variant: same anatomy at >=48px, press feedback <100ms. */\n  .sv-btn--pos {\n    min-height: 48px;\n    padding: var(--sv-s3) var(--sv-s6);\n    font-size: 14.5px;\n    transition-duration: 80ms;\n  }\n\n  .sv-btn--pos.sv-btn--ghost:active:not(:disabled) {\n    background: var(--sv-seed-tint);\n  }\n\n  .sv-btn__icon {\n    display: inline-flex;\n    width: 16px;\n    height: 16px;\n  }\n\n  /* B10 loading spinner — the ONE registered continuous animation in the\n     system (Slop Firewall allowlists `sv-rotate`, see scripts/slop-firewall.mjs). */\n  .sv-btn__spinner {\n    animation: sv-rotate 800ms linear infinite;\n  }\n\n  @keyframes sv-rotate {\n    to {\n      transform: rotate(360deg);\n    }\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/button.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/button.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B10",
+    "job": "Trigger exactly one named action.",
+    "tags": [
+      "button",
+      "primary",
+      "ghost",
+      "danger",
+      "loading-state",
+      "pos-touch-target",
+      "text-link"
+    ],
+    "exports": [
+      "Button",
+      "ButtonLink"
+    ]
+  }
+}

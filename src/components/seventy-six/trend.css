@@ -1,0 +1,62 @@
+/* B5 · Trend */
+
+@layer sv-components {
+  .sv-trend {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sv-s2);
+  }
+
+  .sv-trend__legend {
+    display: flex;
+    gap: var(--sv-s4);
+  }
+
+  .sv-trend__legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-trend__swatch {
+    width: 14px;
+    height: 2px;
+    background: currentColor;
+  }
+
+  .sv-trend__plot {
+    width: 100%;
+    height: auto;
+  }
+
+  .sv-trend__grid {
+    stroke: var(--sv-line);
+    stroke-width: 1;
+  }
+
+  .sv-trend__line {
+    fill: none;
+    stroke-width: 2.25;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .sv-trend__stroke--seed    { stroke: var(--sv-seed);    color: var(--sv-seed); }
+  .sv-trend__stroke--compare { stroke: var(--sv-compare); color: var(--sv-compare); }
+  .sv-trend__stroke--faint   { stroke: var(--sv-ink-faint); color: var(--sv-ink-faint); }
+
+  .sv-trend__fill--seed  { fill: var(--sv-seed); }
+  .sv-trend__fill--faint { fill: var(--sv-ink-faint); }
+
+  .sv-trend__dot {
+    fill: var(--sv-seed);
+  }
+
+  .sv-trend__x {
+    display: flex;
+    justify-content: space-between;
+    color: var(--sv-ink-faint);
+  }
+}

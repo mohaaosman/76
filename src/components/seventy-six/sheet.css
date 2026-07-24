@@ -1,0 +1,48 @@
+/* B2 · Sheet & Grid */
+
+@layer sv-components {
+  .sv-sheet {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--sv-s8) var(--sv-s8);
+  }
+
+  @media (max-width: 1000px) {
+    .sv-sheet {
+      padding: 0 18px 18px;
+    }
+  }
+
+  .sv-row {
+    display: grid;
+    gap: 14px;
+    margin-top: 14px;
+  }
+
+  /* The 76° signature move: paper pinned over the band edge. */
+  .sv-row[data-overlap] {
+    margin-top: -44px;
+  }
+
+  .sv-row--stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .sv-row--main {
+    grid-template-columns: 1.7fr 1fr;
+  }
+
+  .sv-row--full {
+    grid-template-columns: 1fr;
+  }
+
+  @media (max-width: 1000px) {
+    .sv-row--stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .sv-row--main {
+      grid-template-columns: 1fr;
+    }
+  }
+}

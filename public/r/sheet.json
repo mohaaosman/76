@@ -1,0 +1,45 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "sheet",
+  "type": "registry:ui",
+  "title": "Sheet & Row",
+  "description": "The platinum wall and its 12-col grid — including the signature -44px overlap row. One job: Hold the paper: grid, gutters, and the one overlap per page.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/sheet.tsx",
+      "content": "import type { HTMLAttributes } from 'react';\nimport { cx } from '@/lib/cx';\nimport './sheet.css';\n\n/**\n * B2 · Sheet — the platinum wall the paper sits on. The first child row\n * gets data-overlap: margin-top -44px, pinning paper over the band edge.\n * Exactly ONE overlap row per page — a signature, not a repeating trick.\n */\nexport function Sheet({ className, children, ...rest }: HTMLAttributes<HTMLElement>) {\n  return (\n    <main {...rest} id=\"sv-content\" className={cx('sv-sheet', className)}>\n      {children}\n    </main>\n  );\n}\n\n/** 12-col grid row, 14px gutters. Use the canonical splits. */\nexport interface RowProps extends HTMLAttributes<HTMLDivElement> {\n  /** 'stats' = repeat(4,1fr) (2×2 below 1000px) · 'main' = 1.7fr/1fr · 'full'. */\n  split?: 'stats' | 'main' | 'full';\n  /** The single overlap row that pins over the band. */\n  overlap?: boolean;\n}\n\nexport function Row({ split = 'full', overlap = false, className, children, ...rest }: RowProps) {\n  return (\n    <div\n      {...rest}\n      className={cx('sv-row', `sv-row--${split}`, className)}\n      data-overlap={overlap || undefined}\n    >\n      {children}\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/sheet.tsx"
+    },
+    {
+      "path": "registry/seventy-six/sheet.css",
+      "content": "/* B2 · Sheet & Grid */\n\n@layer sv-components {\n  .sv-sheet {\n    max-width: 1280px;\n    margin: 0 auto;\n    padding: 0 var(--sv-s8) var(--sv-s8);\n  }\n\n  @media (max-width: 1000px) {\n    .sv-sheet {\n      padding: 0 18px 18px;\n    }\n  }\n\n  .sv-row {\n    display: grid;\n    gap: 14px;\n    margin-top: 14px;\n  }\n\n  /* The 76° signature move: paper pinned over the band edge. */\n  .sv-row[data-overlap] {\n    margin-top: -44px;\n  }\n\n  .sv-row--stats {\n    grid-template-columns: repeat(4, 1fr);\n  }\n\n  .sv-row--main {\n    grid-template-columns: 1.7fr 1fr;\n  }\n\n  .sv-row--full {\n    grid-template-columns: 1fr;\n  }\n\n  @media (max-width: 1000px) {\n    .sv-row--stats {\n      grid-template-columns: repeat(2, 1fr);\n    }\n\n    .sv-row--main {\n      grid-template-columns: 1fr;\n    }\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/sheet.css"
+    }
+  ],
+  "categories": [
+    "chrome"
+  ],
+  "docs": "https://76.zifala.com/llms/sheet.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B2",
+    "job": "Hold the paper: grid, gutters, and the one overlap per page.",
+    "tags": [
+      "layout",
+      "grid",
+      "main",
+      "overlap",
+      "wall",
+      "responsive"
+    ],
+    "exports": [
+      "Sheet",
+      "Row"
+    ]
+  }
+}

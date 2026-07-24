@@ -1,0 +1,34 @@
+/* Card — the paper primitive (A4: one shadow, one radius, no border) */
+
+@layer sv-components {
+  .sv-card {
+    background: var(--sv-paper);
+    border-radius: var(--sv-r);
+    box-shadow: var(--sv-shadow);
+  }
+
+  .sv-card__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--sv-s4);
+    padding: var(--sv-s4) 18px var(--sv-s3);
+  }
+
+  .sv-card__title {
+    font-size: 13.5px;
+    font-weight: 700;
+  }
+
+  .sv-card__subtitle {
+    margin-top: 2px;
+    font-size: 11.5px;
+    font-weight: 400;
+    color: var(--sv-ink-faint);
+  }
+
+  .sv-card__action {
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+}

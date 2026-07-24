@@ -1,0 +1,44 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "dialog",
+  "type": "registry:ui",
+  "title": "Dialog",
+  "description": "Native <dialog> in a paper card on a flat scrim — focus trap, Esc, and top layer for free. One job: Interrupt for one decision or one form.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/dialog.tsx",
+      "content": "import { useEffect, useId, useRef } from 'react';\nimport type { ReactNode, MouseEvent } from 'react';\nimport { cx } from '@/lib/cx';\nimport './dialog.css';\n\n/**\n * B13 · Dialog — built on the native <dialog> element (showModal gives us\n * focus trapping, Esc, ::backdrop and top-layer for free). Paper card on a\n * flat scrim, no blur. Footer: ghost cancel + ONE primary/danger.\n */\nexport interface DialogProps {\n  open: boolean;\n  onClose: () => void;\n  title: string;\n  /** Forms get 640px; everything else 480px. */\n  wide?: boolean;\n  /** Destructive confirms: scrim click does not close, Esc still does\n      unless the confirm is mid-flight (disable via preventEscape). */\n  destructive?: boolean;\n  preventEscape?: boolean;\n  children: ReactNode;\n  /** Footer actions, right-aligned. Ghost cancel + one primary/danger. */\n  footer?: ReactNode;\n}\n\nexport function Dialog({\n  open,\n  onClose,\n  title,\n  wide = false,\n  destructive = false,\n  preventEscape = false,\n  children,\n  footer,\n}: DialogProps) {\n  const ref = useRef<HTMLDialogElement>(null);\n  const titleId = useId();\n\n  useEffect(() => {\n    const el = ref.current;\n    if (!el) return;\n    if (open && !el.open) el.showModal();\n    if (!open && el.open) el.close();\n  }, [open]);\n\n  function handleCancel(e: React.SyntheticEvent<HTMLDialogElement>) {\n    if (preventEscape) {\n      e.preventDefault();\n      return;\n    }\n    e.preventDefault();\n    onClose();\n  }\n\n  /* Scrim click closes non-destructive dialogs only. */\n  function handleClick(e: MouseEvent<HTMLDialogElement>) {\n    if (destructive) return;\n    if (e.target === ref.current) onClose();\n  }\n\n  return (\n    <dialog\n      ref={ref}\n      className={cx('sv-dialog', wide && 'sv-dialog--wide')}\n      aria-labelledby={titleId}\n      onCancel={handleCancel}\n      onClick={handleClick}\n      onClose={() => open && onClose()}\n    >\n      <div className=\"sv-dialog__panel\">\n        <h2 className=\"sv-dialog__title\" id={titleId}>\n          {title}\n        </h2>\n        <div className=\"sv-dialog__body\">{children}</div>\n        {footer && <footer className=\"sv-dialog__footer\">{footer}</footer>}\n      </div>\n    </dialog>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/dialog.tsx"
+    },
+    {
+      "path": "registry/seventy-six/dialog.css",
+      "content": "/* B13 · Dialog — native <dialog>, flat scrim, no blur */\n\n@layer sv-components {\n  .sv-dialog {\n    max-width: 480px;\n    width: calc(100vw - var(--sv-s7));\n    padding: 0;\n    border: 0;\n    border-radius: var(--sv-r);\n    background: var(--sv-paper);\n    box-shadow: var(--sv-shadow);\n    color: var(--sv-ink);\n  }\n\n  .sv-dialog--wide {\n    max-width: 640px;\n  }\n\n  .sv-dialog::backdrop {\n    background: var(--sv-scrim);\n  }\n\n  .sv-dialog__panel {\n    padding: var(--sv-s5) var(--sv-s6) var(--sv-s6);\n  }\n\n  .sv-dialog__title {\n    font-size: 15px;\n    font-weight: 700;\n  }\n\n  .sv-dialog__body {\n    margin-top: var(--sv-s3);\n    font-size: 13px;\n    line-height: 1.55;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-dialog__footer {\n    display: flex;\n    justify-content: flex-end;\n    gap: var(--sv-s2);\n    margin-top: var(--sv-s5);\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/dialog.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/dialog.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B13",
+    "job": "Interrupt for one decision or one form.",
+    "tags": [
+      "dialog",
+      "modal",
+      "native-dialog",
+      "confirm",
+      "destructive-confirm",
+      "scrim"
+    ],
+    "exports": [
+      "Dialog"
+    ]
+  }
+}

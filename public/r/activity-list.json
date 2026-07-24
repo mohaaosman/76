@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "activity-list",
+  "type": "registry:ui",
+  "title": "ActivityList",
+  "description": "A mono timestamp column beside sentence rows with bold entities. Absolute time, always. One job: Answer \"what needs me.\"",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/activity-list.tsx",
+      "content": "import type { ReactNode } from 'react';\nimport { cx } from '@/lib/cx';\nimport './activity-list.css';\n\n/**\n * B9 · ActivityList — mono timestamp column + sentence rows with bold\n * entities. Timestamps ABSOLUTE in ERP contexts (14:28, never\n * \"3 minutes ago\"); relative allowed in consumer seeds with the absolute\n * value always on title. Answers \"what needs me.\"\n */\nexport interface ActivityItem {\n  /** Absolute display time, e.g. \"14:28\" or \"24 JUL 14:28\". */\n  time: string;\n  /** Full machine timestamp for title/dateTime, e.g. \"2026-07-24T14:28:00+03:00\". */\n  dateTime?: string;\n  /** The sentence; wrap entities in <b>. */\n  children: ReactNode;\n}\n\nexport interface ActivityListProps {\n  items: ActivityItem[];\n  className?: string;\n}\n\nexport function ActivityList({ items, className }: ActivityListProps) {\n  return (\n    <ol className={cx('sv-activity', className)}>\n      {items.map((item, i) => (\n        <li key={i} className=\"sv-activity__row\">\n          <time className=\"sv-activity__time sv-mono\" dateTime={item.dateTime} title={item.dateTime}>\n            {item.time}\n          </time>\n          <p className=\"sv-activity__sentence\">{item.children}</p>\n        </li>\n      ))}\n    </ol>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/activity-list.tsx"
+    },
+    {
+      "path": "registry/seventy-six/activity-list.css",
+      "content": "/* B9 · ActivityList */\n\n@layer sv-components {\n  .sv-activity {\n    margin: 0;\n    padding: 0;\n    list-style: none;\n  }\n\n  .sv-activity__row {\n    display: flex;\n    gap: var(--sv-s4);\n    padding: 10px 18px;\n    border-bottom: 1px solid var(--sv-line);\n  }\n\n  .sv-activity__row:last-child {\n    border-bottom: 0;\n  }\n\n  .sv-activity__time {\n    flex-shrink: 0;\n    width: 72px;\n    padding-top: 1px;\n    color: var(--sv-ink-faint);\n  }\n\n  .sv-activity__sentence {\n    font-size: 12.5px;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-activity__sentence b {\n    font-weight: 600;\n    color: var(--sv-ink);\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/activity-list.css"
+    }
+  ],
+  "categories": [
+    "widgets"
+  ],
+  "docs": "https://76.zifala.com/llms/activity-list.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B9",
+    "job": "Answer \"what needs me.\"",
+    "tags": [
+      "activity",
+      "feed",
+      "timeline",
+      "audit-log",
+      "timestamps"
+    ],
+    "exports": [
+      "ActivityList"
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "seventy-six-design",
+  "version": "0.0.1",
+  "description": "The 76° (Seventy Six Degrees) design system as an agent skill: flat, informational, corporate — paper on a wall. Governs any UI an assistant builds or reviews.",
+  "keywords": [
+    "claude",
+    "claude-code",
+    "cursor",
+    "codex",
+    "skill",
+    "design",
+    "design-system",
+    "ui",
+    "ux",
+    "shadcn",
+    "accessibility",
+    "wcag",
+    "76",
+    "seventy-six"
+  ],
+  "license": "MIT",
+  "author": "Mohamed A. Osman (https://github.com/mohaaosman)",
+  "type": "module",
+  "homepage": "https://76.zifala.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohaaosman/76.git",
+    "directory": "skill/seventy-six-design"
+  },
+  "files": [
+    "SKILL.md",
+    "references",
+    "scripts"
+  ],
+  "skill": {
+    "entry": "SKILL.md",
+    "references": "references",
+    "harnesses": [
+      "claude-code",
+      "cursor",
+      "codex"
+    ]
+  }
+}

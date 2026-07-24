@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "progress",
+  "type": "registry:ui",
+  "title": "Progress",
+  "description": "Value against target with one 3px bar. The numbers are the information; the bar is illustration. One job: Answer \"how far along.\"",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/progress.tsx",
+      "content": "import { cx } from '@/lib/cx';\nimport './progress.css';\n\n/**\n * B4 · Progress — value against target + one 3px bar + soft context.\n * The visible numbers are the primary information; the bar is illustration.\n * No red bars: danger is a word, not a bar.\n */\nexport interface ProgressProps {\n  title: string;\n  current: number;\n  target: number;\n  /** Renders the numbers, e.g. (c, t) => `$${c}K / $${t}K`. */\n  format?: (current: number, target: number) => string;\n  /** Faint context line under the bar. */\n  context?: string;\n  className?: string;\n}\n\nexport function Progress({\n  title,\n  current,\n  target,\n  format = (c, t) => `${c.toLocaleString('en-US')} / ${t.toLocaleString('en-US')}`,\n  context,\n  className,\n}: ProgressProps) {\n  const pct = target > 0 ? Math.min(100, (current / target) * 100) : 0;\n  return (\n    <div className={cx('sv-progress', className)}>\n      <p className=\"sv-progress__title\">{title}</p>\n      <p className=\"sv-progress__value sv-num\">{format(current, target)}</p>\n      <div\n        className=\"sv-progress__track\"\n        role=\"progressbar\"\n        aria-label={title}\n        aria-valuenow={current}\n        aria-valuemin={0}\n        aria-valuemax={target}\n      >\n        <div className=\"sv-progress__fill\" style={{ width: `${pct}%` }} />\n      </div>\n      {context && <p className=\"sv-progress__context\">{context}</p>}\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/progress.tsx"
+    },
+    {
+      "path": "registry/seventy-six/progress.css",
+      "content": "/* B4 · Progress */\n\n@layer sv-components {\n  .sv-progress {\n    display: flex;\n    flex-direction: column;\n    gap: var(--sv-s2);\n  }\n\n  .sv-progress__title {\n    font-size: 12px;\n    font-weight: 500;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-progress__value {\n    font-size: 19px;\n    font-weight: 700;\n  }\n\n  .sv-progress__track {\n    height: 3px;\n    border-radius: 2px;\n    background: var(--sv-wall);\n  }\n\n  /* Fill never animates on load beyond a single width transition. */\n  .sv-progress__fill {\n    height: 100%;\n    border-radius: 2px;\n    background: var(--sv-seed);\n    transition: width var(--sv-t);\n  }\n\n  .sv-progress__context {\n    font-size: 11.5px;\n    color: var(--sv-ink-faint);\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/progress.css"
+    }
+  ],
+  "categories": [
+    "widgets"
+  ],
+  "docs": "https://76.zifala.com/llms/progress.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B4",
+    "job": "Answer \"how far along.\"",
+    "tags": [
+      "progress",
+      "target",
+      "goal",
+      "bar",
+      "progressbar"
+    ],
+    "exports": [
+      "Progress"
+    ]
+  }
+}

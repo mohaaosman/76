@@ -1,0 +1,112 @@
+/* B10 · Button */
+
+@layer sv-components {
+  .sv-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sv-s2);
+    padding: var(--sv-s2) var(--sv-s4);
+    border: 1px solid transparent;
+    border-radius: var(--sv-r);
+    font-size: 12.5px;
+    font-weight: 700;
+    line-height: 1.4;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color var(--sv-t-fast), border-color var(--sv-t-fast), color var(--sv-t-fast);
+  }
+
+  .sv-btn--primary {
+    background: var(--sv-seed);
+    color: var(--sv-paper);
+  }
+
+  .sv-btn--primary:hover:not(:disabled),
+  .sv-btn--primary:active:not(:disabled) {
+    background: var(--sv-seed-deep);
+  }
+
+  .sv-btn--ghost {
+    background: transparent;
+    border-color: var(--sv-line);
+    color: var(--sv-ink);
+  }
+
+  .sv-band .sv-btn--ghost {
+    border-color: var(--sv-band-line);
+    color: var(--sv-paper);
+  }
+
+  .sv-btn--ghost:hover:not(:disabled) {
+    border-color: var(--sv-seed);
+  }
+
+  /* Danger = ghost anatomy with bad text. Never a red fill outside a
+     dialog's final confirm (use data-confirm on that one button). */
+  .sv-btn--danger {
+    background: transparent;
+    border-color: var(--sv-line);
+    color: var(--sv-bad);
+  }
+
+  .sv-btn--danger:hover:not(:disabled) {
+    border-color: var(--sv-bad);
+  }
+
+  .sv-btn--danger[data-confirm] {
+    background: var(--sv-bad);
+    border-color: transparent;
+    color: var(--sv-paper);
+  }
+
+  .sv-btn--link {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--sv-seed-text);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .sv-btn--link:hover {
+    text-decoration: underline;
+  }
+
+  .sv-btn:disabled {
+    background: var(--sv-wall);
+    border-color: transparent;
+    color: var(--sv-ink-faint);
+    cursor: not-allowed;
+  }
+
+  /* POS variant: same anatomy at >=48px, press feedback <100ms. */
+  .sv-btn--pos {
+    min-height: 48px;
+    padding: var(--sv-s3) var(--sv-s6);
+    font-size: 14.5px;
+    transition-duration: 80ms;
+  }
+
+  .sv-btn--pos.sv-btn--ghost:active:not(:disabled) {
+    background: var(--sv-seed-tint);
+  }
+
+  .sv-btn__icon {
+    display: inline-flex;
+    width: 16px;
+    height: 16px;
+  }
+
+  /* B10 loading spinner — the ONE registered continuous animation in the
+     system (Slop Firewall allowlists `sv-rotate`, see scripts/slop-firewall.mjs). */
+  .sv-btn__spinner {
+    animation: sv-rotate 800ms linear infinite;
+  }
+
+  @keyframes sv-rotate {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}

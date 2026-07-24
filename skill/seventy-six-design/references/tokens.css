@@ -1,0 +1,87 @@
+/* ============================================================
+   76° — Seventy Six Degrees · tokens.css
+   The ONLY file in the system permitted to contain color literals.
+   (Slop Firewall A1: any hex/rgb/hsl outside this file is a defect.)
+   ============================================================ */
+
+@layer sv-tokens {
+  :root {
+    /* neutrals — the wall & the ink */
+    --sv-band:       #1B1F26;   /* ink band (header) */
+    --sv-band-line:  #2C323B;   /* hairlines on band */
+    --sv-band-soft:  #8A93A2;   /* soft text on band */
+    --sv-wall:       #F2F3F5;   /* platinum background */
+    --sv-paper:      #FFFFFF;   /* card surface */
+    --sv-ink:        #1C2026;   /* primary text */
+    --sv-ink-soft:   #667080;   /* secondary text */
+    --sv-ink-faint:  #99A1AD;   /* labels, hints — never sole carrier (C2) */
+    --sv-line:       #E9EBEE;   /* internal hairlines */
+    --sv-field-line: #D8DCE1;   /* form field borders */
+    --sv-compare:    #D6DAE0;   /* comparison series in charts — the only
+                                   permitted non-token chart color, aliased */
+
+    /* seed — Layer 3, per product (default: Cobalt / ERP) */
+    --sv-seed:       #2C5BE0;
+    --sv-seed-text:  #2C5BE0;   /* seed used AS text; differs when fills pass
+                                   but text fails the C1 rule (see Signal) */
+    --sv-seed-deep:  #1E44B4;   /* pressed */
+    --sv-seed-tint:  #EEF3FE;   /* icon tiles, selected rows */
+
+    /* functional — words and 6px dots ONLY (contrast-verified on paper) */
+    --sv-ok:         #14804A;   /* 4.98:1 on white — AA */
+    --sv-bad:        #C43D2E;   /* 5.18:1 on white — AA */
+
+    /* scrim — Dialog only, flat, no blur */
+    --sv-scrim:      rgba(27, 31, 38, 0.4);
+
+    /* geometry & elevation */
+    --sv-r:          4px;                              /* the only radius */
+    --sv-shadow:     0 1px 2px rgba(16, 20, 28, 0.05); /* the only shadow */
+
+    /* spacing scale (4px base) */
+    --sv-s1: 4px;  --sv-s2: 8px;  --sv-s3: 12px; --sv-s4: 16px;
+    --sv-s5: 20px; --sv-s6: 24px; --sv-s7: 32px; --sv-s8: 40px;
+
+    /* type */
+    --sv-font-ui:   'Hanken Grotesk Variable', 'Hanken Grotesk', system-ui, sans-serif;
+    --sv-font-mono: 'Fragment Mono', ui-monospace, monospace;
+
+    /* motion — opacity/color fades only, never layout (A1).
+       Both collapse to 0ms under prefers-reduced-motion. */
+    --sv-t-fast: 120ms;
+    --sv-t:      160ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --sv-t-fast: 0ms;
+      --sv-t:      0ms;
+    }
+  }
+
+  /* ---- Per-product seed registry (Layer 3) ------------------
+     One seed per product. tint = seed at ~8% on white,
+     deep = seed darkened ~20%. New seeds must pass C1:
+     seed-on-white >= 4.5:1 AND white-on-seed >= 4.5:1. */
+
+  [data-seed='cobalt'] {
+    --sv-seed:      #2C5BE0;   /* ERP · 5.70:1 both ways */
+    --sv-seed-text: #2C5BE0;
+    --sv-seed-deep: #1E44B4;
+    --sv-seed-tint: #EEF3FE;
+  }
+
+  [data-seed='verdigris'] {
+    --sv-seed:      #12836F;   /* CRM · 5.0:1 both ways */
+    --sv-seed-text: #12836F;
+    --sv-seed-deep: #0D6152;
+    --sv-seed-tint: #EAF5F2;
+  }
+
+  [data-seed='signal'] {
+    --sv-seed:      #D9531E;   /* POS · fills only (white on seed 4.6:1) */
+    --sv-seed-text: #C24413;   /* seed-as-text variant — passes on white */
+    --sv-seed-deep: #A83E12;
+    --sv-seed-tint: #FCF0EA;
+  }
+}

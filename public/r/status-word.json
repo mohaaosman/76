@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "status-word",
+  "type": "registry:ui",
+  "title": "StatusWord",
+  "description": "A 6px currentColor dot + a colored word. The word is the meaning; the dot is rhythm. One job: State the status of one thing, in one word.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/status-word.tsx",
+      "content": "import type { HTMLAttributes } from 'react';\nimport { cx } from '@/lib/cx';\nimport './status-word.css';\n\n/**\n * B12 · StatusWord — 6px currentColor dot + word. The word IS the meaning;\n * the dot is rhythm. Vocabulary is registered per product — inventing\n * statuses ad hoc is a defect. Never pills, never filled chips.\n */\nexport type StatusTone = 'ok' | 'neutral' | 'bad';\n\nexport interface StatusWordProps extends HTMLAttributes<HTMLSpanElement> {\n  tone: StatusTone;\n  children: string;\n}\n\nexport function StatusWord({ tone, className, children, ...rest }: StatusWordProps) {\n  return (\n    <span {...rest} className={cx('sv-status', `sv-status--${tone}`, className)}>\n      <span className=\"sv-status__dot\" aria-hidden=\"true\" />\n      {children}\n    </span>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/status-word.tsx"
+    },
+    {
+      "path": "registry/seventy-six/status-word.css",
+      "content": "/* B12 · StatusWord */\n\n@layer sv-components {\n  .sv-status {\n    display: inline-flex;\n    align-items: center;\n    gap: var(--sv-s2);\n    font-size: 12px;\n    font-weight: 600;\n  }\n\n  .sv-status__dot {\n    width: 6px;\n    height: 6px;\n    border-radius: 50%;\n    background: currentColor;\n  }\n\n  .sv-status--ok      { color: var(--sv-ok); }\n  .sv-status--neutral { color: var(--sv-ink-soft); }\n  .sv-status--bad     { color: var(--sv-bad); }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/status-word.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/status-word.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B12",
+    "job": "State the status of one thing, in one word.",
+    "tags": [
+      "status",
+      "badge-replacement",
+      "dot",
+      "semantic-color",
+      "no-pills"
+    ],
+    "exports": [
+      "StatusWord"
+    ]
+  }
+}

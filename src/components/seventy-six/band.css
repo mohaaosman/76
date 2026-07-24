@@ -1,0 +1,209 @@
+/* B1 · Band — the chrome zone */
+
+@layer sv-components {
+  .sv-band {
+    background: var(--sv-band);
+    color: var(--sv-paper);
+  }
+
+  .sv-band__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--sv-s8);
+  }
+
+  @media (max-width: 1000px) {
+    .sv-band__container {
+      padding: 0 18px;
+    }
+  }
+
+  /* ---- Topbar ---- */
+
+  .sv-band__topbar {
+    border-bottom: 1px solid var(--sv-band-line);
+  }
+
+  .sv-band__topbar-inner {
+    display: flex;
+    align-items: center;
+    gap: var(--sv-s6);
+    min-height: 52px;
+  }
+
+  .sv-band__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sv-s3);
+  }
+
+  .sv-band__wordmark {
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .sv-band__wordmark-six {
+    color: var(--sv-seed);
+  }
+
+  .sv-band__wordmark-deg {
+    color: var(--sv-band-soft);
+  }
+
+  .sv-band__appname {
+    padding-left: var(--sv-s3);
+    border-left: 1px solid var(--sv-band-line);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--sv-band-soft);
+  }
+
+  .sv-band__nav {
+    align-self: stretch;
+    display: flex;
+  }
+
+  .sv-band__navlist {
+    display: flex;
+    gap: var(--sv-s5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sv-band__navlist li {
+    display: flex;
+  }
+
+  .sv-band__navlink {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 52px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--sv-band-soft);
+    text-decoration: none;
+    transition: color var(--sv-t-fast);
+  }
+
+  .sv-band__navlink:hover {
+    color: var(--sv-paper);
+  }
+
+  /* Active: white + weight 700 (non-color cue) + 2px seed underline
+     flush with the row's bottom hairline. No background fills. */
+  .sv-band__navlink--active {
+    color: var(--sv-paper);
+    font-weight: 700;
+  }
+
+  .sv-band__navlink--active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--sv-seed);
+  }
+
+  .sv-band__utilities {
+    display: flex;
+    align-items: center;
+    gap: var(--sv-s3);
+    margin-left: auto;
+  }
+
+  /* ---- SubTabs ---- */
+
+  .sv-band__subtabs {
+    border-bottom: 1px solid var(--sv-band-line);
+  }
+
+  .sv-band__subtablist {
+    display: flex;
+    gap: var(--sv-s5);
+    margin: 0 auto;
+    list-style: none;
+  }
+
+  .sv-band__subtab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    font-size: 10.5px;
+    color: var(--sv-band-soft);
+    text-decoration: none;
+    transition: color var(--sv-t-fast);
+  }
+
+  .sv-band__subtab:hover {
+    color: var(--sv-paper);
+  }
+
+  .sv-band__subtab--active {
+    color: var(--sv-paper);
+    font-weight: 700;
+  }
+
+  .sv-band__subtab--active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--sv-seed);
+  }
+
+  /* ---- PageHero ---- */
+
+  .sv-band__hero {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--sv-s6);
+    padding-top: var(--sv-s6);
+    /* ~68px bottom: room for the -44px paper overlap (the signature). */
+    padding-bottom: 68px;
+  }
+
+  .sv-band__breadcrumb ol {
+    display: flex;
+    gap: var(--sv-s2);
+    margin: 0 0 var(--sv-s2);
+    padding: 0;
+    list-style: none;
+    color: var(--sv-band-soft);
+  }
+
+  .sv-band__breadcrumb li + li::before {
+    content: '/';
+    margin-right: var(--sv-s2);
+  }
+
+  .sv-band__title {
+    font-size: 27px;
+    line-height: 1.2;
+    font-weight: 800;
+  }
+
+  .sv-band__title-soft {
+    color: var(--sv-band-soft);
+  }
+
+  .sv-band__context {
+    margin-top: var(--sv-s1);
+    font-size: 13px;
+    color: var(--sv-band-soft);
+  }
+
+  .sv-band__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--sv-s2);
+  }
+}

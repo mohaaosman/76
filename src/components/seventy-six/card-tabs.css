@@ -1,0 +1,49 @@
+/* B8 · CardTabs */
+
+@layer sv-components {
+  .sv-cardtabs {
+    display: flex;
+    gap: var(--sv-s5);
+    padding: 0 18px;
+    border-bottom: 1px solid var(--sv-line);
+  }
+
+  .sv-cardtabs__tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: var(--sv-s2) 0 10px;
+    border: 0;
+    background: transparent;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--sv-ink-soft);
+    cursor: pointer;
+    transition: color var(--sv-t-fast);
+  }
+
+  .sv-cardtabs__tab:hover {
+    color: var(--sv-ink);
+  }
+
+  .sv-cardtabs__tab--active {
+    color: var(--sv-seed-text);
+  }
+
+  /* 2px seed underline sitting ON the card hairline */
+  .sv-cardtabs__tab--active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--sv-seed);
+  }
+
+  .sv-cardtabs__count {
+    color: var(--sv-ink-faint);
+    letter-spacing: 0.06em;
+  }
+}

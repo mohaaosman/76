@@ -1,0 +1,39 @@
+/* B4 · Progress */
+
+@layer sv-components {
+  .sv-progress {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sv-s2);
+  }
+
+  .sv-progress__title {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-progress__value {
+    font-size: 19px;
+    font-weight: 700;
+  }
+
+  .sv-progress__track {
+    height: 3px;
+    border-radius: 2px;
+    background: var(--sv-wall);
+  }
+
+  /* Fill never animates on load beyond a single width transition. */
+  .sv-progress__fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--sv-seed);
+    transition: width var(--sv-t);
+  }
+
+  .sv-progress__context {
+    font-size: 11.5px;
+    color: var(--sv-ink-faint);
+  }
+}
