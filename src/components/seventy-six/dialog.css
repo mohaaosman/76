@@ -43,3 +43,71 @@
     margin-top: var(--sv-s5);
   }
 }
+
+@layer sv-components {
+  /* v0.2.0 — head row (title + full-screen close) and the full size. */
+  .sv-dialog__head {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--sv-s3);
+  }
+
+  .sv-dialog__head .sv-dialog__title {
+    flex: 1;
+    min-width: 0;
+    text-wrap: balance;
+  }
+
+  .sv-dialog__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    flex: none;
+    border: 0;
+    border-radius: var(--sv-r);
+    background: none;
+    color: var(--sv-ink-soft);
+    cursor: pointer;
+    transition: background-color var(--sv-t-fast), color var(--sv-t-fast);
+  }
+
+  .sv-dialog__close:hover {
+    background: var(--sv-wall);
+    color: var(--sv-ink);
+  }
+
+  .sv-dialog__close:focus-visible {
+    outline: 2px solid var(--sv-seed);
+    outline-offset: 2px;
+  }
+
+  /* Full-screen: the dialog becomes the page — wall background, the
+     work inside stays paper-on-wall. No scrim, no radius, no shadow. */
+  .sv-dialog--full {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+    box-shadow: none;
+    background: var(--sv-wall);
+  }
+
+  .sv-dialog--full .sv-dialog__panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    max-width: 1280px;
+    margin-inline: auto;
+    padding: var(--sv-s6);
+  }
+
+  .sv-dialog--full .sv-dialog__body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+}
