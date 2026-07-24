@@ -32,6 +32,17 @@ import { EmptyState, Button } from '@/components/seventy-six';
 />
 ```
 
+### No results for a filter
+
+The other empty case: not first-run, but a filter that matched nothing. The sentence names the active filter and points at the way back, and the single action clears it rather than starting from zero.
+
+```tsx
+<EmptyState
+  sentence="No orders match “On hold · warehouse B”. Widen the filter or clear it to see the other 246 orders."
+  action={<Button variant="primary">Clear filters</Button>}
+/>
+```
+
 ## Props
 
 ### EmptyState

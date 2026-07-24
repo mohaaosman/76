@@ -41,6 +41,23 @@ import { ActivityList, Card, CardHead } from '@/components/seventy-six';
 </Card>
 ```
 
+### A CRM pipeline feed
+
+Same widget, a different domain: deals, contacts, and amounts are the bold entities in a sales feed. The timestamps stay absolute and the sentence still reads like a colleague's note — no avatars, no coloured event types.
+
+```tsx
+<ActivityList
+  items={[
+    { time: '15:12', dateTime: '2026-07-24T15:12:00+03:00',
+      children: <><b>Acme Corp</b> deal moved to <b>Negotiation</b> — $48K</> },
+    { time: '13:40', dateTime: '2026-07-24T13:40:00+03:00',
+      children: <><b>Priya Nair</b> booked a demo for <b>Northwind</b></> },
+    { time: '11:26', dateTime: '2026-07-24T11:26:00+03:00',
+      children: <><b>Deka Wholesale</b> replied — awaiting a revised quote</> },
+  ]}
+/>
+```
+
 ## Props
 
 ### ActivityList

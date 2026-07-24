@@ -45,6 +45,31 @@ const [filter, setFilter] = useState('all');
 </Card>
 ```
 
+### Counts on each tab
+
+In filters mode each tab carries a mono count of what it holds, so the numbers are visible before you click. The count derives from the same data the filter narrows — one source of truth, no drift.
+
+```tsx
+const [filter, setFilter] = useState('all');
+const filtered = filter === 'all' ? invoices : invoices.filter(byStatus(filter));
+
+<Card>
+  <CardHead title="Invoices" subtitle="July · receivables" />
+  <CardTabs
+    mode="filters"
+    tabs={[
+      { id: 'all', label: 'All', count: invoices.length },
+      { id: 'paid', label: 'Paid', count: 2 },
+      { id: 'due', label: 'Due', count: 2 },
+      { id: 'overdue', label: 'Overdue', count: 1 },
+    ]}
+    active={filter}
+    onChange={setFilter}
+  />
+  {/* table filtered by `filter`, announcing `${filtered.length} · ${filter}` */}
+</Card>
+```
+
 ## Props
 
 ### CardTabs

@@ -35,6 +35,20 @@ import { Progress } from '@/components/seventy-six';
 />
 ```
 
+### At or over target
+
+The fill clamps at 100% even when current exceeds target; the overage is stated as information in the context line, never as a bar that runs off the end.
+
+```tsx
+<Progress
+  title="Q3 units shipped vs target"
+  current={9360}
+  target={9000}
+  format={(c, t) => `${c.toLocaleString()} / ${t.toLocaleString()} units`}
+  context="104% of target · bar caps at 100%, the overage lives in this line"
+/>
+```
+
 ## Props
 
 ### Progress

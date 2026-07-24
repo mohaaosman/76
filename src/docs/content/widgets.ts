@@ -123,6 +123,19 @@ export const widgets: DocEntry[] = [
   context="79% · 7 days remaining"
 />`,
       },
+      {
+        title: 'At or over target',
+        description: 'The fill clamps at 100% even when current exceeds target; the overage is stated as information in the context line, never as a bar that runs off the end.',
+        demoKey: 'progress-over',
+        surface: 'paper',
+        code: `<Progress
+  title="Q3 units shipped vs target"
+  current={9360}
+  target={9000}
+  format={(c, t) => \`\${c.toLocaleString()} / \${t.toLocaleString()} units\`}
+  context="104% of target · bar caps at 100%, the overage lives in this line"
+/>`,
+      },
     ],
     props: [
       {
@@ -267,6 +280,21 @@ export const widgets: DocEntry[] = [
   </div>
 </Card>`,
       },
+      {
+        title: 'A row near capacity',
+        description: 'There is no red "danger" fill (A2) — a zone about to run out carries its warning in words inside the mandatory absolute-numbers subtitle, which is exactly what a screen reader hears too.',
+        demoKey: 'meter-critical',
+        code: `<MeterList
+  items={[
+    { label: 'Zone A · ambient', current: 4630, max: 4700, value: '99%',
+      subtitle: '4,630 of 4,700 — only 70 positions left, reorder space now' },
+    { label: 'Zone B · chilled', current: 1180, max: 1600, value: '74%',
+      subtitle: '1,180 of 1,600 pallet positions' },
+    { label: 'Zone C · bonded', current: 410, max: 900, value: '46%',
+      subtitle: '410 of 900 pallet positions' },
+  ]}
+/>`,
+      },
     ],
     props: [
       {
@@ -333,6 +361,39 @@ export const widgets: DocEntry[] = [
   ]}
   page={{ from: 1, to: 5, of: 248, onNext: nextPage }}
 />`,
+      },
+      {
+        title: 'Selection driving a bulk action',
+        description: 'Selection is controlled — hold a Set in state, pass onSelect, and let the count drive both the live announcement and a bulk action in the CardHead. Space toggles a row, ⇧Space extends the range.',
+        demoKey: 'table-select',
+        code: `const [selected, setSelected] = useState<Set<string>>(new Set());
+const count = selected.size;
+
+<Card>
+  <CardHead
+    title="Draft invoices"
+    subtitle="July · unsent"
+    action={
+      <ButtonLink href="#" onClick={() => sendInvoices(selected)}>
+        {count > 0 ? \`Send \${count}\` : 'Send selected'}
+      </ButtonLink>
+    }
+  />
+  <DataTable
+    caption="Draft invoices"
+    rows={draftInvoices}
+    rowKey={(r) => r.id}
+    selectable
+    selected={selected}
+    onSelect={setSelected}
+    announcement={\`\${count} of \${draftInvoices.length} invoices selected\`}
+    columns={[
+      { key: 'id', header: 'INVOICE', kind: 'id', render: (r) => r.id },
+      { key: 'customer', header: 'CUSTOMER', render: (r) => r.customer },
+      { key: 'total', header: 'TOTAL', kind: 'num', render: (r) => r.total },
+    ]}
+  />
+</Card>`,
       },
     ],
     props: [
@@ -417,6 +478,29 @@ const [filter, setFilter] = useState('all');
   {/* table filtered by \`filter\` */}
 </Card>`,
       },
+      {
+        title: 'Counts on each tab',
+        description: 'In filters mode each tab carries a mono count of what it holds, so the numbers are visible before you click. The count derives from the same data the filter narrows — one source of truth, no drift.',
+        demoKey: 'cardtabs-counts',
+        code: `const [filter, setFilter] = useState('all');
+const filtered = filter === 'all' ? invoices : invoices.filter(byStatus(filter));
+
+<Card>
+  <CardHead title="Invoices" subtitle="July · receivables" />
+  <CardTabs
+    mode="filters"
+    tabs={[
+      { id: 'all', label: 'All', count: invoices.length },
+      { id: 'paid', label: 'Paid', count: 2 },
+      { id: 'due', label: 'Due', count: 2 },
+      { id: 'overdue', label: 'Overdue', count: 1 },
+    ]}
+    active={filter}
+    onChange={setFilter}
+  />
+  {/* table filtered by \`filter\`, announcing \`\${filtered.length} · \${filter}\` */}
+</Card>`,
+      },
     ],
     props: [
       {
@@ -483,6 +567,21 @@ const [filter, setFilter] = useState('all');
     ]}
   />
 </Card>`,
+      },
+      {
+        title: 'A CRM pipeline feed',
+        description: 'Same widget, a different domain: deals, contacts, and amounts are the bold entities in a sales feed. The timestamps stay absolute and the sentence still reads like a colleague\'s note — no avatars, no coloured event types.',
+        demoKey: 'activity-relative',
+        code: `<ActivityList
+  items={[
+    { time: '15:12', dateTime: '2026-07-24T15:12:00+03:00',
+      children: <><b>Acme Corp</b> deal moved to <b>Negotiation</b> — $48K</> },
+    { time: '13:40', dateTime: '2026-07-24T13:40:00+03:00',
+      children: <><b>Priya Nair</b> booked a demo for <b>Northwind</b></> },
+    { time: '11:26', dateTime: '2026-07-24T11:26:00+03:00',
+      children: <><b>Deka Wholesale</b> replied — awaiting a revised quote</> },
+  ]}
+/>`,
       },
     ],
     props: [

@@ -40,6 +40,23 @@ import { MeterList, Card, CardHead } from '@/components/seventy-six';
 </Card>
 ```
 
+### A row near capacity
+
+There is no red "danger" fill (A2) — a zone about to run out carries its warning in words inside the mandatory absolute-numbers subtitle, which is exactly what a screen reader hears too.
+
+```tsx
+<MeterList
+  items={[
+    { label: 'Zone A · ambient', current: 4630, max: 4700, value: '99%',
+      subtitle: '4,630 of 4,700 — only 70 positions left, reorder space now' },
+    { label: 'Zone B · chilled', current: 1180, max: 1600, value: '74%',
+      subtitle: '1,180 of 1,600 pallet positions' },
+    { label: 'Zone C · bonded', current: 410, max: 900, value: '46%',
+      subtitle: '410 of 900 pallet positions' },
+  ]}
+/>
+```
+
 ## Props
 
 ### MeterList

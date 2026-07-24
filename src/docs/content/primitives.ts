@@ -364,6 +364,22 @@ function SaveBar() {
   );
 }`,
       },
+      {
+        title: 'Even a problem stays calm',
+        description: 'There is no error tone, by design (A2). A partial failure is stated factually on the info slip — no red, no "Oops". If the failure actually blocks the flow it belongs inline or in a Dialog, never in a toast.',
+        demoKey: 'toast-error',
+        surface: 'paper',
+        code: `const { toast } = useToast();
+
+<Button variant="ghost"
+  onClick={() => toast('Import finished — 2 of 3 rows added, 1 needs review', 'info')}>
+  Import with issues
+</Button>
+<Button variant="primary"
+  onClick={() => toast('Import finished — 3 of 3 rows added', 'ok')}>
+  Import clean
+</Button>`,
+      },
     ],
     props: [
       {
@@ -419,6 +435,15 @@ function SaveBar() {
 
 <Tooltip content="Exports the filtered view · ⌘E">
   <Button variant="ghost">Export July</Button>
+</Tooltip>`,
+      },
+      {
+        title: 'On an icon-only button',
+        description: 'The natural home for a tooltip: an icon affordance carrying a line of metadata. The button still owns its own aria-label — the tooltip supplements, it never becomes the only label (A4).',
+        demoKey: 'tooltip-icon',
+        surface: 'paper',
+        code: `<Tooltip content="Totals exclude tax and shipping · updated 14:32">
+  <Button variant="ghost" aria-label="About this total" iconLeading={<InfoIcon />} />
 </Tooltip>`,
       },
     ],
@@ -477,6 +502,16 @@ function SaveBar() {
 <EmptyState
   sentence="No orders yet — orders appear here as soon as a sales channel syncs."
   action={<Button variant="primary">Connect channel</Button>}
+/>`,
+      },
+      {
+        title: 'No results for a filter',
+        description: 'The other empty case: not first-run, but a filter that matched nothing. The sentence names the active filter and points at the way back, and the single action clears it rather than starting from zero.',
+        demoKey: 'empty-filtered',
+        surface: 'paper',
+        code: `<EmptyState
+  sentence="No orders match “On hold · warehouse B”. Widen the filter or clear it to see the other 246 orders."
+  action={<Button variant="primary">Clear filters</Button>}
 />`,
       },
     ],

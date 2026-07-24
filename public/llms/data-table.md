@@ -50,6 +50,41 @@ import { DataTable, StatusWord } from '@/components/seventy-six';
 />
 ```
 
+### Selection driving a bulk action
+
+Selection is controlled — hold a Set in state, pass onSelect, and let the count drive both the live announcement and a bulk action in the CardHead. Space toggles a row, ⇧Space extends the range.
+
+```tsx
+const [selected, setSelected] = useState<Set<string>>(new Set());
+const count = selected.size;
+
+<Card>
+  <CardHead
+    title="Draft invoices"
+    subtitle="July · unsent"
+    action={
+      <ButtonLink href="#" onClick={() => sendInvoices(selected)}>
+        {count > 0 ? `Send ${count}` : 'Send selected'}
+      </ButtonLink>
+    }
+  />
+  <DataTable
+    caption="Draft invoices"
+    rows={draftInvoices}
+    rowKey={(r) => r.id}
+    selectable
+    selected={selected}
+    onSelect={setSelected}
+    announcement={`${count} of ${draftInvoices.length} invoices selected`}
+    columns={[
+      { key: 'id', header: 'INVOICE', kind: 'id', render: (r) => r.id },
+      { key: 'customer', header: 'CUSTOMER', render: (r) => r.customer },
+      { key: 'total', header: 'TOTAL', kind: 'num', render: (r) => r.total },
+    ]}
+  />
+</Card>
+```
+
 ## Props
 
 ### DataTable

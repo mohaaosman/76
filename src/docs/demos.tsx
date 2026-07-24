@@ -234,6 +234,20 @@ function ToastBasic() {
   );
 }
 
+function ToastError() {
+  const { toast } = useToast();
+  return (
+    <div className="demo-row">
+      <Button variant="ghost" onClick={() => toast('Import finished — 2 of 3 rows added, 1 needs review', 'info')}>
+        Import with issues
+      </Button>
+      <Button variant="primary" onClick={() => toast('Import finished — 3 of 3 rows added', 'ok')}>
+        Import clean
+      </Button>
+    </div>
+  );
+}
+
 /* ------------------------------------------------ Tooltip */
 
 function TooltipBasic() {
@@ -249,6 +263,23 @@ function TooltipBasic() {
   );
 }
 
+const IconInfo = (
+  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+    <circle cx="8" cy="8" r="6.5" />
+    <path d="M8 7.25v4M8 4.75h.01" strokeLinecap="round" />
+  </svg>
+);
+
+function TooltipIcon() {
+  return (
+    <div className="demo-row">
+      <Tooltip content="Totals exclude tax and shipping · updated 14:32">
+        <Button variant="ghost" aria-label="About this total" iconLeading={IconInfo} />
+      </Tooltip>
+    </div>
+  );
+}
+
 /* ------------------------------------------------ EmptyState */
 
 function EmptyBasic() {
@@ -256,6 +287,15 @@ function EmptyBasic() {
     <EmptyState
       sentence="No orders yet — orders appear here as soon as a sales channel syncs."
       action={<Button variant="primary">Connect channel</Button>}
+    />
+  );
+}
+
+function EmptyFiltered() {
+  return (
+    <EmptyState
+      sentence="No orders match “On hold · warehouse B”. Widen the filter or clear it to see the other 246 orders."
+      action={<Button variant="primary">Clear filters</Button>}
     />
   );
 }
@@ -372,6 +412,20 @@ function ProgressBasic() {
   );
 }
 
+function ProgressOver() {
+  return (
+    <div className="demo-narrow">
+      <Progress
+        title="Q3 units shipped vs target"
+        current={9360}
+        target={9000}
+        format={(c, t) => `${c.toLocaleString('en-US')} / ${t.toLocaleString('en-US')} units`}
+        context="104% of target · bar caps at 100%, the overage lives in this line"
+      />
+    </div>
+  );
+}
+
 /* ------------------------------------------------ Trend */
 
 const july = [12, 14, 13, 16, 18, 17, 19, 22, 21, 24, 23, 26, 28, 27, 30, 29, 32, 34, 33, 36, 38, 37, 40, 42];
@@ -432,6 +486,23 @@ function MeterBasic() {
   );
 }
 
+function MeterCritical() {
+  return (
+    <Card>
+      <CardHead title="Capacity" subtitle="By zone · live" />
+      <div className="trend-pad">
+        <MeterList
+          items={[
+            { label: 'Zone A · ambient', current: 4630, max: 4700, value: '99%', subtitle: '4,630 of 4,700 — only 70 positions left, reorder space now' },
+            { label: 'Zone B · chilled', current: 1180, max: 1600, value: '74%', subtitle: '1,180 of 1,600 pallet positions' },
+            { label: 'Zone C · bonded', current: 410, max: 900, value: '46%', subtitle: '410 of 900 pallet positions' },
+          ]}
+        />
+      </div>
+    </Card>
+  );
+}
+
 /* ------------------------------------------------ DataTable */
 
 const orders = [
@@ -464,6 +535,53 @@ function TableFull() {
           { key: 'total', header: 'TOTAL', kind: 'num', render: (o) => o.total },
         ]}
         page={{ from: 1, to: 5, of: 248, onNext: () => toast('Next page', 'info') }}
+      />
+    </Card>
+  );
+}
+
+const draftInvoices = [
+  { id: 'INV-3320', customer: 'Bloom Retail', total: '$1,204.00' },
+  { id: 'INV-3319', customer: 'Deka Wholesale', total: '$310.75' },
+  { id: 'INV-3317', customer: 'Harbor & Co', total: '$2,090.00' },
+  { id: 'INV-3312', customer: 'Sahan Coffee', total: '$96.40' },
+];
+
+function TableSelect() {
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const { toast } = useToast();
+  const count = selected.size;
+  return (
+    <Card>
+      <CardHead
+        title="Draft invoices"
+        subtitle="July · unsent"
+        action={
+          <ButtonLink
+            href="#/components/data-table"
+            aria-disabled={count === 0 || undefined}
+            onClick={(e) => {
+              e.preventDefault();
+              if (count > 0) toast(`Sending ${count} invoice${count === 1 ? '' : 's'}`, 'info');
+            }}
+          >
+            {count > 0 ? `Send ${count}` : 'Send selected'}
+          </ButtonLink>
+        }
+      />
+      <DataTable
+        caption="Draft invoices"
+        rows={draftInvoices}
+        rowKey={(r) => r.id}
+        selectable
+        selected={selected}
+        onSelect={setSelected}
+        announcement={`${count} of ${draftInvoices.length} invoices selected`}
+        columns={[
+          { key: 'id', header: 'INVOICE', kind: 'id', render: (r) => r.id },
+          { key: 'customer', header: 'CUSTOMER', render: (r) => r.customer },
+          { key: 'total', header: 'TOTAL', kind: 'num', render: (r) => r.total },
+        ]}
       />
     </Card>
   );
@@ -502,6 +620,50 @@ function CardTabsBasic() {
   );
 }
 
+const invoices = [
+  { id: 'INV-3320', customer: 'Bloom Retail', status: 'Paid', tone: 'ok' as const, total: '$1,204.00' },
+  { id: 'INV-3319', customer: 'Deka Wholesale', status: 'Due', tone: 'neutral' as const, total: '$310.75' },
+  { id: 'INV-3317', customer: 'Harbor & Co', status: 'Overdue', tone: 'bad' as const, total: '$2,090.00' },
+  { id: 'INV-3312', customer: 'Sahan Coffee', status: 'Paid', tone: 'ok' as const, total: '$96.40' },
+  { id: 'INV-3308', customer: 'Nasra Ali', status: 'Due', tone: 'neutral' as const, total: '$482.19' },
+];
+
+function CardTabsCounts() {
+  const [filter, setFilter] = useState('all');
+  const count = (tone: 'ok' | 'neutral' | 'bad') => invoices.filter((i) => i.tone === tone).length;
+  const filtered =
+    filter === 'all'
+      ? invoices
+      : invoices.filter((i) => (filter === 'paid' ? i.tone === 'ok' : filter === 'due' ? i.tone === 'neutral' : i.tone === 'bad'));
+  return (
+    <Card>
+      <CardHead title="Invoices" subtitle="July · receivables" />
+      <CardTabs
+        mode="filters"
+        tabs={[
+          { id: 'all', label: 'All', count: invoices.length },
+          { id: 'paid', label: 'Paid', count: count('ok') },
+          { id: 'due', label: 'Due', count: count('neutral') },
+          { id: 'overdue', label: 'Overdue', count: count('bad') },
+        ]}
+        active={filter}
+        onChange={setFilter}
+      />
+      <DataTable
+        caption="Invoices filtered"
+        rows={filtered}
+        rowKey={(i) => i.id}
+        announcement={`${filtered.length} invoices · ${filter}`}
+        columns={[
+          { key: 'id', header: 'INVOICE', kind: 'id', render: (i) => i.id },
+          { key: 'status', header: 'STATUS', kind: 'status', render: (i) => <StatusWord tone={i.tone}>{i.status}</StatusWord> },
+          { key: 'total', header: 'TOTAL', kind: 'num', render: (i) => i.total },
+        ]}
+      />
+    </Card>
+  );
+}
+
 /* ------------------------------------------------ ActivityList */
 
 function ActivityBasic() {
@@ -513,6 +675,21 @@ function ActivityBasic() {
           { time: '14:28', dateTime: '2026-07-24T14:28:00+03:00', children: (<><b>ORD-10482</b> picked complete — 12 of 12 items</>) },
           { time: '13:51', dateTime: '2026-07-24T13:51:00+03:00', children: (<><b>PO-2291</b> approved by <b>Nasra Ali</b></>) },
           { time: '11:04', dateTime: '2026-07-24T11:04:00+03:00', children: (<>Zone B temperature back in range after <b>18 min</b></>) },
+        ]}
+      />
+    </Card>
+  );
+}
+
+function ActivityRelative() {
+  return (
+    <Card>
+      <CardHead title="Pipeline activity" subtitle="Today · West team" action={<ButtonLink href="#/components/activity-list">View log</ButtonLink>} />
+      <ActivityList
+        items={[
+          { time: '15:12', dateTime: '2026-07-24T15:12:00+03:00', children: (<><b>Acme Corp</b> deal moved to <b>Negotiation</b> — $48K</>) },
+          { time: '13:40', dateTime: '2026-07-24T13:40:00+03:00', children: (<><b>Priya Nair</b> booked a demo for <b>Northwind</b></>) },
+          { time: '11:26', dateTime: '2026-07-24T11:26:00+03:00', children: (<><b>Deka Wholesale</b> replied — awaiting a revised quote</>) },
         ]}
       />
     </Card>
@@ -618,19 +795,27 @@ export const demos: Record<string, ComponentType> = {
   'dialog-basic': DialogBasic,
   'dialog-destructive': DialogDestructive,
   'toast-basic': ToastBasic,
+  'toast-error': ToastError,
   'tooltip-basic': TooltipBasic,
+  'tooltip-icon': TooltipIcon,
   'empty-basic': EmptyBasic,
+  'empty-filtered': EmptyFiltered,
   'skeleton-stat': SkeletonStat,
   'command-basic': CommandBasic,
   'stat-row': StatRowDemo,
   'stat-nodelta': StatNoDelta,
   'progress-basic': ProgressBasic,
+  'progress-over': ProgressOver,
   'trend-line': TrendLine,
   'trend-bar': TrendBar,
   'meter-basic': MeterBasic,
+  'meter-critical': MeterCritical,
   'table-full': TableFull,
+  'table-select': TableSelect,
   'cardtabs-basic': CardTabsBasic,
+  'cardtabs-counts': CardTabsCounts,
   'activity-basic': ActivityBasic,
+  'activity-relative': ActivityRelative,
   'sheet-skeleton': SheetSkeleton,
   'band-full': BandFull,
   'form-basic': FormBasic,

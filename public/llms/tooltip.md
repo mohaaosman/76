@@ -33,6 +33,16 @@ import { Tooltip, Button } from '@/components/seventy-six';
 </Tooltip>
 ```
 
+### On an icon-only button
+
+The natural home for a tooltip: an icon affordance carrying a line of metadata. The button still owns its own aria-label — the tooltip supplements, it never becomes the only label (A4).
+
+```tsx
+<Tooltip content="Totals exclude tax and shipping · updated 14:32">
+  <Button variant="ghost" aria-label="About this total" iconLeading={<InfoIcon />} />
+</Tooltip>
+```
+
 ## Props
 
 ### Tooltip

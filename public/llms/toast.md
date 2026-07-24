@@ -43,6 +43,23 @@ function SaveBar() {
 }
 ```
 
+### Even a problem stays calm
+
+There is no error tone, by design (A2). A partial failure is stated factually on the info slip — no red, no "Oops". If the failure actually blocks the flow it belongs inline or in a Dialog, never in a toast.
+
+```tsx
+const { toast } = useToast();
+
+<Button variant="ghost"
+  onClick={() => toast('Import finished — 2 of 3 rows added, 1 needs review', 'info')}>
+  Import with issues
+</Button>
+<Button variant="primary"
+  onClick={() => toast('Import finished — 3 of 3 rows added', 'ok')}>
+  Import clean
+</Button>
+```
+
 ## Props
 
 ### useToast → toast()
