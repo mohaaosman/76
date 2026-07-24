@@ -1,0 +1,133 @@
+/* B20 · Menu — actions dropdown on the native popover top layer. */
+
+@layer sv-components {
+  .sv-menu {
+    /* Top layer: no z-index needed. Positioned by JS from the trigger. */
+    position: fixed;
+    margin: 0;
+    inset: auto;
+    min-width: 200px;
+    max-width: 300px;
+    padding: var(--sv-s1);
+    background: var(--sv-paper);
+    border: 1px solid var(--sv-line);
+    border-radius: var(--sv-r);
+    box-shadow: var(--sv-shadow);
+    color: var(--sv-ink);
+  }
+
+  .sv-menu__item {
+    display: flex;
+    align-items: center;
+    gap: var(--sv-s2);
+    width: 100%;
+    padding: 7px 10px;
+    border: 0;
+    border-radius: var(--sv-r);
+    background: none;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--sv-ink);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color var(--sv-t-fast);
+  }
+
+  .sv-menu__item:hover:enabled,
+  .sv-menu__item:focus-visible {
+    background: var(--sv-seed-tint);
+  }
+
+  .sv-menu__item:focus-visible {
+    outline: 2px solid var(--sv-seed);
+    outline-offset: -2px;
+  }
+
+  .sv-menu__item:disabled {
+    color: var(--sv-ink-faint);
+    cursor: not-allowed;
+  }
+
+  .sv-menu__item--danger {
+    color: var(--sv-bad);
+  }
+
+  .sv-menu__icon {
+    display: inline-flex;
+    width: 16px;
+    height: 16px;
+    color: var(--sv-ink-soft);
+    flex: none;
+  }
+
+  .sv-menu__item--danger .sv-menu__icon {
+    color: var(--sv-bad);
+  }
+
+  .sv-menu__label {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sv-menu__meta {
+    font-size: 10px;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-menu__sep {
+    margin: var(--sv-s1) calc(-1 * var(--sv-s1));
+    border: 0;
+    border-top: 1px solid var(--sv-line);
+  }
+
+  .sv-menu__empty {
+    padding: var(--sv-s2) 10px;
+    font-size: 12.5px;
+    color: var(--sv-ink-soft);
+  }
+
+  /* Chevron drawn from tokens, matching the field chevron. */
+  .sv-menubtn__chevron {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-left: var(--sv-s1);
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
+  }
+
+  /* ---- SplitButton ---- */
+
+  .sv-split {
+    display: inline-flex;
+  }
+
+  .sv-split .sv-split__main {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .sv-split .sv-split__toggle {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    padding-inline: var(--sv-s2);
+  }
+
+  .sv-split .sv-split__toggle .sv-menubtn__chevron {
+    margin-left: 0;
+  }
+
+  /* A hairline seam between the halves, drawn structurally. */
+  .sv-split .sv-split__toggle {
+    box-shadow: inset 1px 0 0 var(--sv-seed-deep);
+  }
+
+  .sv-split .sv-btn--ghost.sv-split__toggle {
+    box-shadow: inset 1px 0 0 var(--sv-line);
+  }
+}
