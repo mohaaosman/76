@@ -171,20 +171,6 @@
     padding-bottom: 68px;
   }
 
-  .sv-band__breadcrumb ol {
-    display: flex;
-    gap: var(--sv-s2);
-    margin: 0 0 var(--sv-s2);
-    padding: 0;
-    list-style: none;
-    color: var(--sv-band-soft);
-  }
-
-  .sv-band__breadcrumb li + li::before {
-    content: '/';
-    margin-right: var(--sv-s2);
-  }
-
   .sv-band__title {
     font-size: 27px;
     line-height: 1.2;

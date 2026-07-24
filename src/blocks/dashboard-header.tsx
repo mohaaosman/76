@@ -31,7 +31,6 @@ export function DashboardHeader() {
       />
       <PageHero
         headingLevel={2}
-        breadcrumb={['OPERATIONS', 'OVERVIEW']}
         title="Overview"
         context="24 Jul · all zones · synced 2 min ago"
         actions={

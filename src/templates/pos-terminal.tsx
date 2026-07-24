@@ -56,7 +56,6 @@ export function PosTerminal() {
         />
         <PageHero
           headingLevel={1}
-          breadcrumb={['REGISTER', 'SALE']}
           title="Current sale"
           context="Cashier Amina · 14:32"
           actions={<Button variant="ghost" onClick={() => toast('Sale held for Register 3', 'info')}>Hold sale</Button>}

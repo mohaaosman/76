@@ -54,7 +54,6 @@ export function ErpDashboard() {
         ]} />
         <PageHero
           headingLevel={1}
-          breadcrumb={['OPERATIONS', 'OVERVIEW']}
           title="Overview"
           context="24 Jul · all zones · synced 2 min ago"
           actions={<>

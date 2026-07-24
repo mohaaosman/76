@@ -3,7 +3,7 @@
 The ink chrome zone: topbar with wordmark and horizontal nav, mono sub-tabs, and the page hero.
 
 **One job:** Carry ALL navigation and page context, so the paper below is 100% work.
-**Category:** chrome · **Exports:** Band, BandTopbar, BandNav, BandSubTabs, PageHero · **Tags:** header, navigation, topbar, breadcrumb, hero, no-sidebar, wordmark
+**Category:** chrome · **Exports:** Band, BandTopbar, BandNav, BandSubTabs, PageHero · **Tags:** header, navigation, topbar, hero, no-sidebar, wordmark
 
 ## Installation
 
@@ -15,7 +15,7 @@ Manual: copy components/seventy-six/band.tsx, components/seventy-six/band.css in
 
 ## Overview
 
-Every 76° screen is two zones, and this is the first: three stacked rows on `--sv-band` inside a 1280px container. **Topbar:** the 76° wordmark (six in seed, degree mark in band-soft — never omitted), the app name behind a hairline, horizontal nav, and the utility cluster. **Sub-tabs:** the active section's children in mono uppercase, collapsing to nothing when there are none. **PageHero:** mono breadcrumb → the page's single h1 → one soft context line, with page-level actions on the right.
+Every 76° screen is two zones, and this is the first: three stacked rows on `--sv-band` inside a 1280px container. **Topbar:** the 76° wordmark (six in seed, degree mark in band-soft — never omitted), the app name behind a hairline, horizontal nav, and the utility cluster. **Sub-tabs:** the active section's children in mono uppercase, collapsing to nothing when there are none. **PageHero:** the page's single h1 → one soft context line, with page-level actions on the right.
 
 Navigation is horizontal. A sidebar as primary nav is a firewall violation (A2) — full stop. The active item is white at weight 700 with a 2px seed underline flush to the row hairline; no background fills on nav items, ever.
 
@@ -51,7 +51,6 @@ import { Band, BandTopbar, BandNav, BandSubTabs, PageHero, Button } from '@/comp
     ]}
   />
   <PageHero
-    breadcrumb={['OPERATIONS', 'ORDERS']}
     title="Good afternoon,"
     titleSoft="Warehouse A"
     context="24 JUL · all zones · synced 14:32"
@@ -81,7 +80,6 @@ import { Band, BandTopbar, BandNav, BandSubTabs, PageHero, Button } from '@/comp
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `breadcrumb` | `string[]` | — | Mono trail; last item is aria-current. |
 | `title / titleSoft` | `string` | — | The h1 (27/800); the soft secondary word in band-soft. |
 | `context` | `string` | — | One sentence max: date · scope · last sync. |
 | `actions` | `ReactNode` | — | Max: one mono range control, two ghosts, ONE primary. |

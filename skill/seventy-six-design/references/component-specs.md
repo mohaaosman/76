@@ -4,11 +4,11 @@ Read the relevant section BEFORE implementing or reviewing any specific componen
 
 ## B1 · Band
 
-**Anatomy** — `Band` renders `<header class="sv-band">`. Composed of `BandTopbar` (`app`, `nav`, `utilities?`) → `BandSubTabs` → `PageHero`. Topbar carries the wordmark (`.sv-band__wordmark` = `7` + seed `6` + `°` in `.sv-band__wordmark-deg`, `aria-label="Seventy Six Degrees"`), `.sv-band__appname`, nav, and the `.sv-band__utilities` cluster. `BandNav`/`BandSubTabs` take `items: BandNavItem[]` (`{label, href, active?}`) plus optional `renderLink(item, className, ariaCurrent)`. `PageHero` takes `breadcrumb?`, `title`, `titleSoft?`, `context?`, `actions?`, `headingLevel?: 1|2`.
+**Anatomy** — `Band` renders `<header class="sv-band">`. Composed of `BandTopbar` (`app`, `nav`, `utilities?`) → `BandSubTabs` → `PageHero`. Topbar carries the wordmark (`.sv-band__wordmark` = `7` + seed `6` + `°` in `.sv-band__wordmark-deg`, `aria-label="Seventy Six Degrees"`), `.sv-band__appname`, nav, and the `.sv-band__utilities` cluster. `BandNav`/`BandSubTabs` take `items: BandNavItem[]` (`{label, href, active?}`) plus optional `renderLink(item, className, ariaCurrent)`. `PageHero` takes `title`, `titleSoft?`, `context?`, `actions?`, `headingLevel?: 1|2`.
 
 **States** — Active nav item = `.sv-band__navlink--active` (white / 700 / 2px seed underline); active sub-tab = `.sv-band__subtab--active`. No background fills, hover, or press transforms on nav items. `BandSubTabs` returns `null` when `items.length === 0`.
 
-**A11y** — `BandNav` is `<nav aria-label="Primary">`, `BandSubTabs` is `<nav aria-label="Section">`, breadcrumb is `<nav aria-label="Breadcrumb"><ol>` with the last `<li>` marked `aria-current="page"`. Active items carry three cues: `aria-current="page"` + weight 700 + underline, never color alone. `PageHero` renders the page's single `h1` (`headingLevel` drops to 2 only when embedded under an existing h1). Icon-only buttons are legal only inside `utilities`, and need `aria-label`.
+**A11y** — `BandNav` is `<nav aria-label="Primary">`, `BandSubTabs` is `<nav aria-label="Section">`. Active items carry three cues: `aria-current="page"` + weight 700 + underline, never color alone. `PageHero` renders the page's single `h1` (`headingLevel` drops to 2 only when embedded under an existing h1). Icon-only buttons are legal only inside `utilities`, and need `aria-label`.
 
 **Don't**
 - No sidebar as primary navigation — horizontal nav only.

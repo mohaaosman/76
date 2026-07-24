@@ -47,7 +47,6 @@ export function RoadmapPage() {
     <>
       <HeroBand>
         <PageHero
-          breadcrumb={['76°', 'ROADMAP']}
           title="Roadmap"
           context="What has shipped, what is next, and what we are still weighing. The visual system is settled; the work is reach and rigor."
         />

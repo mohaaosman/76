@@ -109,7 +109,7 @@ reason through, don't assume — at **320 / 375 / 414 / 768 / 1000 / 1280**.
   (never `hidden` — it kills sticky positioning and programmatic scroll).
 - Grid tracks that carry content or images use `minmax(0, 1fr)`, never bare
   `1fr` — bare `1fr` lets content blow the track open.
-- **No two-line clickable text:** buttons, nav items, breadcrumbs, and CTAs
+- **No two-line clickable text:** buttons, nav items, and CTAs
   never wrap. Shorten the label or widen the container.
 - `text-wrap: balance` on headings; `text-wrap: pretty` on long prose.
   Long words in headings survive via `overflow-wrap: anywhere; min-width: 0`.

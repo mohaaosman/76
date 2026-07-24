@@ -24,7 +24,6 @@ export function ComponentPage() {
     <>
       <HeroBand>
         <PageHero
-          breadcrumb={['COMPONENTS', entry.category.toUpperCase(), entry.book]}
           title={entry.name}
           context={entry.tagline}
           actions={

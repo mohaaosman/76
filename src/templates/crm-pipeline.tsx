@@ -55,7 +55,6 @@ export function CrmPipeline() {
         ]} />
         <PageHero
           headingLevel={1}
-          breadcrumb={['REVENUE', 'PIPELINE']}
           title="Pipeline"
           context="Q3 · 42 open deals · $1.8M weighted"
           actions={<>

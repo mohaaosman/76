@@ -105,8 +105,6 @@ export function BandSubTabs({ items, renderLink }: { items: BandNavItem[]; rende
 /* ---------- PageHero ---------- */
 
 export interface PageHeroProps {
-  /** Mono breadcrumb parts, e.g. ["OPERATIONS", "ORDERS"]. */
-  breadcrumb?: string[];
   /** The h1. Pass the secondary word via titleSoft. */
   title: string;
   titleSoft?: string;
@@ -119,22 +117,11 @@ export interface PageHeroProps {
   headingLevel?: 1 | 2;
 }
 
-export function PageHero({ breadcrumb, title, titleSoft, context, actions, headingLevel = 1 }: PageHeroProps) {
+export function PageHero({ title, titleSoft, context, actions, headingLevel = 1 }: PageHeroProps) {
   const Heading = headingLevel === 1 ? 'h1' : 'h2';
   return (
     <div className="sv-band__container sv-band__hero">
       <div>
-        {breadcrumb && breadcrumb.length > 0 && (
-          <nav aria-label="Breadcrumb" className="sv-band__breadcrumb sv-mono">
-            <ol>
-              {breadcrumb.map((part, i) => (
-                <li key={part} aria-current={i === breadcrumb.length - 1 ? 'page' : undefined}>
-                  {part}
-                </li>
-              ))}
-            </ol>
-          </nav>
-        )}
         <Heading className="sv-band__title">
           {title}
           {titleSoft && <span className="sv-band__title-soft"> {titleSoft}</span>}

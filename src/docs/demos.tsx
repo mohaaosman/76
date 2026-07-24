@@ -729,7 +729,6 @@ function BandFull() {
         />
         <PageHero
           headingLevel={2}
-          breadcrumb={['OPERATIONS', 'ORDERS']}
           title="Good afternoon,"
           titleSoft="Warehouse A"
           context="24 JUL · all zones · synced 14:32"

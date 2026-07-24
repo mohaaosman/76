@@ -8,7 +8,6 @@ export function TemplatesPage() {
     <>
       <HeroBand>
         <PageHero
-          breadcrumb={['76°', 'TEMPLATES']}
           title="Templates"
           titleSoft={`· ${templates.length} full screens`}
           context="Complete screens, each themed by its seed. Open one full screen, or install it and make it yours."

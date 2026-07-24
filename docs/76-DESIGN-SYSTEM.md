@@ -23,7 +23,7 @@ Explicitly rejected — never propose again: gradients of any kind, layered/deco
 1. **Paper on a wall.** White cards on the platinum wall, separated by contrast alone: no borders, one 1px breath of shadow (`0 1px 2px rgba(16,20,28,.05)`), radius 4px. Never blended, never floating.
 2. **Three colors, total.** Ink (+ its soft/faint steps), the product seed, and functional green/red — which may only color *words and 6px dots*, never surfaces.
 3. **Every widget has a type and one job.** No hybrids. If a widget needs two jobs, it is two widgets.
-4. **Mono speaks metadata.** Labels, IDs, timestamps, column headers, breadcrumbs, sub-tabs, date ranges — always Fragment Mono, small caps tracking. Content speaks Hanken Grotesk.
+4. **Mono speaks metadata.** Labels, IDs, timestamps, column headers, sub-tabs, date ranges — always Fragment Mono, small caps tracking. Content speaks Hanken Grotesk.
 5. **The band is the chrome.** All navigation and page context live in the ink band; the paper below is 100% work.
 6. **Numbers are instrumentation.** Tabular numerals everywhere data lives; values bold; units and context soft; last period always drawn in line-gray next to this period's seed color.
 
@@ -83,7 +83,7 @@ Explicitly rejected — never propose again: gradients of any kind, layered/deco
 | Soft subtitle / footnote | Hanken | 11.5 | 400–500 | --sv-ink-soft or faint |
 | Micro label (widget) | Fragment Mono | 10 | 400 | UPPERCASE, tracking .13em, faint |
 | Column header | Fragment Mono | 9.5 | 400 | UPPERCASE, tracking .1em |
-| Sub-tabs / breadcrumb / ranges | Fragment Mono | 10–10.5 | 400 | UPPERCASE, tracking .13em |
+| Sub-tabs / ranges | Fragment Mono | 10–10.5 | 400 | UPPERCASE, tracking .13em |
 | IDs & timestamps | Fragment Mono | 10–11.5 | 400 | ORD-10482, 14:32 |
 
 POS surfaces scale up: body 16–18, values 28–40, touch targets ≥48px — same faces, same laws.
@@ -95,7 +95,7 @@ Every 76 app screen is two zones:
 **Zone 1 — Ink band** (--sv-band), three stacked rows, all inside a 1280px container:
 1. **Topbar:** wordmark `76` + app name (hairline-separated) · horizontal nav (NEVER a sidebar) · search + avatar right. Active item: white text + 2px seed underline flush to the row's bottom hairline.
 2. **Sub-tabs:** the active menu item's children, grouped as mono uppercase tabs directly under the header (Triangl pattern). Same underline behavior. If a section has no children, this row collapses.
-3. **Page context (hero):** mono breadcrumb → H1 greeting or page title → soft context line (date · scope · last sync). Right side: page-level actions (ghost buttons on band + one seed primary). Bottom padding ~68px to make room for the overlap.
+3. **Page context (hero):** H1 greeting or page title → soft context line (date · scope · last sync). Right side: page-level actions (ghost buttons on band + one seed primary). Bottom padding ~68px to make room for the overlap.
 
 **Zone 2 — Paper sheet** on the wall. The first row of cards **overlaps the band by ~44px** (`margin-top:-44px`) — paper pinned over the band edge. This overlap is the 76 signature move; every top-level page has it.
 

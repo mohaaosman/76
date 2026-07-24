@@ -8,7 +8,6 @@ export function BlocksPage() {
     <>
       <HeroBand>
         <PageHero
-          breadcrumb={['76°', 'BLOCKS']}
           title="Blocks"
           titleSoft={`· ${blocks.length} composed sections`}
           context="Ready-made sections built only from the widget taxonomy. Install one and own the source."

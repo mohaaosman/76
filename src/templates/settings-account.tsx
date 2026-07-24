@@ -52,7 +52,6 @@ export function SettingsAccount() {
         <BandSubTabs items={subTabs} />
         <PageHero
           headingLevel={1}
-          breadcrumb={['ACCOUNT', 'NOTIFICATIONS']}
           title="Notifications"
           context="Changes save to your profile"
           actions={

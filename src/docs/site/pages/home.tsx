@@ -38,7 +38,6 @@ export function HomePage() {
     <>
       <HeroBand>
         <PageHero
-          breadcrumb={['76°', 'SEVENTY SIX DEGREES']}
           title="Paper on a wall."
           titleSoft="The product is the design."
           context="24 JUL 2026 · Component Book v1 · all specs implemented from B1–B18"

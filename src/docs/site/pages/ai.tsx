@@ -18,7 +18,6 @@ ${entries.map((e) => `- [${e.name}](/llms/${e.slug}.md): ${e.tagline}`).join('\n
     <>
       <HeroBand>
         <PageHero
-          breadcrumb={['76°', 'AI-READY']}
           title="Built for assistants"
           titleSoft="as much as for people"
           context="Registry metadata, markdown routes, and llms.txt — every doc page is machine-ingestible by design."

@@ -27,7 +27,6 @@ export function FoundationsPage() {
     <>
       <HeroBand>
         <PageHero
-          breadcrumb={['76°', 'FOUNDATIONS']}
           title="Foundations"
           titleSoft="tokens, type, geometry"
           context="Everything below ships in one file: styles/tokens.css — the only file allowed to contain a color literal."

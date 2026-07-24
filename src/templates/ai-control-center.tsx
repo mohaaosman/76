@@ -118,7 +118,6 @@ export function AiControlCenter() {
         <BandSubTabs items={SUBTABS} />
         <PageHero
           headingLevel={1}
-          breadcrumb={['FLEET', 'CONTROL CENTER']}
           title="Control center"
           context="Live · 18 agents · synced 12s ago"
           actions={

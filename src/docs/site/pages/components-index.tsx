@@ -12,7 +12,6 @@ export function ComponentsIndexPage() {
     <>
       <HeroBand>
         <PageHero
-          breadcrumb={['76°', 'COMPONENTS']}
           title="Components"
           titleSoft={`· 18 Book specs, ${entries.length} components`}
           context="Every component: one job, a fixed anatomy, enumerated states, an accessibility contract, and a Don't list."

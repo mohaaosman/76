@@ -126,7 +126,6 @@ export function OrdersPage() {
           }
         />
         <PageHero
-          breadcrumb={['OPERATIONS', 'ORDERS']}
           title="Orders"
           titleSoft="this month"
           context="Jul 2026 · all regions · synced 2m ago"

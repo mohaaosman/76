@@ -46,7 +46,7 @@ Build from this skill in this order:
 3. **Every widget has a type and one job.** If a widget needs two jobs, it is
    two widgets.
 4. **Mono speaks metadata.** Labels, IDs, timestamps, column headers,
-   breadcrumbs, sub-tabs — Fragment Mono, uppercase, tracked. Content speaks
+   sub-tabs — Fragment Mono, uppercase, tracked. Content speaks
    Hanken Grotesk. No other fonts in-product.
 5. **The band is the chrome.** All navigation and page context live in the ink
    band; the paper below is 100% work. Nav is horizontal — a sidebar as
@@ -89,8 +89,8 @@ tracking −.025em; body/table 13/500 (numeric cells 600); micro labels Mono
 ## Layout — the ink band + the sheet
 
 Every screen: **Zone 1**, the ink band (topbar with `76°` wordmark +
-horizontal nav; mono sub-tabs of the active section; page hero with mono
-breadcrumb → the page's ONE h1 → one soft context line → right-side actions,
+horizontal nav; mono sub-tabs of the active section; page hero with
+the page's ONE h1 → one soft context line → right-side actions,
 max one primary). **Zone 2**, the paper sheet on the wall — 1280px container,
 12-col grid, 14px gutters. The first card row overlaps the band by −44px:
 the 76° signature, exactly once per page. Canonical splits: stats

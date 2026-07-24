@@ -9,11 +9,11 @@ export const chrome: DocEntry[] = [
     category: 'chrome',
     tagline: 'The ink chrome zone: topbar with wordmark and horizontal nav, mono sub-tabs, and the page hero.',
     job: 'Carry ALL navigation and page context, so the paper below is 100% work.',
-    tags: ['header', 'navigation', 'topbar', 'breadcrumb', 'hero', 'no-sidebar', 'wordmark'],
+    tags: ['header', 'navigation', 'topbar', 'hero', 'no-sidebar', 'wordmark'],
     exports: ['Band', 'BandTopbar', 'BandNav', 'BandSubTabs', 'PageHero'],
     files: ['components/seventy-six/band.tsx', 'components/seventy-six/band.css'],
     intro: [
-      'Every 76° screen is two zones, and this is the first: three stacked rows on <code>--sv-band</code> inside a 1280px container. <b>Topbar:</b> the 76° wordmark (six in seed, degree mark in band-soft — never omitted), the app name behind a hairline, horizontal nav, and the utility cluster. <b>Sub-tabs:</b> the active section\'s children in mono uppercase, collapsing to nothing when there are none. <b>PageHero:</b> mono breadcrumb → the page\'s single h1 → one soft context line, with page-level actions on the right.',
+      'Every 76° screen is two zones, and this is the first: three stacked rows on <code>--sv-band</code> inside a 1280px container. <b>Topbar:</b> the 76° wordmark (six in seed, degree mark in band-soft — never omitted), the app name behind a hairline, horizontal nav, and the utility cluster. <b>Sub-tabs:</b> the active section\'s children in mono uppercase, collapsing to nothing when there are none. <b>PageHero:</b> the page\'s single h1 → one soft context line, with page-level actions on the right.',
       'Navigation is horizontal. A sidebar as primary nav is a firewall violation (A2) — full stop. The active item is white at weight 700 with a 2px seed underline flush to the row hairline; no background fills on nav items, ever.',
       'The hero\'s 68px bottom padding is load-bearing: it is what the Sheet\'s first row overlaps into. Stats never render in the hero — numbers live on paper.',
     ],
@@ -47,7 +47,6 @@ export const chrome: DocEntry[] = [
     ]}
   />
   <PageHero
-    breadcrumb={['OPERATIONS', 'ORDERS']}
     title="Good afternoon,"
     titleSoft="Warehouse A"
     context="24 JUL · all zones · synced 14:32"
@@ -75,7 +74,6 @@ export const chrome: DocEntry[] = [
       {
         component: 'PageHero',
         rows: [
-          { name: 'breadcrumb', type: 'string[]', description: 'Mono trail; last item is aria-current.' },
           { name: 'title / titleSoft', type: 'string', description: 'The h1 (27/800); the soft secondary word in band-soft.' },
           { name: 'context', type: 'string', description: 'One sentence max: date · scope · last sync.' },
           { name: 'actions', type: 'ReactNode', description: 'Max: one mono range control, two ghosts, ONE primary.' },
