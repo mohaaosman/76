@@ -1,0 +1,38 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "block-table-view",
+  "type": "registry:block",
+  "title": "Table view",
+  "description": "A filtered, paginated data table with a card head action.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/sheet.json",
+    "https://76.zifala.com/r/card.json",
+    "https://76.zifala.com/r/card-tabs.json",
+    "https://76.zifala.com/r/data-table.json",
+    "https://76.zifala.com/r/status-word.json",
+    "https://76.zifala.com/r/button.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/blocks/table-view.tsx",
+      "content": "// Orders table view — filters, statuses, paginated ERP grid.\nimport { useState } from 'react';\nimport {\n  Sheet,\n  Row,\n  Card,\n  CardHead,\n  CardTabs,\n  DataTable,\n  StatusWord,\n  ButtonLink,\n  useToast,\n} from '@/components/seventy-six';\n\ninterface Order {\n  id: string;\n  customer: string;\n  status: { tone: 'ok' | 'neutral' | 'bad'; label: string };\n  total: string;\n}\n\nconst ORDERS: Order[] = [\n  { id: 'ORD-10482', customer: 'Northwind Freight', status: { tone: 'neutral', label: 'Pending' }, total: '$4,820' },\n  { id: 'ORD-10481', customer: 'Halden Instruments', status: { tone: 'ok', label: 'Shipped' }, total: '$12,940' },\n  { id: 'ORD-10479', customer: 'Cedar & Vale Co.', status: { tone: 'ok', label: 'Shipped' }, total: '$1,284' },\n  { id: 'ORD-10478', customer: 'Meridian Foods', status: { tone: 'neutral', label: 'Pending' }, total: '$7,650' },\n  { id: 'ORD-10476', customer: 'Orbit Supply', status: { tone: 'bad', label: 'On hold' }, total: '$482' },\n  { id: 'ORD-10475', customer: 'Halden Instruments', status: { tone: 'ok', label: 'Shipped' }, total: '$9,310' },\n];\n\nconst FILTERS = [\n  { id: 'all', label: 'All', count: 248 },\n  { id: 'pending', label: 'Pending', count: 42 },\n  { id: 'shipped', label: 'Shipped', count: 191 },\n];\n\nexport function TableView() {\n  const [active, setActive] = useState('all');\n  const { toast } = useToast();\n\n  return (\n    <Sheet aria-label=\"Orders\">\n      <Row split=\"full\">\n        <Card>\n          <CardHead\n            title=\"Orders\"\n            subtitle=\"Last 30 days\"\n            action={<ButtonLink href=\"#\">Export</ButtonLink>}\n          />\n          <CardTabs mode=\"filters\" tabs={FILTERS} active={active} onChange={setActive} />\n          <DataTable\n            caption=\"Orders in the last 30 days\"\n            rows={ORDERS}\n            rowKey={(r) => r.id}\n            onRowOpen={(r) => toast(`Opening ${r.id}`)}\n            announcement={`${ORDERS.length} orders · ${FILTERS.find((f) => f.id === active)?.label}`}\n            page={{ from: 1, to: 6, of: 248, onPrev: undefined, onNext: () => toast('Loading next page') }}\n            columns={[\n              { key: 'id', header: 'ORDER', kind: 'id', render: (r) => r.id },\n              { key: 'customer', header: 'CUSTOMER', render: (r) => r.customer },\n              {\n                key: 'status',\n                header: 'STATUS',\n                kind: 'status',\n                render: (r) => <StatusWord tone={r.status.tone}>{r.status.label}</StatusWord>,\n              },\n              { key: 'total', header: 'TOTAL', kind: 'num', render: (r) => r.total },\n            ]}\n          />\n        </Card>\n      </Row>\n    </Sheet>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/blocks/table-view.tsx"
+    }
+  ],
+  "categories": [
+    "blocks"
+  ],
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "kind": "block",
+    "seed": null,
+    "tags": [
+      "table",
+      "data",
+      "filters",
+      "pagination"
+    ]
+  }
+}

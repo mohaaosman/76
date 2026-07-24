@@ -14,6 +14,7 @@ export async function loadEntries(root) {
   const entrySrc = `
     export { entries, categories } from '${path.join(root, 'src/docs/content/index.ts').replace(/\\/g, '/')}';
     export { entryToMarkdown } from '${path.join(root, 'src/docs/content/markdown.ts').replace(/\\/g, '/')}';
+    export { blocks, templates, compositions } from '${path.join(root, 'src/docs/content/compositions.ts').replace(/\\/g, '/')}';
   `;
   const entryFile = path.join(outDir, 'entry.ts');
   await writeFile(entryFile, entrySrc);

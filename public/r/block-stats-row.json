@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "block-stats-row",
+  "type": "registry:block",
+  "title": "Stats row",
+  "description": "The four-up S1 row that overlaps the band on every overview.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/sheet.json",
+    "https://76.zifala.com/r/stat-s1.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/blocks/stats-row.tsx",
+      "content": "// 76° block · Key metrics stat row (ERP operations).\nimport { Sheet, Row, StatS1 } from '@/components/seventy-six';\n\nexport function StatsRow() {\n  return (\n    <Sheet aria-label=\"Key metrics\">\n      <Row split=\"stats\">\n        <StatS1\n          label=\"REVENUE · MTD\"\n          value=\"$482,190\"\n          delta={12.4}\n          icon={\n            <svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" aria-hidden=\"true\">\n              <path d=\"M2 11l4-4 3 3 5-6\" />\n              <path d=\"M14 4v4h-4\" />\n            </svg>\n          }\n          footnote={<><b>$610K</b> target · 79% with 7 days left</>}\n          footnoteText=\"610 thousand dollar target, 79 percent reached with 7 days left\"\n        />\n        <StatS1\n          label=\"OPEN ORDERS\"\n          value=\"1,284\"\n          delta={-3.1}\n          icon={\n            <svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" aria-hidden=\"true\">\n              <path d=\"M2 4h9l1 8H3z\" />\n              <path d=\"M11 4l2 2\" />\n            </svg>\n          }\n          footnote={<>Oldest is <b>4d 6h</b> against a 3-day SLA</>}\n          footnoteText=\"Oldest open order is 4 days 6 hours against a 3-day SLA\"\n        />\n        <StatS1\n          label=\"FILL RATE · MTD\"\n          value=\"96.3\"\n          unit=\"%\"\n          delta={1.8}\n          icon={\n            <svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" aria-hidden=\"true\">\n              <path d=\"M13 4L6 12 3 9\" />\n            </svg>\n          }\n          footnote={<><b>412</b> lines short-shipped from 11,140</>}\n          footnoteText=\"412 lines short-shipped out of 11,140\"\n        />\n        <StatS1\n          label=\"ON-HAND VALUE\"\n          value=\"$3.94M\"\n          icon={\n            <svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" aria-hidden=\"true\">\n              <path d=\"M2 5l6-3 6 3-6 3z\" />\n              <path d=\"M2 5v6l6 3 6-3V5\" />\n            </svg>\n          }\n          footnote={<><b>62 days</b> of cover across 4 warehouses</>}\n          footnoteText=\"62 days of cover across 4 warehouses\"\n        />\n      </Row>\n    </Sheet>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/blocks/stats-row.tsx"
+    }
+  ],
+  "categories": [
+    "blocks"
+  ],
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "kind": "block",
+    "seed": null,
+    "tags": [
+      "kpi",
+      "stats",
+      "overview",
+      "dashboard"
+    ]
+  }
+}

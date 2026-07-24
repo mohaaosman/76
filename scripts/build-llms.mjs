@@ -11,7 +11,7 @@ import { loadEntries } from './lib/load-entries.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.REGISTRY_BASE ?? 'https://76.zifala.com';
 
-const { entries, entryToMarkdown } = await loadEntries(root);
+const { entries, entryToMarkdown, blocks, templates } = await loadEntries(root);
 const outDir = path.join(root, 'public', 'llms');
 await mkdir(outDir, { recursive: true });
 
@@ -32,6 +32,18 @@ const index = `# 76° UI — Seventy Six Degrees
 ## Components
 
 ${entries.map((e) => `- [${e.name}](${BASE}/llms/${e.slug}.md): ${e.tagline} One job: ${e.job}`).join('\n')}
+
+## Blocks
+
+Composed sections — install with npx shadcn@latest add ${BASE}/r/block-<slug>.json
+
+${(blocks ?? []).map((b) => `- ${b.name} (\`block-${b.slug}\`): ${b.tagline}`).join('\n')}
+
+## Templates
+
+Full screens built only from the taxonomy — install with npx shadcn@latest add ${BASE}/r/template-<slug>.json
+
+${(templates ?? []).map((t) => `- ${t.name} (\`template-${t.slug}\`, seed ${t.seed ?? 'neutral'}): ${t.tagline}`).join('\n')}
 
 ## Rules that bind every component
 

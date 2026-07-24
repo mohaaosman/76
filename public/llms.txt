@@ -30,6 +30,28 @@
 - [SearchCommand](https://76.zifala.com/llms/search-command.md): The ⌘K palette every 76° app ships — dialog anatomy, mono input, grouped results. One job: Be the keyboard front door to everything.
 - [Forms](https://76.zifala.com/llms/field.md): Field, Select, Checkbox, Radio, Toggle — labels above, seed focus without glow, errors that say how to fix. One job: Collect one value per control, honestly labeled.
 
+## Blocks
+
+Composed sections — install with npx shadcn@latest add https://76.zifala.com/r/block-<slug>.json
+
+- Stats row (`block-stats-row`): The four-up S1 row that overlaps the band on every overview.
+- Trend panel (`block-trend-panel`): A card with in-card range filters and a two-series trend.
+- Table view (`block-table-view`): A filtered, paginated data table with a card head action.
+- Activity panel (`block-activity-panel`): A timestamped feed with bold entities.
+- Meter panel (`block-meter-panel`): Part-by-part utilization — the donut replacement.
+- Empty screen (`block-empty-screen`): A calm empty state with exactly one action.
+- Dashboard header (`block-dashboard-header`): The ink band: topbar, sub-tabs, and page hero.
+
+## Templates
+
+Full screens built only from the taxonomy — install with npx shadcn@latest add https://76.zifala.com/r/template-<slug>.json
+
+- ERP dashboard (`template-erp-dashboard`, seed cobalt): A warehouse operations overview — the densest 76° screen.
+- CRM pipeline (`template-crm-pipeline`, seed verdigris): A sales pipeline — stages, momentum, and deals.
+- POS terminal (`template-pos-terminal`, seed signal): A point-of-sale register — scaled up, touch-first.
+- Settings (`template-settings-account`, seed neutral): An account settings screen — the forms showcase as a page.
+- AI agent control center (`template-ai-control-center`, seed cobalt): An ops console for a fleet of AI agents.
+
 ## Rules that bind every component
 
 - Three colors per screen: ink, one product seed, functional green/red as words and 6px dots only.

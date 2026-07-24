@@ -1,0 +1,40 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "template-pos-terminal",
+  "type": "registry:block",
+  "title": "POS terminal",
+  "description": "A point-of-sale register — scaled up, touch-first.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/band.json",
+    "https://76.zifala.com/r/sheet.json",
+    "https://76.zifala.com/r/card.json",
+    "https://76.zifala.com/r/data-table.json",
+    "https://76.zifala.com/r/stat-s1.json",
+    "https://76.zifala.com/r/status-word.json",
+    "https://76.zifala.com/r/button.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/templates/pos-terminal.tsx",
+      "content": "// 76° POS template — Register 3 sale surface, seed signal (touch-first, scaled-up).\nimport {\n  Band,\n  BandTopbar,\n  BandNav,\n  PageHero,\n  Sheet,\n  Row,\n  Card,\n  CardHead,\n  DataTable,\n  StatS1,\n  Button,\n  useToast,\n} from '@/components/seventy-six';\n\nconst NAV = [\n  { label: 'Sale', href: '#sale', active: true },\n  { label: 'Orders', href: '#orders' },\n  { label: 'Shift', href: '#shift' },\n];\n\ntype Line = { item: string; qty: string; price: string; line: string };\n\nconst LINES: Line[] = [\n  { item: 'Flat white', qty: '2', price: '$4.20', line: '$8.40' },\n  { item: 'Sourdough loaf', qty: '1', price: '$9.00', line: '$9.00' },\n  { item: 'Chicken sandwich', qty: '3', price: '$12.50', line: '$37.50' },\n  { item: 'Garden salad', qty: '2', price: '$11.00', line: '$22.00' },\n  { item: 'Sparkling water', qty: '4', price: '$3.75', line: '$15.00' },\n];\n\nconst columns = [\n  { key: 'item', header: 'ITEM', kind: 'text' as const, render: (r: Line) => r.item },\n  { key: 'qty', header: 'QTY', kind: 'num' as const, render: (r: Line) => r.qty },\n  { key: 'price', header: 'PRICE', kind: 'num' as const, render: (r: Line) => r.price },\n  { key: 'line', header: 'LINE', kind: 'num' as const, render: (r: Line) => r.line },\n];\n\nconst CartIcon = (\n  <svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" aria-hidden=\"true\">\n    <circle cx=\"6\" cy=\"14\" r=\"1\" /><circle cx=\"13\" cy=\"14\" r=\"1\" />\n    <path d=\"M1 1h2l1.5 9h8L15 4H4\" />\n  </svg>\n);\n\nexport function PosTerminal() {\n  const { toast } = useToast();\n  return (\n    <div data-seed=\"signal\">\n      <Band>\n        <BandTopbar\n          app=\"Register 3\"\n          nav={<BandNav items={NAV} />}\n          utilities={<span className=\"sv-mono sv-num\">14:32 · TILL OPEN</span>}\n        />\n        <PageHero\n          headingLevel={1}\n          breadcrumb={['REGISTER', 'SALE']}\n          title=\"Current sale\"\n          context=\"Cashier Amina · 14:32\"\n          actions={<Button variant=\"ghost\" onClick={() => toast('Sale held for Register 3', 'info')}>Hold sale</Button>}\n        />\n      </Band>\n      <Sheet aria-label=\"Point of sale\">\n        <Row split=\"main\" overlap>\n          <Card>\n            <CardHead title=\"Cart\" subtitle=\"5 line items on this sale\" />\n            <DataTable\n              caption=\"Line items on the current sale\"\n              columns={columns}\n              rows={LINES}\n              rowKey={(r) => r.item}\n              announcement=\"5 items in cart\"\n            />\n          </Card>\n          <Card>\n            <CardHead title=\"Total\" />\n            <StatS1\n              label=\"GRAND TOTAL · DUE\"\n              value=\"$128.40\"\n              icon={CartIcon}\n              footnote={<>3 items · tax <b>$9.40</b> included</>}\n              footnoteText=\"3 items, tax $9.40 included\"\n            />\n            <div className=\"sv-mono sv-num\" style={{ display: 'grid', gap: 'var(--sv-s2)', marginTop: 'var(--sv-s5)' }}>\n              <span>SUBTOTAL · $119.00</span>\n              <span>TAX 8% · $9.40</span>\n            </div>\n            <div style={{ display: 'grid', gap: 'var(--sv-s3)', marginTop: 'var(--sv-s5)' }}>\n              <Button variant=\"primary\" onClick={() => toast('Charging $128.40 to card', 'info')}>Charge $128.40</Button>\n              <Button variant=\"ghost\" onClick={() => toast('Discount panel opened', 'info')}>Add discount</Button>\n            </div>\n          </Card>\n        </Row>\n      </Sheet>\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/templates/pos-terminal.tsx"
+    }
+  ],
+  "categories": [
+    "templates"
+  ],
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "kind": "template",
+    "seed": "signal",
+    "tags": [
+      "pos",
+      "retail",
+      "checkout",
+      "signal",
+      "touch"
+    ]
+  }
+}

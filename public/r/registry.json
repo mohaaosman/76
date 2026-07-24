@@ -377,6 +377,186 @@
           "type": "registry:ui"
         }
       ]
+    },
+    {
+      "name": "block-stats-row",
+      "type": "registry:block",
+      "title": "Stats row",
+      "description": "The four-up S1 row that overlaps the band on every overview.",
+      "categories": [
+        "blocks"
+      ],
+      "files": [
+        {
+          "path": "blocks/stats-row.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "block-trend-panel",
+      "type": "registry:block",
+      "title": "Trend panel",
+      "description": "A card with in-card range filters and a two-series trend.",
+      "categories": [
+        "blocks"
+      ],
+      "files": [
+        {
+          "path": "blocks/trend-panel.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "block-table-view",
+      "type": "registry:block",
+      "title": "Table view",
+      "description": "A filtered, paginated data table with a card head action.",
+      "categories": [
+        "blocks"
+      ],
+      "files": [
+        {
+          "path": "blocks/table-view.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "block-activity-panel",
+      "type": "registry:block",
+      "title": "Activity panel",
+      "description": "A timestamped feed with bold entities.",
+      "categories": [
+        "blocks"
+      ],
+      "files": [
+        {
+          "path": "blocks/activity-panel.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "block-meter-panel",
+      "type": "registry:block",
+      "title": "Meter panel",
+      "description": "Part-by-part utilization — the donut replacement.",
+      "categories": [
+        "blocks"
+      ],
+      "files": [
+        {
+          "path": "blocks/meter-panel.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "block-empty-screen",
+      "type": "registry:block",
+      "title": "Empty screen",
+      "description": "A calm empty state with exactly one action.",
+      "categories": [
+        "blocks"
+      ],
+      "files": [
+        {
+          "path": "blocks/empty-screen.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "block-dashboard-header",
+      "type": "registry:block",
+      "title": "Dashboard header",
+      "description": "The ink band: topbar, sub-tabs, and page hero.",
+      "categories": [
+        "blocks"
+      ],
+      "files": [
+        {
+          "path": "blocks/dashboard-header.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "template-erp-dashboard",
+      "type": "registry:block",
+      "title": "ERP dashboard",
+      "description": "A warehouse operations overview — the densest 76° screen.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/erp-dashboard.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "template-crm-pipeline",
+      "type": "registry:block",
+      "title": "CRM pipeline",
+      "description": "A sales pipeline — stages, momentum, and deals.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/crm-pipeline.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "template-pos-terminal",
+      "type": "registry:block",
+      "title": "POS terminal",
+      "description": "A point-of-sale register — scaled up, touch-first.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/pos-terminal.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "template-settings-account",
+      "type": "registry:block",
+      "title": "Settings",
+      "description": "An account settings screen — the forms showcase as a page.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/settings-account.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "template-ai-control-center",
+      "type": "registry:block",
+      "title": "AI agent control center",
+      "description": "An ops console for a fleet of AI agents.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/ai-control-center.tsx",
+          "type": "registry:block"
+        }
+      ]
     }
   ]
 }

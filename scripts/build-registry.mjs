@@ -13,7 +13,7 @@ import { loadEntries } from './lib/load-entries.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.REGISTRY_BASE ?? 'https://76.zifala.com';
 
-const { entries } = await loadEntries(root);
+const { entries, compositions } = await loadEntries(root);
 const outDir = path.join(root, 'public', 'r');
 await mkdir(outDir, { recursive: true });
 
@@ -83,6 +83,52 @@ for (const entry of entries) {
   });
 }
 
+/* Blocks & templates — registry:block items composed from the taxonomy.
+   Each bundles one source file and depends on the components it uses. */
+async function compositionFile(relPath) {
+  const content = await readFile(path.join(root, 'src', relPath), 'utf8');
+  return {
+    path: `registry/seventy-six/${relPath}`,
+    content,
+    type: 'registry:ui',
+    target: `components/seventy-six/${relPath}`,
+  };
+}
+
+const blockItems = [];
+for (const comp of compositions ?? []) {
+  const name = `${comp.kind}-${comp.slug}`;
+  const category = comp.kind === 'block' ? 'blocks' : 'templates';
+  const item = {
+    $schema: 'https://ui.shadcn.com/schema/registry-item.json',
+    name,
+    type: 'registry:block',
+    title: comp.name,
+    description: comp.tagline,
+    registryDependencies: [
+      `${BASE}/r/tokens.json`,
+      ...comp.deps.map((dep) => `${BASE}/r/${dep}.json`),
+    ],
+    files: [await compositionFile(comp.file)],
+    categories: [category],
+    meta: {
+      system: '76° — Seventy Six Degrees',
+      kind: comp.kind,
+      seed: comp.seed ?? null,
+      tags: comp.tags,
+    },
+  };
+  await writeFile(path.join(outDir, `${name}.json`), JSON.stringify(item, null, 2));
+  blockItems.push({
+    name,
+    type: 'registry:block',
+    title: comp.name,
+    description: comp.tagline,
+    categories: [category],
+    files: [{ path: comp.file, type: 'registry:block' }],
+  });
+}
+
 const registry = {
   $schema: 'https://ui.shadcn.com/schema/registry.json',
   name: 'seventy-six',
@@ -90,8 +136,11 @@ const registry = {
   items: [
     { name: 'tokens', type: 'registry:theme', title: '76° tokens', description: tokensItem.description },
     ...items,
+    ...blockItems,
   ],
 };
 await writeFile(path.join(outDir, 'registry.json'), JSON.stringify(registry, null, 2));
 
-console.log(`registry: ${items.length + 1} items → public/r/ (base: ${BASE})`);
+console.log(
+  `registry: ${items.length + 1} components + ${blockItems.length} blocks/templates → public/r/ (base: ${BASE})`,
+);

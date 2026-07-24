@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "block-empty-screen",
+  "type": "registry:block",
+  "title": "Empty screen",
+  "description": "A calm empty state with exactly one action.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/sheet.json",
+    "https://76.zifala.com/r/card.json",
+    "https://76.zifala.com/r/empty-state.json",
+    "https://76.zifala.com/r/button.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/blocks/empty-screen.tsx",
+      "content": "// Empty state — no purchase orders yet this period, with a single primary action.\nimport { Sheet, Row, Card, EmptyState, Button } from '@/components/seventy-six';\n\nexport function EmptyScreen() {\n  return (\n    <Sheet aria-label=\"Purchase orders\">\n      <Row split=\"full\">\n        <Card>\n          <EmptyState\n            sentence=\"No purchase orders have been raised this period. Orders you create will appear here with their supplier, value, and approval status.\"\n            action={<Button variant=\"primary\">Create purchase order</Button>}\n          />\n        </Card>\n      </Row>\n    </Sheet>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/blocks/empty-screen.tsx"
+    }
+  ],
+  "categories": [
+    "blocks"
+  ],
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "kind": "block",
+    "seed": null,
+    "tags": [
+      "empty-state",
+      "zero-data",
+      "onboarding"
+    ]
+  }
+}

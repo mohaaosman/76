@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "block-dashboard-header",
+  "type": "registry:block",
+  "title": "Dashboard header",
+  "description": "The ink band: topbar, sub-tabs, and page hero.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/band.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/blocks/dashboard-header.tsx",
+      "content": "// Chrome block — Band topbar, primary nav, sub-tabs, and the page hero.\nimport { Band, BandTopbar, BandNav, BandSubTabs, PageHero, Button } from '@/components/seventy-six';\n\nexport function DashboardHeader() {\n  return (\n    <Band>\n      <BandTopbar\n        app=\"Warehouse\"\n        nav={\n          <BandNav\n            items={[\n              { label: 'Overview', href: '#overview', active: true },\n              { label: 'Orders', href: '#orders' },\n              { label: 'Inventory', href: '#inventory' },\n              { label: 'Suppliers', href: '#suppliers' },\n            ]}\n          />\n        }\n        utilities={\n          <button type=\"button\" className=\"sv-mono\" aria-label=\"Search\">\n            SEARCH ⌘K\n          </button>\n        }\n      />\n      <BandSubTabs\n        items={[\n          { label: 'Today', href: '#today', active: true },\n          { label: '7 days', href: '#7-days' },\n          { label: 'Month', href: '#month' },\n        ]}\n      />\n      <PageHero\n        headingLevel={2}\n        breadcrumb={['OPERATIONS', 'OVERVIEW']}\n        title=\"Overview\"\n        context=\"24 Jul · all zones · synced 2 min ago\"\n        actions={\n          <>\n            <Button variant=\"ghost\">Export</Button>\n            <Button variant=\"primary\">Create order</Button>\n          </>\n        }\n      />\n    </Band>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/blocks/dashboard-header.tsx"
+    }
+  ],
+  "categories": [
+    "blocks"
+  ],
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "kind": "block",
+    "seed": null,
+    "tags": [
+      "band",
+      "header",
+      "navigation",
+      "chrome"
+    ]
+  }
+}

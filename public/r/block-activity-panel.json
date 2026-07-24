@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "block-activity-panel",
+  "type": "registry:block",
+  "title": "Activity panel",
+  "description": "A timestamped feed with bold entities.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/sheet.json",
+    "https://76.zifala.com/r/card.json",
+    "https://76.zifala.com/r/activity-list.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/blocks/activity-panel.tsx",
+      "content": "// Warehouse floor activity — absolute-time ERP event log.\nimport { Sheet, Row, Card, CardHead, ActivityList } from '@/components/seventy-six';\n\nconst ITEMS = [\n  {\n    time: '14:28',\n    dateTime: '2026-07-24T14:28:00+03:00',\n    children: (\n      <>\n        <b>Priya Nair</b> released <b>ORD-10482</b> to picking in <b>Zone B</b>.\n      </>\n    ),\n  },\n  {\n    time: '14:11',\n    dateTime: '2026-07-24T14:11:00+03:00',\n    children: (\n      <>\n        <b>PO-2291</b> received — 340 units booked to <b>Zone A</b>.\n      </>\n    ),\n  },\n  {\n    time: '13:52',\n    dateTime: '2026-07-24T13:52:00+03:00',\n    children: (\n      <>\n        <b>Marcus Bell</b> flagged a short pick on <b>ORD-10476</b>.\n      </>\n    ),\n  },\n  {\n    time: '13:37',\n    dateTime: '2026-07-24T13:37:00+03:00',\n    children: (\n      <>\n        <b>ORD-10479</b> staged for carrier pickup at <b>Dock 3</b>.\n      </>\n    ),\n  },\n  {\n    time: '13:04',\n    dateTime: '2026-07-24T13:04:00+03:00',\n    children: (\n      <>\n        <b>Ana Sokolova</b> closed cycle count for <b>Zone C</b>.\n      </>\n    ),\n  },\n  {\n    time: '12:46',\n    dateTime: '2026-07-24T12:46:00+03:00',\n    children: (\n      <>\n        <b>PO-2288</b> partially received — 12 units held for inspection.\n      </>\n    ),\n  },\n];\n\nexport function ActivityPanel() {\n  return (\n    <Sheet aria-label=\"Activity\">\n      <Row split=\"full\">\n        <Card>\n          <CardHead title=\"Activity\" subtitle=\"Warehouse floor · today\" />\n          <ActivityList items={ITEMS} />\n        </Card>\n      </Row>\n    </Sheet>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/blocks/activity-panel.tsx"
+    }
+  ],
+  "categories": [
+    "blocks"
+  ],
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "kind": "block",
+    "seed": null,
+    "tags": [
+      "activity",
+      "feed",
+      "timeline",
+      "audit"
+    ]
+  }
+}

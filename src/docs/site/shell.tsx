@@ -17,7 +17,10 @@ export function Shell({ onSearch }: { onSearch: () => void }) {
     { label: 'Introduction', href: '/', active: pathname === '/' },
     { label: 'Foundations', href: '/foundations', active: pathname === '/foundations' },
     { label: 'Components', href: '/components', active: pathname.startsWith('/components') },
+    { label: 'Blocks', href: '/blocks', active: pathname === '/blocks' },
+    { label: 'Templates', href: '/templates', active: pathname.startsWith('/templates') },
     { label: 'AI-ready', href: '/ai', active: pathname === '/ai' },
+    { label: 'Roadmap', href: '/roadmap', active: pathname === '/roadmap' },
   ];
 
   const subtabs: BandNavItem[] = pathname.startsWith('/components')

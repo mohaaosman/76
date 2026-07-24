@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "block-trend-panel",
+  "type": "registry:block",
+  "title": "Trend panel",
+  "description": "A card with in-card range filters and a two-series trend.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/sheet.json",
+    "https://76.zifala.com/r/card.json",
+    "https://76.zifala.com/r/card-tabs.json",
+    "https://76.zifala.com/r/trend.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/blocks/trend-panel.tsx",
+      "content": "// 76° block · Revenue trend panel with in-card range filters.\nimport { useState } from 'react';\nimport { Sheet, Row, Card, CardHead, CardTabs, Trend } from '@/components/seventy-six';\n\nconst MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];\nconst THIS_YEAR = [318, 342, 361, 355, 389, 431, 482, 470, 498, 512, 540, 566];\nconst LAST_YEAR = [290, 301, 330, 322, 351, 388, 402, 415, 430, 448, 471, 495];\n\nexport function TrendPanel() {\n  const [range, setRange] = useState('ytd');\n  return (\n    <Sheet aria-label=\"Revenue trend\">\n      <Row split=\"full\">\n        <Card>\n          <CardHead title=\"Revenue\" subtitle=\"Monthly, this year vs last\" />\n          <CardTabs\n            mode=\"filters\"\n            active={range}\n            onChange={setRange}\n            tabs={[\n              { id: '30d', label: '30D' },\n              { id: 'qtd', label: 'QTD' },\n              { id: 'ytd', label: 'YTD' },\n            ]}\n          />\n          <Trend\n            kind=\"line\"\n            xLabels={MONTHS}\n            ariaLabel=\"Revenue is running ahead of last year every month, $566K in December versus $495K a year ago\"\n            series={[\n              { label: 'This year', data: THIS_YEAR, tone: 'seed' },\n              { label: 'Last year', data: LAST_YEAR, tone: 'compare' },\n            ]}\n          />\n        </Card>\n      </Row>\n    </Sheet>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/blocks/trend-panel.tsx"
+    }
+  ],
+  "categories": [
+    "blocks"
+  ],
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "kind": "block",
+    "seed": null,
+    "tags": [
+      "trend",
+      "chart",
+      "time-series",
+      "filters"
+    ]
+  }
+}
