@@ -44,7 +44,8 @@
     "scripts/slop-firewall.mjs",
     "scripts/lib",
     "README.md",
-    "ROADMAP.md"
+    "ROADMAP.md",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "dev": "vite",
