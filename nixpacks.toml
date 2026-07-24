@@ -1,7 +1,8 @@
 # Nixpacks build for Coolify.
-# Vite builds the docs site + shadcn registry into dist/; Caddy serves it
-# statically (HashRouter, so no SPA rewrite is needed — every request is
-# either / or a real file under dist/, incl. /r/*.json and /llms/*.md).
+# Vite builds the docs site + shadcn registry into dist/; a zero-dependency
+# Node static server (server.mjs) serves it. No extra Nix packages — adding
+# caddy via nixPkgs collides with the base image's caddy (2.8.4 vs 2.9.0).
+# HashRouter means every request is either / or a real file, so no SPA rewrite.
 providers = ['node']
 
 [variables]
@@ -12,9 +13,6 @@ PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = '1'
 # in Coolify if you serve the registry from a different host.
 REGISTRY_BASE = 'https://76.zifala.com'
 
-[phases.setup]
-nixPkgs = ['nodejs_22', 'caddy']
-
 [phases.install]
 cmds = ['npm ci']
 
@@ -22,4 +20,4 @@ cmds = ['npm ci']
 cmds = ['npm run build']
 
 [start]
-cmd = 'caddy run --config Caddyfile --adapter caddyfile'
+cmd = 'node server.mjs'
