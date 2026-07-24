@@ -1,29 +1,90 @@
-/* B14 · Toast */
+/* B14 · Notification (toast) — paper card, tone rule, icon + title +
+   description anatomy. z from the --sv-z-* ladder. */
 
 @layer sv-components {
   .sv-toaster {
     position: fixed;
     left: var(--sv-s5);
     bottom: var(--sv-s5);
-    z-index: 60;
+    z-index: var(--sv-z-toast);
     display: flex;
     flex-direction: column;
     gap: var(--sv-s2);
+    max-width: calc(100vw - var(--sv-s5) * 2);
   }
 
   .sv-toast {
-    max-width: 360px;
-    padding: var(--sv-s3) var(--sv-s4);
+    display: flex;
+    align-items: flex-start;
+    gap: var(--sv-s3);
+    width: min(360px, 100%);
+    padding: var(--sv-s3) var(--sv-s3) var(--sv-s3) var(--sv-s4);
     background: var(--sv-paper);
     border-radius: var(--sv-r);
     box-shadow: var(--sv-shadow);
     border-left: 2px solid var(--sv-seed);
-    font-size: 13px;
-    font-weight: 500;
     transition: opacity var(--sv-t);
   }
 
-  .sv-toast--ok {
-    border-left-color: var(--sv-ok);
+  .sv-toast--lg {
+    width: min(440px, 100%);
+  }
+
+  .sv-toast--ok   { border-left-color: var(--sv-ok); }
+  .sv-toast--warn { border-left-color: var(--sv-ink-soft); }
+  .sv-toast--bad  { border-left-color: var(--sv-bad); }
+
+  .sv-toast__icon {
+    display: inline-flex;
+    flex: none;
+    margin-top: 1px;
+    color: var(--sv-seed-text);
+  }
+
+  .sv-toast--ok   .sv-toast__icon { color: var(--sv-ok); }
+  .sv-toast--warn .sv-toast__icon { color: var(--sv-ink-soft); }
+  .sv-toast--bad  .sv-toast__icon { color: var(--sv-bad); }
+
+  .sv-toast__text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .sv-toast__title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--sv-ink);
+  }
+
+  .sv-toast__desc {
+    margin-top: 2px;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-toast__dismiss {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    flex: none;
+    border: 0;
+    border-radius: var(--sv-r);
+    background: none;
+    color: var(--sv-ink-faint);
+    cursor: pointer;
+    transition: background-color var(--sv-t-fast), color var(--sv-t-fast);
+  }
+
+  .sv-toast__dismiss:hover {
+    background: var(--sv-wall);
+    color: var(--sv-ink);
+  }
+
+  .sv-toast__dismiss:focus-visible {
+    outline: 2px solid var(--sv-seed);
+    outline-offset: 2px;
   }
 }
