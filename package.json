@@ -1,6 +1,6 @@
 {
   "name": "seventy-six-ui",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha.1",
   "description": "76° — Seventy Six Degrees. The component library and documentation site. Flat, informational, corporate — paper on a wall.",
   "type": "module",
   "license": "MIT",
@@ -31,12 +31,20 @@
     "access": "public"
   },
   "files": [
-    "src",
+    "src/components",
+    "src/styles",
+    "src/lib",
+    "src/blocks",
+    "src/templates",
     "public/r",
     "public/llms",
     "public/llms.txt",
-    "scripts",
-    "README.md"
+    "scripts/build-registry.mjs",
+    "scripts/build-llms.mjs",
+    "scripts/slop-firewall.mjs",
+    "scripts/lib",
+    "README.md",
+    "ROADMAP.md"
   ],
   "scripts": {
     "dev": "vite",
@@ -45,7 +53,9 @@
     "registry": "node scripts/build-registry.mjs",
     "llms": "node scripts/build-llms.mjs",
     "firewall": "node scripts/slop-firewall.mjs",
-    "prepublishOnly": "npm run registry && npm run llms"
+    "screens": "node scripts/shipgate-screens.mjs",
+    "check:sync": "node scripts/check-sync.mjs",
+    "prepublishOnly": "npm run check:sync && npm run registry && npm run llms"
   },
   "dependencies": {
     "@fontsource-variable/hanken-grotesk": "^5.2.5",

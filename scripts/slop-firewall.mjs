@@ -47,7 +47,7 @@ function check(file, source) {
       const ok = radius[1]
         .trim()
         .split(/\s+/)
-        .every((v) => ['var(--sv-r)', '50%', '0', '2px', '3px', '9px'].slice(0, 5).includes(v));
+        .every((v) => ['var(--sv-r)', '50%', '0', '2px', '3px'].includes(v));
       if (!ok) flag('unregistered border-radius');
     }
 

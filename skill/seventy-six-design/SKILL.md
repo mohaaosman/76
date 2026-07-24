@@ -1,7 +1,7 @@
 ---
 name: seventy-six-design
 description: "The 76° (Seventy Six Degrees) design system — the binding visual system for every product, screen, component, prototype, or mockup in Max's projects. Use this skill whenever building or reviewing ANY UI: React components, HTML pages, dashboards, ERP/CRM/POS screens, admin panels, forms, tables, charts, landing mockups, or artifacts — even if the user never says 76° or design system. Also use when styling anything with CSS/Tailwind, choosing colors or fonts, or when asked to critique a screen. If the output has pixels, this skill governs it."
-version: 0.1.0
+version: 0.1.0-alpha.1
 ---
 
 # 76° — Seventy Six Degrees

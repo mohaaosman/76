@@ -1,6 +1,6 @@
 {
   "name": "seventy-six-design",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.1",
   "description": "The 76\u00b0 (Seventy Six Degrees) design system as an agent skill: flat, informational, corporate \u2014 paper on a wall. Governs any UI an assistant builds or reviews.",
   "keywords": [
     "claude",
