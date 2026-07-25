@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import './toast.css';
@@ -120,6 +120,11 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     [notify],
   );
 
+  /* Both callbacks are stable, so the API object must be too — an inline
+     literal would re-render every useToast() consumer in the tree each time
+     a toast appears or expires. */
+  const api = useMemo<ToastApi>(() => ({ notify, toast }), [notify, toast]);
+
   function pause(id: number) {
     const timer = timers.current.get(id);
     if (!timer) return;
@@ -134,7 +139,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <ToastContext.Provider value={{ notify, toast }}>
+    <ToastContext.Provider value={api}>
       {children}
       <div className="sv-toaster" aria-label="Notifications">
         {items.map((t) => (
