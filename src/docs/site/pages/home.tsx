@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { PageHero, Sheet, Row, Card, CardHead, StatS1, StatusWord } from '@/components/seventy-six';
-import { entries } from '../../content';
 import { HeroBand } from '../shell';
 import { Prose } from '../blocks';
 
@@ -33,6 +32,13 @@ const IconBot = (
   </svg>
 );
 
+/* Derived from the doc entries at build time (vite.config.ts), never typed
+   by hand — a hardcoded count is a lie waiting to happen, and importing the
+   whole corpus to count it puts 140kB of prose in the landing chunk. */
+const entryCount = __ENTRY_COUNT__;
+const specCount = __SPEC_COUNT__;
+const highestSpec = __HIGHEST_SPEC__;
+
 export function HomePage() {
   return (
     <>
@@ -40,7 +46,7 @@ export function HomePage() {
         <PageHero
           title="Paper on a wall."
           titleSoft="The product is the design."
-          context="24 JUL 2026 · Component Book v1 · all specs implemented from B1–B18"
+          context={`25 JUL 2026 · Component Book v1 · every spec implemented, B1–B${highestSpec}`}
           actions={
             <Link className="sv-btn sv-btn--primary" to="/components">
               Browse components
@@ -52,14 +58,17 @@ export function HomePage() {
         <Row split="stats" overlap>
           <StatS1
             label="COMPONENTS · V1"
-            value={String(entries.length)}
+            value={String(entryCount)}
             icon={IconGrid}
             footnote={
               <>
-                <b>18 of 18</b> Component Book specs covered — B1 through B18
+                <b>
+                  {specCount} of {highestSpec}
+                </b>{' '}
+                Component Book specs covered — B1 through B{highestSpec}
               </>
             }
-            footnoteText="18 of 18 Component Book specs covered"
+            footnoteText={`${specCount} of ${highestSpec} Component Book specs covered`}
           />
           <StatS1
             label="RUNTIME DEPENDENCIES"

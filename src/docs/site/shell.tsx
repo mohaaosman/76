@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { Band, BandTopbar, BandNav, BandSubTabs } from '@/components/seventy-six';
+import { Band, BandTopbar, BandNav, BandSubTabs, Busy } from '@/components/seventy-six';
 import type { BandNavItem } from '@/components/seventy-six';
-import { categories } from '../content';
+import { categories } from '../content/categories';
 
 /**
  * The docs site shell IS a 76° screen: ink band, horizontal nav,
@@ -80,7 +80,12 @@ export function Shell({ onSearch }: { onSearch: () => void }) {
         />
         <BandSubTabs items={subtabs} renderLink={renderLink} />
       </Band>
-      <Outlet />
+      {/* Routes are code-split, so a page can be in flight. The band stays
+          put and the wall carries a B31 Busy — the system's own answer to
+          "a region is fetching", used on itself. */}
+      <Suspense fallback={<Busy label="Loading the page…" minHeight={320} />}>
+        <Outlet />
+      </Suspense>
     </>
   );
 }
