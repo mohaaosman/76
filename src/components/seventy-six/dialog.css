@@ -16,8 +16,55 @@
     max-width: 640px;
   }
 
+  /* ---- v0.9 · the panel arrives ---------------------------------
+
+     THIS ONE IS NOT POSTURE-GATED, and the distinction is the whole
+     argument. `--sv-t-enter` is described in tokens.css as "the only
+     duration in the system that is not feedback on an act the reader
+     performed" — it is off by default because nobody asked for it. A
+     dialog is the opposite case: it is on screen because the reader
+     clicked something, and the move is the answer to that click. B21's
+     Drawer settled this before the posture existed and settles it here
+     — it slides from its owning edge on `--sv-t` with no posture in
+     sight — so a Dialog that held still while a Drawer slid would be
+     two rules about one act. It takes the ordinary interaction step
+     (`--sv-t-fast`), which collapses to 0ms under reduced motion at the
+     token layer and on paper, so C7 is answered without a second gate.
+
+     The move is `.sv-enter`'s, restated for the top layer: one opacity
+     step and 6px, transform and opacity only. `@starting-style` rather
+     than a keyframe because the panel is entering from `display: none`
+     and this is the property the platform gives for exactly that — the
+     same construction drawer.css uses, and on a browser without it the
+     dialog simply appears, which is what it did before.
+
+     EXIT IS INSTANT, in B21's words: honest and cheaper than
+     choreographing a close animation. */
+  .sv-dialog[open] {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity var(--sv-t-fast) ease-out, transform var(--sv-t-fast) ease-out;
+  }
+
+  @starting-style {
+    .sv-dialog[open] {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+
+  /* The scrim dims what is behind the panel, so it must not snap to 40%
+     under a panel that is still arriving — that reads as two events. It
+     fades on the same step. */
   .sv-dialog::backdrop {
     background: var(--sv-scrim);
+    transition: background-color var(--sv-t-fast) ease-out;
+  }
+
+  @starting-style {
+    .sv-dialog[open]::backdrop {
+      background: transparent;
+    }
   }
 
   .sv-dialog__panel {

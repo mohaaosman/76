@@ -1,6 +1,6 @@
 # Trend · 76° UI (B5)
 
-Flat single-weight SVG lines on a hairline grid — seed for now, line-gray for before. No fills, no draw-in.
+Flat single-weight SVG lines on a hairline grid — seed for now, line-gray for before. No fills; the draw-in is off until the app asks.
 
 **One job:** Answer "which direction."
 **Category:** widgets · **Exports:** Trend, Sparkline · **Tags:** chart, line-chart, bar-chart, stacked-bar, sparkline, comparison, svg, no-area-fill
@@ -128,7 +128,7 @@ Thursday is the point, so Thursday is stated: the chip is printed above the peak
 
 - No area or gradient fills under lines (A1).
 - No dual-axis charts; two units means two charts.
-- No animated draw-in; the chart is simply there.
+- No animated draw-in **by default** — the chart is simply there. It draws only where a wrapper declares `data-motion="on"`, in 200ms, along a `pathLength`-normalised line whose un-animated state is the finished line. The Sparkline follows it; the highlight chip deliberately does not, because a printed statement does not arrive late.
 - No donuts, pies, radials, or gauges anywhere in product (A2) — MeterList replaces them.
 - No more than three series.
 - No stacked bars for measures that do not sum to a real total.

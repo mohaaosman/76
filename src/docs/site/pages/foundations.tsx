@@ -99,7 +99,7 @@ export function FoundationsPage() {
             </div>
           </Card>
           <Card>
-            <CardHead title="Geometry & motion" subtitle="One radius, one shadow, two durations" />
+            <CardHead title="Geometry & motion" subtitle="One radius, one shadow, four durations" />
             <div className="site-prose">
               <p>
                 <RichText text="<b>Radius:</b> <code>--sv-r</code> (4px) everywhere; 50% for avatars and dots; 2–3px for bars. Nothing else — no 8, no 12, no pills." />
@@ -111,7 +111,13 @@ export function FoundationsPage() {
                 <RichText text="<b>Spacing:</b> 4px base scale, <code>--sv-s1</code> through <code>--sv-s8</code>. Grid is 12-col with 14px gutters; canonical splits are 4×1fr for stat rows and 1.7fr/1fr for content rows." />
               </p>
               <p>
-                <RichText text="<b>Motion:</b> <code>--sv-t-fast</code> 120ms and <code>--sv-t</code> 160ms, opacity and color only — nothing moves layout. Both collapse to 0ms under <code>prefers-reduced-motion</code>, and 76° loses nothing, by design." />
+                <RichText text="<b>Motion — the answer to an act:</b> <code>--sv-t-fast</code> 120ms and <code>--sv-t</code> 160ms. Opacity, colour and <i>transform</i> only — never layout, so nothing a transition touches can reflow the page. This is feedback the reader asked for: a dialog, a menu, a popover and a tooltip arriving on the click that opened them, a tab underline drawing under the tab you chose, a toast rising at the corner. It is <b>always on</b>, because the alternative is a control that answers silently." />
+              </p>
+              <p>
+                <RichText text="<b>Motion — the arrival:</b> <code>--sv-t-enter</code> 200ms and <code>--sv-t-count</code> 640ms, and both are <b>0ms until a wrapper declares <code>data-motion=&quot;on&quot;</code></b> — registered and opt-in, exactly as <code>data-seed</code> and <code>data-mode</code> are, and the opposite of the usual arrangement where motion is what a library does until somebody asks it to stop. Under the posture a progress fill, a meter, a distribution strip, a stepper's closed span and a timeline rail draw from nothing; a chart line and a sparkline draw along their length; a stat counts to the figure it is already printing. Nothing staggers — a queue of delayed children is a page performing." />
+              </p>
+              <p>
+                <RichText text="<b>The rule that governs all of it: motion never carries information.</b> Every figure a count animates to is in the DOM and in the accessible name at first paint; every bar is beside the number it illustrates. Delete every animation in the system and no screen states one thing less — which is why <code>prefers-reduced-motion</code> and the printed page can send all four durations to 0ms and 76° loses nothing, by design." />
               </p>
               <p>
                 <RichText text="<b>Per-product theming:</b> set <code>&lt;html data-seed=&quot;cobalt&quot;&gt;</code> (or verdigris, signal…). Nothing else may change between products." />

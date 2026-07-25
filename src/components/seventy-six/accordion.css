@@ -63,4 +63,36 @@
     line-height: 1.55;
     color: var(--sv-ink-soft);
   }
+
+  /* ---- v0.9 · the panel fades, and the row does NOT slide ---------
+
+     What every accordion animates is the height, and 76° cannot: A1
+     forbids transitioning layout outright, and the firewall greps for
+     it. That ban is not a gap this rule works around — a height
+     transition on a <details> pushes every row below it down for the
+     length of the animation, so the reader who went to click the next
+     section watches it walk away from the pointer. The rows snap, which
+     is what they do today and what they will keep doing.
+
+     What is left is honest and is the part worth having: the panel's
+     copy fades up over 120ms while the row is already at its final
+     height, so the section reads as opening rather than as replaced.
+     Opacity only — no transform, because a 6px rise inside a box that
+     just snapped open is two events where the reader saw one.
+
+     Not posture-gated: <details> opens because the reader clicked the
+     summary, so this is feedback on an act (dialog.css argues the
+     boundary in full) and `--sv-t-fast` collapses at the token layer
+     under reduced motion and on paper. The chevron above already runs
+     ungated on the same step; a panel that held still under a chevron
+     that turned would be two rules about one click. */
+  .sv-accordion__item[open] .sv-accordion__panel {
+    animation: sv-accordion-open var(--sv-t-fast) cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  @keyframes sv-accordion-open {
+    from {
+      opacity: 0;
+    }
+  }
 }

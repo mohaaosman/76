@@ -45,6 +45,35 @@
     bottom: -1px;
     height: 2px;
     background: var(--sv-seed);
+
+    /* ---- v0.9 · the underline draws in ------------------------
+
+       A KEYFRAME, NOT A TRANSITION, and not the sliding underline
+       every tab component ships. The mark belongs to the ACTIVE
+       tab's pseudo-element, so switching tabs destroys one and
+       creates another; there is no element to slide, and inventing
+       a shared one that travels the row would mean a seed rule
+       crossing tabs the reader did not choose. An animation on a
+       freshly generated pseudo-element runs on generation, which is
+       exactly the event worth marking.
+
+       Not posture-gated: it answers a click, so it takes the
+       ordinary interaction step, which collapses to 0ms under
+       reduced motion and on paper at the token layer. It is drawn
+       from the left because that is where the label starts.
+
+       C5 is untouched. The state is carried by the colour step, the
+       700 weight and `aria-selected`; the rule is the visible
+       confirmation, and it is at full length on the final frame
+       whether or not the animation ever ran. */
+    transform-origin: left center;
+    animation: sv-tabs-mark var(--sv-t-fast) cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  @keyframes sv-tabs-mark {
+    from {
+      transform: scaleX(0);
+    }
   }
 
   .sv-tabs__count {

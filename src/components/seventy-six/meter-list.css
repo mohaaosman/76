@@ -43,4 +43,39 @@
     font-size: 11px;
     color: var(--sv-ink-soft);
   }
+
+  /* ---- v0.9 · the bars arrive, and they are OFF until the app asks ----
+
+     B4's argument, verbatim, because B6 is B4's list form: a scaleX from
+     the left rather than a width (A1 forbids animating layout, and the
+     registered `width` exception is for a value CHANGE), the final frame
+     is the element's ordinary state, and --sv-t-enter with base.css's
+     ease-out-cubic rather than a tempo of its own.
+
+     THE BARS DO NOT STAGGER, and that is the whole difference between a
+     list arriving and a list performing. A queue of delayed children is
+     the page putting on a show — use-reveal.ts refuses one by name for a
+     page's sections and a MeterList is the same refusal at widget scale.
+     Every fill starts on the same frame and lands on the same frame; the
+     rows differ by the LENGTH they draw, which is the data, and that is
+     already printed twice on every row (B6 requires the value right and
+     the absolute-numbers subtitle under the track). Delete every
+     declaration below and the list states each figure exactly as it did. */
+  [data-motion='on'] .sv-meters__fill {
+    transform-origin: left center;
+    animation: sv-meters-grow var(--sv-t-enter) cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  @keyframes sv-meters-grow {
+    from {
+      transform: scaleX(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-motion='on'] .sv-meters__fill {
+      animation: none;
+      transition: none;
+    }
+  }
 }

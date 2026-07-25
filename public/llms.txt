@@ -14,7 +14,7 @@
 - [Sheet & Row](https://76.zifala.com/llms/sheet.md): The platinum wall and its 12-col grid — including the signature -44px overlap row. One job: Hold the paper: grid, gutters, and the one overlap per page.
 - [StatS1](https://76.zifala.com/llms/stat-s1.md): The signature stat and the only legal KPI card: label + delta, icon tile + value, and a footnote that earns its line. One job: Answer "how much — and so what."
 - [Progress](https://76.zifala.com/llms/progress.md): Value against target with one 3px bar. The numbers are the information; the bar is illustration. One job: Answer "how far along."
-- [Trend](https://76.zifala.com/llms/trend.md): Flat single-weight SVG lines on a hairline grid — seed for now, line-gray for before. No fills, no draw-in. One job: Answer "which direction."
+- [Trend](https://76.zifala.com/llms/trend.md): Flat single-weight SVG lines on a hairline grid — seed for now, line-gray for before. No fills; the draw-in is off until the app asks. One job: Answer "which direction."
 - [MeterList](https://76.zifala.com/llms/meter-list.md): Named items with 3px bars and mandatory absolute numbers — the donut chart's replacement. One job: Answer "how is each part doing."
 - [DistributionStrip](https://76.zifala.com/llms/distribution-strip.md): One total divided into its shares: a 10px strip with structural seams and a legend that prints every figure. One job: Answer "what share is each part."
 - [DataTable](https://76.zifala.com/llms/data-table.md): The ERP workhorse: mono headers, mono IDs, dot+word statuses, right-aligned tabular numbers, full keyboard contract. One job: Answer "what exactly happened."

@@ -97,7 +97,7 @@
       "name": "trend",
       "type": "registry:ui",
       "title": "Trend",
-      "description": "Flat single-weight SVG lines on a hairline grid — seed for now, line-gray for before. No fills, no draw-in. One job: Answer \"which direction.\"",
+      "description": "Flat single-weight SVG lines on a hairline grid — seed for now, line-gray for before. No fills; the draw-in is off until the app asks. One job: Answer \"which direction.\"",
       "categories": [
         "widgets"
       ],

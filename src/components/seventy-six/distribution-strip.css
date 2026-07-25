@@ -90,4 +90,41 @@
      a part that was not stated (WCAG 1.4.11). The hairline stays what it is:
      a rule, not a fill. */
   .sv-dist__tone--edge    { background: var(--sv-field-line-strong); }
+
+  /* ---- v0.9 · the strip arrives, and it is OFF until the app asks ----
+
+     Each SEGMENT scales from its own left edge, not the strip from its
+     left edge, and the difference is structural rather than aesthetic.
+     Scaling `.sv-dist__strip` would scale the 2px paper seams with it —
+     the seams are what makes this read as PARTS instead of one
+     continuous smear, so an entrance that thins them to nothing spends
+     its 200ms dismantling the component's only structural claim. Scaling
+     the segments leaves every seam at 2px on every frame; what grows is
+     the fill on either side of it.
+
+     The --sv-wall track shows through underneath while they draw, which
+     is the same thing it does at rest when the parts are a subset of the
+     total. Nothing new appears mid-animation.
+
+     No stagger — see meter-list.css. And B44 is the component that
+     already passes this surface's test by specification: "delete the
+     strip and the card still answers the question", because the legend
+     under it repeats every part by name and figure. A strip that draws
+     in is that same illustration, arriving. */
+  [data-motion='on'] .sv-dist__seg {
+    transform-origin: left center;
+    animation: sv-dist-grow var(--sv-t-enter) cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  @keyframes sv-dist-grow {
+    from {
+      transform: scaleX(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-motion='on'] .sv-dist__seg {
+      animation: none;
+    }
+  }
 }

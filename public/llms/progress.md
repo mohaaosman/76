@@ -15,7 +15,9 @@ Manual: copy components/seventy-six/progress.tsx, components/seventy-six/progres
 
 ## Overview
 
-Soft title, a 19/700 tabular "current / target" line, a 3px seed bar on a wall track, and a faint context line. The fill transitions width once (160ms) and never animates on load beyond that.
+Soft title, a 19/700 tabular "current / target" line, a 3px seed bar on a wall track, and a faint context line. The fill transitions width once (160ms) when the value changes.
+
+**v0.9** lets the bar arrive. Under `data-motion="on"` the fill draws from the left in 200ms — a `scaleX`, never a width, because A1 forbids animating layout and the track, the figure above it and the context line under it must not reflow. With no posture declared not one declaration applies and the bar paints finished on the first frame, which is what it did before. Nothing is carried by it: B4 specifies the numbers as the information and the bar as illustration.
 
 Danger is a word, not a bar: there is no red fill state. If something is overdue it belongs in a table or list with a StatusWord, not in a meter.
 

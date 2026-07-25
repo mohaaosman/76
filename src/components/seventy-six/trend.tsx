@@ -116,7 +116,10 @@ export function Sparkline({ data, ariaLabel, width = 72, height = 20, tone = 'se
       role="img"
       aria-label={ariaLabel}
     >
-      <path className="sv-spark__line" d={path} />
+      {/* pathLength normalises the line to ONE unit, exactly as the B5 plot
+          does, so trend.css can express the draw-in as a dash of 1 whatever
+          the cell is wide. Un-animated the pair is the finished line. */}
+      <path className="sv-spark__line" d={path} pathLength={1} />
       {data.length > 0 && (
         <circle className="sv-spark__dot" cx={1 + (data.length - 1) * step} cy={y(data[data.length - 1])} r="2" />
       )}

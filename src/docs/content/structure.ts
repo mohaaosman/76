@@ -77,7 +77,7 @@ export const structure: DocEntry[] = [
     ],
     faq: [
       { q: 'Accordion or Tabs?', a: 'Accordion when the reader may want two things at once, or none. CardTabs (B8) when the options are alternatives filtering one region.' },
-      { q: 'Why not animate the open?', a: 'A1 bans transitions on layout properties, and a height animation is the most expensive one there is. The section opens instantly; nothing is lost.' },
+      { q: 'Why not animate the open?', a: 'A1 bans transitions on layout properties, and a height animation is the most expensive one there is — it walks every row below the section away from the pointer that was about to click one. The row still snaps to its full height. What v0.9 adds is a 120ms opacity fade on the panel copy <i>inside</i> that height, so the section reads as opening rather than as replaced; the geometry never moves, and deleting the fade loses nothing.' },
     ],
   },
 
