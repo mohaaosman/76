@@ -1,0 +1,45 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tabs",
+  "type": "registry:ui",
+  "title": "Tabs",
+  "description": "A hairline row on the wall — the sheet's whole content region, switched. One job: Switch which set of cards the sheet shows, without touching the URL.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/tabs.tsx",
+      "content": "import { useId, useRef } from 'react';\nimport type { KeyboardEvent, ReactNode } from 'react';\nimport { cx } from '@/lib/cx';\nimport './tabs.css';\n\n/**\n * B38 · Tabs — the sheet's content switch. One job: change WHICH SET OF\n * CARDS the sheet shows, without touching the URL. Three components look\n * alike and are not interchangeable: BandSubTabs (B1) NAVIGATE — they are\n * links, they change the URL, they live on the band; CardTabs (B8) FILTER\n * ONE CARD'S CONTENT in place and live on that card's hairline; Tabs (B38)\n * SWITCH A WHOLE CONTENT REGION OF THE SHEET and live on the wall, directly\n * above the region they switch. Pick by what changes, not by what it looks\n * like.\n *\n * There is no `filters` mode here — aria-pressed buttons are B8's job, and\n * a tablist that sometimes is not a tablist is a defect. If the switch is\n * addressable state a user should be able to link to or reload into, it is\n * navigation and belongs on the band.\n */\nexport interface Tab {\n  id: string;\n  label: string;\n  /** Optional mono tabular count shown after the label. */\n  count?: number;\n}\n\nexport interface TabsProps {\n  /** Cap: five. A sixth section is a band nav item, not a tab. */\n  tabs: Tab[];\n  active: string;\n  onChange: (id: string) => void;\n  /** Ties each tab to its OWN panel: `${idBase}-tab-${id}` / `${idBase}-panel-${id}`.\n      Pass it explicitly whenever TabPanel is used — TabPanel requires the same base. */\n  idBase?: string;\n  /** Accessible name for the tablist, e.g. \"Report sections\". */\n  label: string;\n  className?: string;\n}\n\nexport function Tabs({ tabs, active, onChange, idBase, label, className }: TabsProps) {\n  const autoId = useId();\n  const base = idBase ?? autoId;\n  const listRef = useRef<HTMLDivElement>(null);\n\n  /* Automatic activation: arrowing moves focus AND switches the region.\n     The panels are already mounted client-side, so there is nothing to\n     wait for and no reason to make the user press Enter twice. */\n  function onKeyDown(e: KeyboardEvent) {\n    const idx = tabs.findIndex((t) => t.id === active);\n    let next = -1;\n    if (e.key === 'ArrowRight') next = (idx + 1) % tabs.length;\n    if (e.key === 'ArrowLeft') next = (idx - 1 + tabs.length) % tabs.length;\n    if (e.key === 'Home') next = 0;\n    if (e.key === 'End') next = tabs.length - 1;\n    if (next >= 0) {\n      e.preventDefault();\n      onChange(tabs[next].id);\n      const buttons = listRef.current?.querySelectorAll<HTMLButtonElement>('button');\n      buttons?.[next]?.focus();\n    }\n  }\n\n  return (\n    <div\n      ref={listRef}\n      className={cx('sv-tabs', className)}\n      role=\"tablist\"\n      aria-label={label}\n      onKeyDown={onKeyDown}\n    >\n      {tabs.map((tab) => {\n        const isActive = tab.id === active;\n        return (\n          <button\n            key={tab.id}\n            type=\"button\"\n            role=\"tab\"\n            id={`${base}-tab-${tab.id}`}\n            className={cx('sv-tabs__tab', isActive && 'sv-tabs__tab--active')}\n            aria-selected={isActive}\n            aria-controls={`${base}-panel-${tab.id}`}\n            tabIndex={isActive ? 0 : -1}\n            onClick={() => onChange(tab.id)}\n          >\n            {tab.label}\n            {tab.count !== undefined && (\n              <span className=\"sv-tabs__count sv-mono sv-num\">{tab.count}</span>\n            )}\n          </button>\n        );\n      })}\n    </div>\n  );\n}\n\nexport interface TabPanelProps {\n  idBase: string;\n  tabId: string;\n  active: boolean;\n  children: ReactNode;\n  className?: string;\n}\n\n/**\n * Every tab owns its OWN panel — unlike B8, where one panel serves the whole\n * card and each tab points at the same id. Render one TabPanel per Tab, all\n * of them, and let `hidden` decide: the id contract only holds if the panel\n * the active tab names is in the document.\n */\nexport function TabPanel({ idBase, tabId, active, children, className }: TabPanelProps) {\n  return (\n    <div\n      role=\"tabpanel\"\n      id={`${idBase}-panel-${tabId}`}\n      aria-labelledby={`${idBase}-tab-${tabId}`}\n      hidden={!active}\n      /* A panel of cards holds no focusable content of its own, so it takes\n         tabIndex 0 — otherwise the tab key steps straight past the region\n         the tabs just switched to. */\n      tabIndex={0}\n      className={cx('sv-tabs__panel', className)}\n    >\n      {children}\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/tabs.tsx"
+    },
+    {
+      "path": "registry/seventy-six/tabs.css",
+      "content": "/* B38 · Tabs — a hairline row on the wall that switches the sheet's content region */\n\n@layer sv-components {\n  /* A2 · a nav-like row wraps; it never becomes a horizontal scroller. The\n     wrap is declared here rather than in the query below because it costs\n     nothing above 1000px and is the only honest behaviour below it. */\n  .sv-tabs {\n    display: flex;\n    flex-wrap: wrap;\n    gap: var(--sv-s5);\n    border-bottom: 1px solid var(--sv-line);\n  }\n\n  .sv-tabs__tab {\n    position: relative;\n    display: inline-flex;\n    align-items: center;\n    gap: 6px;\n    padding: var(--sv-s2) 0 10px;\n    border: 0;\n    /* No fill, ever — the underline carries the state and a tinted tab\n       would read as a pill on the wall. */\n    background: transparent;\n    font-size: 14px;\n    font-weight: 700;\n    color: var(--sv-ink-soft);\n    cursor: pointer;\n    transition: color var(--sv-t-fast);\n  }\n\n  .sv-tabs__tab:hover {\n    color: var(--sv-ink);\n  }\n\n  .sv-tabs__tab--active {\n    color: var(--sv-seed-text);\n  }\n\n  /* 2px seed underline sitting ON the row hairline, not beside it */\n  .sv-tabs__tab--active::after {\n    content: '';\n    position: absolute;\n    left: 0;\n    right: 0;\n    bottom: -1px;\n    height: 2px;\n    background: var(--sv-seed);\n  }\n\n  .sv-tabs__count {\n    color: var(--sv-ink-faint);\n    letter-spacing: 0.06em;\n  }\n\n  /* C7 · below 1000px the row runs onto more lines. Nothing is dropped,\n     nothing scrolls sideways, and the hairline still spans the full width. */\n  @media (max-width: 1000px) {\n    .sv-tabs {\n      column-gap: var(--sv-s4);\n      row-gap: 0;\n    }\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/tabs.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/tabs.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B38",
+    "job": "Switch which set of cards the sheet shows, without touching the URL.",
+    "tags": [
+      "tabs",
+      "tablist",
+      "tabpanel",
+      "sections",
+      "content switch",
+      "sheet"
+    ],
+    "exports": [
+      "Tabs",
+      "TabPanel"
+    ]
+  }
+}

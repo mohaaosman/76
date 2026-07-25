@@ -4,7 +4,22 @@ What has shipped, what is next, and what we are still weighing. The visual
 system is settled; the work now is reach and rigor — never new chrome for its
 own sake. Live version: <https://76.zifala.com/#/roadmap>.
 
-## Shipped — v0.4.0 · closing the product taxonomy
+## Shipped — v0.4.0 · the taxonomy, closed
+
+The line-by-line audit against Bootstrap, Tailwind UI, shadcn/ui and Material
+is now empty of everything Part F does not refuse.
+
+- **The nine that were missing** — `SearchField` (B36), `FileField` (B37), `Tabs` (B38), `Stepper` (B39), `TreeList` (B40), `Timeline` (B41), `Popover` (B42), `CodeBlock` (B43), `DistributionStrip` (B44). Each named, single-jobbed, registered, documented and installable in the same change.
+- **The donut finally has a replacement, by name** — `DistributionStrip` divides ONE total into its shares; `MeterList` measures each part against its own maximum. The A2 ban always pointed at B6, and B6 was answering a different question. Every donut a team has drawn was asking B44's.
+- **Multi-select, without the chip wall** — the B19 refusal is repealed and replaced with a specification. Pass `multiple` and the list stays open while you pick; the selection is STATED as one mono line in the `FilterLine` voice, never worn as dismissible pills (A2, B23).
+- **`FilterBar` (B7 amendment)** — the control row that SETS what `FilterLine` states. The division is now complete and binding: **`CardTabs` switches presets · `FilterBar` sets · `FilterLine` states.**
+- **`Trend` states the column it is about (B5 amendment)** — `highlight` prints a chip above the peak and recedes the rest, and `yTicks` labels the four gridlines the plot already drew. Printed, never hovered: C8 forbids hover-dependent information.
+- **`Split` (B46)** — the band-less page cut in half, with the card ACROSS the cut. **B2's overlap, finished:** the Sheet pulls its first row 44px over the band edge so the dashboard stat cards straddle ink and wall; a Plate has no Sheet, so the same physics arrive as a page type, with the card centred on the seam. The halves carry nothing at all — no statement, no widget, no screenshot — so they are `aria-hidden` and the page reads as exactly the Plate it composes. Two orientations on one prop: `side` cuts left/right, `stacked` cuts top/bottom.
+- **The auth set moved onto it** — all seven screens are a Plate on a cut surface and nothing else. The wordmark and the footer moved into the card, because centred above and below a seam-straddling card they would land half on ink and half on paper.
+- **Two more templates** — `analytics-overview` (reconciling stats, wall-level `Tabs` over a stat row that stays put, the full filter stack, and the donut refused in favour of a strip) and `auth-stacked`, the same sign-in on the other orientation so the gallery carries both types.
+- **Numbering** — the remainder took B36–B44 and the split page type took B46, so `Prose` moves to **B45**.
+
+## Shipped — v0.4.0-alpha.1 · closing the product taxonomy
 
 - **The table's missing half** — `SelectionHead` swaps the CardHead in place while rows are selected (mono count, the verbs, "Clear"); `FilterLine` states active filters as one mono line of running text with a single "Clear all" that doubles as the `aria-live` announcement. No floating bar, no chips.
 - **Structure & display** — `Accordion` (B27, native `<details>`), `DescriptionList` (B28), `Divider` (B29), `Avatar` + `AvatarGroup` (B30), `Spinner` + `Busy` (B31), `Kbd` (B32).
@@ -58,7 +73,7 @@ leaks.
 |---|---|---|
 | **0.2.1** | The dark chrome regression — a shipped AA failure | Shipped |
 | **0.3** | The 320px floor + the auth surface | Shipped |
-| **0.4** | Closing the product taxonomy | Shipped in part — remainder below |
+| **0.4** | Closing the product taxonomy | Shipped |
 | **0.5** | The public surface | Next |
 
 ---
@@ -102,22 +117,22 @@ does not support RTL. Arabic, Hebrew, Persian, and Urdu products are out of
 scope until this line is repealed. *(Weighed and deliberately declined: the
 conversion is ~29 declarations today and grows with every component shipped.)*
 
-## 0.4 — closing the product taxonomy · the remainder
+## 0.4 — closing the product taxonomy · what the inventory found
 
 The line-by-line inventory against Bootstrap, Tailwind UI, shadcn/ui, and
-Material, minus everything Part F refuses. Each enters through the Book: named,
-single-jobbed, registered. The first pass shipped in v0.4.0 (see Shipped,
-above); these are what it did not reach.
+Material, minus everything Part F refuses. Every line is now shipped.
 
-**Inputs.** Multi-select Combobox · File upload (drop zone + rows + progress) · Search field.
+| | Asked for | Shipped as |
+|---|---|---|
+| Inputs | Multi-select Combobox · File upload · Search field | B19 amendment · `FileField` (B37) · `SearchField` (B36) |
+| Structure | Page-level Tabs · Stepper · Tree list · Timeline | `Tabs` (B38) · `Stepper` (B39) · `TreeList` (B40) · `Timeline` (B41) |
+| Feedback & display | Popover primitive · Code block | `Popover` (B42) · `CodeBlock` (B43) |
+| Charts | Distribution strip | `DistributionStrip` (B44) |
+| Table | `FilterBar` | B7 amendment |
 
-**Structure.** Page-level Tabs · Stepper/wizard header · Tree list · Timeline.
-
-**Feedback & display.** Popover primitive · Code block.
-
-**Charts.** Distribution strip — donuts and gauges stay banned forever.
-
-**Table.** `FilterBar` — the control row above the shipped filter line.
+**Donuts and gauges stay banned forever.** B44 is not a concession to the
+donut, it is the component that answers the question the donut was asked —
+and it draws a straight line.
 
 ## 0.5 — the public surface
 
@@ -127,7 +142,7 @@ illustration, no 3D, no logo clouds.** A2's illustration and stock-photo bans
 stand unamended; F11 states the refusal outright.
 
 - **Display tokens** — `--sv-display-1/2/3` (≈64/48/34), the system's first type tokens, since the product ramp tops out at 27px. **Firewall rule 17** bans them outside marketing block CSS, so no dashboard grows a 64px number.
-- **`Prose` (B36)** — one registered component styling its whole subtree: 16px body, ~66ch measure, heading ramp, lists, hairline-ruled blockquote, inline mono, seed-underlined links. Markdown drops straight in. It is also the only place Part E permits italic. *(Numbered B36: B25 and B26 went to PinField and SocialButton in v0.3.0, B27–B35 in v0.4.0.)*
+- **`Prose` (B45)** — one registered component styling its whole subtree: 16px body, ~66ch measure, heading ramp, lists, hairline-ruled blockquote, inline mono, seed-underlined links. Markdown drops straight in. It is also the only place Part E permits italic. *(Renumbered from B36: the 0.4 remainder shipped first and took B36–B44.)*
 - **Marketing blocks** — hero (type only) · feature list · FAQ (on the B27 Accordion) · footer · CTA · stat band.
 - **Pricing is a DataTable.** No tier cards, no "Most popular" pill, no three competing primaries: one row per feature, one column per plan, and a single primary beneath. C7 governs it on mobile — the table scrolls, it never truncates.
 - **Marketing shell** — the band without product nav.
@@ -138,7 +153,7 @@ stand unamended; F11 states the refusal outright.
 - **Health seed** — a contrast-verified clinical seed, added through the seed rule (both directions ≥ 4.5:1), including its dark `--sv-seed-text` variant.
 - **8-state preview files** — the fundamentals state contract shipped as a preview per component.
 - **Full type tokenization** — a complete `--sv-text-*` scale replacing the literals across every component. Correct, and large enough to need its own release.
-- **More templates** — analytics, billing, inbox, and onboarding screens.
+- **More templates** — billing, inbox, and onboarding screens. *(Analytics shipped in v0.4.0 as `analytics-overview`.)*
 - **Theming playground** — swap the seed and the mode live and watch a real screen re-theme.
 - **Token sync** — a Figma ⇄ `tokens.css` bridge so design and code share one source.
 

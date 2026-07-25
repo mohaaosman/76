@@ -142,4 +142,34 @@
     text-transform: uppercase;
     color: var(--sv-ink-soft);
   }
+
+  /* ---- v0.4.0 · the filter controls (B7 amendment) ---- */
+
+  /* Sits under the CardHead and above the table. flex-end so a labelled
+     Select and a bare Button share one baseline; wrap, never scroll — a
+     horizontally scrolling filter row hides the filters it is offering. */
+  .sv-filterbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 10px;
+    padding: var(--sv-s3) 18px;
+    border-bottom: 1px solid var(--sv-line);
+  }
+
+  .sv-filterbar__controls {
+    display: flex;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .sv-filterbar__actions {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--sv-s3);
+    margin-left: auto;
+  }
 }

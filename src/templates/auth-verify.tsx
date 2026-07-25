@@ -1,7 +1,10 @@
-// 76° template · Verify email (B24 Plate + B25 PinField, seed-neutral).
+// 76° template · Verify email — B46 Split + B25 PinField, seed-neutral.
 import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
-import { Banner, Button, Plate, PlateHead, PinField } from '@/components/seventy-six';
+import { Banner, Button, Split, PlateHead, PinField } from '@/components/seventy-six';
+
+/* Type only. The panel answers the one question a code screen provokes —
+   how much of this is left — in a sentence rather than a widget. */
 
 const EMAIL = 'maya@northwind.co';
 const CODE_LENGTH = 6;
@@ -82,7 +85,9 @@ export function AuthVerify({ state = 'idle' }: AuthVerifyProps) {
   const failure = problem ? PROBLEMS[problem] : null;
 
   return (
-    <Plate footer={<a href="#signin">Back to sign in</a>}>
+    <Split
+      footer={<a href="#signin">Back to sign in</a>}
+    >
       {failure && (
         <div style={notice}>
           <Banner tone="bad" title={failure.title}>
@@ -124,6 +129,6 @@ export function AuthVerify({ state = 'idle' }: AuthVerifyProps) {
           <span className="sv-mono sv-num">Resend available in {clock(left)}</span>
         )}
       </div>
-    </Plate>
+    </Split>
   );
 }

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "distribution-strip",
+  "type": "registry:ui",
+  "title": "DistributionStrip",
+  "description": "One total divided into its shares: a 10px strip with structural seams and a legend that prints every figure. One job: Answer \"what share is each part.\"",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/distribution-strip.tsx",
+      "content": "import { cx } from '@/lib/cx';\nimport './distribution-strip.css';\n\n/**\n * B44 · DistributionStrip — the named replacement for the donut (Firewall\n * A2 bans donut, pie, radial and gauge). It states how ONE total divides\n * into its parts. This is NOT B6 MeterList, which the Book pointed at\n * until now: B6 measures each part against ITS OWN maximum — utilization,\n * \"Zone A is 92% full\" — while B44 divides ONE total into shares, \"46% of\n * 128,953 sessions were mobile\". Neither is a donut and neither ever will\n * be. The strip is one flat bar with structural 2px seams, because a\n * gradient smear would read as a continuum instead of as parts; the legend\n * is the data and repeats every figure as text, so nothing is carried by\n * colour or width alone (C5).\n *\n * Don'ts: never more than five rows — six parts is a B7 DataTable; never a\n * stack of strips comparing periods — that is B5 kind=\"stacked\"; never a\n * strip whose parts do not sum to the stated total without saying so.\n */\nexport interface DistributionPart {\n  label: string;\n  value: number;\n}\n\nexport interface DistributionStripProps {\n  /** REQUIRED takeaway, e.g. \"Devices accessed, 128,953 total: mobile 46%, desktop 31%, tablet 15%, other 8%\". */\n  ariaLabel: string;\n  /** Mono uppercase label for the total, e.g. \"DEVICES ACCESSED\". */\n  label: string;\n  parts: DistributionPart[];\n  /** Defaults to the sum of the parts. Pass it when the parts are a subset. */\n  total?: number;\n  /** Formats both the total and each absolute figure. Defaults to a grouped integer. */\n  format?: (value: number) => string;\n  className?: string;\n}\n\n/** Four named tones, in order. A fifth part is the caller's \"Other\" and reuses the last. */\nconst TONES = ['seed', 'compare', 'faint', 'edge'] as const;\n\n/* Resolved per call, never at module scope: a formatter built at import\n   time freezes whatever locale the module happened to load under. */\nconst groupedInteger = (value: number) => value.toLocaleString();\n\nexport function DistributionStrip({\n  ariaLabel,\n  label,\n  parts,\n  total,\n  format = groupedInteger,\n  className,\n}: DistributionStripProps) {\n  const sum = parts.reduce((acc, part) => acc + part.value, 0);\n  const denominator = total ?? sum;\n  const share = (value: number) => (denominator > 0 ? (value / denominator) * 100 : 0);\n  const tone = (i: number) => TONES[Math.min(i, TONES.length - 1)];\n\n  return (\n    <div className={cx('sv-dist', className)}>\n      <div className=\"sv-dist__line\">\n        <span className=\"sv-dist__label sv-mono\">{label}</span>\n        <span className=\"sv-dist__total sv-num\">{format(denominator)}</span>\n      </div>\n      <div className=\"sv-dist__strip\" role=\"img\" aria-label={ariaLabel}>\n        {parts.map((part, i) => (\n          <span\n            key={part.label}\n            className={cx('sv-dist__seg', `sv-dist__tone--${tone(i)}`)}\n            style={{ flexBasis: `${share(part.value)}%` }}\n          />\n        ))}\n      </div>\n      <ul className=\"sv-dist__legend\">\n        {parts.map((part, i) => (\n          <li key={part.label} className=\"sv-dist__row\">\n            <span className={cx('sv-dist__swatch', `sv-dist__tone--${tone(i)}`)} aria-hidden=\"true\" />\n            <span className=\"sv-dist__name\">{part.label}</span>\n            {/* The absolute figure is REQUIRED beside the share, exactly as in B6. */}\n            <span className=\"sv-dist__figure sv-num\">\n              {format(part.value)} · {Math.round(share(part.value))}%\n            </span>\n          </li>\n        ))}\n      </ul>\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/distribution-strip.tsx"
+    },
+    {
+      "path": "registry/seventy-six/distribution-strip.css",
+      "content": "/* B44 · DistributionStrip — one total split into parts, with structural\n   seams instead of a gradient, and a legend that carries every number. */\n\n@layer sv-components {\n  .sv-dist {\n    display: flex;\n    flex-direction: column;\n    gap: var(--sv-s2);\n  }\n\n  .sv-dist__line {\n    display: flex;\n    align-items: baseline;\n    justify-content: space-between;\n    gap: var(--sv-s3);\n  }\n\n  .sv-dist__label {\n    color: var(--sv-ink-soft);\n  }\n\n  /* B4's value voice — the figure, not the bar, is the information. */\n  .sv-dist__total {\n    font-size: 19px;\n    font-weight: 700;\n  }\n\n  /* The wall shows through when the parts are a subset of the total. */\n  .sv-dist__strip {\n    display: flex;\n    height: 10px;\n    border-radius: 2px;\n    background: var(--sv-wall);\n    overflow: hidden;\n  }\n\n  /* The 2px paper seam is what makes this read as PARTS. It is structure,\n     not decoration: without it the strip is one continuous smear. */\n  .sv-dist__seg {\n    flex-grow: 0;\n    flex-shrink: 0;\n    min-width: 0;\n    border-right: 2px solid var(--sv-paper);\n  }\n\n  .sv-dist__seg:last-child {\n    border-right: 0;\n  }\n\n  .sv-dist__legend {\n    display: flex;\n    flex-direction: column;\n    gap: var(--sv-s2);\n    margin: 0;\n    padding: 0;\n    list-style: none;\n  }\n\n  .sv-dist__row {\n    display: flex;\n    align-items: baseline;\n    gap: var(--sv-s2);\n  }\n\n  .sv-dist__swatch {\n    flex: none;\n    width: 8px;\n    height: 8px;\n    border-radius: 2px;\n  }\n\n  .sv-dist__name {\n    font-size: 12.5px;\n    font-weight: 500;\n    color: var(--sv-ink);\n  }\n\n  .sv-dist__figure {\n    margin-left: auto;\n    font-size: 11px;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-dist__tone--seed    { background: var(--sv-seed); }\n  .sv-dist__tone--compare { background: var(--sv-compare); }\n  .sv-dist__tone--faint   { background: var(--sv-ink-faint); }\n  /* The fourth tone is --sv-field-line-strong, NOT the hairline: it is the\n     last distinguishable step (3.63:1 on paper) and a segment drawn at\n     --sv-line would be 1.06:1 — a part of the total that nobody can see is\n     a part that was not stated (WCAG 1.4.11). The hairline stays what it is:\n     a rule, not a fill. */\n  .sv-dist__tone--edge    { background: var(--sv-field-line-strong); }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/distribution-strip.css"
+    }
+  ],
+  "categories": [
+    "widgets"
+  ],
+  "docs": "https://76.zifala.com/llms/distribution-strip.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B44",
+    "job": "Answer \"what share is each part.\"",
+    "tags": [
+      "distribution",
+      "share",
+      "part-to-whole",
+      "composition",
+      "donut-replacement",
+      "legend",
+      "strip"
+    ],
+    "exports": [
+      "DistributionStrip"
+    ]
+  }
+}

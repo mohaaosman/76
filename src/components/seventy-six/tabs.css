@@ -1,0 +1,63 @@
+/* B38 · Tabs — a hairline row on the wall that switches the sheet's content region */
+
+@layer sv-components {
+  /* A2 · a nav-like row wraps; it never becomes a horizontal scroller. The
+     wrap is declared here rather than in the query below because it costs
+     nothing above 1000px and is the only honest behaviour below it. */
+  .sv-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sv-s5);
+    border-bottom: 1px solid var(--sv-line);
+  }
+
+  .sv-tabs__tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: var(--sv-s2) 0 10px;
+    border: 0;
+    /* No fill, ever — the underline carries the state and a tinted tab
+       would read as a pill on the wall. */
+    background: transparent;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--sv-ink-soft);
+    cursor: pointer;
+    transition: color var(--sv-t-fast);
+  }
+
+  .sv-tabs__tab:hover {
+    color: var(--sv-ink);
+  }
+
+  .sv-tabs__tab--active {
+    color: var(--sv-seed-text);
+  }
+
+  /* 2px seed underline sitting ON the row hairline, not beside it */
+  .sv-tabs__tab--active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--sv-seed);
+  }
+
+  .sv-tabs__count {
+    color: var(--sv-ink-faint);
+    letter-spacing: 0.06em;
+  }
+
+  /* C7 · below 1000px the row runs onto more lines. Nothing is dropped,
+     nothing scrolls sideways, and the hairline still spans the full width. */
+  @media (max-width: 1000px) {
+    .sv-tabs {
+      column-gap: var(--sv-s4);
+      row-gap: 0;
+    }
+  }
+}

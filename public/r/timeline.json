@@ -1,0 +1,44 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "timeline",
+  "type": "registry:ui",
+  "title": "Timeline",
+  "description": "One record's history on a clipped rail — including what has not happened. One job: State the ordered HISTORY of ONE record, with the gaps visible.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/timeline.tsx",
+      "content": "import { Fragment } from 'react';\nimport type { ReactNode } from 'react';\nimport { cx } from '@/lib/cx';\nimport './timeline.css';\n\n/**\n * B41 · Timeline — one job: state the ordered HISTORY of ONE record, with\n * the gaps visible. It is NOT B9 ActivityList, which is a live, flat feed\n * answering \"what needs me\", newest first, across many records. A Timeline\n * is one record's life — oldest-first or newest-first as the caller renders\n * it — and it shows what has NOT happened yet as well as what has, which is\n * why `pending` is a first-class tone rather than an absent row. A real\n * <ol> carries the order, so assistive tech announces position for free.\n */\nexport type TimelineTone = 'done' | 'pending' | 'bad';\n\nexport interface TimelineItem {\n  id: string;\n  /** Absolute display time, e.g. \"24 JUL · 14:28\". */\n  time: string;\n  /** Full machine timestamp for <time dateTime>. */\n  dateTime?: string;\n  title: string;\n  /** One sentence. Two is a record page. */\n  body?: ReactNode;\n  /** Who did it — mono, under the body. */\n  actor?: string;\n  tone?: TimelineTone;\n  /** Mono uppercase day divider rendered ABOVE this item. */\n  group?: string;\n}\n\nexport interface TimelineProps {\n  items: TimelineItem[];\n  className?: string;\n}\n\n/* C5 · a coloured dot is colour-only meaning, so every row says its tone\n   in words too — and says it BEFORE the title, the way a reader scanning\n   the rail sees the marker before the text. */\nconst TONE_WORD: Record<TimelineTone, string> = {\n  done: 'Completed',\n  pending: 'Not started',\n  bad: 'Failed',\n};\n\nexport function Timeline({ items, className }: TimelineProps) {\n  return (\n    <ol className={cx('sv-timeline', className)}>\n      {items.map((item) => {\n        const tone = item.tone ?? 'done';\n        return (\n          <Fragment key={item.id}>\n            {item.group && (\n              /* The day divider labels the rows below it; it is not a step\n                 in the history, so it stays out of the <ol>'s count. */\n              <li className=\"sv-timeline__day sv-mono\" role=\"presentation\">\n                {item.group}\n              </li>\n            )}\n            <li className=\"sv-timeline__item\">\n              <span\n                className={cx('sv-timeline__dot', `sv-timeline__dot--${tone}`)}\n                aria-hidden=\"true\"\n              />\n              <time\n                className=\"sv-timeline__time sv-mono\"\n                dateTime={item.dateTime}\n                title={item.dateTime}\n              >\n                {item.time}\n              </time>\n              <p className=\"sv-timeline__title\">\n                <span className=\"sv-visually-hidden\">{TONE_WORD[tone]}. </span>\n                {item.title}\n              </p>\n              {item.body && <p className=\"sv-timeline__body\">{item.body}</p>}\n              {item.actor && <p className=\"sv-timeline__actor sv-mono\">{item.actor}</p>}\n            </li>\n          </Fragment>\n        );\n      })}\n    </ol>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/timeline.tsx"
+    },
+    {
+      "path": "registry/seventy-six/timeline.css",
+      "content": "/* B41 · Timeline — the rail carries the rhythm, so there are no hairlines. */\n\n@layer sv-components {\n  .sv-timeline {\n    margin: 0;\n    padding: 0;\n    list-style: none;\n  }\n\n  /* 20px rail column + an 8px gutter. The 16px row gap is padding, not a\n     flex gap, so each row's rail meets the next one and the line is\n     continuous down the sequence. */\n  .sv-timeline__item {\n    position: relative;\n    padding: 0 0 var(--sv-s4) 28px;\n  }\n\n  .sv-timeline__item:last-child {\n    padding-bottom: 0;\n  }\n\n  .sv-timeline__item::before {\n    content: '';\n    position: absolute;\n    left: 9.5px;\n    top: 0;\n    bottom: 0;\n    width: 1px;\n    background: var(--sv-line);\n  }\n\n  /* The line starts at the first marker and stops at the last, so it never\n     dangles past the sequence. A day divider restarts it the same way. */\n  .sv-timeline__item:first-child::before,\n  .sv-timeline__day + .sv-timeline__item::before {\n    top: 10px;\n  }\n\n  .sv-timeline__item:last-child::before {\n    bottom: calc(100% - 10px);\n  }\n\n  /* The marker is an 11px circle whose outer 2px is a paper ring drawn as\n     an INSET shadow — what reads is a 7px dot sitting on the rail rather\n     than crossing it, with no elevation shadow anywhere near it. */\n  .sv-timeline__dot {\n    position: absolute;\n    left: 4.5px;\n    top: 4.5px;\n    width: 11px;\n    height: 11px;\n    border-radius: 50%;\n    box-shadow: inset 0 0 0 2px var(--sv-paper);\n  }\n\n  .sv-timeline__dot--done {\n    background: var(--sv-seed);\n  }\n\n  .sv-timeline__dot--bad {\n    background: var(--sv-bad);\n  }\n\n  /* Not started: the ring is the dot's ONLY affordance, so it takes the\n     3:1 step, not the hairline. */\n  .sv-timeline__dot--pending {\n    background: var(--sv-paper);\n    box-shadow: inset 0 0 0 2px var(--sv-paper), inset 0 0 0 3.5px var(--sv-field-line-strong);\n  }\n\n  .sv-timeline__time {\n    display: block;\n    color: var(--sv-ink-faint);\n  }\n\n  .sv-timeline__title {\n    margin-top: 2px;\n    font-size: 13px;\n    font-weight: 600;\n    color: var(--sv-ink);\n  }\n\n  .sv-timeline__body {\n    margin-top: 3px;\n    font-size: 12.5px;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-timeline__actor {\n    margin-top: var(--sv-s1);\n    color: var(--sv-ink-faint);\n  }\n\n  .sv-timeline__day {\n    padding: var(--sv-s3) 0 var(--sv-s2);\n    font-size: 9.5px;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-timeline__day:first-child {\n    padding-top: 0;\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/timeline.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/timeline.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B41",
+    "job": "State the ordered HISTORY of ONE record, with the gaps visible.",
+    "tags": [
+      "timeline",
+      "history",
+      "audit trail",
+      "events",
+      "record",
+      "pending"
+    ],
+    "exports": [
+      "Timeline"
+    ]
+  }
+}

@@ -132,6 +132,25 @@
       ]
     },
     {
+      "name": "distribution-strip",
+      "type": "registry:ui",
+      "title": "DistributionStrip",
+      "description": "One total divided into its shares: a 10px strip with structural seams and a legend that prints every figure. One job: Answer \"what share is each part.\"",
+      "categories": [
+        "widgets"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/distribution-strip.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/distribution-strip.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "data-table",
       "type": "registry:ui",
       "title": "DataTable",
@@ -360,10 +379,29 @@
       ]
     },
     {
+      "name": "code-block",
+      "type": "registry:ui",
+      "title": "CodeBlock",
+      "description": "Code as a quotation: monospace, ink, an inset panel on wall — and no syntax highlighting, ever. One job: Print code or a command exactly as it must be typed.",
+      "categories": [
+        "primitives"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/code-block.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/code-block.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "combobox",
       "type": "registry:ui",
       "title": "Combobox",
-      "description": "The searchable select — ARIA 1.2 combobox pattern, hand-rolled, zero dependencies. One job: Pick ONE value from a list too long to scan.",
+      "description": "The searchable select — ARIA 1.2 combobox pattern, hand-rolled, zero dependencies. One job: Pick one value — or a set of them — from a list too long to scan.",
       "categories": [
         "forms"
       ],
@@ -455,6 +493,25 @@
       ]
     },
     {
+      "name": "popover",
+      "type": "registry:ui",
+      "title": "Popover",
+      "description": "The non-modal panel on the native popover attribute — a few controls beside their trigger, 320px at the widest. One job: Hold a FEW controls beside the control that asked for them.",
+      "categories": [
+        "primitives"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/popover.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/popover.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "plate",
       "type": "registry:ui",
       "title": "Plate",
@@ -469,6 +526,25 @@
         },
         {
           "path": "components/seventy-six/plate.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "split",
+      "type": "registry:ui",
+      "title": "Split",
+      "description": "The band-less page cut in half, with the card across the cut. One job: Carry a single decision on the line between two surfaces.",
+      "categories": [
+        "chrome"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/split.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/split.css",
           "type": "registry:ui"
         }
       ]
@@ -626,6 +702,82 @@
       ]
     },
     {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "A hairline row on the wall — the sheet's whole content region, switched. One job: Switch which set of cards the sheet shows, without touching the URL.",
+      "categories": [
+        "primitives"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/tabs.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/tabs.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "stepper",
+      "type": "registry:ui",
+      "title": "Stepper",
+      "description": "A fixed sequence, stated — where you are, and what remains. One job: State where you are in a FIXED sequence, and what remains.",
+      "categories": [
+        "primitives"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/stepper.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/stepper.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tree-list",
+      "type": "registry:ui",
+      "title": "TreeList",
+      "description": "The full ARIA tree, hand-rolled — depth drawn, one tab stop, no dependency. One job: Move through a HIERARCHY whose depth is itself the information.",
+      "categories": [
+        "primitives"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/tree-list.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/tree-list.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "timeline",
+      "type": "registry:ui",
+      "title": "Timeline",
+      "description": "One record's history on a clipped rail — including what has not happened. One job: State the ordered HISTORY of ONE record, with the gaps visible.",
+      "categories": [
+        "primitives"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/timeline.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/timeline.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "field",
       "type": "registry:ui",
       "title": "Forms",
@@ -697,6 +849,44 @@
         },
         {
           "path": "components/seventy-six/date-range-field.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "search-field",
+      "type": "registry:ui",
+      "title": "SearchField",
+      "description": "The in-place filter — native search, B11 chrome, one named clear, a live count. One job: Filter a set that is ALREADY on screen by typing.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/search-field.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/search-field.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "file-field",
+      "type": "registry:ui",
+      "title": "FileField",
+      "description": "The attachment field — a dashed target, a real file input behind a named button, one row per file stating its outcome. One job: Attach files, and state what happened to each one.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/file-field.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/file-field.css",
           "type": "registry:ui"
         }
       ]
@@ -882,6 +1072,21 @@
       ]
     },
     {
+      "name": "template-analytics-overview",
+      "type": "registry:block",
+      "title": "Analytics overview",
+      "description": "A marketing analytics screen — and the donut it refuses to draw.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/analytics-overview.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
       "name": "template-auth-sign-in",
       "type": "registry:block",
       "title": "Sign in",
@@ -892,6 +1097,21 @@
       "files": [
         {
           "path": "templates/auth-sign-in.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "template-auth-stacked",
+      "type": "registry:block",
+      "title": "Sign in · stacked band",
+      "description": "The other Split orientation — ink across the top, the card over its edge.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/auth-stacked.tsx",
           "type": "registry:block"
         }
       ]

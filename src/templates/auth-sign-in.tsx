@@ -1,7 +1,13 @@
-// 76° template · Sign in — B24 Plate, band-less, seed cobalt (default root).
+// 76° template · Sign in — B46 Split (a B24 Plate beside the ink panel), seed cobalt.
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { Field, Checkbox, Button, ButtonLink, Banner, Plate, PlateHead, SocialButton } from '@/components/seventy-six';
+import {
+  Field, Checkbox, Button, ButtonLink, Banner, Split, PlateHead, SocialButton,
+} from '@/components/seventy-six';
+
+/* The panel is TYPE, and nothing else: a statement and one sentence on ink.
+   No widgets, no screenshot, no illustration — F11's answer is "type,
+   hairline, and real data", and a sign-in page has no real data yet. */
 
 const providers = { display: 'grid', gap: 'var(--sv-s2)' } as const;
 const rule = {
@@ -79,7 +85,7 @@ export function AuthSignIn() {
   }
 
   return (
-    <Plate
+    <Split
       footer={
         <>
           Trouble signing in? <a href="#support" style={link}>Contact support</a>
@@ -143,6 +149,6 @@ export function AuthSignIn() {
         <ButtonLink href="#reset">Forgot password?</ButtonLink>
         <ButtonLink href="#sign-up">Create an account</ButtonLink>
       </div>
-    </Plate>
+    </Split>
   );
 }

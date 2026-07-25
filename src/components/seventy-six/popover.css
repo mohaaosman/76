@@ -1,0 +1,54 @@
+/* B42 · Popover — a small non-modal panel of secondary controls, parked beside its trigger. */
+
+@layer sv-components {
+  .sv-popover {
+    /* Native popover: the browser top layer. No z-index at all — the
+       --sv-z-* ladder never applies here. Positioned by JS from the trigger. */
+    position: fixed;
+    margin: 0;
+    inset: auto;
+    /* Above 320px the content is a workspace, not an aside: use B21 Drawer. */
+    min-width: 220px;
+    max-width: 320px;
+    padding: var(--sv-s4);
+    background: var(--sv-paper);
+    border: 1px solid var(--sv-line);
+    border-radius: var(--sv-r);
+    box-shadow: var(--sv-shadow);
+    color: var(--sv-ink);
+    font-size: 13px;
+  }
+
+  /* The panel itself takes focus when it holds no focusable control. */
+  .sv-popover:focus-visible {
+    outline: 2px solid var(--sv-seed-line);
+    outline-offset: 2px;
+  }
+
+  /* The head bleeds to the panel edge so its hairline spans the full width. */
+  .sv-popover__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sv-s4);
+    margin: calc(-1 * var(--sv-s4)) calc(-1 * var(--sv-s4)) var(--sv-s3);
+    padding: var(--sv-s3) var(--sv-s4);
+    border-bottom: 1px solid var(--sv-line);
+  }
+
+  .sv-popover__title {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--sv-ink);
+  }
+
+  .sv-popover__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sv-s3);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--sv-ink);
+  }
+}

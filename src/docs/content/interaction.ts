@@ -1,8 +1,9 @@
 import type { DocEntry } from './types';
 
 /**
- * v0.2.0 — the interaction layer: B19–B23. Searchable selection,
- * action menus, slide-overs, inline notices, and category tags.
+ * The interaction layer. B19–B23 from v0.2.0: searchable selection,
+ * action menus, slide-overs, inline notices, and category tags — plus
+ * B42 Popover, the non-modal top-layer panel B20 Menu now stands on.
  */
 export const interaction: DocEntry[] = [
   /* ================================================================ B19 */
@@ -12,8 +13,8 @@ export const interaction: DocEntry[] = [
     book: 'B19',
     category: 'forms',
     tagline: 'The searchable select — ARIA 1.2 combobox pattern, hand-rolled, zero dependencies.',
-    job: 'Pick ONE value from a list too long to scan.',
-    tags: ['combobox', 'searchable-select', 'autocomplete', 'typeahead', 'listbox', 'filter'],
+    job: 'Pick one value — or a set of them — from a list too long to scan.',
+    tags: ['combobox', 'searchable-select', 'multi-select', 'autocomplete', 'typeahead', 'listbox', 'filter'],
     exports: ['Combobox'],
     files: ['components/seventy-six/combobox.tsx', 'components/seventy-six/combobox.css'],
     registryDeps: ['field'],
@@ -21,6 +22,8 @@ export const interaction: DocEntry[] = [
       'Native <code>&lt;select&gt;</code> (B11) stays the default for short, known lists. The Combobox exists for the moment the list grows past roughly ten options, or the user knows the value\'s <b>name</b> faster than its position: customers, SKUs, warehouses, assignees. Typing filters; arrows walk the matches; Enter commits; Escape closes, then clears.',
       'It follows the ARIA 1.2 combobox pattern with <code>aria-activedescendant</code> — focus never leaves the input, so the screen-reader experience matches the visual one. Options can carry mono <code>meta</code> (an ID, a count) that is searched along with the label.',
       'The listbox is a child of the field and must not sit inside an <code>overflow</code> container (Firewall E) — lift the field out, or put the picker in a Dialog.',
+      '<b>The v0.4.0 amendment: multi-select.</b> The original spec refused it outright, which was a refusal of the usual implementation rather than of the job. Pass <code>multiple</code> and <code>value</code> becomes a <code>string[]</code>: Enter and click toggle the active option and <b>leave the list open</b>, the query survives the toggle so three matches of one search are taken without retyping it, and Backspace on an empty query drops the value taken last. The two modes are a discriminated union, so they cannot be mixed by accident and every existing single-select call site is untouched.',
+      'What is refused is the chip wall. A multi-selection is <b>stated, never worn</b>: one mono line of running text under the field, in the B7 <code>FilterLine</code> voice, naming at most three values and counting the rest, ending in a single Clear. A2 bans pills, B23 keeps Badge category-only and non-dismissible, and a growing row of chips reflows the form on every pick while a one-line statement holds its ground. That line is also the only live region in the component.',
     ],
     examples: [
       {
@@ -63,6 +66,27 @@ const [customer, setCustomer] = useState<string | null>(null);
   emptyText="No one matches. Check the spelling or invite them from Settings → Team."
 />`,
       },
+      {
+        title: 'Multi-select, stated as one line',
+        description: 'The list stays open while you pick, the query survives each toggle, and the selection states itself in the FilterLine voice underneath. No chips, and nothing reflows.',
+        demoKey: 'combobox-multi',
+        surface: 'paper',
+        code: `const [picked, setPicked] = useState<string[]>(['c-127', 'c-152']);
+
+<Combobox
+  multiple
+  noun="account"
+  label="Accounts in this report"
+  options={customers}
+  value={picked}
+  onChange={(values) => setPicked(values)}
+  placeholder="Type a name or C-number"
+  hint="Pick as many as the report covers — the list stays open."
+/>
+
+// The line under the field reads:
+// 2 ACCOUNTS · Corridor Foods · Fairline Imports        Clear`,
+      },
     ],
     props: [
       {
@@ -70,8 +94,10 @@ const [customer, setCustomer] = useState<string | null>(null);
         rows: [
           { name: 'label', type: 'string', description: 'Field label above the input — never replaced by the placeholder (B11).' },
           { name: 'options', type: 'ComboOption[]', description: '{ value, label, meta?, disabled? }. meta renders mono, right-aligned, and is searched.' },
-          { name: 'value', type: 'string | null', description: 'Controlled selected value.' },
-          { name: 'onChange', type: '(value, option) => void', description: 'Fires on commit and on clear (null).' },
+          { name: 'multiple', type: 'boolean', description: 'Switches the props to the multi union: value becomes string[] and onChange receives (values, options).' },
+          { name: 'value', type: 'string | null | string[]', description: 'Controlled selection. string | null in single mode, string[] in pick order when multiple.' },
+          { name: 'onChange', type: '(value, option) => void', description: 'Single: fires on commit and on clear (null). Multi: fires on every toggle with the full array.' },
+          { name: 'noun', type: 'string', defaultValue: "'selected'", description: 'Multi only. The singular noun the selection line counts: "account" reads "3 ACCOUNTS".' },
           { name: 'error / hint / required', type: 'string / string / boolean', description: 'B11 field chrome; error sets aria-invalid + describedby.' },
           { name: 'emptyText', type: 'string', defaultValue: "'No matching options.'", description: 'No-match copy — state what, like every 76° empty state.' },
         ],
@@ -81,7 +107,8 @@ const [customer, setCustomer] = useState<string | null>(null);
       keyboard: [
         { keys: '↓ / ↑', action: 'Open the list / move the active option.' },
         { keys: 'Home / End', action: 'First / last match.' },
-        { keys: 'Enter', action: 'Commit the active option.' },
+        { keys: 'Enter', action: 'Single: commit the active option and close. Multi: toggle it and stay open.' },
+        { keys: 'Backspace', action: 'Multi only, on an empty query: drops the value taken last.' },
         { keys: 'Esc', action: 'Close the list; pressed again on a closed field, clear the selection.' },
         { keys: 'Tab', action: 'Close and move on — never traps.' },
       ],
@@ -89,17 +116,20 @@ const [customer, setCustomer] = useState<string | null>(null);
         'ARIA 1.2 pattern: <code>role="combobox"</code> input, <code>aria-expanded</code>, <code>aria-controls</code>, and <code>aria-activedescendant</code> pointing at the active <code>role="option"</code>.',
         'Focus stays in the input the whole time; the active option is conveyed, not focused.',
         'The selected option carries <code>aria-selected</code> and a seed tick.',
+        'In multi mode the listbox adds <code>aria-multiselectable="true"</code>, and the selection line is <code>aria-live="polite"</code> — one announcement per toggle, and no second live region anywhere in the component.',
       ],
     },
     donts: [
       'No Combobox for lists a native Select scans in one glance (≤ ~10 options).',
-      'No multi-select — that is a different job and a future component.',
+      'No chips for a multi-selection — the line states it, and a dismissible chip is a control row pretending to be state (A2, B23).',
       'No listbox inside an overflow container; portal the field out or use a Dialog.',
       'No free-text values — the Combobox picks from the list; a creatable input is a Field.',
     ],
     faq: [
       { q: 'Select or Combobox?', a: 'Count the options. If the user scans, Select. If the user searches, Combobox. Both wear identical B11 field chrome, so swapping later costs nothing.' },
       { q: 'Async options?', a: 'Filter locally up to a few thousand rows — it is faster than any spinner. Past that, debounce the query upstream and pass the fetched page as options.' },
+      { q: 'Why did multi-select take until v0.4.0?', a: 'Because the refusal in v0.2.0 was aimed at the chip wall every implementation ships with, and the replacement — a stated mono line — did not exist until B7 shipped FilterLine. The pattern had to be invented before the feature could be allowed.' },
+      { q: 'Multi-select or a column of checkboxes?', a: 'Count again. Under about ten options a checkbox group shows every choice at once and costs no interaction model. The multi Combobox is for the set you have to search for.' },
     ],
   },
 
@@ -400,6 +430,93 @@ const [open, setOpen] = useState(false);
     ],
     faq: [
       { q: 'Badge or StatusWord?', a: 'Can it change while you watch? StatusWord. Is it a fixed classification? Badge. "SYNCING" is status; "EU-WEST" is category.' },
+    ],
+  },
+
+  /* ================================================================ B42 */
+  {
+    slug: 'popover',
+    name: 'Popover',
+    book: 'B42',
+    category: 'primitives',
+    tagline: 'The non-modal panel on the native popover attribute — a few controls beside their trigger, 320px at the widest.',
+    job: 'Hold a FEW controls beside the control that asked for them.',
+    tags: ['popover', 'popover-attribute', 'top-layer', 'non-modal', 'panel', 'column-chooser'],
+    exports: ['Popover'],
+    files: ['components/seventy-six/popover.tsx', 'components/seventy-six/popover.css'],
+    registryDeps: ['button'],
+    intro: [
+      'B18 <code>Tooltip</code> is a phrase with no interactive content, on hover or focus. B20 <code>Menu</code> is a list of verbs with <code>role="menu"</code> and its own keyboard model. B21 <code>Drawer</code> is a workspace beside the work. B13 <code>Dialog</code> interrupts for one decision. A Popover is the non-modal panel that holds a few controls — a column chooser, a saved-view picker, a short explanation with a link — and nothing else in the taxonomy does that.',
+      'It is built on the native <code>popover</code> attribute: browser top layer, light dismiss, Esc, and <b>no z-index at all</b> — the <code>--sv-z-*</code> ladder never reaches it. It also <b>owns its own trigger</b>, exactly as <code>MenuButton</code> does, so <code>aria-expanded</code> and <code>aria-controls</code> cannot drift out of sync with what is on screen.',
+      'Labelling is enforced by the type system: <code>title</code> and <code>ariaLabel</code> are a mutually exclusive union, so an unlabelled panel does not compile. 320px is the ceiling; wider is a B21 Drawer. And the panel is non-modal — the page behind stays readable and keeps its scroll, and focus is never trapped: tabbing past the last control closes the panel and carries on into the page, because a panel left standing behind the focus ring is one nobody can see they have left.',
+      '<b>B20 Menu now stands on this component.</b> <code>usePopoverAnchor</code> — the hook that positions a top-layer panel under its trigger, since the top layer does not anchor itself without CSS anchor positioning — moved here, and Menu imports it. Popover is the primitive; Menu is a specialisation of it. The hook is deliberately not re-exported from the barrel: it is an implementation detail of the two components, not public API.',
+    ],
+    examples: [
+      {
+        title: 'Column chooser',
+        description: 'An untitled panel: three checkboxes and nothing else. ariaLabel names it, because there is no title to do the naming.',
+        demoKey: 'popover-basic',
+        surface: 'paper',
+        code: `import { Popover, Checkbox } from '@/components/seventy-six';
+
+<Popover label="Columns" ariaLabel="Choose visible columns" align="end">
+  <Checkbox label="Customer" defaultChecked />
+  <Checkbox label="Total" defaultChecked />
+  <Checkbox label="Dispatched" />
+</Popover>`,
+      },
+      {
+        title: 'Titled panel with one action',
+        description: 'A title renders the hairline head and a close that names its panel. The action is a single text link, exactly as a Banner carries one.',
+        demoKey: 'popover-titled',
+        surface: 'paper',
+        code: `import { Popover, ButtonLink } from '@/components/seventy-six';
+
+<Popover label="About this total" title="How the total is calculated">
+  Line totals, less order-level discounts, plus shipping. Tax is applied at
+  invoicing, so this figure can differ from the invoice by the tax line.
+  <ButtonLink href="/docs/totals">Read the totals rules</ButtonLink>
+</Popover>`,
+      },
+    ],
+    props: [
+      {
+        component: 'Popover',
+        rows: [
+          { name: 'label', type: 'string', description: 'The trigger\'s visible text — it names what the panel holds ("Columns").' },
+          { name: 'title', type: 'string', description: 'Renders the hairline head plus a named close, and labels the panel. Mutually exclusive with <code>ariaLabel</code>.' },
+          { name: 'ariaLabel', type: 'string', description: 'Names an untitled panel. Mutually exclusive with <code>title</code>; omitting both does not compile.' },
+          { name: 'children', type: 'ReactNode', description: 'A few controls, or a short explanation with one link. Not a form, not a page.' },
+          { name: 'align', type: "'start' | 'end'", defaultValue: "'start'", description: 'Panel edge alignment against the trigger; it is clamped 8px inside the viewport either way.' },
+          { name: 'variant', type: "'ghost' | 'primary' | 'link'", defaultValue: "'ghost'", description: 'Trigger variant — the panel is not an action, so the trigger is usually quiet.' },
+          { name: 'disabled / className', type: 'boolean / string', description: 'Both apply to the trigger; the panel is top-layer and owns its own box.' },
+        ],
+      },
+    ],
+    a11y: {
+      keyboard: [
+        { keys: 'Enter / Space', action: 'Opens the panel and moves focus to its first control.' },
+        { keys: 'Tab / ⇧Tab', action: 'Walks the panel; leaving it closes the panel and keeps going. Nothing is trapped and focus is never stolen back.' },
+        { keys: 'Esc', action: 'Closes (native popover) and returns focus to the trigger.' },
+      ],
+      notes: [
+        'Trigger: <code>aria-haspopup="dialog"</code> + <code>aria-controls</code>, with <code>aria-expanded</code> read off the panel\'s own <code>toggle</code> event — the browser is the source of truth for open state, so the attribute cannot lie.',
+        'Panel: <code>role="dialog"</code>, labelled by the title through <code>aria-labelledby</code> or by <code>ariaLabel</code>. The union of the two means the unlabelled case is unreachable, not merely discouraged.',
+        'Focus moves to the first focusable control on open, or to the panel itself when it holds none; close returns focus to the trigger.',
+        'A titled panel\'s close names its target ("Close How the total is calculated"); an untitled one exits by Esc or by clicking away.',
+      ],
+    },
+    donts: [
+      'No action whose only path is the popover (C4) — whatever lives here also lives somewhere reachable without it.',
+      'No navigation in a popover; links between places belong in the Band.',
+      'No popover nested inside another popover.',
+      'No errors in a popover — an error renders inline at its cause, in a B22 Banner.',
+      'No panel wider than 320px; at that point the content is a workspace and belongs in a B21 Drawer.',
+    ],
+    faq: [
+      { q: 'Why not CSS anchor positioning?', a: 'It is not yet baseline across the browsers 76° supports, so shipping it would mean shipping a fallback anyway. Instead <code>usePopoverAnchor</code> measures the trigger and places the panel under it, clamped inside the viewport, re-running on resize — about thirty lines, no dependency, and it deletes itself the day anchor positioning is safe.' },
+      { q: 'Why does it own the trigger instead of taking a children render prop?', a: 'Because the ARIA wiring is the whole risk. A render prop hands aria-haspopup, aria-controls, and aria-expanded to the caller, and the first time one of them drifts the panel is silently unusable by keyboard. Owning the button makes the wiring unforgeable.' },
+      { q: 'Popover or Menu?', a: 'Count the verbs. A list of actions is a B20 Menu and gets the menu keyboard model. Controls that change a view — checkboxes, a radio set, a short explanation — are a Popover. Both ride the same top layer and the same anchor hook.' },
     ],
   },
 ];

@@ -1,0 +1,119 @@
+/* B37 · FileField — a dashed target, a named button, and one row per file. */
+
+@layer sv-components {
+  /* The dashed border is the zone's ONLY affordance, so it owes the 3:1
+     non-text bar (WCAG 1.4.11) — --sv-field-line-strong, not --sv-line. */
+  .sv-filefield__zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sv-s2);
+    padding: var(--sv-s5);
+    border: 1px dashed var(--sv-field-line-strong);
+    border-radius: var(--sv-r);
+    background: var(--sv-wall);
+    text-align: center;
+    transition: background-color var(--sv-t-fast), border-color var(--sv-t-fast);
+  }
+
+  .sv-filefield__zone--drag {
+    background: var(--sv-seed-tint);
+    border-color: var(--sv-seed-line);
+  }
+
+  /* Mid-drag the children must not swallow the pointer, or crossing the
+     button fires dragleave and the zone flickers out of its own state. */
+  .sv-filefield__zone--drag > * {
+    pointer-events: none;
+  }
+
+  /* The input is visually hidden but still focusable, so its focus ring is
+     drawn on the zone it belongs to (C3 — never a focus stop with no ring). */
+  .sv-filefield__zone:has(.sv-filefield__input:focus-visible) {
+    outline: 2px solid var(--sv-seed-line);
+    outline-offset: 2px;
+  }
+
+  .sv-filefield__prompt {
+    font-size: 12.5px;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-filefield__constraint {
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-filefield__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sv-filefield__row {
+    display: flex;
+    align-items: center;
+    gap: var(--sv-s3);
+    padding: var(--sv-s2) 0;
+    border-bottom: 1px solid var(--sv-line);
+  }
+
+  .sv-filefield__row:last-child {
+    border-bottom: 0;
+  }
+
+  .sv-filefield__name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--sv-ink);
+  }
+
+  .sv-filefield__size {
+    flex: none;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-filefield__progress {
+    display: flex;
+    align-items: center;
+    gap: var(--sv-s2);
+    flex: none;
+    width: 116px;
+  }
+
+  .sv-filefield__track {
+    display: block;
+    flex: 1;
+  }
+
+  .sv-filefield__fill {
+    display: block;
+  }
+
+  .sv-filefield__percent {
+    flex: none;
+    color: var(--sv-ink-soft);
+  }
+
+  /* The word is the state; --sv-ok only agrees with it (C5). */
+  .sv-filefield__done {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    flex: none;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--sv-ok);
+  }
+
+  .sv-filefield__bad {
+    flex: 2;
+    min-width: 0;
+    font-size: 11.5px;
+    color: var(--sv-bad);
+  }
+}

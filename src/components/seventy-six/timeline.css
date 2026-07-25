@@ -1,0 +1,103 @@
+/* B41 · Timeline — the rail carries the rhythm, so there are no hairlines. */
+
+@layer sv-components {
+  .sv-timeline {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* 20px rail column + an 8px gutter. The 16px row gap is padding, not a
+     flex gap, so each row's rail meets the next one and the line is
+     continuous down the sequence. */
+  .sv-timeline__item {
+    position: relative;
+    padding: 0 0 var(--sv-s4) 28px;
+  }
+
+  .sv-timeline__item:last-child {
+    padding-bottom: 0;
+  }
+
+  .sv-timeline__item::before {
+    content: '';
+    position: absolute;
+    left: 9.5px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--sv-line);
+  }
+
+  /* The line starts at the first marker and stops at the last, so it never
+     dangles past the sequence. A day divider restarts it the same way. */
+  .sv-timeline__item:first-child::before,
+  .sv-timeline__day + .sv-timeline__item::before {
+    top: 10px;
+  }
+
+  .sv-timeline__item:last-child::before {
+    bottom: calc(100% - 10px);
+  }
+
+  /* The marker is an 11px circle whose outer 2px is a paper ring drawn as
+     an INSET shadow — what reads is a 7px dot sitting on the rail rather
+     than crossing it, with no elevation shadow anywhere near it. */
+  .sv-timeline__dot {
+    position: absolute;
+    left: 4.5px;
+    top: 4.5px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 2px var(--sv-paper);
+  }
+
+  .sv-timeline__dot--done {
+    background: var(--sv-seed);
+  }
+
+  .sv-timeline__dot--bad {
+    background: var(--sv-bad);
+  }
+
+  /* Not started: the ring is the dot's ONLY affordance, so it takes the
+     3:1 step, not the hairline. */
+  .sv-timeline__dot--pending {
+    background: var(--sv-paper);
+    box-shadow: inset 0 0 0 2px var(--sv-paper), inset 0 0 0 3.5px var(--sv-field-line-strong);
+  }
+
+  .sv-timeline__time {
+    display: block;
+    color: var(--sv-ink-faint);
+  }
+
+  .sv-timeline__title {
+    margin-top: 2px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--sv-ink);
+  }
+
+  .sv-timeline__body {
+    margin-top: 3px;
+    font-size: 12.5px;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-timeline__actor {
+    margin-top: var(--sv-s1);
+    color: var(--sv-ink-faint);
+  }
+
+  .sv-timeline__day {
+    padding: var(--sv-s3) 0 var(--sv-s2);
+    font-size: 9.5px;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-timeline__day:first-child {
+    padding-top: 0;
+  }
+}

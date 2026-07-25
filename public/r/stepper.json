@@ -1,0 +1,44 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "stepper",
+  "type": "registry:ui",
+  "title": "Stepper",
+  "description": "A fixed sequence, stated — where you are, and what remains. One job: State where you are in a FIXED sequence, and what remains.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/stepper.tsx",
+      "content": "import { cx } from '@/lib/cx';\nimport './stepper.css';\n\n/**\n * B39 · Stepper — one job: state where you are in a FIXED sequence, and what\n * remains. It is a STATEMENT, not a control: steps render as plain text unless\n * `onStepSelect` is passed, and even then only ALREADY-COMPLETED steps become\n * buttons — you cannot click into a step you have not earned. It is not a\n * progress bar (that is B4, for a quantity), not a tablist (that is B38, for a\n * free choice between peers), and not navigation (that is B1). A real `<ol>`\n * carries the ordering, because the order is the whole point.\n */\nexport interface Step {\n  id: string;\n  label: string;\n  /** One line under the label, e.g. \"Signed 14 Jul\". */\n  note?: string;\n}\n\nexport interface StepperProps {\n  steps: Step[];\n  /** Index of the current step, 0-based. Everything before it is done. */\n  current: number;\n  /** Passing this makes COMPLETED steps buttons. Omit and the stepper is a statement. */\n  onStepSelect?: (index: number) => void;\n  /** Accessible name, e.g. \"Onboarding progress\". */\n  label: string;\n  className?: string;\n}\n\nconst STATE_WORD = {\n  done: 'completed',\n  current: 'current step',\n  upcoming: 'not started',\n} as const;\n\nexport function Stepper({ steps, current, onStepSelect, label, className }: StepperProps) {\n  return (\n    <ol className={cx('sv-stepper', className)} aria-label={label}>\n      {steps.map((step, i) => {\n        const state = i < current ? 'done' : i === current ? 'current' : 'upcoming';\n        const body = (\n          <>\n            {/* The marker is a picture of the index; the hidden line below\n                says the same thing in words, so the marker stays silent. */}\n            <span className=\"sv-stepper__marker sv-mono sv-num\" aria-hidden=\"true\">\n              {state === 'done' ? (\n                <svg viewBox=\"0 0 10 8\" width=\"10\" height=\"8\" aria-hidden=\"true\">\n                  <path\n                    d=\"M1 4l2.5 2.5L9 1\"\n                    fill=\"none\"\n                    stroke=\"currentColor\"\n                    strokeWidth=\"1.8\"\n                    strokeLinecap=\"round\"\n                    strokeLinejoin=\"round\"\n                  />\n                </svg>\n              ) : (\n                i + 1\n              )}\n            </span>\n            <span className=\"sv-stepper__text\">\n              <span className=\"sv-stepper__label\">{step.label}</span>\n              {step.note && <span className=\"sv-stepper__note\">{step.note}</span>}\n            </span>\n            {/* C5 · the seed fill is a colour, and colour never carries\n                meaning alone — every step also says its state in words. */}\n            <span className=\"sv-visually-hidden\">\n              {` Step ${i + 1} of ${steps.length}, ${STATE_WORD[state]}`}\n            </span>\n          </>\n        );\n        return (\n          <li\n            key={step.id}\n            className={cx('sv-stepper__step', `sv-stepper__step--${state}`)}\n            aria-current={state === 'current' ? 'step' : undefined}\n          >\n            {state === 'done' && onStepSelect ? (\n              <button\n                type=\"button\"\n                className=\"sv-stepper__hit sv-stepper__hit--button\"\n                onClick={() => onStepSelect(i)}\n              >\n                {body}\n              </button>\n            ) : (\n              <span className=\"sv-stepper__hit\">{body}</span>\n            )}\n          </li>\n        );\n      })}\n    </ol>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/stepper.tsx"
+    },
+    {
+      "path": "registry/seventy-six/stepper.css",
+      "content": "/* B39 · Stepper — a fixed sequence, stated: where you are and what remains */\n\n@layer sv-components {\n  .sv-stepper {\n    display: flex;\n    align-items: center;\n    gap: var(--sv-s3);\n    margin: 0;\n    padding: 0;\n    list-style: none;\n  }\n\n  .sv-stepper__step {\n    display: flex;\n    align-items: center;\n    gap: var(--sv-s3);\n    flex: 1 1 auto;\n    min-width: 0;\n  }\n\n  .sv-stepper__step:last-child {\n    flex: 0 1 auto;\n  }\n\n  /* The connector is the li's own ::after, never an extra element: an empty\n     <span> between steps would land inside the ordered list as a phantom. */\n  .sv-stepper__step::after {\n    content: '';\n    flex: 1 1 var(--sv-s5);\n    min-width: var(--sv-s3);\n    height: 1px;\n    background: var(--sv-line);\n  }\n\n  /* Behind the current step the sequence is earned, so the rule is seed;\n     ahead of it, hairline. A done step's connector is the span it closed. */\n  .sv-stepper__step--done::after {\n    background: var(--sv-seed);\n  }\n\n  .sv-stepper__step:last-child::after {\n    content: none;\n  }\n\n  .sv-stepper__hit {\n    display: inline-flex;\n    align-items: center;\n    gap: var(--sv-s3);\n    min-width: 0;\n    text-align: left;\n  }\n\n  .sv-stepper__hit--button {\n    padding: 0;\n    border: 0;\n    background: transparent;\n    cursor: pointer;\n  }\n\n  .sv-stepper__marker {\n    flex: 0 0 auto;\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 24px;\n    height: 24px;\n    border-radius: var(--sv-r);\n    font-size: 11px;\n    /* mono tracking would shove a single digit off centre */\n    letter-spacing: 0;\n  }\n\n  .sv-stepper__step--done .sv-stepper__marker,\n  .sv-stepper__step--current .sv-stepper__marker {\n    background: var(--sv-seed);\n    color: var(--sv-on-dark);\n  }\n\n  /* The border is this marker's only affordance against the wall, so it\n     owes 3:1 and takes the strong field line, not the hairline. */\n  .sv-stepper__step--upcoming .sv-stepper__marker {\n    background: var(--sv-wall);\n    border: 1px solid var(--sv-field-line-strong);\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-stepper__text {\n    display: flex;\n    flex-direction: column;\n    gap: 2px;\n    min-width: 0;\n  }\n\n  .sv-stepper__label {\n    font-size: 12.5px;\n    font-weight: 500;\n    color: var(--sv-ink-soft);\n    transition: color var(--sv-t-fast);\n  }\n\n  .sv-stepper__step--current .sv-stepper__label {\n    font-weight: 700;\n    color: var(--sv-ink);\n  }\n\n  .sv-stepper__hit--button:hover .sv-stepper__label {\n    color: var(--sv-ink);\n  }\n\n  .sv-stepper__note {\n    font-size: 11px;\n    color: var(--sv-ink-soft);\n  }\n\n  /* C7 · below 620px the sequence stands up. Nothing is hidden and nothing\n     scrolls: the connectors simply become vertical rules in the marker\n     column, and the list reads top to bottom. */\n  @media (max-width: 620px) {\n    .sv-stepper {\n      flex-direction: column;\n      align-items: stretch;\n      gap: 0;\n    }\n\n    .sv-stepper__step {\n      position: relative;\n      flex: 0 0 auto;\n      align-items: flex-start;\n      padding-bottom: var(--sv-s6);\n    }\n\n    .sv-stepper__step:last-child {\n      padding-bottom: 0;\n    }\n\n    .sv-stepper__step::after {\n      position: absolute;\n      left: 11.5px;\n      top: 28px;\n      bottom: var(--sv-s1);\n      flex: none;\n      width: 1px;\n      min-width: 0;\n      height: auto;\n    }\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/stepper.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/stepper.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B39",
+    "job": "State where you are in a FIXED sequence, and what remains.",
+    "tags": [
+      "stepper",
+      "steps",
+      "sequence",
+      "wizard",
+      "checkout",
+      "onboarding"
+    ],
+    "exports": [
+      "Stepper"
+    ]
+  }
+}

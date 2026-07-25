@@ -21,6 +21,8 @@ Trend cards live on report pages, not overviews (overviews use S1 stats). Maximu
 
 **v0.4.0** adds two things. `kind="stacked"` sums the series per column and scales the plot to the total — legal only when the segments are parts of ONE total, never unrelated measures sharing an axis. **Sparkline** is the same shape at cell size: no axes, no grid, no labels, and legal only BESIDE a printed figure, because a line with no scale states nothing on its own.
 
+The **v0.4.0 remainder amendment** adds the two things a printed chart was still missing. `yTicks` takes up to four PRE-FORMATTED labels, given bottom-to-top, pinned to the four gridlines the chart already draws at 25, 50, 75 and 100 percent of the plot — the component never formats a number (C9), and the column is `aria-hidden` because the required `ariaLabel` already carries the takeaway. `highlight` names the one column the chart is ABOUT, and it is a **printed statement, never a hover tooltip**: C8 forbids hover-dependent information, so the chip is always visible. The other columns recede to `--sv-compare`, the chip is drawn in HTML rather than SVG because the plot is `preserveAspectRatio="none"` and would stretch any `<text>` inside it, and the matching x label goes ink at 700.
+
 The `ariaLabel` prop is required and must state the takeaway, because a chart's role="img" summary is the accessible content. For decision-critical data, pair the chart with a "View data" affordance or a visually-hidden table.
 
 ## Examples
@@ -76,6 +78,22 @@ Only when the segments sum to something real. Two unrelated measures are two cha
 />
 ```
 
+### The bar the chart is about
+
+Thursday is the point, so Thursday is stated: the chip is printed above the peak, the other six bars recede to compare, and the THU label goes ink at 700. Nothing here waits for a pointer. The yTicks are formatted upstream and land on the gridlines the plot already draws.
+
+```tsx
+<Trend
+  kind="bar"
+  ariaLabel="Orders per weekday peak on Thursday at 312, a quarter above the weekday average"
+  series={[{ label: 'Orders', data: [180, 224, 251, 312, 296, 142, 98], tone: 'seed' }]}
+  xLabels={['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']}
+  yTicks={['90', '180', '270', '360']}
+  highlight={{ index: 3, label: 'THU · 312' }}
+  height={140}
+/>
+```
+
 ## Props
 
 ### Trend
@@ -88,6 +106,8 @@ Only when the segments sum to something real. Two unrelated measures are two cha
 | `xLabels` | `string[]` | — | Mono labels spread under the plot. |
 | `height` | `number` | `160` | Plot height in viewBox units. |
 | `legend` | `boolean` | `false` | Show 14×2px swatch legend when the seed/gray convention is not enough. |
+| `yTicks` | `string[]` | — | Up to four PRE-FORMATTED labels, bottom-to-top, pinned to the 25/50/75/100% gridlines. The chart never formats a number (C9); the column is aria-hidden. |
+| `highlight` | `{ index: number; label: string }` | — | The one column the chart is about. Prints a chip above it, recedes the rest to compare, and takes its x label to ink/700. Never a hover state (C8). |
 
 ### Sparkline
 
@@ -102,6 +122,7 @@ Only when the segments sum to something real. Two unrelated measures are two cha
 
 - The SVG is `role="img"` with the takeaway as its label — screen-reader users get the conclusion, not a coordinate dump.
 - Series are never referenced by color alone in copy (C5): label them directly or via the legend.
+- The y-tick column is `aria-hidden`, and so is the highlight chip: both are ordinary HTML text in the flow rather than stretched SVG, but the required `ariaLabel` already states the takeaway and two readings of one fact is a defect.
 
 ## Don't
 
@@ -112,6 +133,7 @@ Only when the segments sum to something real. Two unrelated measures are two cha
 - No more than three series.
 - No stacked bars for measures that do not sum to a real total.
 - No Sparkline standing alone — it sits beside the figure that carries the value.
+- No `highlight` standing in for interaction — a chart that only tells the truth on hover has failed C8.
 
 ## FAQ
 
@@ -126,3 +148,7 @@ A flat line on hairlines is ~60 lines of SVG. A library would add a dependency, 
 **How do users get exact values?**
 
 Pair the card with a "View data" text-link action in the CardHead that opens the underlying table — decision-critical numbers always exist as text somewhere.
+
+**Did the x labels move in v0.4.0?**
+
+Yes, and it was a fix. `.sv-trend__x` went from `space-between` to a real column grid of `xLabels.length` equal columns, matching the columns the bars are centred in. Under space-between only the first and last label ever sat on their bar; every label between them drifted, and the more labels a chart had the further off they were.

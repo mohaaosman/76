@@ -1,5 +1,10 @@
 import type { DocEntry } from './types';
 
+/**
+ * The primitives — the parts every other component is composed from:
+ * Button, StatusWord, Card, Dialog, Notification, Tooltip, EmptyState,
+ * Skeleton and SearchCommand, plus B43 CodeBlock, the code quotation.
+ */
 export const primitives: DocEntry[] = [
   /* ================================================================ B10 */
   {
@@ -716,6 +721,88 @@ const search = useSearchCommand(); // ⌘K binds automatically
       { q: 'How do I open it programmatically?', a: 'useSearchCommand() returns { open, show, hide }; call show() from your search button and pass open/hide to the component.' },
       { q: 'Does it search the server?', a: 'The component filters the items you pass. For server search, treat items as the current result set and refresh it as the user types upstream.' },
       { q: 'What goes in hint?', a: 'A mono fragment on the right edge: an ID, an amount, a shortcut. Metadata voice, per Law 4.' },
+    ],
+  },
+
+  /* ================================================================ B43 */
+  {
+    slug: 'code-block',
+    name: 'CodeBlock',
+    book: 'B43',
+    category: 'primitives',
+    tagline: 'Code as a quotation: monospace, ink, an inset panel on wall — and no syntax highlighting, ever.',
+    job: 'Print code or a command exactly as it must be typed.',
+    tags: ['code-block', 'no-highlighting', 'copy-to-clipboard', 'monospace', 'line-numbers', 'scroll-region'],
+    exports: ['CodeBlock'],
+    files: ['components/seventy-six/code-block.tsx', 'components/seventy-six/code-block.css'],
+    registryDeps: ['button'],
+    intro: [
+      '<b>No syntax highlighting, ever.</b> Highlighting is six to nine colours on one surface; Ship Gate point 2 counts the colours on a screen and Law 2 allows neutrals plus one seed, so a token theme fails the gate before it renders. Code in 76° is monospace, ink, and correct. A reader who needs colour to parse a snippet has been handed a snippet that is too long.',
+      'The block sits on <code>--sv-wall</code> inside a 1px <code>--sv-line</code> border — the one place in the system a bordered inset panel is right, because the code is a <b>quotation</b> and not a card. The head carries a mono <code>label</code> on the left (a filename, a language, a target) and the copy control on the right.',
+      'The copy control reads "Copy", becomes "Copied" for two seconds at a <b>locked minimum width</b> — B10 says buttons never resize on state change — and announces through a visually-hidden polite live region rather than through the label alone. When <code>navigator.clipboard</code> is absent it is <b>not rendered at all</b>: a control that cannot work is not shown. A write that fails claims nothing; the label stays "Copy".',
+      '<code>numbered</code> puts the gutter outside the <code>&lt;code&gt;</code> element, <code>aria-hidden</code> and <code>user-select: none</code>, so a selection or a copy never picks the numbers up; the gutter is sticky, so the numbers hold while the code scrolls under them. Horizontal overflow is <code>auto</code> and never <code>hidden</code> — the firewall rejects <code>hidden</code> and C7 forbids silent truncation. <code>role="region"</code> and <code>tabIndex={0}</code> are applied <b>only when the block actually scrolls</b>, measured at runtime: a keyboard user must be able to scroll it, and an unnecessary tab stop on a block that does not scroll is its own defect.',
+    ],
+    examples: [
+      {
+        title: 'An install command',
+        description: 'A label, one line, and copy. The command is the whole content, so it is also the whole accessible name.',
+        demoKey: 'code-basic',
+        surface: 'paper',
+        code: `import { CodeBlock } from '@/components/seventy-six';
+
+<CodeBlock
+  label="TERMINAL"
+  code="npx shadcn@latest add https://76.zifala.com/r/code-block.json"
+/>`,
+      },
+      {
+        title: 'A numbered snippet',
+        description: 'Numbers live in a sticky gutter outside the code, so selecting the block copies the code alone.',
+        demoKey: 'code-numbered',
+        surface: 'paper',
+        code: `const snippet = \`<DataTable
+  columns={columns}
+  rows={rows}
+  empty="No orders match this filter."
+/>\`;
+
+<CodeBlock label="orders-table.tsx" numbered code={snippet} />`,
+      },
+    ],
+    props: [
+      {
+        component: 'CodeBlock',
+        rows: [
+          { name: 'code', type: 'string', description: 'The snippet, printed verbatim. A trailing newline is trimmed so the last line carries no empty number.' },
+          { name: 'label', type: 'string', description: 'Mono head label — a filename, a language, a target. Omitting it drops the head unless copy is available.' },
+          { name: 'numbered', type: 'boolean', defaultValue: 'false', description: 'Renders the sticky, unselectable line gutter.' },
+          { name: 'copyable', type: 'boolean', defaultValue: 'true', description: 'Offers the copy control — and only when the clipboard API exists.' },
+          { name: 'ariaLabel', type: 'string', description: 'Names the block; defaults to "Code, {label}", or "Code" when unlabelled.' },
+          { name: 'className', type: 'string', description: 'Applied to the outer panel.' },
+        ],
+      },
+    ],
+    a11y: {
+      keyboard: [
+        { keys: 'Tab', action: 'Reaches the block only when it scrolls — the tab stop exists precisely when there is something to scroll.' },
+        { keys: '← / →', action: 'Scrolls a focused overflowing block; the focus ring is the standard 2px seed.' },
+      ],
+      notes: [
+        'The scroll container becomes <code>role="region"</code> with a name only while it overflows, measured with a <code>ResizeObserver</code> — no permanent tab stop on a block that fits.',
+        'Copy confirmation is announced from a visually-hidden <code>aria-live="polite"</code> region, so the change is spoken and not merely seen.',
+        'The line gutter is <code>aria-hidden</code> and unselectable: screen readers read the code, and a copy returns the code.',
+      ],
+    },
+    donts: [
+      'No syntax highlighting — the colour count is the whole reason this component exists.',
+      'No CodeBlock for inline code: a term in running copy is a <code>&lt;code&gt;</code> in the sentence, which the B45 Prose component carries in 0.5.',
+      'No code as an image — it cannot be copied, searched, read aloud, or zoomed.',
+      'No snippet long enough to need a scrollbar in both directions; that is a file, and a file gets a link.',
+    ],
+    faq: [
+      { q: 'Can I add a highlighter myself?', a: 'The component takes a string and prints it, so nothing in the code stops you wrapping it. But a product that overrides this owns the Ship Gate consequence and declares it in its own overrides — exactly as B26 permits for provider brand marks. The escape hatch is written down, not taken quietly.' },
+      { q: 'Why no filename tab row?', a: 'One label, one snippet. A tab row of files is several snippets, which is a B38 Tabs holding several CodeBlocks — the keyboard model and the ARIA for tabbing belong to that component, not to this one.' },
+      { q: 'Why is the copy control sometimes missing?', a: 'Because <code>navigator.clipboard</code> is unavailable — an insecure origin, or a browser that withholds it. A button that would fail on press is worse than no button, so it is not rendered, and the code stays selectable.' },
     ],
   },
 ];

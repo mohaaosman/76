@@ -12,8 +12,13 @@ interface Phase {
 const ROADMAP: Phase[] = [
   {
     title: 'Shipped',
-    note: 'v0.4.0 · closing the product taxonomy',
+    note: 'v0.4.0 · the taxonomy closed',
     items: [
+      { t: 'The nine that were missing', d: 'SearchField (B36), FileField (B37), Tabs (B38), Stepper (B39), TreeList (B40), Timeline (B41), Popover (B42), CodeBlock (B43), DistributionStrip (B44). The line-by-line audit against Bootstrap, Tailwind UI, shadcn/ui and Material is now empty of everything Part F does not refuse.' },
+      { t: 'The donut has a replacement, by name', d: '<b>DistributionStrip</b> divides ONE total into its shares; <b>MeterList</b> measures each part against its own maximum. Every donut ever drawn was asking the first question and being handed the second.' },
+      { t: 'Three amendments', d: 'The Combobox picks a SET and states it as one mono line, never chips (B19). <b>FilterBar</b> sets what FilterLine states (B7). <b>Trend</b> prints the column it is about and labels its y axis — never on hover (B5).' },
+      { t: 'Split (B46)', d: 'The band-less page cut in half, with the card ACROSS the cut — <b>B2\u2019s overlap, finished</b>. The dashboard\u2019s stat cards straddle ink and wall; a <b>Plate</b> has no Sheet, so the same physics arrive as a page type. The halves carry nothing at all, so they are <code>aria-hidden</code> and the page reads as the Plate it composes. Two orientations on one prop, side and stacked.' },
+      { t: 'Two more templates', d: '<b>Analytics overview</b> — reconciling stats, a Trend whose peak is printed, wall-level Tabs, and the donut refused in favour of a strip. <b>Sign in · stacked band</b> — the same auth screen with the cut rotated. All seven auth screens ride B46.' },
       { t: 'The table’s missing half', d: '<b>SelectionHead</b> swaps the card head in place while rows are selected; <b>FilterLine</b> states active filters as one mono line with one "Clear all" — no floating bar, no chips.' },
       { t: 'Structure & display', d: 'Accordion (B27), DescriptionList (B28), Divider (B29), Avatar + AvatarGroup (B30), Spinner + Busy (B31), Kbd (B32).' },
       { t: 'The three missing inputs', d: 'NumberField (B33), Slider (B34), and DateRangeField (B35) — the F4 range, presets and two native date fields, still with no month grid.' },
@@ -45,19 +50,9 @@ const ROADMAP: Phase[] = [
     note: 'v0.5.0 · the public surface',
     items: [
       { t: 'Display tokens', d: '<code>--sv-display-1/2/3</code>, banned outside marketing block CSS by firewall rule 17.' },
-      { t: 'Prose (B36)', d: 'One registered component styling a whole subtree — and the only place Part E permits italic.' },
+      { t: 'Prose (B45)', d: 'One registered component styling a whole subtree — and the only place Part E permits italic. Renumbered from B36, which the 0.4 remainder claimed first.' },
       { t: 'Marketing blocks', d: 'Hero (type only), feature list, FAQ, footer, CTA, stat band. No photography, no illustration, no logo clouds (F11).' },
       { t: 'Pricing is a DataTable', d: 'One row per feature, one column per plan, one primary beneath. No tier cards, no "Most popular" pill.' },
-    ],
-  },
-  {
-    title: 'Still open',
-    note: 'v0.4 remainder',
-    items: [
-      { t: 'Inputs', d: 'Multi-select Combobox, file upload, search field.' },
-      { t: 'Structure', d: 'Page-level Tabs, stepper/wizard header, tree list, timeline.' },
-      { t: 'Display', d: 'Popover primitive, code block, distribution strip.' },
-      { t: 'FilterBar', d: 'The control row above the stated filter line.' },
     ],
   },
   {

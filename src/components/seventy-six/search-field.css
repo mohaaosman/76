@@ -1,0 +1,72 @@
+/* B36 · SearchField — B11 chrome plus a magnifier and one named clear. */
+
+@layer sv-components {
+  .sv-search__wrap {
+    position: relative;
+    display: flex;
+  }
+
+  .sv-search__input {
+    width: 100%;
+    /* Left clears the 14px magnifier; right is reserved permanently so the
+       text never shifts when the clear button appears on the first keystroke. */
+    padding-left: 32px;
+    padding-right: 30px;
+  }
+
+  /* WebKit's native cancel button is unlabelled, unstyleable and duplicates
+     ours — ours is a real button with a name (A4). */
+  .sv-search__input::-webkit-search-cancel-button {
+    appearance: none;
+  }
+
+  .sv-search__icon {
+    position: absolute;
+    left: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--sv-ink-faint);
+    pointer-events: none;
+  }
+
+  .sv-search__clear {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--sv-r);
+    background: none;
+    color: var(--sv-ink-soft);
+    cursor: pointer;
+    transform: translateY(-50%);
+    transition: background-color var(--sv-t-fast), color var(--sv-t-fast);
+  }
+
+  .sv-search__clear:hover:not(:disabled) {
+    background: var(--sv-wall);
+    color: var(--sv-ink);
+  }
+
+  .sv-search__clear:disabled {
+    color: var(--sv-ink-faint);
+    cursor: not-allowed;
+  }
+
+  .sv-search__result {
+    color: var(--sv-ink-soft);
+  }
+
+  /* Collapsed, not removed: display:none would drop the live region out of
+     the accessibility tree and lose the first announcement. The negative
+     margin eats the .sv-field flex gap so an absent count leaves no hole. */
+  .sv-search__result:empty {
+    height: 0;
+    margin-top: calc(-1 * var(--sv-s1));
+  }
+}

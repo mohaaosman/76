@@ -1,7 +1,14 @@
-// 76° template · Create account — B24 Plate, band-less, seed cobalt (default root).
+// 76° template · Create account — B46 Split, seed cobalt (default root).
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { Field, Button, ButtonLink, Banner, Plate, PlateHead, SocialButton } from '@/components/seventy-six';
+import {
+  Field, Button, ButtonLink, Banner, Split, PlateHead, SocialButton,
+} from '@/components/seventy-six';
+
+/* Type only — a statement and one sentence on ink. F11's answer is "type,
+   hairline, and real data", and a sign-up page has no real data yet. */
+
+/* Type only — a statement and one sentence on ink (F11). */
 
 const providers = { display: 'grid', gap: 'var(--sv-s2)' } as const;
 const rule = {
@@ -82,7 +89,7 @@ export function AuthSignUp() {
   }
 
   return (
-    <Plate
+    <Split
       footer={
         <>
           Setting up a team? <a href="#sales" style={link}>Talk to sales</a>
@@ -164,6 +171,6 @@ export function AuthSignUp() {
       <div style={foot}>
         <ButtonLink href="#sign-in">Already have an account? Sign in</ButtonLink>
       </div>
-    </Plate>
+    </Split>
   );
 }

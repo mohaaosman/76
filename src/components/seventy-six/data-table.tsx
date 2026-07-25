@@ -111,6 +111,52 @@ export function FilterLine({ filters, onClearAll, count, className }: FilterLine
   );
 }
 
+/**
+ * B7 amendment (v0.4.0) · FilterBar — the controls that SET the filters.
+ * A card can carry all three, in this order: CardTabs switches between
+ * mutually exclusive presets · FilterBar sets the filters · FilterLine
+ * states what is currently set. It is role="group", NOT role="search":
+ * this filters a set in place, it does not search the site. It carries no
+ * live region either — announcing the change is FilterLine's job, and two
+ * live regions for one change is a defect.
+ */
+export interface FilterBarProps {
+  /** The controls — a SearchField, then at most three Selects or Comboboxes. */
+  controls: ReactNode;
+  /** Anything that is not a filter: a saved-view Popover, an export Button. */
+  actions?: ReactNode;
+  /** Shown as "Clear all" only when something is actually set. */
+  active?: boolean;
+  onClearAll?: () => void;
+  label?: string;
+  className?: string;
+}
+
+export function FilterBar({
+  controls,
+  actions,
+  active = false,
+  onClearAll,
+  label = 'Filters',
+  className,
+}: FilterBarProps) {
+  return (
+    <div className={cx('sv-filterbar', className)} role="group" aria-label={label}>
+      <div className="sv-filterbar__controls">{controls}</div>
+      {(actions || active) && (
+        <div className="sv-filterbar__actions">
+          {actions}
+          {active && (
+            <button type="button" className="sv-btn sv-btn--link" onClick={onClearAll}>
+              Clear all
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function DataTable<Row>({
   caption,
   columns,

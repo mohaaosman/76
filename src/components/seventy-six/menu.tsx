@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useId, useRef } from 'react';
+import { useId } from 'react';
 import type { KeyboardEvent, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import { Button } from './button';
 import type { ButtonVariant } from './button';
+import { usePopoverAnchor } from './popover';
 import './menu.css';
 
 /**
@@ -117,43 +118,11 @@ function MenuPanel({ id, items, labelledBy, onClose, panelRef, align }: MenuPane
   );
 }
 
-/* Position the popover under its trigger (popovers are top-layer and do
-   not anchor themselves without CSS anchor positioning). */
-function usePopoverAnchor(align: 'start' | 'end') {
-  const triggerRef = useRef<HTMLElement | null>(null);
-  const panelRef = useRef<HTMLDivElement | null>(null);
-
-  const place = useCallback(() => {
-    const trigger = triggerRef.current;
-    const panel = panelRef.current;
-    if (!trigger || !panel) return;
-    const r = trigger.getBoundingClientRect();
-    const w = panel.offsetWidth;
-    const x = align === 'end' ? r.right - w : r.left;
-    panel.style.top = `${Math.round(r.bottom + 4)}px`;
-    panel.style.left = `${Math.round(Math.min(Math.max(8, x), window.innerWidth - w - 8))}px`;
-  }, [align]);
-
-  useEffect(() => {
-    const panel = panelRef.current;
-    if (!panel) return;
-    function onToggle(e: Event) {
-      if ((e as ToggleEvent).newState === 'open') {
-        place();
-        panel?.querySelector<HTMLButtonElement>('[role="menuitem"]:enabled')?.focus();
-      } else {
-        (triggerRef.current as HTMLButtonElement | null)?.focus();
-      }
-    }
-    panel.addEventListener('toggle', onToggle);
-    window.addEventListener('resize', place);
-    return () => {
-      panel.removeEventListener('toggle', onToggle);
-      window.removeEventListener('resize', place);
-    };
-  }, [place]);
-
-  return { triggerRef, panelRef };
+/* An opened menu puts focus on its first verb. B42's anchor hook only
+   places the panel and returns focus on close — knowing what to focus is
+   this component's business, not the primitive's. */
+function focusFirstItem(open: boolean, panel: HTMLDivElement) {
+  if (open) panel.querySelector<HTMLButtonElement>('[role="menuitem"]:enabled')?.focus();
 }
 
 /* ---------- MenuButton — a button whose job is opening the menu ---------- */
@@ -178,7 +147,7 @@ export function MenuButton({
   const id = useId();
   const menuId = `${id}-menu`;
   const btnId = `${id}-btn`;
-  const { triggerRef, panelRef } = usePopoverAnchor(align);
+  const { triggerRef, panelRef } = usePopoverAnchor(align, focusFirstItem);
 
   return (
     <>
@@ -243,10 +212,10 @@ export function SplitButton({
   const id = useId();
   const menuId = `${id}-menu`;
   const btnId = `${id}-btn`;
-  const { triggerRef, panelRef } = usePopoverAnchor('end');
+  const { triggerRef, panelRef } = usePopoverAnchor('end', focusFirstItem);
 
   return (
-    <span className={cx('sv-split', className)}>
+    <span className={cx('sv-splitbtn', className)}>
       <Button
         id={btnId}
         variant={variant}
@@ -254,7 +223,7 @@ export function SplitButton({
         isLoading={isLoading}
         loadingLabel={loadingLabel}
         disabled={disabled}
-        className="sv-split__main"
+        className="sv-splitbtn__main"
       >
         {label}
       </Button>
@@ -262,7 +231,7 @@ export function SplitButton({
         ref={triggerRef as React.Ref<HTMLButtonElement>}
         variant={variant}
         disabled={disabled || isLoading}
-        className="sv-split__toggle"
+        className="sv-splitbtn__toggle"
         aria-label={menuLabel}
         aria-haspopup="menu"
         aria-controls={menuId}
