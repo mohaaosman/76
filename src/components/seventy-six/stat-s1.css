@@ -55,6 +55,18 @@
     height: 16px;
   }
 
+  /* A4's `tabular-nums` arrives on the element itself via .sv-num (see
+     stat-s1.tsx), and on the moving surface it is doing a second job:
+     it is what stops a counting figure jittering. Proportional digits
+     are different widths, so a 1 becoming a 7 would shift every digit
+     to its right and the unit suffix with it, sixty times a second.
+     Tabular holds every digit at one width, so the figure stays a
+     column and only its glyphs change.
+     What tabular cannot hold is the DIGIT COUNT: a count that crosses
+     from 999 to 1,000 is one character wider. Nothing to the value's
+     left moves — the tile is before it in the flex row — and nothing
+     to its right exists except the unit, which rides with it. The
+     card itself never resizes: its width is the grid track's (B2). */
   .sv-stat__value {
     font-size: 24px;
     line-height: 1.1;

@@ -106,19 +106,6 @@ export function AuthSignUp() {
         </div>
       )}
 
-      <div style={providers}>
-        <SocialButton provider="google" action="Sign up with" />
-        <SocialButton provider="apple" action="Sign up with" />
-        <SocialButton provider="github" action="Sign up with" />
-      </div>
-
-      <div style={rule}>
-        <span style={hairline} aria-hidden="true" />
-        <span className="sv-mono" style={word}>
-          Or
-        </span>
-        <span style={hairline} aria-hidden="true" />
-      </div>
 
       <form style={stack} onSubmit={submit} noValidate>
         <Field
@@ -157,6 +144,20 @@ export function AuthSignUp() {
           Create account
         </Button>
       </form>
+
+      <div style={rule}>
+        <span style={hairline} aria-hidden="true" />
+        <span className="sv-mono" style={word}>
+          Or
+        </span>
+        <span style={hairline} aria-hidden="true" />
+      </div>
+
+      <div style={providers}>
+        <SocialButton provider="google" action="Sign up with" />
+        <SocialButton provider="apple" action="Sign up with" />
+        <SocialButton provider="github" action="Sign up with" />
+      </div>
 
       {/* Terms are the contract this account is formed under, not a separate
           consent, so they read as running copy with real links rather than a

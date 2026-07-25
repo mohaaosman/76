@@ -15,6 +15,8 @@ import { EmptyScreen } from '@/blocks/empty-screen';
 import { DashboardHeader } from '@/blocks/dashboard-header';
 import { MarketingHome } from '@/templates/marketing-home';
 import { PricingPage } from '@/templates/pricing-page';
+import { InvoiceCheckout } from '@/templates/invoice-checkout';
+import { PaymentCheckout } from '@/templates/payment-checkout';
 import { ErpPurchaseOrder } from '@/templates/erp-purchase-order';
 import { CrmDealBoard } from '@/templates/crm-deal-board';
 import { ErpDashboard } from '@/templates/erp-dashboard';
@@ -40,6 +42,8 @@ import emptyScreenSrc from '@/blocks/empty-screen.tsx?raw';
 import dashboardHeaderSrc from '@/blocks/dashboard-header.tsx?raw';
 import marketingHomeSrc from '@/templates/marketing-home.tsx?raw';
 import pricingPageSrc from '@/templates/pricing-page.tsx?raw';
+import invoiceCheckoutSrc from '@/templates/invoice-checkout.tsx?raw';
+import paymentCheckoutSrc from '@/templates/payment-checkout.tsx?raw';
 import erpPurchaseOrderSrc from '@/templates/erp-purchase-order.tsx?raw';
 import crmDealBoardSrc from '@/templates/crm-deal-board.tsx?raw';
 import erpDashboardSrc from '@/templates/erp-dashboard.tsx?raw';
@@ -71,6 +75,8 @@ export const compositionRender: Record<string, CompositionRender> = {
   'dashboard-header': { Component: DashboardHeader, source: dashboardHeaderSrc },
   'marketing-home': { Component: MarketingHome, source: marketingHomeSrc },
   'pricing-page': { Component: PricingPage, source: pricingPageSrc },
+  'invoice-checkout': { Component: InvoiceCheckout, source: invoiceCheckoutSrc },
+  'payment-checkout': { Component: PaymentCheckout, source: paymentCheckoutSrc },
   'erp-purchase-order': { Component: ErpPurchaseOrder, source: erpPurchaseOrderSrc },
   'crm-deal-board': { Component: CrmDealBoard, source: crmDealBoardSrc },
   'erp-dashboard': { Component: ErpDashboard, source: erpDashboardSrc },

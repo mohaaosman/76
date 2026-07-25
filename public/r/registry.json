@@ -208,6 +208,25 @@
       ]
     },
     {
+      "name": "sum-list",
+      "type": "registry:ui",
+      "title": "SumList",
+      "description": "The amount block — a set of charges and the figure they add up to. One job: State a set of amounts and the figure they add up to.",
+      "categories": [
+        "widgets"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/sum-list.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/sum-list.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "button",
       "type": "registry:ui",
       "title": "Button",
@@ -1155,6 +1174,36 @@
       "files": [
         {
           "path": "templates/pricing-page.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "template-invoice-checkout",
+      "type": "registry:block",
+      "title": "Invoice",
+      "description": "A document a business sends and a customer pays — and it prints.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/invoice-checkout.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "template-payment-checkout",
+      "type": "registry:block",
+      "title": "Checkout",
+      "description": "A card payment in the shape people expect, refusing what 76° refuses.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/payment-checkout.tsx",
           "type": "registry:block"
         }
       ]

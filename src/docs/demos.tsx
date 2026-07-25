@@ -56,6 +56,7 @@ import {
   Select,
   SelectionHead,
   SiteFooter,
+  SumList,
   Skeleton,
   Slider,
   SocialButton,
@@ -1068,7 +1069,7 @@ function FormError() {
 const plateFit = { minHeight: 0, padding: 0 } as const;
 const stackTight = { display: 'grid', gap: 'var(--sv-s2)' } as const;
 const stackForm = { display: 'grid', gap: 'var(--sv-s4)' } as const;
-const pairCols = { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--sv-s4)' } as const;
+const pairCols = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 'var(--sv-s4)' } as const;
 const orRule = {
   display: 'grid',
   gridTemplateColumns: '1fr auto 1fr',
@@ -2445,6 +2446,26 @@ function ProseMarkdown() {
   );
 }
 
+/* ------------------------------------------------ v0.7 · the money block */
+
+function SumBasic() {
+  return (
+    <div style={{ maxWidth: 420 }}>
+      {/* Every figure reconciles: 25,600 − 1,280 = 24,320; VAT 20% of that is
+          4,864; 24,320 + 4,864 = 29,184; less the 7,296 deposit = 21,888. */}
+      <SumList
+        rows={[
+          { label: 'LINE TOTAL', amount: '$25,600.00' },
+          { label: 'DISCOUNT', amount: '\u2212$1,280.00', note: '5% agreed rate' },
+          { label: 'VAT 20%', amount: '$4,864.00', note: '20% of $24,320.00' },
+          { label: 'DEPOSIT RECEIVED', amount: '\u2212$7,296.00', note: '19 JUN 2026' },
+          { label: 'BALANCE DUE', amount: '$21,888.00', strong: true },
+        ]}
+      />
+    </div>
+  );
+}
+
 /* ------------------------------------------------ registry */
 
 export const demos: Record<string, ComponentType> = {
@@ -2548,4 +2569,5 @@ export const demos: Record<string, ComponentType> = {
   'errsum-basic': ErrSumBasic,
   'errsum-form': ErrSumForm,
   'table-totals': TableTotals,
+  'sum-basic': SumBasic,
 };

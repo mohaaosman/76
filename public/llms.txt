@@ -20,6 +20,7 @@
 - [DataTable](https://76.zifala.com/llms/data-table.md): The ERP workhorse: mono headers, mono IDs, dot+word statuses, right-aligned tabular numbers, full keyboard contract. One job: Answer "what exactly happened."
 - [CardTabs](https://76.zifala.com/llms/card-tabs.md): In-card filter tabs on the card hairline — honest ARIA in both of its two modes. One job: Filter one card's content in place.
 - [ActivityList](https://76.zifala.com/llms/activity-list.md): A mono timestamp column beside sentence rows with bold entities. Absolute time, always. One job: Answer "what needs me."
+- [SumList](https://76.zifala.com/llms/sum-list.md): The amount block — a set of charges and the figure they add up to. One job: State a set of amounts and the figure they add up to.
 - [Button](https://76.zifala.com/llms/button.md): Native <button> with four registered variants — no shadows, no transforms, one primary per view region. One job: Trigger exactly one named action.
 - [StatusWord](https://76.zifala.com/llms/status-word.md): A 6px currentColor dot + a colored word. The word is the meaning; the dot is rhythm. One job: State the status of one thing, in one word.
 - [Card](https://76.zifala.com/llms/card.md): The paper primitive: one shadow, one radius, zero border. Every widget composes it. One job: Be the sheet of paper a widget is printed on.
@@ -82,6 +83,8 @@ Full screens built only from the taxonomy — install with npx shadcn@latest add
 
 - Public home (`template-marketing-home`, seed cobalt): The public surface — a masthead, figures, columns, one ask.
 - Pricing (`template-pricing-page`, seed cobalt): Pricing as a DataTable — no tier cards, no "Most popular" pill.
+- Invoice (`template-invoice-checkout`, seed cobalt): A document a business sends and a customer pays — and it prints.
+- Checkout (`template-payment-checkout`, seed signal): A card payment in the shape people expect, refusing what 76° refuses.
 - Purchase order (`template-erp-purchase-order`, seed cobalt): One operational document — its facts, its lines, its history, its verbs.
 - Deal board (`template-crm-deal-board`, seed verdigris): The pipeline as a board — four stage cards, and a deal that moves by a named verb.
 - ERP dashboard (`template-erp-dashboard`, seed cobalt): A warehouse operations overview — the densest 76° screen.

@@ -35,7 +35,17 @@
 
   /* The one line of layout that answers for the DOM order: the <dt> is first
      in the markup so the pair is announced term-then-figure, and the figure
-     is first on screen because that is what the reader came for. */
+     is first on screen because that is what the reader came for.
+
+     A4's `tabular-nums` arrives on this element via .sv-num (see
+     proof-row.tsx) and inherits into both children of a counting figure —
+     the visible span and the visually-hidden one. On the moving surface it
+     is what stops the count jittering: every digit is one width, so the
+     figure stays a column while its glyphs change. The digit COUNT still
+     grows as a count climbs, and nothing moves when it does — the item is a
+     `minmax(0, 1fr)` grid track whose width the content does not set, and
+     the figure is the first line of a left-aligned column, so it grows into
+     space that was already reserved for it. The hairline never moves. */
   .sv-proof__figure {
     order: -1;
     font-size: var(--sv-display-3);

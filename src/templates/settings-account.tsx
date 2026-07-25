@@ -29,7 +29,7 @@ const subTabs = [
   { label: 'DELIVERY', href: '#delivery' },
 ];
 
-const grid2 = { display: 'grid', gap: 'var(--sv-s4)', gridTemplateColumns: '1fr 1fr' } as const;
+const grid2 = { display: 'grid', gap: 'var(--sv-s4)', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))' } as const;
 const stack = { display: 'grid', gap: 'var(--sv-s3)' } as const;
 const rightBar = { display: 'flex', gap: 'var(--sv-s3)', justifyContent: 'flex-end' } as const;
 

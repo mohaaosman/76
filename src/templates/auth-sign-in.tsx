@@ -102,19 +102,6 @@ export function AuthSignIn() {
         </div>
       )}
 
-      <div style={providers}>
-        <SocialButton provider="google" />
-        <SocialButton provider="apple" />
-        <SocialButton provider="github" />
-      </div>
-
-      <div style={rule}>
-        <span style={hairline} aria-hidden="true" />
-        <span className="sv-mono" style={word}>
-          Or
-        </span>
-        <span style={hairline} aria-hidden="true" />
-      </div>
 
       <form style={stack} onSubmit={submit} noValidate>
         <Field
@@ -144,6 +131,20 @@ export function AuthSignIn() {
           Sign in
         </Button>
       </form>
+
+      <div style={rule}>
+        <span style={hairline} aria-hidden="true" />
+        <span className="sv-mono" style={word}>
+          Or
+        </span>
+        <span style={hairline} aria-hidden="true" />
+      </div>
+
+      <div style={providers}>
+        <SocialButton provider="google" />
+        <SocialButton provider="apple" />
+        <SocialButton provider="github" />
+      </div>
 
       <div style={foot}>
         <ButtonLink href="#reset">Forgot password?</ButtonLink>

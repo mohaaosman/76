@@ -17,7 +17,7 @@ These rules are written to be lintable. Grep the codebase; any hit is a violatio
 - `text-shadow`, `filter: drop-shadow` — never.
 - Any hex/rgb/hsl color literal outside `tokens.css` — in `.css` and in `.tsx` alike (an inline SVG `fill="#4285F4"` is the same defect). Components reference tokens only. The Foundations page is the one registered exception: it is the palette specimen.
 - `color: var(--sv-paper)` — paper is the card surface, not a mark. Use `--sv-on-dark`.
-- `animation` durations > 200ms; any `transition` on layout properties (width/height/top/left/margin); keyframe bounces/springs.
+- `animation` durations > 200ms; any `transition` on layout properties (width/height/top/left/margin); keyframe bounces/springs. **One registered amendment: `--sv-t-count` is 640ms** — see "The motion posture" in Part B. It is the only duration in the system over the ceiling, it is off by default, and the ceiling stands for everything else.
 - `!important` — a component that needs it is mis-structured.
 - Font families other than Hanken Grotesk / Fragment Mono (system stack fallbacks only).
 - **Rule 18 — nothing touches the paper's edge by accident.** `.sv-card` carries no padding *by design*: a DataTable's rows are hairline-ruled edge to edge and a CardHead owns its own row, so a card that padded everything would have to un-pad them again. The cost is that a widget with no inset of its own — a `MeterList`, a `Trend`, a `Field`, a `Prose`, a `Timeline` — dropped straight into a `<Card>` renders flush against the corners. It has happened more than once, it is invisible in a diff, and until now the only thing standing between the system and it was a comment. A capitalised component that is a **direct child of `<Card>`** must either be full-bleed by specification or self-padded (both lists are registered in `slop-firewall.mjs`), or sit inside `<div className="sv-card__body">`. This is the one firewall rule that reads structure rather than lines, because the defect is a parent/child relationship. Adding a name to the allowlist is a Book change — it is a claim that the component draws to the card's edge on purpose.
@@ -447,6 +447,52 @@ A purchase-order line table is fourteen columns wide; at column seven the reader
 
 The band prints as paper with a rule under it, because a 1280px ink rectangle is a page of toner and a header nobody can annotate. `--sv-shadow` goes `none` and the card's edge comes from a hairline instead, because A4's zero-border rule exists to protect an elevation that does not exist on paper. Meaning is never carried by colour in 76° (C5), so a greyscale printer loses nothing that was load-bearing.
 
+### B46 · `Split` — v0.6.1 amendment · the card's measure is a constant
+
+`.sv-split__plate` centred the Plate on both axes, which shrink-wrapped it to its widest LINE: the same 400px card came out 400px on *Create account* — whose password hint runs to two lines — and **286px on *Sign in***, whose longest line is a button label. **A card's measure is a constant of the system, never a function of the copy inside it.** Two auth screens side by side have to be the same object. The plate now stretches horizontally and centres vertically; it paints nothing, so stretching is free, and the Plate's own `justify-items: center` still puts its 400px inner exactly on the seam.
+
+**The wordmark is centred.** It is the one line in the card that is — the title, the fields and the footer stay left, because that is how the system sets type. The mark is not type in that sense: it is what the page belongs to, it is the same object on all seven auth screens, and B24 already centres it above the card on a plain Plate. When B46 moves it INTO the card it keeps the position it had.
+
+### B26 · `SocialButton` — v0.6.1 amendment · the stack goes UNDER the form
+
+The provider stack sits **below** the credential form, under the hairline `OR`, not above it. A federated button above the fields makes the page's first offer someone else's, and it puts three ghost buttons between the reader and the two inputs they came to fill. The credential form is the page's job; the providers are the alternative to it, and an alternative is stated after the thing it is an alternative to.
+
+### B28 · `DescriptionList` — v0.6.1 amendment · the row's inset
+
+Rows take **18px horizontal padding — exactly B7's cell inset.** B28 already says the value `kind` inherits the table's type discipline; it inherits the table's INSET for the same reason. The hairline still runs edge to edge, as a `<tr>` border does, but the type no longer touches the paper's corner — which is the defect firewall rule 18 exists to catch, and which this row was quietly committing everywhere it was a direct child of a card.
+
+### B55 · `SumList` (v0.7)
+
+**B44 `DistributionStrip`'s arithmetic sibling, and the pairing is the point: B44 divides ONE total into its shares; B55 builds ONE total FROM its lines.** B44 starts with 128,953 sessions and asks how they split; B55 starts with a line total, a discount, a tax and a carriage charge and asks what the reader owes. They share a voice deliberately — mono uppercase label left, pre-formatted figure right, the closing figure at B4's 19/700 step — because they are the same arithmetic read in opposite directions. One job: **state a set of amounts and the figure they add up to.**
+
+**The boundary against B7, stated here because someone will otherwise use the wrong one.** INSIDE a table the closing figures are B7's `totals`: a real `<tfoot>` keyed to the table's own columns and repeated by the browser at the foot of every printed page. `SumList` is that block wherever it sits OUTSIDE a table — the amount-due card beside an invoice, the order summary beside a payment form. The test is not where the block looks right, it is whether the amounts belong to the table's columns: a line total does; shipping, a discount and tax belong to the DOCUMENT and have no column to sit in.
+
+- **It never computes.** Every amount is a pre-formatted string the caller supplies (C9, A4), the currency symbol and the minus sign on a discount included. A component that adds up the numbers it was handed can disagree with the invoice, and the invoice is the document of record.
+- It carries no inset of its own — inside a `<Card>` it takes `sv-card__body` (rule 18), like B6 and B41.
+- Don't: never computes a sum; never a currency symbol the caller did not supply; never a minus the component invented; never more rows than a reader can check by eye; never inside a table — that is B7 `totals`.
+
+### B5 · `Trend` — v0.7 amendment · the fit, the readout, and the opt-in draw
+
+**The fit was a bug, and it is worth naming.** A chart card in a `main` split stretches to match the taller card beside it, and the plot rendered ~90px tall at the top of a ~490px card with 250px of dead paper beneath. **A chart card is the one card whose content should GROW into the space it is given** — every other card wraps its content and lets the grid stretch the paper, but a chart placed at the top of a card it did not fill has not been fitted, it has been dropped in. The plot now fills the height available, with a floor so a short card cannot squash it.
+
+**`readouts` is enhancement, and that is the whole of its licence under C8.** C8 forbids hover-dependent information and B5's `highlight` amendment exists precisely because "a chart that only tells the truth under a pointer has failed C8". So: the readout row is **printed from the first frame**, it always names and states SOME column, and every figure it prints is a figure the marks already encode. Pointing at a column changes which one is stated; it never reveals a figure that was hidden. The strip is keyboard-reachable with a roving tab stop and arrow keys, because a pointer-only affordance fails C4 as well as C8. A reader who never touches the chart loses nothing — that is the test.
+
+**The animated draw-in stays refused by default.** B5's Don't list is unamended: with the motion posture absent, the chart renders its finished state on first paint, exactly as it always has. Under `[data-motion="on"]` a line may animate its own `stroke-dashoffset`, which is legal precisely because the *un-animated* state is the finished line — the final state is correct whether or not the animation ever runs.
+
+### The motion posture — v0.6.1
+
+**Motion is a registered, opt-in posture, declared on a wrapper and resolved at the nearest declaration — exactly as `data-mode` and `data-seed` are.** `<div data-motion="on">` turns `--sv-t-enter` and `--sv-t-count` from `0ms` into durations; absent, they are zero and every animated path renders its finished state on first paint. `prefers-reduced-motion: reduce` collapses it to zero no matter what anyone declared, and so does print. The reduce block matches the bare `[data-motion]` attribute rather than `:root`, for the same reason the v0.4.0 seed amendment matches the descendant position: a nested wrapper's literal would otherwise shadow it.
+
+**The governing rule, and the test: motion never carries information.** Every figure a count-up animates to is already printed and already in the accessible name at first paint. Delete every animation in the system and no screen states one thing less — which is the same test B44 `DistributionStrip` passes ("delete the strip and the card still answers the question"). A motion that fails that test is a defect, not a setting.
+
+**A1's 200ms ceiling is amended once, by name.** `--sv-t-enter` is **200ms — at the ceiling, not over it**: the ceiling is a definition, not a budget, and one opacity step plus 6px does not need more. `--sv-t-count` is **640ms, and that IS an amendment**, stated here rather than smuggled past a grep that would never have seen it (it is not a CSS `animation`). The argument: the ceiling protects a reader who is *waiting*, and nobody waits on a count-up whose figure is already announced; below ~400ms a six-digit count is a flicker, so the real choice was a readable count or none at all. It is fenced three ways — off by default, zero under reduced motion, zero on paper.
+
+**`countTo` + `format` are an inseparable pair** on B3 `StatS1` and B50 `ProofRow` — a union type, the same enforcement B42 `Popover` uses for `title`/`ariaLabel`. The component still never formats a number (C9), the pre-formatted string stays the source of truth, and the screen reader never hears a number counting: the animated mark is `aria-hidden` and the final figure is present, in words, from first paint.
+
+### B1 · `BandTopbar` — v0.6.1 amendment · `navAlign`
+
+`navAlign="center"` centres the nav in the row, brand left and utilities right. A product band reads left to right — brand, then the sections of the app, in the order the work happens. **A public page has no work and no order:** its links are peers, and centring them says so. Product screens keep `start`, which is the default. Below 1000px the nav leaves the band for the drawer (A2) and the rule has nothing left to centre.
+
 ### B1 · `BandTopbar` — v0.5 amendment · the marketing shell
 
 `app` and `nav` are both optional. **The marketing shell is the band with its product navigation removed**: it keeps the wordmark and the right cluster, carries marketing links instead of app sections, and has no `BandSubTabs` row at all, because a public page has no section to sub-divide. A public page is not an app, so the wordmark stands alone and the hairline has nothing to divide. Below 1000px `BandNav` still swaps itself for the left Drawer — the public surface inherits the 320px floor rather than re-solving it.
@@ -554,7 +600,7 @@ Light-first stands: light is the default, dark is opt-in via `<html data-mode="d
 
 1. Grep Part A1 patterns — zero hits.
 2. Count colors on the screen: neutrals + one seed + at most both functional colors as words/dots. Anything else fails. **Then check WHERE the seed landed (F14): the one seed fill is on the action, and every figure on the screen is ink.**
-3. Every widget is a registered type (S1, Progress, Trend, MeterList, DataTable, CardTabs, ActivityList — from v0.2.0: Combobox, Menu, Drawer, Banner, Badge — from v0.3.0: Plate, PinField, SocialButton — from v0.4.0: Accordion, DescriptionList, Divider, Avatar, Spinner/Busy, Kbd, NumberField, Slider, DateRangeField, SearchField, FileField, Tabs, Stepper, TreeList, Timeline, Popover, CodeBlock, DistributionStrip, Split — from v0.5: Prose, and on the PUBLIC surface only, Masthead, FeatureList, CallToAction, ProofRow, SiteFooter — from v0.6: ErrorSummary) — if a new type was needed, it is named, single-jobbed, and added to Part B in the same change. If Part F refuses it, it is a screen, not a component.
+3. Every widget is a registered type (S1, Progress, Trend, MeterList, DataTable, CardTabs, ActivityList — from v0.2.0: Combobox, Menu, Drawer, Banner, Badge — from v0.3.0: Plate, PinField, SocialButton — from v0.4.0: Accordion, DescriptionList, Divider, Avatar, Spinner/Busy, Kbd, NumberField, Slider, DateRangeField, SearchField, FileField, Tabs, Stepper, TreeList, Timeline, Popover, CodeBlock, DistributionStrip, Split — from v0.5: Prose, and on the PUBLIC surface only, Masthead, FeatureList, CallToAction, ProofRow, SiteFooter — from v0.6: ErrorSummary — from v0.7: SumList) — if a new type was needed, it is named, single-jobbed, and added to Part B in the same change. If Part F refuses it, it is a screen, not a component.
 4. Every S1 footnote passes the "so what" test (new information, not paraphrase).
 5. Tab through the screen: visible focus everywhere, order sane, skip-link present (a Plate is the one exception, B24), ⌘K opens.
 6. Squint test: the page reads as ink band + white paper on a platinum wall — a Plate (B24) reads as one card and a wordmark on the wall; nothing glows, nothing floats, nothing performs.
@@ -611,6 +657,8 @@ Where you are is the Band's job (B1): the nav item is `aria-current`, the sub-ta
 The reason is arithmetic, not taste. **If the number is as loud as the button, the reader has two primaries, and a screen with two primaries has none.** Law 2 spends one accent per screen; a stat that takes it has taken it from the one control that needed it. This is why B50 `ProofRow` sets its figures in `--sv-ink` while the `CallToAction` below it carries the only seed rectangle on the page, and why B3 puts the seed in a 34px tile beside the value rather than in the value.
 
 Corollary for the public surface: a `ProofRow` and a `CallToAction` on one page are the test case. Squint at it (Ship Gate 6) — exactly one thing should be coloured, and it should be the thing you click.
+
+**F11'S REPLACEMENT COLUMN IS LOAD-BEARING: "type, hairline, and REAL DATA".** Every library the public page is measured against puts product photography where its hero is. F11 refuses that and A2 refuses the stock-photo card — but a component library has the one asset that qualifies as real data: **the components themselves, running, at rest, with figures that reconcile.** The 76° landing page therefore carries a SPECIMEN row — a live `StatS1` row, a live `DataTable` with its `<tfoot>`, a live `MeterList` — rendered by the same code the installer ships. Nothing on it is a picture of the product; it IS the product. It is not `aria-hidden`, because it is real and focusable, and a reader may tab into it.
 
 **F11 SURVIVED THE PUBLIC SURFACE.** v0.5 dressed the pitch without repealing a single refusal: no photography, no illustration, no 3D, no logo cloud. B47 `Masthead` has no image slot, B48 `FeatureList` has no icon, and B50 `ProofRow` has no chart. The one thing that changed is the type ramp — three display steps, fenced to those components by firewall rule 17. A refusal that survives the surface it was written against is a refusal that was right.
 

@@ -161,6 +161,25 @@ function check(file, source) {
       flag('paper-as-text (use --sv-on-dark for marks on band/seed)');
     }
 
+    /* RULE 19 · A CONTENT TRACK IS minmax(0, 1fr), NEVER A BARE 1fr.
+       A grid item's default min-width is `auto`, so a bare `1fr` track
+       floors at its MIN-CONTENT width: one long word, one unbreakable SKU,
+       one field hint that runs long, and the track refuses to shrink and
+       pushes the page into a horizontal scroll. C7 forbids that at 320px,
+       Ship Gate point 11 checks for it, Part E states it — and until now
+       nothing enforced it, so it kept coming back.
+       Only the multi-column CONTENT patterns are flagged: `1fr 1fr` and
+       `repeat(N, 1fr)`. `1fr auto 1fr` is deliberately not — it is the
+       rule/label/rule spacer (the "OR" divider), whose flexible tracks hold
+       nothing at all and therefore have no content to floor at. */
+    const tracks = line.match(/grid-template-columns\s*:\s*([^;]+)|gridTemplateColumns:\s*'([^']+)'/);
+    if (tracks) {
+      const value = tracks[1] ?? tracks[2] ?? '';
+      const bareRepeat = /repeat\(\s*\d+\s*,\s*1fr\s*\)/.test(value);
+      const barePair = /\b1fr\s+1fr\b/.test(value);
+      if (bareRepeat || barePair) flag('bare 1fr content track (rule 19: use minmax(0, 1fr))');
+    }
+
     /* RULE 17 · display type outside the public surface (see the set above). */
     if (
       /var\(--sv-display-[1-3]\)/.test(line) &&

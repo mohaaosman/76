@@ -101,6 +101,103 @@
      in the system uses var(--sv-t) / var(--sv-t-fast), which collapse
      to 0ms under prefers-reduced-motion (see tokens.css). 76° loses
      nothing, by design. */
+
+  /* ============================================================
+     The moving surface (v0.6.1) — what the PAGE does with the
+     posture. `tokens.css` states what the two motion tokens
+     BECOME when a wrapper declares `data-motion='on'`; these two
+     rules are the whole of what uses them HERE.
+
+     The posture is NOT the mode or the medium, and the difference
+     is worth stating so nobody quotes the wrong rule at it. A
+     component may never branch on the mode or the medium because
+     dark and print change what a mark IS — the same paint, on a
+     different surface — so a branch there means two truths. The
+     posture changes only whether something MOVES on its way to a
+     state it would have reached anyway, so a component may gate a
+     transition of its own on it. B5 `Trend` does exactly that for
+     its draw-in, because a line's stroke cannot be expressed
+     through a generic entrance class. What no component may do is
+     read the posture to decide what it SAYS.
+
+     MOTION NEVER CARRIES INFORMATION. Delete either rule and the
+     page states everything it stated before — a scroll still
+     arrives, an element is still there.
+     ============================================================ */
+
+  /* Smooth scrolling is a property of the SCROLLING ELEMENT, so it is
+     matched in the same-element position only: declared on
+     <html data-motion='on'> it covers in-page anchors and every
+     `scrollIntoView` in the document, and a nested scroll container
+     that wants it declares the posture on itself. A posture wrapper
+     that is not a scroller has nothing to smooth.
+
+     The docs shell's route-change `window.scrollTo` deliberately
+     passes `behavior: 'instant'` and keeps passing it: an explicit
+     behavior overrides `scroll-behavior`, which is the intent. Going
+     to the top of a page you just navigated to is not a transition
+     the reader asked for — it is the browser's own behaviour on a
+     multi-page site, restated by a hash-routed SPA. A 900px smooth
+     scroll on every route change is the page performing.
+
+     A duration token cannot express this one — the browser owns the
+     easing and the length — so it is gated on the media query
+     directly. Under `reduce` the declaration is never made, which is
+     the same 0ms the tokens take, spelled the only way this property
+     can spell it. */
+  @media (prefers-reduced-motion: no-preference) {
+    [data-motion='on'] {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* The entrance — the one reusable move on the surface, and INERT
+     unless the posture is declared: with no `[data-motion='on']`
+     above it, `.sv-enter` carries no animation at all, not a
+     0ms one.
+
+     Matched in BOTH positions for the reason the v0.4.0 seed
+     amendment gives about nearest declarations: the posture is
+     declared on a WRAPPER, and that wrapper is sometimes the element
+     entering and sometimes the element containing it. A descendant
+     selector alone would leave a section that declares its own
+     posture and animates itself unstyled — the one element that
+     asked for the entrance.
+
+     Transform and opacity ONLY. A1 forbids transitioning layout
+     (width/height/top/left/margin/padding), and a transform is not
+     layout: it moves paint, not the box, so nothing around it
+     reflows and no other element is asked to move. `both` holds the
+     opening frame before the first paint and the closing one after,
+     so the element never flashes at full opacity first.
+
+     ONE keyframe. The system has exactly one continuous animation
+     (`sv-rotate`, B31) and this is not a second: it runs once, it
+     does not loop, and it ends. 6px, because the move has to be
+     legible as an arrival and not as travel — B21's drawer slides
+     24px because it comes from off-screen; this comes from where it
+     already is.
+
+     The easing decelerates and never overshoots: y stays in [0,1]
+     (Ship Gate 13 / Part E). It is ease-out-cubic, the same curve
+     `count-up.ts` runs in JS, so the two moves on this surface are
+     one move at two layers. */
+  [data-motion='on'] .sv-enter,
+  [data-motion='on'].sv-enter {
+    animation: sv-enter var(--sv-t-enter) cubic-bezier(0.215, 0.61, 0.355, 1) both;
+  }
+
+  @keyframes sv-enter {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 /* ============================================================

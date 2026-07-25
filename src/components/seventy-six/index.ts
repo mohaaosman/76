@@ -14,7 +14,7 @@ export { StatS1, Delta } from './stat-s1';
 export type { StatS1Props, DeltaProps } from './stat-s1';
 export { Progress } from './progress';
 export { Trend, Sparkline } from './trend';
-export type { TrendSeries, SparklineProps } from './trend';
+export type { TrendSeries, TrendColumn, SparklineProps } from './trend';
 export { MeterList } from './meter-list';
 export type { MeterItem } from './meter-list';
 export { DistributionStrip } from './distribution-strip';
@@ -107,3 +107,8 @@ export { SearchCommand, useSearchCommand } from './search-command';
 export type { CommandItem } from './search-command';
 export { Skeleton, SkeletonGate } from './skeleton';
 export { Tooltip } from './tooltip';
+
+/* v0.7 · B44's arithmetic sibling. B44 divides ONE total into its shares;
+   SumList builds ONE total from its lines. */
+export { SumList } from './sum-list';
+export type { SumListProps, SumRow } from './sum-list';

@@ -94,8 +94,8 @@ leaks.
 | **0.3** | The 320px floor + the auth surface | Shipped |
 | **0.4** | Closing the product taxonomy | Shipped |
 | **0.5** | The public surface | Shipped |
-| **0.6** | The promises already made | Next |
-| **0.7** | Posting the work | Planned |
+| **0.6** | The promises already made | Shipped |
+| **0.7** | Motion, money, and posting the work | In progress |
 | **0.8** | The number in relation | Planned |
 | **0.9** | The record and the console | Planned |
 
@@ -211,7 +211,7 @@ typist presses most.
 |---|---|---|
 | **B53** | `EntryTable` | Type one bounded number into every row of a fixed list of lines, and post the lot once. |
 | **B54** | `ScanField` | Take one identifier at a time, scanned or typed, and state what the last one resolved to. |
-| **B55** | `SumList` | State a set of amounts and the figure they add up to. |
+| **B55** | `SumList` | **Shipped.** State a set of amounts and the figure they add up to. |
 | **B56** | `JobList` | State what became of each background operation this reader started, and where its result landed. |
 | **B7 amd** | `rowSync` | State that a row's change has not been saved yet, or failed to save. |
 | **surface** | Density | Re-tokenize spacing, row height and control minimum into three registered postures, declared on a wrapper and resolved at the nearest declaration. |

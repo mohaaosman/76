@@ -163,4 +163,200 @@
     color: var(--sv-ink);
     font-weight: 700;
   }
+
+  /* ---- v0.6.1 · a chart card GROWS into the card it was given ---- */
+
+  /* Every other widget in the system wraps its content and lets the grid
+     stretch the paper under it. A chart is the one exception, and the
+     Momentum card in crm-pipeline is why it had to be written down: a
+     split="main" row stretches it to match the taller card beside it, and a
+     90px plot pinned to the top of a 490px card with 250px of white under
+     the x labels has not been FITTED to its card, it has been dropped into
+     it.
+     The chain is opened one link at a time — card → body → trend →
+     plotwrap → plotarea → <svg> — and :has() scopes it to a card whose body
+     actually holds a Trend, so nothing else on any screen changes shape.
+     Every rule below grows with flex-basis AUTO, never 0: in a card that
+     the grid did NOT stretch there is no free space to distribute, the
+     hypothetical sizes are still the content sizes, and an ordinary-height
+     Trend renders to the pixel as it did before. */
+  .sv-card:has(> .sv-card__body > .sv-trend) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sv-card__body:has(> .sv-trend) {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .sv-card__body > .sv-trend {
+    flex-grow: 1;
+  }
+
+  .sv-card__body > .sv-trend .sv-trend__plotwrap {
+    flex-grow: 1;
+  }
+
+  /* The plot becomes a BOX WITH A KNOWN RATIO rather than an image with an
+     intrinsic height: the <svg> is lifted out of flow, so this element's
+     height is decided by `aspect-ratio` alone and there is no chicken-and-
+     egg between the two. At an ordinary card height the ratio yields
+     exactly the pixel height the in-flow <svg> yielded before — it is the
+     same viewBox arithmetic, published from the component as
+     --sv-trend-ratio. When the row stretches the card, the flex line's
+     stretch beats the ratio and the plot simply gets taller.
+     The floor is the "short card" case: below about 120px the grid, the
+     marks and the y ticks stop being a measurement and become a texture. */
+  .sv-card__body > .sv-trend .sv-trend__plotarea {
+    aspect-ratio: var(--sv-trend-ratio, 560 / 160);
+    min-height: 120px;
+  }
+
+  .sv-card__body > .sv-trend .sv-trend__plot {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ---- v0.6.1 · the column readout (B5 amendment) ---- */
+
+  /* The strip is a HIT layer, not a mark layer. It is drawn before the plot
+     so its tint reads behind the bars instead of across them, and the plot
+     gives up the pointer so the columns can take it. Nothing here is a
+     mark: the marks are unchanged, and so is every figure they encode. */
+  .sv-trend--live .sv-trend__plot {
+    position: relative;
+    pointer-events: none;
+  }
+
+  .sv-trend__cols {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--sv-trend-hits), minmax(0, 1fr));
+  }
+
+  /* A bare column: no border, no radius, no fill until it is pointed at or
+     focused, because everything it reveals is ALREADY printed in the
+     readout line below the plot (C8 — hover is enhancement only). Each
+     column is the full height of the plot, which clears C8's 48px on the
+     axis that matters; its width is the data's, and a column too narrow to
+     tap is still reachable by the arrow keys and still stated by the row. */
+  .sv-trend__col {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    transition: background var(--sv-t-fast);
+  }
+
+  .sv-trend__col--on {
+    background: var(--sv-seed-tint);
+  }
+
+  .sv-trend__col:focus-visible {
+    outline: 2px solid var(--sv-seed);
+    outline-offset: 2px;
+  }
+
+  /* Printed at rest, so it is a statement the chart makes and not a tooltip
+     the chart hides. The name is ink/700 and the figures soft — never faint
+     (C2): this is a line a reader is meant to READ. */
+  .sv-trend__readout {
+    display: flex;
+    gap: var(--sv-s2);
+    align-items: baseline;
+    min-height: 18px;
+    margin: 0;
+    font-size: 11.5px;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-trend__readout-name {
+    flex: none;
+    color: var(--sv-ink);
+    font-weight: 700;
+  }
+
+  /* Aligned to the plot's left edge, exactly as the x labels are, so the
+     row reads as part of the chart and not as a caption under the card. */
+  .sv-trend__readout--inset {
+    padding-left: 34px;
+  }
+
+  /* ---- v0.6.1 · the draw-in, and it is OFF until the app asks ---- */
+
+  /* B5's Don't list bans an animated draw-in, and that ban is NOT repealed
+     here — it is made conditional on a posture the product has to set.
+     [data-motion='on'] is absent by default and tokens.css drops it under
+     prefers-reduced-motion, so with no posture NOT ONE declaration below
+     applies and the chart paints finished on the first frame, exactly as it
+     does today.
+     Transform, opacity and a dash offset only (A1 forbids animating
+     layout), no overshoot, and every animation's FINAL frame is the
+     element's ordinary state — so a chart whose animation never runs, or is
+     interrupted, is still a correct chart.
+     Duration and curve are the surface's own, not new ones: --sv-t-enter is
+     the registered entrance step (0ms at :root, 200ms only under the
+     posture, 0ms again under reduce and on paper) and the curve is the
+     ease-out-cubic base.css runs .sv-enter on. A chart arriving is the same
+     move as anything else arriving; it is not a second tempo. */
+  [data-motion='on'] .sv-trend__line {
+    /* pathLength="1" on the path makes ONE dash unit the whole line, so
+       this pair of declarations un-animated IS the finished line. */
+    stroke-dasharray: 1;
+    animation: sv-trend-draw var(--sv-t-enter) cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  [data-motion='on'] .sv-trend__bar {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: sv-trend-rise var(--sv-t-enter) cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  /* The terminal dot is the only other thing that moves, and it fades
+     rather than travels. The highlight chip is deliberately NOT in this
+     list: it is a printed statement, and a printed statement does not
+     arrive late. */
+  [data-motion='on'] .sv-trend__dot {
+    animation: sv-trend-in var(--sv-t-enter) cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  @keyframes sv-trend-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+  }
+
+  @keyframes sv-trend-rise {
+    from {
+      transform: scaleY(0);
+    }
+  }
+
+  @keyframes sv-trend-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  /* Belt and braces. --sv-t-enter is already 0ms here, but base.css makes
+     the point that a 0ms animation is not the same object as no animation,
+     and it is right: a chart holds figures, so it gets the stronger of the
+     two. --sv-t-fast collapses on its own; the transition is restated for
+     the same reason. */
+  @media (prefers-reduced-motion: reduce) {
+    [data-motion='on'] .sv-trend__line,
+    [data-motion='on'] .sv-trend__bar,
+    [data-motion='on'] .sv-trend__dot {
+      animation: none;
+    }
+
+    .sv-trend__col {
+      transition: none;
+    }
+  }
 }
