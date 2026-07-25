@@ -94,6 +94,10 @@ leaks.
 | **0.3** | The 320px floor + the auth surface | Shipped |
 | **0.4** | Closing the product taxonomy | Shipped |
 | **0.5** | The public surface | Shipped |
+| **0.6** | The promises already made | Next |
+| **0.7** | Posting the work | Planned |
+| **0.8** | The number in relation | Planned |
+| **0.9** | The record and the console | Planned |
 
 ---
 
@@ -153,15 +157,175 @@ Material, minus everything Part F refuses. Every line is now shipped.
 donut, it is the component that answers the question the donut was asked —
 and it draws a straight line.
 
+## The 0.6 audit — what stops a management system
+
+The programme was re-scoped against one question, asked six ways: what stops a
+team building an **ERP, a CRM, a finance system, an admin console, a BI
+dashboard or any long-lived management product** on 76° without reaching
+outside it? Six independent inventories produced 47 candidates; 25 survived an
+adversarial vet against the shipped taxonomy and Part F. They sequence into
+four releases, in the order the programme has always used — **what is broken,
+then what was asked for, then breadth, then new surface.**
+
+## 0.6 — the promises already made
+
+The gaps that stop a build hardest are not new ideas. They are **the Book's own
+binding text with nothing behind it.** B11 mandates a top-of-form error summary
+that is not in the barrel. C7 promises tables scroll and never truncate, and
+there is not one `@media print` rule in the repository, so on paper the promise
+is structurally unkeepable. F2 refuses the Kanban board and cites a replacement
+template `src/templates/` does not contain. B28 defers record editing to "a
+Drawer with a form" and no screen has ever drawn the pairing. Nothing new is
+built on a floor that leaks, and this floor leaks in the system's own voice.
+
+| | Name | One job |
+|---|---|---|
+| **B52** | `ErrorSummary` | Index a failed submit's field errors as one list of links to the fields that caused them. |
+| **B7 amd** | `totals` | State a table's closing figures in a real `<tfoot>`, keyed to the same columns and outside the row, focus, selection and pagination models. |
+| **B7 amd** | `leadHold` | Hold the row's identity column in place while the rest of a wide table scrolls under it. |
+| **surface** | The printed surface | State what every 76° surface becomes on paper — in `tokens.css` and `base.css` only, so no component branches on the medium. |
+| **template** | `erp-purchase-order` | Hold ONE named operational document on its own page: its identity, its facts, its lines, its history and its verbs. |
+| **template** | `crm-deal-board` | Show every open deal in the column of the stage it sits in, moved between stages by a named verb rather than by drag. |
+
+**F3 survives, and is argued rather than assumed.** F3 refuses the configurable
+data grid — column resize, pin, group, a toolbar the reader drives at runtime.
+A `<tfoot>` is not resizable, pinnable or groupable: it is authored, keyed to
+the same `Column` array, and outside every model F3 protects. `leadHold` is not
+a pin either — not caller-configurable, not draggable, and applied to the first
+column only when that column is already `kind: 'id'`, which is the row's
+identity B7 already names. **F3 protects against a table whose shape the reader
+rearranges; neither of these lets the reader rearrange anything.**
+
+## 0.7 — posting the work
+
+B1–B51 will render a warehouse, a ledger or a service desk beautifully, and
+cannot **run** one. The system reads an operation: it lists, filters, drills,
+charts and states. The act it has no vocabulary for is the one a procurement
+clerk performs forty times an hour — type a bounded number into a row, scan the
+next identifier, watch the row acknowledge, post the lot, and find out ninety
+seconds later what became of it. B7 is a reader by spec: `Column.render` returns
+a node, Enter opens the row and Space selects it, which are the two keys a
+typist presses most.
+
+| | Name | One job |
+|---|---|---|
+| **B53** | `EntryTable` | Type one bounded number into every row of a fixed list of lines, and post the lot once. |
+| **B54** | `ScanField` | Take one identifier at a time, scanned or typed, and state what the last one resolved to. |
+| **B55** | `SumList` | State a set of amounts and the figure they add up to. |
+| **B56** | `JobList` | State what became of each background operation this reader started, and where its result landed. |
+| **B7 amd** | `rowSync` | State that a row's change has not been saved yet, or failed to save. |
+| **surface** | Density | Re-tokenize spacing, row height and control minimum into three registered postures, declared on a wrapper and resolved at the nearest declaration. |
+
+`SumList` is B44's arithmetic sibling and the pairing is the point: **B44
+divides ONE total into its shares; `SumList` builds ONE total from its lines.**
+Density belongs here because this is the release where it becomes load-bearing —
+forty entry lines at one fixed row height serve neither a warehouse floor at
+arm's length nor an analyst at 27 inches. The system has already solved it once
+per-component: B10 carries a bespoke POS variant with its own height and type
+ramp, which is exactly the ad-hoc branching the dark-surface amendment exists to
+forbid. It becomes a posture on a wrapper, exactly as `data-seed` and
+`data-mode` are.
+
+## 0.8 — the number in relation
+
+76° has an excellent vocabulary for a number that is **measured** (B4, B6, B44)
+and a number that **changed** (`Delta`). It has almost none for a number read
+**against** something else — a hierarchy that rolls up, a second dimension, the
+step before it, or the path the reader took to reach it. Every delta in the
+system asserts a change without naming what it changed from: `analytics-overview`
+prints ▲12.8% with no baseline stated anywhere on the screen, and Ship Gate
+point 12 is not checkable against a denominator nobody printed.
+
+| | Name | One job |
+|---|---|---|
+| **B57** | `TreeTable` | State a hierarchy of rows in which every parent is the sum of its children, across the same numeric columns at every depth. |
+| **B58** | `CrossTable` | State ONE measure at every intersection of two dimensions. |
+| **B59** | `FunnelList` | State how one total narrows through an ordered sequence of steps. |
+| **B60** | `PathLine` | State the ordered path a reader has drilled into, every level above the current one a link back. |
+| **B35 amd** | The stated baseline | Print what a comparison is against, so no delta on any 76° screen is an unsourced assertion. |
+| **surface** | `saved-view-line` | State that the view on screen has drifted from the view that was saved. |
+
+`TreeTable` takes the same F3 reading: a trial balance is not grouped at
+runtime — its depth **is** the chart of accounts, which B40 already accepted as
+legitimate structure. It is `role="treegrid"`, takes B40's keyboard model,
+indent and chevron verbatim, and carries pre-formatted column strings the
+component never computes (C9). The heatmap stays refused: `CrossTable` states
+the matrix in figures, and a colour scale is six colours on one surface.
+
+## 0.9 — the record and the console
+
+Two screens a person is inside all day and the system has never drawn: the
+**conversation** and the **administration console**. 0.6 draws the record page
+as a document — identity, lines, totals, paper. This draws it as a
+relationship: a thread of attributed, directional messages, facts edited in a
+Drawer without leaving the page, history beside them. And it draws the settable
+twin of B28, which is exactly the right anatomy and refuses editing controls by
+name — leaving `settings-account` shipping four bare switches with no statement
+of what flipping one does, an A3 failure the system has no component to prevent.
+
+| | Name | One job |
+|---|---|---|
+| **B61** | `MessageThread` | State one conversation as an ordered list of messages, each attributed to a person and marked with its direction. |
+| **B62** | `SettingList` | State one setting's consequence beside the instant-effect control that changes it. |
+| **template** | `crm-deal` | Open ONE record from its list and hold its facts, its history and its verbs on one page, editing in a Drawer rather than on another screen. |
+| **template** | `settings-team` | Administer one workspace's people — who is a member, what each may do, and which invitations are outstanding. |
+
+B41 forbids the message thread by its own Don't list — "never two sentences of
+body", "never an interactive row" — and its tones are lifecycle, not direction.
+`settings-team` is also the screen that unblocks the inbox template listed
+below, and it is the first administration console in a set of fifteen templates
+that has never held one.
+
+## Part F · refused during the 0.6 audit
+
+Every lens proposed more than survived. These were tested and killed by name, so
+they are not proposed again. Part F's test is unchanged: **if a widget's job
+needs more than one sentence, or it carries an internal toolbar or
+sub-taxonomy, it is a screen composed of 76° parts — not a component.**
+
+| Proposed | Why it is not a gap |
+|---|---|
+| Approval chain / workflow | B41 `pending` plus a mono actor is exactly this; B39 states position. |
+| Exception queue | B7 + `FilterBar` + `FilterLine` + `CardTabs`. The division is complete and binding. |
+| Shift handover note | A multiline B11 Field plus B41. |
+| BOM hierarchy · chart-of-accounts nav | B40 names a bill of materials in its own spec. |
+| Batch-job progress bar | B4 + B31 `Busy` + B22. `JobList` is the lifecycle and the result, not the bar. |
+| Month-end close checklist | B39's five-step cap correctly makes it a B7 + B12 screen. |
+| Variance vs plan | The extracted `Delta`, with `polarity`. |
+| AR ageing · plan split · pipeline mix | B44, absolute figures required in the legend. The donut stays dead. |
+| Person picker | `ComboOption` already carries `meta`; owner assignment composes. |
+| Inline editing in a `<dl>` | B28 rules it out by name and points at a Drawer with a form — a stated answer, not a gap. |
+| Saved-view *picker* | B42 names it as a reason the component exists. The gap was the LINE that states drift. |
+| Sparkline inside a `StatS1` | A2 stands. A stat that needs a shape is a B5 `Trend`. |
+| Heatmap | `CrossTable` states the matrix in figures. A colour scale is six colours on one surface. |
+| Kanban board **widget** | F2 stands unamended. Only the template ships — F2's second column becomes true. |
+| Drag to move a card between stages | F10's reasoning holds: the verb is named, in a B20 Menu, and works from the keyboard. |
+| `PageHero` record-identity amendment | Declined. B1's Don't is right: no stat numbers in the hero, one sentence of context. A live tone on the ink band puts colour on the one surface that carries none. |
+| `Amount` component | Declined. C9 puts formatting at the caller's layer; alignment is the `kind: 'num'` discipline B7 and B28 already carry. |
+| `Folio` (printed issuer head) | Declined. The printed surface prints the screen's own head. |
+| `GrantMatrix` (roles × permissions) | Declined. The shape is `CrossTable`, the cells are B11 Checkboxes, and `indeterminate` is a one-prop B11 change. |
+| API-key / secret reveal | Declined. B43 prints the value exactly and owns the copy control; a one-time secret is B22 + B43 in a Drawer. |
+| `ConfirmDialog` | Declined. B13 + B11 + B10 Danger is the composition B10 already mandates. |
+| `ErrorState` as a fourth lifecycle component | Declined. The failed region is a B22 Banner at the region's head with B15's anatomy. |
+| Impersonation / sandbox chrome | Declined. Nothing new attaches to the band; an impersonated session is a Banner at the top of `<main>`. |
+| `DueBy` / relative deadline chip | Declined. A deadline is a mono absolute date beside a B12 `StatusWord`. |
+| @mentions · merge/dedupe UI | Declined. Screens or fields composed of shipped parts, not widgets. |
+| `print.css` as its own stylesheet | Refused. Print goes in `tokens.css` + `base.css`, for the same reason dark did: no component branches on the medium. |
+| Density as a per-component prop | Refused. It is a token-layer posture on a wrapper, resolved at the nearest declaration. |
+
 ## Exploring — later
 
 - **Registry MCP server** — search components, blocks, and templates by metadata from any assistant.
 - **Health seed** — a contrast-verified clinical seed, added through the seed rule (both directions ≥ 4.5:1), including its dark `--sv-seed-text` variant.
 - **8-state preview files** — the fundamentals state contract shipped as a preview per component.
 - **Full type tokenization** — a complete `--sv-text-*` scale replacing the literals across every component. Correct, and large enough to need its own release.
-- **More templates** — billing, inbox, and onboarding screens. *(Analytics shipped in v0.4.0 as `analytics-overview`.)*
+- **More templates** — billing and onboarding screens. *(Analytics shipped in v0.4.0. The inbox is unblocked by `MessageThread` in 0.9, and the purchase order, deal board, deal record and team console are scheduled in 0.6 and 0.9.)*
 - **Theming playground** — swap the seed and the mode live and watch a real screen re-theme.
 - **Token sync** — a Figma ⇄ `tokens.css` bridge so design and code share one source.
+
+*Full type tokenization is still listed above, and 0.7's density postures will
+touch the same layer. If the two land together the `--sv-text-*` scale is the
+cheaper half of that change, not a separate release.*
 
 ## Quality gates — every item, every phase
 
