@@ -13,6 +13,10 @@ import './cta.css';
  * ghost may stand beside the primary; the discipline is the caller's, and
  * the prop doc is where it is written down.
  *
+ * There is no `note` prop either, and F12 is why: a mono line under the
+ * actions is a footnote nobody reads, in the voice reserved for metadata,
+ * restating what the statement was for. The refusal is the absent slot.
+ *
  * There is no `urgency`, no `countdown` and no `scarcity` prop, and there
  * never will be: 76° speaks like a competent colleague (A3), and a clock
  * that pressures the reader is the opposite of that. There is no `form`
@@ -25,8 +29,6 @@ export interface CallToActionProps {
   statement?: string;
   /** ONE primary. A ghost beside it is permitted; a second primary is not. */
   actions: ReactNode;
-  /** A mono line under the actions: the terms, the trial length, the card requirement. */
-  note?: string;
   /** 'paper' — a card on the wall. 'band' — the ink surface, edge to edge. */
   tone?: 'paper' | 'band';
   /** 2 by default: a page's h1 is its Masthead (B47), and levels never skip (A4). */
@@ -38,7 +40,6 @@ export function CallToAction({
   title,
   statement,
   actions,
-  note,
   tone = 'paper',
   headingLevel = 2,
   className,
@@ -59,11 +60,13 @@ export function CallToAction({
         <Heading className="sv-cta__title">{title}</Heading>
         {statement && <p className="sv-cta__statement">{statement}</p>}
       </div>
+      {/* Nothing under the buttons. F12 refuses the mono line of terms that
+          every generated CTA grows there: it is a footnote in the metadata
+          voice doing the job the statement above it already had. A term that
+          is load-bearing goes in the statement or on the page the button
+          opens — never in 10px type beneath the thing being clicked. */}
       <div className="sv-cta__side">
         <div className="sv-cta__actions">{actions}</div>
-        {/* The terms sit UNDER the button, in the mono metadata voice — the
-            cost is stated where the click is, not in a footnote nobody reads. */}
-        {note && <p className="sv-cta__note sv-mono">{note}</p>}
       </div>
     </section>
   );

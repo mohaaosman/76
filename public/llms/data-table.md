@@ -25,7 +25,29 @@ On narrow screens the table scrolls horizontally inside its card. It never reflo
 
 **FilterBar** closes the third side of that row, and the division of labour is exact: **`CardTabs` switches between mutually exclusive presets · `FilterBar` sets the filters · `FilterLine` states what is set.** A card may carry all three, in that order, and each does one of the three jobs — a control that does two of them is the defect. FilterBar itself is a layout with slots, not a filter engine: it takes a SearchField and at most three Selects or Comboboxes in `controls`, anything that is not a filter in `actions`, and your code owns every value. It is `role="group"` with an `aria-label`, deliberately NOT `role="search"`, because this filters a set in place and does not search a site. It holds no live region either, because the announcement is FilterLine's job and two live regions for one change is a defect. It wraps when it runs out of room and never scrolls — a horizontally scrolling filter row hides the filters it is offering — and "Clear all" appears only when `active` says something is actually set.
 
+**v0.6 adds the closing row and the held column.** `totals` renders a real `<tfoot>` keyed to the same columns — which matters because the only way to draw a totals row before this was to push a fake record into `rows`, where ↑/↓ focuses it, Space selects it, `onRowOpen` opens it and `page.of` counts it. Four lies for one row. Foot cells inherit each column's own `kind`, so a `num` column's total is right-aligned and tabular exactly as its body cells are.
+
+`leadHold` holds the identity column in place while the rest of a wide table scrolls under it — at column seven of a fourteen-column line table, the reader has otherwise lost which line they are on. **It is self-limiting, and that is what keeps F3 refused:** it is not caller-configurable per column, not draggable, and it applies to the first column ONLY when that column is already declared `kind: "id"`, which is the row identity B7 already names. Pass it on a table whose first column is anything else and it is ignored. F3 protects against a table whose shape the reader rearranges; this lets the reader rearrange nothing.
+
 ## Examples
+
+### A document's closing figures
+
+Subtotal, tax and total in a real <tfoot> — outside the row, focus, selection and pagination models.
+
+```tsx
+<DataTable
+  caption="Purchase order lines"
+  rows={lines}
+  rowKey={(l) => l.sku}
+  columns={columns}
+  totals={[
+    { label: 'SUBTOTAL', cells: { total: '$18,240.00' } },
+    { label: 'VAT 20%', cells: { total: '$3,648.00' } },
+    { label: 'TOTAL DUE', cells: { total: '$21,888.00' }, strong: true },
+  ]}
+/>
+```
 
 ### Orders table with selection and keyboard nav
 
@@ -177,6 +199,8 @@ const active = query !== '' || status !== 'all';
 | `selectable / selected / onSelect` | `boolean / Set<string> / (keys) => void` | — | Controlled selection; Space toggles, ⇧ extends. |
 | `announcement` | `string` | — | aria-live polite text on data/filter changes ("12 orders · Pending"). |
 | `page` | `{ from, to, of, onPrev?, onNext? }` | — | Mono "1–50 OF 248" + ghost prev/next. No numbered pill walk. |
+| `totals` | `TotalsRow[]` | — | v0.6 · a real <code>&lt;tfoot&gt;</code>: { label, cells (keyed by column key), strong? }. Outside the row, focus, selection and pagination models. |
+| `leadHold` | `boolean` | — | v0.6 · holds the first column while the rest scrolls. IGNORED unless that column is <code>kind: "id"</code>. |
 
 ### SelectionHead
 

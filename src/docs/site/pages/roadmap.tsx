@@ -88,7 +88,7 @@ const ROADMAP: Phase[] = [
     items: [
       { t: 'Measured, changed — and against what?', d: '76° states a number that is measured (B4, B6, B44) and a number that changed (<b>Delta</b>). It has almost no vocabulary for a number read against something else. Every delta today asserts a change without naming what it changed from.' },
       { t: 'TreeTable (B57) · CrossTable (B58)', d: 'A hierarchy of rows where every parent is the sum of its children, and one measure at every intersection of two dimensions. A trial balance is not grouped at runtime — its depth IS the chart of accounts, which B40 already accepted as structure.' },
-      { t: 'FunnelList (B59) · PathLine (B60)', d: 'How one total narrows through an ordered sequence, and the drill path a reader took, every level above the current one a link back.' },
+      { t: 'FunnelList (B59)', d: 'How one total narrows through an ordered sequence of steps. <b>PathLine (B60) was withdrawn before it was built</b> — the 0.6 review named it for what it was, a breadcrumb, and breadcrumbs are now refused as F13.' },
       { t: 'The stated baseline (B35)', d: 'Print what a comparison is against, so no delta on any 76° screen is an unsourced assertion. Ship Gate 12 is not checkable against a denominator nobody printed.' },
     ],
   },

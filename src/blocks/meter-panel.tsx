@@ -8,7 +8,7 @@ export function MeterPanel() {
         <Card>
           <CardHead title="Warehouse utilization" subtitle="By zone" />
           <div className="sv-card__body">
-          <MeterList
+            <MeterList
             items={[
               {
                 label: 'Zone A · Ambient',

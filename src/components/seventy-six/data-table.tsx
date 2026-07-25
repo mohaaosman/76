@@ -22,6 +22,38 @@ export interface Column<Row> {
   render: (row: Row) => ReactNode;
 }
 
+/**
+ * B7 amendment (v0.6) · totals — the closing row every ledger, invoice,
+ * goods receipt and stock transfer ends with. Pushed into `rows` it tells
+ * four lies at once: ↑/↓ focuses it, Space selects it, `onRowOpen` opens
+ * it, and `page.of` counts it as a record. A real `<tfoot>`, keyed to the
+ * same columns, tells none of them. One job: state a table's closing
+ * figures.
+ */
+export interface TotalsRow {
+  /** The row's name — "Subtotal", "VAT 20%", "Total due". Mono uppercase. */
+  label: string;
+  /** Keyed by Column.key. A column with no entry renders an empty cell. */
+  cells: Record<string, ReactNode>;
+  /** The closing figure of the set. Rendered heavier, on a stronger rule. */
+  strong?: boolean;
+}
+
+/**
+ * B7 amendment (v0.6) · leadHold — a purchase order line table is fourteen
+ * columns wide, and by column seven the reader has lost which line they are
+ * on. It holds the row's identity column in place while the rest of the
+ * table scrolls under it.
+ *
+ * It is not a pin, and that is exactly what keeps F3 refused. F3 protects
+ * against a table whose shape the reader rearranges, and this lets the
+ * reader rearrange nothing: it is one boolean the AUTHOR sets, never
+ * per-column, never draggable, never resizable, never exposed at runtime.
+ * It applies to the FIRST column ONLY, and only when that column already
+ * declares `kind: 'id'` — the row identity B7 names. Any other first column
+ * and the prop is ignored, because holding a description or an amount in
+ * place holds nothing the reader was using to keep their place.
+ */
 export interface DataTableProps<Row> {
   caption: string;
   columns: Column<Row>[];
@@ -37,7 +69,25 @@ export interface DataTableProps<Row> {
   announcement?: string;
   /** Pagination line, e.g. { from: 1, to: 50, of: 248 }. */
   page?: { from: number; to: number; of: number; onPrev?: () => void; onNext?: () => void };
+  /** Closing figures, rendered as a real `<tfoot>`. Never records. */
+  totals?: TotalsRow[];
+  /** Holds the first column in place while the rest scrolls. Ignored unless
+      that column is `kind: 'id'` — see the amendment block above. */
+  leadHold?: boolean;
   className?: string;
+}
+
+/**
+ * The kind → class map, in ONE place. A foot cell has to align and count
+ * exactly as the body cells of its own column do; a total that is
+ * right-aligned only because someone remembered to re-derive it is a total
+ * that will one day be left-aligned.
+ */
+function cellKind<Row>(col: Column<Row>): string {
+  return cx(
+    col.kind === 'num' && 'sv-table__cell--num sv-num',
+    col.kind === 'id' && 'sv-table__cell--id',
+  );
 }
 
 /**
@@ -168,8 +218,15 @@ export function DataTable<Row>({
   onSelect,
   announcement,
   page,
+  totals,
+  leadHold = false,
   className,
 }: DataTableProps<Row>) {
+  /* The ignore, implemented rather than documented: the hold is legal only
+     on a first column that is already the row's identity. Everything the
+     reader could rearrange is what F3 refuses, so there is nothing here to
+     configure — not the column, not its width, not its order. */
+  const held = leadHold && columns[0]?.kind === 'id';
   const [focusIdx, setFocusIdx] = useState(0);
   /* The ⇧-range anchor is only ever read inside a handler, never rendered —
      as state it would cost a re-render of the whole table per selection. */
@@ -242,11 +299,21 @@ export function DataTable<Row>({
           <caption className="sv-visually-hidden">{caption}</caption>
           <thead>
             <tr>
-              {columns.map((col) => (
+              {columns.map((col, colIdx) => (
                 <th
                   key={col.key}
                   scope="col"
-                  className={cx('sv-table__th', col.kind === 'num' && 'sv-table__cell--num')}
+                  className={cx(
+                    'sv-table__th',
+                    col.kind === 'num' && 'sv-table__cell--num',
+                    /* One axis, deliberately: this header does not stick
+                       vertically today (nothing in data-table.css sets
+                       position on .sv-table__th), so the held header cell
+                       holds on `left` only. If the header ever goes sticky,
+                       `top` joins it on this same element and the ladder
+                       step below is already the right one. */
+                    held && colIdx === 0 && 'sv-table__cell--held',
+                  )}
                   aria-sort={col.sorted}
                 >
                   {col.sortable ? (
@@ -277,13 +344,13 @@ export function DataTable<Row>({
                   onClick={() => setFocusIdx(idx)}
                   onDoubleClick={() => onRowOpen?.(row)}
                 >
-                  {columns.map((col) => (
+                  {columns.map((col, colIdx) => (
                     <td
                       key={col.key}
                       className={cx(
                         'sv-table__td',
-                        col.kind === 'num' && 'sv-table__cell--num sv-num',
-                        col.kind === 'id' && 'sv-table__cell--id',
+                        cellKind(col),
+                        held && colIdx === 0 && 'sv-table__cell--held',
                       )}
                     >
                       {col.render(row)}
@@ -293,6 +360,52 @@ export function DataTable<Row>({
               );
             })}
           </tbody>
+          {/* The foot is NOT in `rows`, and that is the whole amendment: a
+              closing figure drawn here cannot be focused by ↑/↓, selected by
+              Space, opened by `onRowOpen` or counted by `page.of`, because
+              none of those models can see it. Nothing guards it — it is
+              simply not a record.
+              Printing: `<tfoot>` may follow `<tbody>`, and browsers repeat
+              the foot at the bottom of every printed page. Under 0.6's
+              printed surface a ledger that breaks across pages therefore
+              carries these figures on each one, and they are always the
+              SET's closing figures, never that page's — which is why `label`
+              names its own row ("Total due") and nothing here derives a
+              per-page subtotal. */}
+          {totals && totals.length > 0 && (
+            <tfoot className="sv-table__foot">
+              {totals.map((total) => (
+                <tr
+                  key={total.label}
+                  className={cx(
+                    'sv-table__footrow',
+                    total.strong && 'sv-table__footrow--strong',
+                  )}
+                >
+                  {columns.map((col, colIdx) =>
+                    colIdx === 0 ? (
+                      /* scope="row": the label names its row, exactly as a
+                         column header names its column. */
+                      <th
+                        key={col.key}
+                        scope="row"
+                        className={cx(
+                          'sv-table__footlabel sv-mono',
+                          held && 'sv-table__cell--held',
+                        )}
+                      >
+                        {total.label}
+                      </th>
+                    ) : (
+                      <td key={col.key} className={cx('sv-table__td', cellKind(col))}>
+                        {total.cells[col.key]}
+                      </td>
+                    ),
+                  )}
+                </tr>
+              ))}
+            </tfoot>
+          )}
         </table>
       </div>
       <p className="sv-visually-hidden" aria-live="polite">

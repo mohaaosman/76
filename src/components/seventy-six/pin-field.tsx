@@ -1,4 +1,4 @@
-import { forwardRef, useId, useRef, useState } from 'react';
+import { forwardRef, useEffect, useId, useRef, useState } from 'react';
 import type { ChangeEvent, ClipboardEvent, FocusEvent, KeyboardEvent } from 'react';
 import { cx } from '@/lib/cx';
 import './pin-field.css';
@@ -96,6 +96,20 @@ export const PinField = forwardRef<HTMLInputElement, PinFieldProps>(function Pin
     el?.focus();
     el?.select();
   }
+
+  /* `autoFocus` is honoured HERE rather than by the DOM attribute, and the
+     difference is `preventScroll`. The attribute focuses AND scrolls the
+     element into view, so a PinField mounted anywhere but the top of a
+     document drags the viewport down to itself the instant it renders —
+     which is what happens on the template gallery, where every screen is
+     live at once and the one with an OTP field wins the scroll position.
+     B24 wants focus to land on the first meaningful control; nothing in it
+     asks for the page to move. Focus is placed, the viewport is left where
+     the reader put it, and the field is still the first thing they type in. */
+  useEffect(() => {
+    if (!autoFocus || disabled) return;
+    boxes.current[0]?.focus({ preventScroll: true });
+  }, [autoFocus, disabled]);
 
   function commit(next: string) {
     if (next === code) return;
@@ -233,7 +247,7 @@ export const PinField = forwardRef<HTMLInputElement, PinFieldProps>(function Pin
             spellCheck={false}
             required={required}
             disabled={disabled}
-            autoFocus={i === 0 ? autoFocus : undefined}
+            /* NOT the DOM autoFocus attribute — see the effect above. */
             aria-label={`${boxWord} ${i + 1} of ${size}`}
             aria-invalid={error ? true : undefined}
             value={code[i] ?? ''}

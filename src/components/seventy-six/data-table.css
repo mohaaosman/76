@@ -172,4 +172,88 @@
     gap: var(--sv-s3);
     margin-left: auto;
   }
+
+  /* ---- v0.6 · the closing figures (B7 amendment) ---- */
+
+  /* A hairline above the foot and nothing else. The foot is the same paper
+     as the body — a fill here would be paper on paper — so the rule is the
+     whole separation between the records and what they come to. The last
+     body row is already unruled, so this line never doubles one. */
+  .sv-table__footrow > .sv-table__td,
+  .sv-table__footlabel {
+    border-top: 1px solid var(--sv-line);
+    border-bottom: 0;
+  }
+
+  /* The label speaks in the column-header voice, because it does the same
+     work in the other axis: it names its row. */
+  .sv-table__footlabel {
+    padding: 10.5px 18px;
+    text-align: left;
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    color: var(--sv-ink-soft);
+    font-weight: 400;
+  }
+
+  /* The closing figure of the set — the one line the reader came for — takes
+     a stronger rule above it. Fragment Mono ships a single weight, so the
+     label states its emphasis in ink rather than a synthetic bold and the
+     figures carry the 700. */
+  .sv-table__footrow--strong > .sv-table__td,
+  .sv-table__footrow--strong > .sv-table__footlabel {
+    border-top: 1px solid var(--sv-field-line-strong);
+  }
+
+  .sv-table__footrow--strong > .sv-table__td {
+    font-weight: 700;
+  }
+
+  .sv-table__footrow--strong > .sv-table__footlabel {
+    color: var(--sv-ink);
+  }
+
+  /* ---- v0.6 · the held identity column (B7 amendment) ---- */
+
+  /* Sticky on one axis only: nothing in this file makes .sv-table__th sticky
+     vertically, so the header cell holds on `left` alone. The step is the
+     registered one — an arbitrary z-index is a firewall defect, and
+     --sv-z-sticky is the rung cut for exactly this.
+     The 320px floor (C7): the hold costs the scroll region one mono ID
+     column — 11px Fragment Mono plus the 18px gutters, near 110px — leaving
+     roughly 170px of the ~288px a card has at 320px. That is still a whole
+     further column beside the identity, so the table keeps scrolling rather
+     than truncating. The held column is given no width of its own for the
+     same reason: it takes what its ID needs and not a pixel more. */
+  .sv-table__cell--held {
+    position: sticky;
+    left: 0;
+    z-index: var(--sv-z-sticky);
+    /* The rest of the table scrolls UNDER this cell, so it owes a real
+       surface — a transparent held cell prints two columns on top of each
+       other. Paper is the card's own surface, so nothing new appears. */
+    background-color: var(--sv-paper);
+    /* The seam, stated rather than implied. The table draws horizontal
+       hairlines only — no cell carries a vertical rule — so this is the one
+       vertical line in the table and has nothing to double with. */
+    border-right: 1px solid var(--sv-line);
+    transition: background-color var(--sv-t-fast);
+  }
+
+  /* A cell background paints OVER its row's, so the held cell would desync
+     from the row it belongs to: the reader hovers row nine and watches its
+     identity stay white. The row's own states are therefore repainted on the
+     held cell in the same tokens — no new colour, no branch, just the tint
+     the row already carries. */
+  .sv-table__row:hover > .sv-table__cell--held,
+  .sv-table__row:focus-visible > .sv-table__cell--held,
+  .sv-table__row--selected > .sv-table__cell--held {
+    background-color: var(--sv-seed-tint);
+  }
+
+  /* Same reason, one layer down: the held cell's background covers the 2px
+     seed rule the selected <tr> paints, so the held cell redraws it. */
+  .sv-table__row--selected > .sv-table__cell--held {
+    box-shadow: inset 2px 0 0 var(--sv-seed);
+  }
 }

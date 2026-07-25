@@ -102,3 +102,288 @@
      to 0ms under prefers-reduced-motion (see tokens.css). 76° loses
      nothing, by design. */
 }
+
+/* ============================================================
+   76° · the printed page (v0.6) — the second half of the
+   printed surface. `tokens.css` states what every 76° token
+   BECOMES on paper; this states what the page does with them.
+   Both live in these two files rather than in a `print.css`,
+   which was proposed during the 0.6 audit and refused: the dark
+   surface's rule reads one word wider than it was written, and
+   NO COMPONENT MAY BRANCH ON THE MEDIUM. Every selector below
+   names a component, and not one component file knows it.
+
+   This block is deliberately UNLAYERED, and it is the only
+   unlayered CSS in the system. The order declared at the top of
+   tokens.css is sv-tokens, sv-base, sv-components, sv-site — so
+   a rule written into sv-base LOSES to the component rule it is
+   correcting, whatever selector it carries: layer order beats
+   specificity, which is the reason that line exists. The C7
+   answer below has to beat `.sv-table__scroll { overflow-x:
+   auto }` in sv-components, and the importance flag A1 bans is
+   not available. Unlayered is the one position left, and it is
+   the honest one: the printed page is not a layer stacked on
+   the screen, it REPLACES the screen for one medium. A product
+   overriding any of this writes its own unlayered @media print
+   rule and wins on source order, exactly as it would here.
+   ============================================================ */
+
+@media print {
+  /* @page is a page context, not an element context — a cascade
+     layer has nothing to order it against. No `size` is set:
+     A4 or Letter is the reader's paper and the printer's
+     business, and a system that picks one is wrong in half the
+     world. 14mm is the narrowest side gutter that a two-hole
+     punch and a staple both clear, which is what happens to a
+     purchase order within a minute of printing. The band's 40px
+     is a screen measure and is not a page margin. */
+  @page {
+    margin: 16mm 14mm;
+  }
+
+  /* 76° does NOT ask the browser to honour its backgrounds, and
+     it states that here rather than inheriting it silently.
+     `exact` would print the wall on every page, a tint under
+     every selected row and a seed rectangle behind every primary
+     button — square decimetres of toner spent reproducing
+     decisions the page does not need to carry, because C5
+     already guarantees that nothing 76° MEANS is carried by a
+     colour. Two components prove it rather than assert it: B44
+     `DistributionStrip` is specified to pass the test "delete
+     the strip and the card still answers the question", because
+     its legend repeats every figure as text; B4 and B6 require
+     the absolute numbers beside every bar and call the bar
+     illustration. Economy printing removes exactly the
+     illustration. Ink is spent on marks — type, rules, strokes,
+     dots — and marks are where the information already lives. */
+  :root {
+    -webkit-print-color-adjust: economy;
+    print-color-adjust: economy;
+  }
+
+  /* ---- Chrome that is not information ---------------------
+     Nothing hidden here CARRIES anything. Each is either a
+     control whose result the page already states, or a
+     statement about a moment that ended before the sheet left
+     the printer. Nothing that holds information is hidden. */
+
+  /* C4's skip link is a keyboard affordance and its whole
+     definition is "first tab stop". Paper has no tab order. */
+  .sv-skip {
+    display: none;
+  }
+
+  /* The top layer does not paginate: a panel left open prints
+     over page one and can take the rest of the document with
+     it. Every 76° top-layer surface is SPECIFIED as
+     supplementary or as a list of verbs — B18 Tooltip is a
+     phrase, B20 Menu is verbs, B42 Popover is a few controls —
+     and C4 forbids any of them being the only path to
+     anything. None of them holds something the sheet does not.
+     An OPEN <dialog> is deliberately NOT hidden: B13 interrupts
+     for one decision and B21 Drawer opens a workspace beside
+     the work, so a reader printing with a Drawer open is
+     printing the record inside it. Hiding that would be the
+     silent loss the rest of this block exists to prevent. */
+  [popover],
+  dialog:not([open]) {
+    display: none;
+  }
+
+  /* B14: a toast auto-dismisses and is never the only path to
+     an action. It is a statement about a moment, and the moment
+     is over. */
+  .sv-toaster {
+    display: none;
+  }
+
+  /* B17: a skeleton states that data has NOT ARRIVED. On paper
+     there is nothing left to wait for, and a column of grey
+     blocks is a page that says nothing while looking like it
+     says something. */
+  .sv-skeleton {
+    display: none;
+  }
+
+  /* B31: the spinner is the system's one continuous animation,
+     and a frozen arc states nothing at all. The Busy SENTENCE
+     stays — it is required copy naming what is loading, and a
+     sentence is information. The content it was dimming comes
+     back to full ink: B31's own words are that it "is still
+     true until it changes", and 40% ink is a photocopy of
+     nothing. The overlay is un-positioned with it, or the
+     sentence prints on top of the rows it was covering. */
+  .sv-spin {
+    display: none;
+  }
+
+  .sv-busy--over .sv-busy__line {
+    position: static;
+  }
+
+  .sv-busy--over > :not(.sv-busy__line) {
+    opacity: 1;
+  }
+
+  /* ---- The band, ended with a rule ------------------------
+     tokens.css turned the band into paper; a surface that no
+     longer differs from the sheet has to say where it stops.
+     The topbar and sub-tab rows already draw --sv-band-line,
+     which is now an ordinary printed hairline, so they rule
+     themselves. The PageHero is the last row and carries none,
+     so the band states its own bottom edge. */
+  .sv-band {
+    border-bottom: 1px solid var(--sv-line);
+  }
+
+  /* B2's overlap is the one place in 76° where paper crosses a
+     surface boundary — B46 `Split` names it as the move it
+     finishes. It exists because the band is ink and the wall is
+     platinum and the card straddles both. On paper there is one
+     surface and nothing to straddle, and a -44px row would
+     instead cut straight through the rule directly above it.
+     The signature is a property of the screen. What is left on
+     paper is the ordinary gutter, and the hero's 68px of
+     clearance closes with it. */
+  .sv-row[data-overlap] {
+    margin-top: 14px;
+  }
+
+  .sv-band__hero {
+    padding-bottom: var(--sv-s6);
+  }
+
+  /* ---- C7 · a scroll region on paper ----------------------
+     "Tables scroll, never truncate silently." A sheet has no
+     scrollbar, so on paper the first half of that promise is
+     simply unavailable and the second half is the whole of it.
+
+     `overflow: hidden` is the failure C7 names by name: the
+     columns past the container edge are gone, the table stops
+     at a clean padding edge inside the card, and NOTHING on the
+     page says a column was dropped. It is a firewall defect for
+     the same reason.
+
+     `overflow: visible` alone is not the answer either, and
+     this is the part worth writing down: a printer does not
+     paginate sideways. A 1600px table on an 800px page still
+     loses its right-hand columns — it loses them at the paper's
+     edge instead of at the card's.
+
+     So the rule is `visible`, and the reason it works is what
+     it releases: freed from a fixed-width scroll box, a table
+     lays out at its preferred width and then shrinks toward its
+     MINIMUM CONTENT width by wrapping its cells. Pages grow
+     downward for free. A printed 76° table gets taller, and it
+     keeps every column it was promised.
+
+     Where a table genuinely cannot fit even fully wrapped, 76°
+     chooses the table that RUNS OFF THE PAPER over the table
+     that stops neatly early. Both lose the same columns; only
+     one tells the reader. A column cut through mid-glyph at the
+     sheet's edge is unmistakably incomplete, while a table
+     clipped inside a card looks exactly like a table that
+     ended. C7 forbids the silent truncation, not the visible
+     one — and between an honest failure and a tidy one, a
+     management system prints the honest one. */
+  .sv-table__scroll,
+  .sv-code__pre,
+  .sv-prose pre {
+    overflow: visible;
+  }
+
+  /* The only two sticky elements in the system, and both are
+     scroll affordances for a scroll that no longer exists: B7's
+     held identity column and B43's line gutter. Left sticky
+     inside a now-`visible` ancestor they pin themselves against
+     the page instead and print over the very columns they were
+     holding open. */
+  .sv-table__cell--held,
+  .sv-code__gutter {
+    position: static;
+  }
+
+  /* ---- Page-break discipline ------------------------------
+     `break-inside: avoid` is a PREFERENCE, not a guarantee: a
+     card taller than a page still breaks, because the
+     alternative is losing it. That is the correct behaviour and
+     it is why the thead note below matters. */
+  .sv-card {
+    break-inside: avoid;
+
+    /* A4's "every card: zero border" is a SCREEN rule, and its
+       reason is elevation: --sv-shadow already draws the edge.
+       The shadow is `none` on paper (tokens.css), so with it
+       gone the card has no edge at all — paper on paper. A
+       hairline is what a card is without its elevation, and
+       this is the one rule the token layer could not carry. */
+    border: 1px solid var(--sv-line);
+  }
+
+  /* A row split across a page break is two half-rows and no
+     record. */
+  tr {
+    break-inside: avoid;
+  }
+
+  /* There is no rule here for <thead>, and that is the finding
+     rather than an omission: a browser ALREADY repeats a table
+     header group on every page a table breaks across. It is
+     table layout, not something CSS asks for. What CSS has to
+     do is avoid DEFEATING it — a sticky or absolutely
+     positioned header suppresses the repeat — and the sticky
+     rule above is the whole of that. Unobstructed, the promise
+     keeps itself.
+
+     A heading that lands as the last line on a page is a title
+     for a blank space. `break-after` binds it to what it
+     introduces; `break-inside` keeps a two-line heading whole. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    break-after: avoid;
+    break-inside: avoid;
+  }
+
+  /* B45 Prose is running copy, and running copy is where a page
+     break strands a single line of a paragraph at the top or
+     bottom of a sheet. Three lines is the typographic floor. */
+  p,
+  blockquote,
+  li {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* ---- Link destinations, in one place only ---------------
+     `a[href]::after { content: attr(href) }` on the document is
+     the standard print snippet, and it is wrong for this
+     system. 76° prints an APPLICATION: nearly every anchor on a
+     76° page is a control — a band nav item, an ID cell, a text
+     link action — whose href is an in-app route. Printing
+     "(#/orders/PO-2291)" after every identity cell in a 200-row
+     table adds a second string to the narrowest column on the
+     page and pushes out the columns C7 has just fought to keep.
+     It is noise, and it is noise that costs information.
+
+     Inside B45 Prose it is the exact opposite. Prose sets
+     running copy 76° did not author — a changelog, a policy, a
+     help article — where a link sits inside a SENTENCE and its
+     destination IS the information ("see the token reference").
+     On paper that destination is lost with nothing left to
+     recover it from. So the URL prints there, and only there.
+
+     Absolute http(s) only: a same-page anchor or a hash route
+     states nothing a reader holding the sheet can act on. And
+     it breaks anywhere, because a 90-character URL that cannot
+     break is a horizontal overflow on a 66ch measure — C7
+     again, arriving through a footnote. */
+  .sv-prose a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-family: var(--sv-font-mono);
+    font-size: 0.85em;
+    color: var(--sv-ink-soft);
+    word-break: break-all;
+  }
+}

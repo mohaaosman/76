@@ -14,28 +14,36 @@
  * ramp tops out at the PageHero h1, so a marketing page had no honest way to
  * speak above the work.
  *
- * Don't: no image, no video, no background of its own; no second primary (B10
- * allows one per view region); no second sentence in the statement (running copy
- * is B45 Prose); no stat inside the Masthead (a number on the public surface is
- * B50 ProofRow).
+ * THE HEADER ANATOMY, and it is closed: a TITLE, ONE line under it, and ONE
+ * or TWO buttons. Nothing above the title and nothing under the buttons.
+ *
+ * Don't: no kicker, eyebrow or category line above the title, and no mono note
+ * under the actions — F12 refuses both by name, and the refusal is enforced by
+ * the props not existing; no image, no video, no background of its own; no
+ * second primary (B10 allows one per view region) and no third button; no
+ * second sentence in the statement (running copy is B45 Prose); no stat inside
+ * the Masthead (a number on the public surface is B50 ProofRow); no breadcrumb
+ * anywhere near it (F13).
  */
 import type { ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import './masthead.css';
 
+/**
+ * THE HEADER ANATOMY IS CLOSED, and it is three things: a title, ONE line
+ * under it, and one or two buttons. There is no kicker prop and no note prop,
+ * and F12 refuses both by name — see the Don't list above. A slot that exists
+ * is a slot that gets filled, so the refusal is the absent prop.
+ */
 export interface MastheadProps {
-  /** Mono uppercase line above the title: the category, the release, the audience. */
-  eyebrow?: string;
   /** The claim. Becomes the page's h1. */
   title: string;
   /** The claim's second half, receded — exactly PageHero's move. */
   titleSoft?: string;
   /** ONE sentence. Two is a paragraph, and a paragraph is B45 Prose. */
   statement?: string;
-  /** At most one primary and one ghost (B10: one primary per view region). */
+  /** ONE or TWO buttons, one of them primary. A third is a menu or a page. */
   actions?: ReactNode;
-  /** A mono line under the actions: the terms, the licence, the count. */
-  note?: string;
   align?: 'start' | 'center';
   /** 1 by default — a page has one h1. 2 only when embedded in a page that already owns one. */
   headingLevel?: 1 | 2;
@@ -43,12 +51,10 @@ export interface MastheadProps {
 }
 
 export function Masthead({
-  eyebrow,
   title,
   titleSoft,
   statement,
   actions,
-  note,
   align = 'start',
   headingLevel = 1,
   className,
@@ -61,11 +67,11 @@ export function Masthead({
     /* start is the default because left-aligned type is how the rest of the
        system sets everything; centring is the exception a page asks for. */
     <header className={cx('sv-masthead', align === 'center' && 'sv-masthead--center', className)}>
-      {/* A sibling LINE, not a heading: marking the category as an h-level
-          would put a rung above the claim in the outline and announce the
-          audience as the page's subject. Nothing here is decorative-only, so
-          nothing is aria-hidden either. */}
-      {eyebrow && <p className="sv-masthead__eyebrow sv-mono">{eyebrow}</p>}
+      {/* Nothing above the title. F12 refuses the mono kicker outright: it is
+          a line of type that states the page's category to a reader who is
+          already on the page, it pushes the claim down the sheet, and it is
+          the single most reliable tell of a header nobody wrote. The claim
+          opens the page. */}
       <Heading className="sv-masthead__title">
         {title}
         {/* Inside the heading, so the accessible name is the whole claim and
@@ -74,8 +80,12 @@ export function Masthead({
         {titleSoft && <span className="sv-masthead__title-soft"> {titleSoft}</span>}
       </Heading>
       {statement && <p className="sv-masthead__statement">{statement}</p>}
+      {/* And nothing under the buttons. The mono line of terms, licences and
+          counts that every generated landing page grows there is F12's other
+          half: it is a footnote nobody asked for, in the metadata voice, doing
+          the job the statement above already had. If a term is load-bearing it
+          belongs in the statement or on the page the button opens. */}
       {actions && <div className="sv-masthead__actions">{actions}</div>}
-      {note && <p className="sv-masthead__note sv-mono">{note}</p>}
     </header>
   );
 }

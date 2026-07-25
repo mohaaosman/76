@@ -169,19 +169,18 @@ export function PricingPage() {
       <Band>
         <BandTopbar
           nav={<BandNav items={nav} />}
-          utilities={<Button variant="primary">Start on Team</Button>}
+          /* Ghost, not a second primary — the Masthead below owns the ask (A2). */
+          utilities={<ButtonLink href="#start">Start on Team</ButtonLink>}
         />
       </Band>
 
       <Sheet aria-label="Pricing">
         <Row>
           <Masthead
-            eyebrow="PRICING"
             title="One table."
             titleSoft="Every plan, every line."
             statement="Every capability is stated for every plan, including the ones a plan does not carry. Nothing is implied by leaving it out."
             actions={<Button variant="primary">Start on Team</Button>}
-            note="MIT COMPONENTS · NO CARD REQUIRED ON TEAM"
           />
         </Row>
 
@@ -242,7 +241,6 @@ export function PricingPage() {
             title="Start on Team"
             statement="Install the registry, ship a screen, and move up only when the review and the audit are worth paying for."
             actions={<Button variant="primary">Start on Team</Button>}
-            note="NO CARD REQUIRED · MIT COMPONENTS"
           />
         </Row>
       </Sheet>

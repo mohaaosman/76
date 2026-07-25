@@ -20,6 +20,7 @@ These rules are written to be lintable. Grep the codebase; any hit is a violatio
 - `animation` durations > 200ms; any `transition` on layout properties (width/height/top/left/margin); keyframe bounces/springs.
 - `!important` — a component that needs it is mis-structured.
 - Font families other than Hanken Grotesk / Fragment Mono (system stack fallbacks only).
+- **Rule 18 — nothing touches the paper's edge by accident.** `.sv-card` carries no padding *by design*: a DataTable's rows are hairline-ruled edge to edge and a CardHead owns its own row, so a card that padded everything would have to un-pad them again. The cost is that a widget with no inset of its own — a `MeterList`, a `Trend`, a `Field`, a `Prose`, a `Timeline` — dropped straight into a `<Card>` renders flush against the corners. It has happened more than once, it is invisible in a diff, and until now the only thing standing between the system and it was a comment. A capitalised component that is a **direct child of `<Card>`** must either be full-bleed by specification or self-padded (both lists are registered in `slop-firewall.mjs`), or sit inside `<div className="sv-card__body">`. This is the one firewall rule that reads structure rather than lines, because the defect is a parent/child relationship. Adding a name to the allowlist is a Book change — it is a claim that the component draws to the card's edge on purpose.
 - **Rule 17 —** `var(--sv-display-1|2|3)` anywhere but `tokens.css` and the three marketing components that set display type (`masthead.css`, `cta.css`, `proof-row.css`). The product ramp tops out at 27px; a dashboard that grows a 64px number has left the system. B48 `FeatureList` and B51 `SiteFooter` are marketing too and are deliberately NOT on that list — an allowance nobody uses is an allowance somebody will.
 
 **A2 · Banned patterns:**
@@ -32,6 +33,9 @@ These rules are written to be lintable. Grep the codebase; any hit is a violatio
 - Emojis in product UI. Decorative illustrations in v1. Stock-photo cards.
 - Toasts for errors that belong inline next to the field that caused them.
 - More than one seed-colored primary button visible per view region.
+- **A kicker above a title, or a mono note under an actions cluster.** The header anatomy is closed and it is three things: a **title**, **ONE line under it**, and **ONE or TWO buttons**. Nothing above the title, nothing below the buttons. Refused by name as F12.
+- **Breadcrumbs.** Refused by name as F13.
+- **A stat wearing the colour a button wears.** The seed FILL belongs to the ACTION. A view region gets one seed-filled primary, and every figure on that screen is ink — a stat's accent is `--sv-seed-tint` behind a 34px icon tile (B3) or a 3px bar (B4, B6), never the fill itself. When a stat and a call to action share a surface they must not share a colour: if the number is as loud as the button, the reader has two primaries and the screen has none.
 - Dark mode implemented anywhere but the tokens. Light-first stands as the default surface; dark is opt-in and token-only — the spec is "The dark surface" (Part B, v0.2.0) plus its v0.2.1 amendment. A component that branches on the mode is a defect.
 - KPI cards that are not the S1 anatomy. "Generic admin widget" is a defect class.
 
@@ -370,12 +374,12 @@ The one component in 76° that styles elements it does not own. Running copy —
 
 **The hero, refused as imagery and rebuilt as type.** F11 bans hero photography, illustration and 3D; A2 bans the stock-photo card; A1 bans the gradient every hero grows next. What is left is what a masthead always was — a claim, set large, with nothing behind it. There is **no image slot, no video slot and no background slot**, and adding one is a Book change rather than a prop. One job: **open a public page with the claim, set in type.**
 
-It is B1 `PageHero`'s public-surface sibling and speaks its vocabulary deliberately: `title` plus a receded `titleSoft` inside the same heading, one line of context, an actions cluster with ONE primary. The difference is the ramp and the surface — `--sv-display-1` on the wall, instead of 27px on the band. It is not a card: no paper, no shadow, no radius, no border.
+It is B1 `PageHero`'s public-surface sibling and speaks its vocabulary deliberately: `title` plus a receded `titleSoft` inside the same heading, one line of context, ONE or TWO buttons. **The anatomy is closed by F12** — there is no `eyebrow` prop and no `note` prop, and the refusal is enforced by the slots not existing. The difference is the ramp and the surface — `--sv-display-1` on the wall, instead of 27px on the band. It is not a card: no paper, no shadow, no radius, no border.
 
 - **The steps clamp.** `--sv-display-1` is 64px at full width and 34px at 320px — the size the same line takes in the product ramp — so a public page degrades INTO the system rather than out of it (C7). At the floor the tracking and leading relax back toward the product ramp, because −0.03em/1.05 steadies a 64px line and closes the counters on a 34px one.
 - The actions keep B10's registered geometry. A taller marketing button is a third button size the Book does not carry, and "the type above it is large" is not a reason the taxonomy accepts.
 - A11y: the heading is a real `h1` (or `h2` when embedded), with `titleSoft` inside it so the accessible name is the whole claim. The eyebrow is a sibling LINE, never a heading — an h2 above the h1 puts a rung above the claim in the outline.
-- Don't: no image, video or background; no second primary; no paragraph in the statement (that is B45); no figure inside it (that is B50).
+- Don't: no kicker above the title and no mono note under the actions (F12); no third button; no image, video or background; no second primary; no paragraph in the statement (that is B45); no figure inside it (that is B50); no breadcrumb near it (F13).
 
 ### B48 · `FeatureList` (v0.5)
 
@@ -393,7 +397,7 @@ The last row of a public page, and the only one that asks for anything. Everythi
 - **Two surfaces, one prop.** `tone="paper"` is an ordinary card (A4: radius 4, one `--sv-shadow`, zero border). `tone="band"` paints `--sv-band` and takes the band's own tokens, carrying the `.sv-band` class so ghost buttons and focus rings inside it inherit the band treatment already defined in `button.css` and `base.css` — it writes none of its own. **Ink takes no shadow**: it is the wall's opposite, not a card resting on it.
 - Marks on ink paint with `--sv-on-dark`. `color: var(--sv-paper)` is firewall rule 16 and would collapse every white-on-ink pair on dark.
 - There is no `urgency`, `countdown` or `scarcity` prop, and there never will be: A3 is the copy contract, and a clock that pressures the reader is the opposite of a competent colleague.
-- Don't: never two primaries; never "Get started" or "Learn more" (A3 — the button names its object); never a form inside it (that is a page, or a B24 Plate); never a tinted "premium" surface.
+- Don't: never two primaries; never a mono line of terms under the actions (F12); never "Get started" or "Learn more" (A3 — the button names its object); never a form inside it (that is a page, or a B24 Plate); never a tinted "premium" surface.
 
 ### B50 · `ProofRow` (v0.5)
 
@@ -413,6 +417,35 @@ The last thing on a public page, and the only place a page is allowed to be a li
 - The wordmark carries one accessible name, "Seventy Six Degrees"; its glyph spans are `aria-hidden` so it is never spelled out. Two marks per page — the band opens, the footer closes — and nothing between them carries a third.
 - `renderLink` is BandNav's adapter shape verbatim, so one function wires the band and the footer alike.
 - Don't: no newsletter form (a form is a page, or a Plate); no social icon tiles (A2); no language picker that is the only path to anything (C4); no second wordmark on a page whose band already carries one; no fifth group — that is a sitemap page.
+
+### B52 · `ErrorSummary` (v0.6)
+
+**B11 has required this since v0.1.0 and the barrel never had it.** B11's validation contract ends: *"Submit reveals a top-of-form error summary linking to each field (focus moves to summary)."* Every 76° form that shipped skipped that sentence. B22 Banner's `bad` anatomy verbatim — paper card, 2px `--sv-bad` left rule, 16px tone icon, 13/700 title — with an `<ol>` body, one entry per failed field: a fragment link carrying the field's own LABEL, then the message in B11's voice. One job: **index a failed submit's field errors as one list of links to the fields that caused them.**
+
+- **It never replaces the inline field error.** A2 sends every error to its source, B11 states it at the field, B22 says it again. The summary is the INDEX; the field error is the STATEMENT. A long form failing on field eleven needs both — one to find it, one to fix it.
+- **No `role="alert"`, and the omission is the specification.** Focus moves here on a failed submit, and focusing an element already announces its content; an alert would announce the same event twice. That is the defect `FilterBar` refuses when it declines a second live region. Focus is what B11 mandates, so focus is what ships.
+- Focus moves again when the SET of errors changes, not only when it first appears — a second failed submit is a second event.
+- Each entry is a real fragment link to the input's own `id`, so the browser moves focus with no scripted scrolling. The list is an `<ol>` because the order is the form's order.
+- The title states a tabular COUNT ("3 fields need attention"), never "Oops", never "Please", never an exclamation mark (A3). Tone is carried by the rule, the icon and the sentence, never by colour alone (C5).
+- Don't: never replaces the field error; never a toast (A2); never lists an error with no field to point at (that is B22); never renders when empty.
+
+### B7 · `DataTable` — v0.6 amendment · `totals`
+
+The row every ledger, invoice, goods receipt and stock transfer ends with. **Before this the only way to draw one was to push a fake record into `rows`, where ↑/↓ focuses it, Space selects it, `onRowOpen` opens it and `page.of` counts it — four lies for one row.** `totals` takes `{ label, cells, strong? }[]` and renders a real `<tfoot>`: the label occupies the first column as a `<th scope="row">` in the mono uppercase header voice, and every other cell is keyed by `Column.key` and inherits that column's own `kind` — a `num` column's total is right-aligned and tabular exactly as its body cells are. A `strong` row takes a heavier top rule and 700 figures. One job: **state a table's closing figures outside the row, focus, selection and pagination models.**
+
+### B7 · `DataTable` — v0.6 amendment · `leadHold`
+
+A purchase-order line table is fourteen columns wide; at column seven the reader has lost which line they are on. `leadHold` holds the first column in place while the rest scrolls under it, with a `--sv-line` right rule marking the seam and `--sv-z-sticky` from the registered ladder. One job: **hold the row's identity column in place while the rest of a wide table scrolls under it.**
+
+**It is self-limiting, and that is what keeps F3 refused.** F3 refuses the configurable data grid — column resize, pin, group, a toolbar the reader drives at runtime. This is not a pin: it is not caller-configurable per column, it is not draggable, and it applies to the first column ONLY when that column is already declared `kind: 'id'` — the row identity B7 already names. Passed on a table whose first column is anything else, it is IGNORED. **F3 protects against a table whose shape the reader rearranges; this lets the reader rearrange nothing.**
+
+### The printed surface — v0.6
+
+**C7 promises tables scroll and never truncate silently, and until 0.6 there was not one `@media print` rule in the repository.** On paper a scroll region has no scrollbar, so every column past the fold was gone with nothing on the page to say so — which made C7 structurally unkeepable on the one output surface every ERP, finance and admin product actually ships: the purchase order, the picking list, the invoice, the period report.
+
+**It is specified exactly as the dark surface was, and inherits its governing rule verbatim: no component may branch on the medium.** The printed surface changes tokens in `tokens.css` and page rules in `base.css`, and nowhere else. A `print.css` was proposed and refused for that reason — a separate stylesheet is an invitation for a component to reach into it.
+
+The band prints as paper with a rule under it, because a 1280px ink rectangle is a page of toner and a header nobody can annotate. `--sv-shadow` goes `none` and the card's edge comes from a hairline instead, because A4's zero-border rule exists to protect an elevation that does not exist on paper. Meaning is never carried by colour in 76° (C5), so a greyscale printer loses nothing that was load-bearing.
 
 ### B1 · `BandTopbar` — v0.5 amendment · the marketing shell
 
@@ -520,12 +553,12 @@ Light-first stands: light is the default, dark is opt-in via `<html data-mode="d
 **Fourteen points.** All must pass. Points 1–9 are the original visual gate; 10–14 arrived with the fundamentals layer (v0.1.0) and are stated here so the Book and `skill/seventy-six-design` carry the same gate — they are edited in the same change or neither is.
 
 1. Grep Part A1 patterns — zero hits.
-2. Count colors on the screen: neutrals + one seed + at most both functional colors as words/dots. Anything else fails.
-3. Every widget is a registered type (S1, Progress, Trend, MeterList, DataTable, CardTabs, ActivityList — from v0.2.0: Combobox, Menu, Drawer, Banner, Badge — from v0.3.0: Plate, PinField, SocialButton — from v0.4.0: Accordion, DescriptionList, Divider, Avatar, Spinner/Busy, Kbd, NumberField, Slider, DateRangeField, SearchField, FileField, Tabs, Stepper, TreeList, Timeline, Popover, CodeBlock, DistributionStrip, Split — from v0.5: Prose, and on the PUBLIC surface only, Masthead, FeatureList, CallToAction, ProofRow, SiteFooter) — if a new type was needed, it is named, single-jobbed, and added to Part B in the same change. If Part F refuses it, it is a screen, not a component.
+2. Count colors on the screen: neutrals + one seed + at most both functional colors as words/dots. Anything else fails. **Then check WHERE the seed landed (F14): the one seed fill is on the action, and every figure on the screen is ink.**
+3. Every widget is a registered type (S1, Progress, Trend, MeterList, DataTable, CardTabs, ActivityList — from v0.2.0: Combobox, Menu, Drawer, Banner, Badge — from v0.3.0: Plate, PinField, SocialButton — from v0.4.0: Accordion, DescriptionList, Divider, Avatar, Spinner/Busy, Kbd, NumberField, Slider, DateRangeField, SearchField, FileField, Tabs, Stepper, TreeList, Timeline, Popover, CodeBlock, DistributionStrip, Split — from v0.5: Prose, and on the PUBLIC surface only, Masthead, FeatureList, CallToAction, ProofRow, SiteFooter — from v0.6: ErrorSummary) — if a new type was needed, it is named, single-jobbed, and added to Part B in the same change. If Part F refuses it, it is a screen, not a component.
 4. Every S1 footnote passes the "so what" test (new information, not paraphrase).
 5. Tab through the screen: visible focus everywhere, order sane, skip-link present (a Plate is the one exception, B24), ⌘K opens.
 6. Squint test: the page reads as ink band + white paper on a platinum wall — a Plate (B24) reads as one card and a wordmark on the wall; nothing glows, nothing floats, nothing performs.
-7. Copy audit vs A3: no exclamation marks, buttons name objects, errors say what and how to fix.
+7. Copy audit vs A3: no exclamation marks, buttons name objects, errors say what and how to fix. Header audit vs F12: no kicker above a title, no mono note under an actions cluster, one or two buttons.
 8. Contrast spot-check anything new against C1; new seeds through the C1 seed rule.
 9. The degree mark: every wordmark reads `76°` — never bare `76`.
 10. State contract: 8 interaction states on every interactive element, 4 lifecycle states on every data region; disabled is never bare opacity (Part E).
@@ -553,6 +586,31 @@ The test: **if a widget's job needs more than one sentence, or it carries an int
 | F9 | Color picker, star rating | Out of taxonomy |
 | F10 | Drag-drop dashboard layout | The fixed 12-column grid (B2) |
 | F11 | Hero imagery, stock photography, illustration | Type, hairline, and real data |
+| F12 | The kicker above a title · the mono note under an actions cluster | The closed header: title · one line · one or two buttons |
+| F13 | Breadcrumbs | The Band states where you are; a record page states its own parent in its facts |
+| F14 | A stat and a call to action in the same colour | The seed fill is the action's; every figure is ink |
+
+### F12 · The closed header
+
+**A header is a title, ONE line under it, and ONE or TWO buttons.** Nothing above the title. Nothing below the buttons.
+
+The **kicker** — the mono uppercase category line sitting above a heading ("COMPONENT LIBRARY · v0.5", "PRICING", "OUR PLATFORM") — states the page's category to a reader who is already on the page, pushes the claim down the sheet, and adds a rung above the h1 that the document outline does not have. The **note** — the mono line of terms, licences and counts under the actions ("MIT · ZERO DEPENDENCIES · REACT 19") — is a footnote nobody reads, set in the voice reserved for metadata, doing the job the line above the buttons already had.
+
+Both are refused because both are the same failure: **a slot filled because it exists.** So the refusal is enforced by the props not existing. B47 `Masthead` has no `eyebrow` and no `note`; B49 `CallToAction` has no `note`. A term that is load-bearing goes in the statement, or on the page the button opens. A third button is a B20 Menu, or it is a page.
+
+### F13 · Breadcrumbs
+
+Where you are is the Band's job (B1): the nav item is `aria-current`, the sub-tab row names the section, and the `PageHero` h1 names the page. A breadcrumb restates all three in a fourth voice, and it grows the nested multi-level structure F6 already refuses. A record page that genuinely has a parent states it as a **fact** — a `DescriptionList` row naming the order, the account or the requisition it came from, which is a link the reader can follow and a fact they can read, rather than a trail of chevrons above the title.
+
+*(This closes the 0.8 `PathLine` proposal, which was a breadcrumb by another name. The drill path a reader took is not a component; the level above the current one is a link in the record's own facts.)*
+
+### F14 · The stat and the action never share a colour
+
+**The seed fill belongs to the action.** A view region gets one seed-filled primary (A2), and everything that states a number on that region is ink: a `StatS1` value, a `ProofRow` figure, a `DistributionStrip` total, a table's `num` column. The seed appears in a stat only as `--sv-seed-tint` behind a 34px icon tile (B3) or as the 3px bar B4 and B6 explicitly call illustration — never as the figure's own colour and never as a fill behind it.
+
+The reason is arithmetic, not taste. **If the number is as loud as the button, the reader has two primaries, and a screen with two primaries has none.** Law 2 spends one accent per screen; a stat that takes it has taken it from the one control that needed it. This is why B50 `ProofRow` sets its figures in `--sv-ink` while the `CallToAction` below it carries the only seed rectangle on the page, and why B3 puts the seed in a 34px tile beside the value rather than in the value.
+
+Corollary for the public surface: a `ProofRow` and a `CallToAction` on one page are the test case. Squint at it (Ship Gate 6) — exactly one thing should be coloured, and it should be the thing you click.
 
 **F11 SURVIVED THE PUBLIC SURFACE.** v0.5 dressed the pitch without repealing a single refusal: no photography, no illustration, no 3D, no logo cloud. B47 `Masthead` has no image slot, B48 `FeatureList` has no icon, and B50 `ProofRow` has no chart. The one thing that changed is the type ramp — three display steps, fenced to those components by firewall rule 17. A refusal that survives the surface it was written against is a refusal that was right.
 

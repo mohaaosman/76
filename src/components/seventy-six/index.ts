@@ -81,6 +81,11 @@ export { Spinner, Busy } from './spinner';
 export type { SpinnerProps, BusyProps } from './spinner';
 export { Kbd } from './kbd';
 export type { KbdProps } from './kbd';
+/* v0.6 · the promises already made. B11 has required a top-of-form error
+   summary since v0.1.0 and the barrel never carried one. */
+export { ErrorSummary } from './error-summary';
+export type { ErrorSummaryProps, FieldError } from './error-summary';
+
 export { Prose } from './prose';
 export type { ProseProps } from './prose';
 

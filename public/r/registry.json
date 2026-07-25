@@ -816,6 +816,25 @@
       ]
     },
     {
+      "name": "error-summary",
+      "type": "registry:ui",
+      "title": "ErrorSummary",
+      "description": "The top-of-form index B11 has always required and the barrel never had. One job: Index a failed submit's field errors as one list of links to the fields that caused them.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/error-summary.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/error-summary.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "number-field",
       "type": "registry:ui",
       "title": "NumberField",
@@ -1136,6 +1155,36 @@
       "files": [
         {
           "path": "templates/pricing-page.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "template-erp-purchase-order",
+      "type": "registry:block",
+      "title": "Purchase order",
+      "description": "One operational document — its facts, its lines, its history, its verbs.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/erp-purchase-order.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "template-crm-deal-board",
+      "type": "registry:block",
+      "title": "Deal board",
+      "description": "The pipeline as a board — four stage cards, and a deal that moves by a named verb.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/crm-deal-board.tsx",
           "type": "registry:block"
         }
       ]

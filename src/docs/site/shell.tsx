@@ -47,6 +47,16 @@ export function Shell({ onSearch }: { onSearch: () => void }) {
       ]
     : [];
 
+  /* A route change starts at the top of the new page. A multi-page app gets
+     this from the browser; a hash-routed SPA has to say it, and until it does
+     the reader arrives at whatever scroll offset the previous page left
+     behind — or at whatever the new page's first control pulled them to.
+     `instant` rather than smooth: this is not a transition the reader asked
+     for, and C7 sends every animation to 0ms under reduced motion anyway. */
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [pathname]);
+
   const renderLink = (item: BandNavItem, className: string, ariaCurrent?: 'page') => (
     <Link to={item.href} className={className} aria-current={ariaCurrent}>
       {item.label}
