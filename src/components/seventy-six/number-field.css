@@ -1,0 +1,59 @@
+/* B33 · NumberField — B11 chrome plus a − / + pair. */
+
+@layer sv-components {
+  .sv-numfield__row {
+    display: flex;
+    align-items: center;
+    gap: var(--sv-s2);
+  }
+
+  .sv-numfield__input {
+    width: 88px;
+    text-align: right;
+    font-weight: 600;
+    /* The native spinners duplicate the − / + pair and cannot be styled
+       to system; the pair replaces them. */
+    appearance: textfield;
+  }
+
+  .sv-numfield__input::-webkit-outer-spin-button,
+  .sv-numfield__input::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  /* B10 ghost anatomy at the field's own height — square, so the pair
+     reads as chrome on the input rather than as two more buttons. */
+  .sv-numfield__step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--sv-field-line);
+    border-radius: var(--sv-r);
+    background: var(--sv-paper);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--sv-ink);
+    cursor: pointer;
+    transition: border-color var(--sv-t-fast), color var(--sv-t-fast);
+  }
+
+  .sv-numfield__step:hover:not(:disabled) {
+    border-color: var(--sv-seed-line);
+  }
+
+  .sv-numfield__step:disabled {
+    background: var(--sv-wall);
+    color: var(--sv-ink-faint);
+    cursor: not-allowed;
+  }
+
+  .sv-numfield__unit {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sv-ink-soft);
+  }
+}

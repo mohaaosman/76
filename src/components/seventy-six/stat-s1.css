@@ -12,13 +12,18 @@
     color: var(--sv-ink-soft);
   }
 
-  .sv-stat__delta {
+  /* The delta chip — used by the S1 top row and standalone in cells. */
+  .sv-delta {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 3px;
     font-size: 12px;
     font-weight: 700;
+    white-space: nowrap;
   }
 
-  .sv-stat__delta--ok  { color: var(--sv-ok); }
-  .sv-stat__delta--bad { color: var(--sv-bad); }
+  .sv-delta--ok  { color: var(--sv-ok); }
+  .sv-delta--bad { color: var(--sv-bad); }
 
   .sv-stat__mid {
     display: flex;

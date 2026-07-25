@@ -101,4 +101,45 @@
     color: var(--sv-ink-faint);
     cursor: not-allowed;
   }
+
+  /* ---- v0.4.0 · the selection head (B7 amendment) ---- */
+
+  /* Same row, same padding as CardHead — it SWAPS the head, it does not
+     stack a second bar on top of it. The seed tint is the only signal
+     that the card is in a different mode. */
+  .sv-selhead {
+    align-items: center;
+    background: var(--sv-seed-tint);
+    border-radius: var(--sv-r) var(--sv-r) 0 0;
+  }
+
+  .sv-selhead__count {
+    font-size: 10.5px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--sv-seed-text);
+  }
+
+  .sv-selhead__verbs {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sv-s3);
+  }
+
+  /* ---- v0.4.0 · the stated filter line (B7 amendment) ---- */
+
+  .sv-filterline {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sv-s3);
+    padding: var(--sv-s2) 18px 10px;
+  }
+
+  .sv-filterline__text {
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--sv-ink-soft);
+  }
 }

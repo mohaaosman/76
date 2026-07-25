@@ -20,7 +20,9 @@ export interface TrendProps {
   series: TrendSeries[];
   /** X labels rendered in mono under the plot (subset shown). */
   xLabels?: string[];
-  kind?: 'line' | 'bar';
+  /** stacked sums the series per column — parts of ONE total, never
+      unrelated measures sharing an axis. */
+  kind?: 'line' | 'bar' | 'stacked';
   height?: number;
   /** Show a small legend row (14×2px swatches). Omit when the seed/gray
       convention carries it. */
@@ -29,6 +31,50 @@ export interface TrendProps {
 }
 
 const X_PAD = 4;
+
+/** Stacked segments read bottom-up: the live part in seed, the rest receding. */
+const STACK_TONES = ['seed', 'compare', 'faint'] as const;
+
+/**
+ * B5 amendment (v0.4.0) · Sparkline — the shape of a series at cell size:
+ * no axes, no grid, no labels, no interaction. It is only ever legal
+ * BESIDE a printed figure, because a line with no scale states nothing on
+ * its own (B4's rule: the numbers inform, the bar illustrates).
+ */
+export interface SparklineProps {
+  data: number[];
+  /** REQUIRED takeaway, e.g. "Orders per day, trending up over 14 days". */
+  ariaLabel: string;
+  width?: number;
+  height?: number;
+  tone?: 'seed' | 'faint';
+  className?: string;
+}
+
+export function Sparkline({ data, ariaLabel, width = 72, height = 20, tone = 'seed', className }: SparklineProps) {
+  const lo = Math.min(...data);
+  const hi = Math.max(...data);
+  const span = hi - lo || 1;
+  const step = (width - 2) / Math.max(1, data.length - 1);
+  const y = (v: number) => height - 2 - ((v - lo) / span) * (height - 4);
+  const path = data.map((v, i) => `${i === 0 ? 'M' : 'L'}${(1 + i * step).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+
+  return (
+    <svg
+      className={cx('sv-spark', tone === 'faint' && 'sv-spark--faint', className)}
+      viewBox={`0 0 ${width} ${height}`}
+      width={width}
+      height={height}
+      role="img"
+      aria-label={ariaLabel}
+    >
+      <path className="sv-spark__line" d={path} />
+      {data.length > 0 && (
+        <circle className="sv-spark__dot" cx={1 + (data.length - 1) * step} cy={y(data[data.length - 1])} r="2" />
+      )}
+    </svg>
+  );
+}
 
 export function Trend({
   ariaLabel,
@@ -43,11 +89,15 @@ export function Trend({
   const width = 560;
 
   const { max, gridYs } = useMemo(() => {
-    const all = capped.flatMap((s) => s.data);
-    const top = Math.max(1, ...all);
-    const niceMax = top * 1.15;
-    return { max: niceMax, gridYs: [0.25, 0.5, 0.75, 1] };
-  }, [capped]);
+    /* Stacked columns are read against their SUM — scaling to the tallest
+       single series would push the stack off the plot. */
+    const tops =
+      kind === 'stacked'
+        ? capped[0]?.data.map((_, i) => capped.reduce((sum, s) => sum + (s.data[i] ?? 0), 0)) ?? []
+        : capped.flatMap((s) => s.data);
+    const top = Math.max(1, ...tops);
+    return { max: top * 1.15, gridYs: [0.25, 0.5, 0.75, 1] };
+  }, [capped, kind]);
 
   const toneClass = (tone: TrendSeries['tone'], i: number) =>
     tone ?? (i === 0 ? 'seed' : 'compare');
@@ -128,6 +178,31 @@ export function Trend({
                     rx="2"
                   />
                 ))}
+              </g>
+            );
+          })}
+        {kind === 'stacked' &&
+          (capped[0]?.data ?? []).map((_, i) => {
+            const group = (width - X_PAD * 2) / (capped[0]?.data.length ?? 1);
+            const barW = Math.min(26, group * 0.62);
+            let base = height;
+            return (
+              <g key={i}>
+                {capped.map((s, si) => {
+                  const v = s.data[i] ?? 0;
+                  const h = (v / max) * height;
+                  base -= h;
+                  return (
+                    <rect
+                      key={s.label}
+                      className={cx('sv-trend__bar', `sv-trend__fill--${s.tone ?? STACK_TONES[si]}`)}
+                      x={X_PAD + i * group + (group - barW) / 2}
+                      y={base}
+                      width={barW}
+                      height={h}
+                    />
+                  );
+                })}
               </g>
             );
           })}

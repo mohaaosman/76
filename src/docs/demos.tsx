@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import type { ComponentType, FormEvent } from 'react';
 import {
+  Accordion,
   ActivityList,
+  Avatar,
+  AvatarGroup,
   Badge,
+  Busy,
   Band,
   BandNav,
   BandSubTabs,
@@ -16,12 +20,19 @@ import {
   CardTabs,
   Checkbox,
   DataTable,
+  DateRangeField,
+  Delta,
+  DescriptionList,
   Dialog,
+  Divider,
   Drawer,
   EmptyState,
   Field,
+  FilterLine,
+  Kbd,
   MenuButton,
   MeterList,
+  NumberField,
   PageHero,
   PinField,
   Plate,
@@ -30,8 +41,12 @@ import {
   Row,
   SearchCommand,
   Select,
+  SelectionHead,
   Skeleton,
+  Slider,
   SocialButton,
+  Sparkline,
+  Spinner,
   SplitButton,
   StatS1,
   StatusWord,
@@ -1236,6 +1251,305 @@ function SocialLoading() {
   );
 }
 
+/* ------------------------------------------------ Accordion */
+
+const orderSections = [
+  { id: 'lines', title: 'Line items', meta: '14 SKUS', children: <p>Fourteen SKUs across three pallets. Two lines are short-picked and route to the overflow bay.</p> },
+  { id: 'ship', title: 'Shipping', meta: 'DHL · 24 JUL', children: <p>DHL Express, collected 24 JUL 14:28, tracking 8471 2290 4471.</p> },
+  { id: 'audit', title: 'Audit trail', meta: '6 EVENTS', children: <p>Created by A. Yusuf, approved by K. Berg, released to the floor at 09:12.</p> },
+];
+
+function AccordionBasic() {
+  return (
+    <Accordion sections={orderSections.map((s, i) => ({ ...s, defaultOpen: i === 0 }))} />
+  );
+}
+
+function AccordionExclusive() {
+  return <Accordion exclusive name="demo-sections" sections={orderSections} />;
+}
+
+/* ------------------------------------------------ DescriptionList */
+
+function DescriptionRecord() {
+  return (
+    <DescriptionList
+      rows={[
+        { term: 'ORDER', kind: 'id', children: 'ORD-10482' },
+        { term: 'CUSTOMER', children: 'Halcyon Freight' },
+        { term: 'STATUS', children: <StatusWord tone="ok">Fulfilled</StatusWord> },
+        { term: 'RELEASED', children: '24 JUL · 09:12' },
+        { term: 'TOTAL', kind: 'num', children: '$18,240.00' },
+      ]}
+    />
+  );
+}
+
+/* ------------------------------------------------ Divider */
+
+function DividerBasic() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+      <Divider />
+      <Divider label="OR" />
+      <Divider label="ARCHIVED" align="start" />
+    </div>
+  );
+}
+
+/* ------------------------------------------------ Avatar */
+
+const team = [
+  { name: 'Amina Yusuf' },
+  { name: 'Karl Berg' },
+  { name: 'Priya Raman' },
+  { name: 'Tomas Nowak' },
+  { name: 'Lena Fischer' },
+  { name: 'Sam Okonkwo' },
+];
+
+function AvatarGroupDemo() {
+  return (
+    <div className="demo-row">
+      <Avatar name="Amina Yusuf" size="lg" />
+      <Avatar name="Karl Berg" tone="seed" />
+      <span className="demo-row" style={{ gap: 8 }}>
+        <AvatarGroup people={team} max={4} />
+        <span style={{ fontSize: 12.5, color: 'var(--sv-ink-soft)' }}>Assigned to the July close</span>
+      </span>
+    </div>
+  );
+}
+
+/* ------------------------------------------------ Spinner & Busy */
+
+function SpinnerBasic() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+      <span className="demo-row" style={{ gap: 8, fontSize: 12.5, color: 'var(--sv-ink-soft)' }}>
+        <Spinner label="Saving" />
+        Saving draft…
+      </span>
+      <Busy label="Loading July orders…" minHeight={120} />
+    </div>
+  );
+}
+
+function SpinnerOver() {
+  const [busy, setBusy] = useState(false);
+  const figures = (
+    <DescriptionList
+      rows={[
+        { term: 'OPEN ORDERS', kind: 'num', children: '248' },
+        { term: 'PICKED TODAY', kind: 'num', children: '1,412' },
+      ]}
+    />
+  );
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div className="demo-row">
+        <Button variant="ghost" onClick={() => { setBusy(true); setTimeout(() => setBusy(false), 1800); }}>
+          Refresh figures
+        </Button>
+      </div>
+      {busy ? (
+        <Busy label="Refreshing figures…" minHeight={90}>
+          {figures}
+        </Busy>
+      ) : (
+        figures
+      )}
+    </div>
+  );
+}
+
+/* ------------------------------------------------ Kbd */
+
+function KbdBasic() {
+  return (
+    <div className="demo-row" style={{ fontSize: 12.5, color: 'var(--sv-ink-soft)' }}>
+      <span className="demo-row" style={{ gap: 8 }}>
+        <Kbd keys={['⌘', 'K']} /> Search
+      </span>
+      <span className="demo-row" style={{ gap: 8 }}>
+        <Kbd keys={['G', 'O']} separator="then" /> Go to orders
+      </span>
+      <span className="demo-row" style={{ gap: 8 }}>
+        <Kbd keys={['Esc']} /> Close
+      </span>
+    </div>
+  );
+}
+
+/* ------------------------------------------------ NumberField */
+
+function NumberBasic() {
+  const [qty, setQty] = useState(12);
+  return (
+    <div className="demo-form">
+      <NumberField
+        label="Pallet positions"
+        hint="Whole pallets only — partials go on the overflow line."
+        value={qty}
+        onValueChange={setQty}
+        min={1}
+        max={48}
+        unit="pallets"
+      />
+    </div>
+  );
+}
+
+function NumberError() {
+  const [value, setValue] = useState(5200);
+  return (
+    <div className="demo-form">
+      <NumberField
+        label="Reorder point"
+        value={value}
+        onValueChange={setValue}
+        step={100}
+        max={9000}
+        error={value > 4700 ? 'Reorder point must be below the maximum stock level of 4,700.' : undefined}
+      />
+    </div>
+  );
+}
+
+/* ------------------------------------------------ Slider */
+
+function SliderBasic() {
+  const [threshold, setThreshold] = useState(40);
+  return (
+    <div className="demo-form">
+      <Slider
+        label="Alert threshold"
+        hint="Below this, the warehouse raises a replenishment task."
+        value={threshold}
+        onValueChange={setThreshold}
+        step={5}
+        format={(v) => `${v}%`}
+      />
+    </div>
+  );
+}
+
+/* ------------------------------------------------ DateRangeField */
+
+function DateRangeBasic() {
+  const [range, setRange] = useState({ from: '2026-06-26', to: '2026-07-25' });
+  return (
+    <div className="demo-form">
+      <DateRangeField label="Reporting period" value={range} onValueChange={setRange} today="2026-07-25" />
+    </div>
+  );
+}
+
+function DateRangeError() {
+  const [range, setRange] = useState({ from: '2026-07-30', to: '2026-07-02' });
+  return (
+    <div className="demo-form">
+      <DateRangeField label="Reporting period" value={range} onValueChange={setRange} today="2026-07-25" />
+    </div>
+  );
+}
+
+/* ------------------------------------------------ Delta & Sparkline */
+
+function DeltaInline() {
+  return (
+    <DescriptionList
+      rows={[
+        { term: 'REVENUE MTD', children: <span className="demo-row" style={{ gap: 10 }}>$482,190 <Delta value={12.4} /></span> },
+        { term: 'COST PER ORDER', children: <span className="demo-row" style={{ gap: 10 }}>$4.18 <Delta value={-6.2} polarity="down-good" /></span> },
+        {
+          term: 'ORDERS / DAY',
+          children: (
+            <span className="demo-row" style={{ gap: 10 }}>
+              312 <Sparkline data={[180, 224, 251, 198, 262, 296, 312]} ariaLabel="Orders per day, trending up over seven days" />
+            </span>
+          ),
+        },
+      ]}
+    />
+  );
+}
+
+function TrendStacked() {
+  return (
+    <Card>
+      <CardHead title="Volume by channel" subtitle="Parts of one total" />
+      <div className="trend-pad">
+        <Trend
+          kind="stacked"
+          legend
+          ariaLabel="Weekly volume by channel, total peaking Thursday at 412 orders"
+          series={[
+            { label: 'Direct', data: [120, 148, 161, 202, 186, 92, 61] },
+            { label: 'Partner', data: [40, 52, 58, 141, 78, 34, 22] },
+            { label: 'Marketplace', data: [20, 24, 32, 69, 32, 16, 15] },
+          ]}
+          xLabels={['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']}
+          height={140}
+        />
+      </div>
+    </Card>
+  );
+}
+
+/* ------------------------------------------------ Selection head & filter line */
+
+function TableSelectionHead() {
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const { notify } = useToast();
+  const count = selected.size;
+  return (
+    <Card>
+      {count > 0 ? (
+        <SelectionHead
+          count={count}
+          noun="invoice"
+          onClear={() => setSelected(new Set())}
+          actions={
+            <>
+              <Button variant="ghost" onClick={() => notify({ tone: 'ok', title: `Sent ${count} invoice${count === 1 ? '' : 's'}` })}>
+                Send {count}
+              </Button>
+              <Button variant="danger" onClick={() => notify({ tone: 'warn', title: 'Deleting confirms in a dialog first' })}>
+                Delete
+              </Button>
+            </>
+          }
+        />
+      ) : (
+        <CardHead title="Draft invoices" subtitle="July · unsent" />
+      )}
+      <FilterLine
+        count={`${draftInvoices.length} of 248`}
+        filters={[
+          { label: 'Status', value: 'Draft' },
+          { label: 'Period', value: 'July' },
+        ]}
+        onClearAll={() => notify({ tone: 'info', title: 'Filters cleared' })}
+      />
+      <DataTable
+        caption="Draft invoices"
+        rows={draftInvoices}
+        rowKey={(r) => r.id}
+        selectable
+        selected={selected}
+        onSelect={setSelected}
+        announcement={`${count} of ${draftInvoices.length} invoices selected`}
+        columns={[
+          { key: 'id', header: 'INVOICE', kind: 'id', render: (r) => r.id },
+          { key: 'customer', header: 'CUSTOMER', render: (r) => r.customer },
+          { key: 'total', header: 'TOTAL', kind: 'num', render: (r) => r.total },
+        ]}
+      />
+    </Card>
+  );
+}
+
 /* ------------------------------------------------ registry */
 
 export const demos: Record<string, ComponentType> = {
@@ -1290,4 +1604,20 @@ export const demos: Record<string, ComponentType> = {
   'social-stack': SocialStack,
   'social-signup': SocialSignup,
   'social-loading': SocialLoading,
+  'accordion-basic': AccordionBasic,
+  'accordion-exclusive': AccordionExclusive,
+  'dl-record': DescriptionRecord,
+  'divider-basic': DividerBasic,
+  'avatar-group': AvatarGroupDemo,
+  'spinner-basic': SpinnerBasic,
+  'spinner-over': SpinnerOver,
+  'kbd-basic': KbdBasic,
+  'number-basic': NumberBasic,
+  'number-error': NumberError,
+  'slider-basic': SliderBasic,
+  'daterange-basic': DateRangeBasic,
+  'daterange-error': DateRangeError,
+  'delta-inline': DeltaInline,
+  'trend-stacked': TrendStacked,
+  'table-selection': TableSelectionHead,
 };
