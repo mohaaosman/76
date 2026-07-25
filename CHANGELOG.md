@@ -6,6 +6,108 @@ project uses [semantic versioning](https://semver.org).
 
 ## [Unreleased]
 
+**The surface reaches the widgets.** v0.6.1 built the moving surface and wired
+exactly one component to it — B5 `Trend`. v0.7 declared the posture, v0.8
+switched it on, and the widgets that most obviously wanted it were still
+painting finished on frame one. This connects them. **Not one governing rule
+was repealed to do it**, and the two that were argued against are argued
+against in the stylesheets rather than deleted: B4's "the fill never animates
+on load" is made *conditional on a posture the product declares*, exactly as
+B5's ban on a draw-in was in v0.6.1, and A1's ban on transitioning layout is
+not touched at all — every bar below scales, none of them widens.
+
+**The line the whole release is drawn along:** an *arrival* is posture-gated
+and off by default, because nobody asked for it; an *answer to an act the
+reader performed* is not, because the alternative is a control that responds
+silently. B21 `Drawer` settled that boundary before the posture existed — it
+has slid from its owning edge on `--sv-t` since v0.2 with no gate in sight —
+and every top-layer entrance here follows it.
+
+### Added
+- **The bars arrive** — `Progress` (B4), `MeterList` (B6), `DistributionStrip`
+  (B44) and the `Stepper`'s closed spans (B39) draw from nothing under the
+  posture, in `--sv-t-enter` on base.css's ease-out-cubic. **A `scaleX`, never
+  a width**: the registered `width` exception in the firewall is for a *value
+  change*, and an entrance that reflowed the track would be the layout
+  transition A1 bans. B44 scales its **segments** rather than its strip, so
+  the 2px paper seams — the thing that makes it read as parts — stay 2px on
+  every frame. **Nothing staggers.** The `Stepper` connector flips to a
+  `scaleY` below 620px, where the sequence stands up and a `scaleX` would draw
+  a full-height rule zero pixels wide.
+- **The `Timeline` rail runs down** (B41) — every row's segment scales from
+  its own top on the same frame, so an unbroken line extends downward rather
+  than eight lines growing. The dots **fade rather than scale**: the marker is
+  an 11px circle whose outer 2px is a paper ring, and scaling animates that
+  ring to sub-pixel.
+- **The `Sparkline` draws** (B5) — it was left out of v0.6.1 and that was an
+  omission, not a decision. It takes the plot's declarations verbatim: the
+  same dash-of-one on a `pathLength`-normalised path, the same fade on the
+  terminal dot. Twenty in a table column draw on one frame and land on one
+  frame.
+- **The top layer arrives** — `Dialog` (B13), `Popover` (B42), `Menu` (B20)
+  and `Tooltip` (B18), via `@starting-style`, the construction `Drawer`
+  already used. **Ungated**, on `--sv-t-fast`, which the token layer collapses
+  under `prefers-reduced-motion` and on paper. **Exit stays instant** — B21's
+  words: honest and cheaper than choreographing a close. Two constraints came
+  from the components rather than from taste: B42 and B20 **translate and
+  never scale**, because their placement code reads `offsetWidth` and a scaled
+  panel would land at a position measured for a size it did not have; B18
+  **only fades**, because it is placed from its own `getBoundingClientRect()`,
+  which — unlike `offsetWidth` — reports a transformed box. **Menu items do
+  not stagger**: the reader opened it to hit a verb, and a cascade means the
+  verb is not where it will be.
+- **`Toast` rises** (B14) — the one entrance here that answers no click, and
+  still ungated: B14 arrives unannounced at the corner of a screen nobody is
+  looking at, and the move is what says something appeared.
+- **The tab underline draws** (B38, B8) — a keyframe, not the sliding
+  underline every tab library ships. The mark belongs to the active tab's
+  `::after`, so switching destroys one and generates another; there is no
+  element to slide, and a shared one travelling the row would drag a seed rule
+  across tabs the reader did not choose.
+
+### Changed
+- **The `Accordion` panel fades** (B27) — 120ms of opacity on the copy
+  *inside* a row that still snaps to its full height. The height ban is
+  untouched and the reason is restated: a height transition walks every row
+  below the section away from the pointer that was about to click one.
+- **The foundations page describes the surface it actually has.** Its motion
+  paragraph still read "two durations… opacity and color only", written before
+  `--sv-t-enter`, `--sv-t-count` and the posture existed. It now states all
+  four durations, the arrival/answer boundary, and the rule that governs both.
+- **Three stale claims in the component docs** — B4's "never animates on
+  load", B5's tagline "no draw-in" and its Don't list — now say *by default*
+  and name the posture, which has been the truth since v0.6.1.
+
+### Fixed
+- **Rule 18 is verified instead of believed, and it was wrong about three
+  components.** The firewall's exemption list carried a SELF-PADDED half under
+  the comment *"Verified against each one's own stylesheet, not assumed"* —
+  and three of its seven names were assumed. `.sv-stepper`, `.sv-features` and
+  `.sv-daterange` each declare `padding: 0`, which is a list reset and a
+  fieldset reset, not an inset. The gate built to stop a widget rendering
+  flush against a card's corners was waving three of them through.
+
+  The list now names the **selector that carries the inset**, and the gate
+  reads it. Only the **inline** axis counts: a component padded 16px top and
+  bottom and zero at the sides is exactly as flush as one padded nowhere.
+  `StatS1`, `EmptyState`, `Banner` and `ErrorSummary` verify and keep the
+  exemption; the other three lose it and take `sv-card__body` like the
+  `MeterList` and `Timeline` they resemble. The FULL-BLEED half stays a
+  hand-kept list, because "this component draws hairline rows to the paper's
+  edge on purpose" is a claim about structure that no stylesheet can confirm.
+
+  A name in the checked half can no longer be wrong, and a claim that goes
+  stale later fails the build rather than a screenshot months on.
+- **B39 `Stepper` shipped flush in `payment-checkout`** — markers hard against
+  the card's left corner and the third step clipped at the right edge. It was
+  a direct child of `<Card>` under a call-site comment asserting the exemption
+  it did not qualify for, while `analytics-overview` wrapped the same
+  component in a `sv-card__body` two files away. Two call sites, two
+  contradictory beliefs, and a green build either way — which is the whole
+  reason the check above exists.
+
+---
+
 **The cover.** The public surface takes its structure from Japanese editorial
 design — the *SUPER: Osaka* cover, *TOKYO PAPER*, the NAGANO and HOKKAIDO
 travel posters. English only, and **not one refusal was repealed to do it**:

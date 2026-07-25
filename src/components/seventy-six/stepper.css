@@ -38,6 +38,41 @@
     background: var(--sv-seed);
   }
 
+  /* ---- v0.9 · the closed spans draw, and it is OFF until the app asks
+
+     The seed connector is the one thing in B39 that has a DIRECTION —
+     it is "the span it closed", so it draws the way the sequence runs.
+     Everything else here holds still: the markers do not pop, the
+     labels do not fade, and the upcoming hairlines are already the
+     length they will be.
+
+     POSTURE-GATED, unlike the tab underline, and the boundary is the
+     one tokens.css draws. A tab mark answers a click the reader just
+     made. A Stepper states where a process stands and is usually on
+     screen before the reader does anything at all — an arrival, which
+     is `--sv-t-enter`'s definition and is off until a product declares
+     the posture. When the sequence does advance under the reader's
+     hand, the class changes, the animation re-runs, and the same
+     declaration is the feedback.
+
+     A scale, not a width: A1 forbids animating layout, and the
+     connector is a flex item whose length the row depends on. The
+     final frame is the ordinary rule.
+
+     Nothing is carried by this. The step's state is in its marker fill,
+     its label weight and `aria-current`; C5 has already paid for a
+     connector nobody sees. */
+  [data-motion='on'] .sv-stepper__step--done::after {
+    transform-origin: left center;
+    animation: sv-stepper-span var(--sv-t-enter) cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  @keyframes sv-stepper-span {
+    from {
+      transform: scaleX(0);
+    }
+  }
+
   .sv-stepper__step:last-child::after {
     content: none;
   }
@@ -142,6 +177,29 @@
       width: 1px;
       min-width: 0;
       height: auto;
+    }
+
+    /* The connector turned 90°, so the move does too. A scaleX on a
+       1px-wide vertical rule would draw a full-height line that is
+       zero pixels wide — the animation running with nothing visible on
+       any frame but the last, which is worse than not running. It
+       draws downward from the marker it leaves, which is the direction
+       the sequence now reads. */
+    [data-motion='on'] .sv-stepper__step--done::after {
+      transform-origin: center top;
+      animation-name: sv-stepper-span-down;
+    }
+
+    @keyframes sv-stepper-span-down {
+      from {
+        transform: scaleY(0);
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-motion='on'] .sv-stepper__step--done::after {
+      animation: none;
     }
   }
 }

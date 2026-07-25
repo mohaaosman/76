@@ -40,6 +40,23 @@
     bottom: -1px;
     height: 2px;
     background: var(--sv-seed);
+
+    /* B38's mark, so B38's move — the argument is written out in
+       tabs.css and is not restated here: a keyframe rather than a
+       transition because the pseudo-element is generated on switch,
+       no sliding rule across tabs nobody chose, `--sv-t-fast`
+       because it answers a click. The keyframe is declared per file
+       rather than shared, exactly as `sv-rotate` is declared in both
+       button.css and spinner.css: a component pulled from the
+       registry on its own has to carry its own move. */
+    transform-origin: left center;
+    animation: sv-cardtabs-mark var(--sv-t-fast) cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  @keyframes sv-cardtabs-mark {
+    from {
+      transform: scaleX(0);
+    }
   }
 
   .sv-cardtabs__count {

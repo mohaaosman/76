@@ -51,4 +51,36 @@
     line-height: 1.5;
     color: var(--sv-ink);
   }
+
+  /* ---- v0.9 · the panel arrives ---------------------------------
+
+     Not posture-gated, for the reason dialog.css states in full: the
+     panel is on screen because the reader clicked its trigger, so this
+     is feedback on an act and belongs to `--sv-t-fast`, which collapses
+     under reduced motion and on paper at the token layer.
+
+     A TRANSLATE, NEVER A SCALE, and this is a constraint the component
+     imposes on its own entrance rather than a preference. The panel is
+     parked beside its trigger by JS, and that code reads
+     `panel.offsetWidth` to keep the panel inside the viewport.
+     `offsetWidth` is the layout box and ignores a transform, so a
+     translate is invisible to the arithmetic; a scale would be too, and
+     would therefore land the panel at a position measured for a size it
+     did not have on that frame. 4px rather than `.sv-enter`'s 6px,
+     because the panel opens 4px below the trigger's bottom edge and the
+     move should read as it settling onto that offset.
+
+     Exit is instant, as B21 has it. */
+  .sv-popover:popover-open {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity var(--sv-t-fast) ease-out, transform var(--sv-t-fast) ease-out;
+  }
+
+  @starting-style {
+    .sv-popover:popover-open {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+  }
 }

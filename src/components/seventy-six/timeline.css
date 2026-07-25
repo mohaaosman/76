@@ -68,6 +68,60 @@
     box-shadow: inset 0 0 0 2px var(--sv-paper), inset 0 0 0 3.5px var(--sv-field-line-strong);
   }
 
+  /* ---- v0.9 · the rail runs down, and it is OFF until the app asks
+
+     B41's opening line is that the rail carries the rhythm, which is
+     why there are no hairlines between rows. So the rail is what moves,
+     and it moves the way the sequence is read: down.
+
+     EVERY SEGMENT DRAWS ON THE SAME FRAME. Each row owns a piece of the
+     rail (the ::before, padded so it meets the next row's and the line
+     is continuous), and scaling each from its own top means the whole
+     rail extends downward as one — an unbroken line growing, not eight
+     lines growing. The alternative was a per-row delay, which would
+     produce the same picture and would be a stagger: a queue of delayed
+     children is the page performing, refused here as it is refused in
+     use-reveal.ts and meter-list.css.
+
+     The dots FADE rather than scale. A dot that grows from nothing is
+     the marker performing its own arrival, and B41's marker is a
+     precise 11px circle whose outer 2px is a paper ring — scaling it
+     would animate that ring to sub-pixel and read as a smudge on the
+     way in. Opacity leaves the geometry alone on every frame.
+
+     Posture-gated, `--sv-t-enter`, base.css's curve. A Timeline is a
+     record of things that already happened; nobody clicked to make it
+     appear, so it is an arrival and it is off until a product says
+     otherwise. Nothing here is information: the state is in the dot's
+     fill, the copy beside it and the time it carries. */
+  [data-motion='on'] .sv-timeline__item::before {
+    transform-origin: center top;
+    animation: sv-timeline-rail var(--sv-t-enter) cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  [data-motion='on'] .sv-timeline__dot {
+    animation: sv-timeline-dot var(--sv-t-enter) cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  @keyframes sv-timeline-rail {
+    from {
+      transform: scaleY(0);
+    }
+  }
+
+  @keyframes sv-timeline-dot {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-motion='on'] .sv-timeline__item::before,
+    [data-motion='on'] .sv-timeline__dot {
+      animation: none;
+    }
+  }
+
   .sv-timeline__time {
     display: block;
     color: var(--sv-ink-faint);

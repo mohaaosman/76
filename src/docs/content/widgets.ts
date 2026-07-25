@@ -126,7 +126,8 @@ export const widgets: DocEntry[] = [
     exports: ['Progress'],
     files: ['components/seventy-six/progress.tsx', 'components/seventy-six/progress.css'],
     intro: [
-      'Soft title, a 19/700 tabular "current / target" line, a 3px seed bar on a wall track, and a faint context line. The fill transitions width once (160ms) and never animates on load beyond that.',
+      'Soft title, a 19/700 tabular "current / target" line, a 3px seed bar on a wall track, and a faint context line. The fill transitions width once (160ms) when the value changes.',
+      '<b>v0.9</b> lets the bar arrive. Under <code>data-motion="on"</code> the fill draws from the left in 200ms — a <code>scaleX</code>, never a width, because A1 forbids animating layout and the track, the figure above it and the context line under it must not reflow. With no posture declared not one declaration applies and the bar paints finished on the first frame, which is what it did before. Nothing is carried by it: B4 specifies the numbers as the information and the bar as illustration.',
       'Danger is a word, not a bar: there is no red fill state. If something is overdue it belongs in a table or list with a StatusWord, not in a meter.',
     ],
     examples: [
@@ -192,7 +193,7 @@ export const widgets: DocEntry[] = [
     name: 'Trend',
     book: 'B5',
     category: 'widgets',
-    tagline: 'Flat single-weight SVG lines on a hairline grid — seed for now, line-gray for before. No fills, no draw-in.',
+    tagline: 'Flat single-weight SVG lines on a hairline grid — seed for now, line-gray for before. No fills; the draw-in is off until the app asks.',
     job: 'Answer "which direction."',
     tags: ['chart', 'line-chart', 'bar-chart', 'stacked-bar', 'sparkline', 'comparison', 'svg', 'no-area-fill'],
     exports: ['Trend', 'Sparkline'],
@@ -302,7 +303,7 @@ export const widgets: DocEntry[] = [
     donts: [
       'No area or gradient fills under lines (A1).',
       'No dual-axis charts; two units means two charts.',
-      'No animated draw-in; the chart is simply there.',
+      'No animated draw-in <b>by default</b> — the chart is simply there. It draws only where a wrapper declares <code>data-motion="on"</code>, in 200ms, along a <code>pathLength</code>-normalised line whose un-animated state is the finished line. The Sparkline follows it; the highlight chip deliberately does not, because a printed statement does not arrive late.',
       'No donuts, pies, radials, or gauges anywhere in product (A2) — MeterList replaces them.',
       'No more than three series.',
       'No stacked bars for measures that do not sum to a real total.',

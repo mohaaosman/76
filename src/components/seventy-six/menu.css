@@ -16,6 +16,32 @@
     color: var(--sv-ink);
   }
 
+  /* ---- v0.9 · the menu arrives ----------------------------------
+
+     B42's entrance, verbatim, because B20 is the same object doing a
+     narrower job: the same top layer, the same JS placement reading
+     `offsetWidth`, the same 4px offset below the trigger. Not
+     posture-gated — it answers a click (dialog.css argues it in full) —
+     and `--sv-t-fast` collapses under reduced motion and on paper.
+
+     THE ITEMS DO NOT STAGGER. A menu whose rows cascade in is the one
+     move on this surface that would actively cost the reader something:
+     they opened it to hit a verb, and a queue of delayed children means
+     the verb they were reaching for is not where it will be. The panel
+     arrives; its contents are in it. */
+  .sv-menu:popover-open {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity var(--sv-t-fast) ease-out, transform var(--sv-t-fast) ease-out;
+  }
+
+  @starting-style {
+    .sv-menu:popover-open {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+  }
+
   .sv-menu__item {
     display: flex;
     align-items: center;

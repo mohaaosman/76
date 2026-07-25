@@ -14,4 +14,31 @@
     font-weight: 500;
     max-width: 260px;
   }
+
+  /* ---- v0.9 · the tip arrives, and it only FADES -----------------
+
+     No translate here, unlike B42 and B20, and the reason is in
+     tooltip.tsx: the tip is placed by measuring its OWN
+     `getBoundingClientRect()`, which — unlike `offsetWidth` — reports
+     the box as transformed. It is only read for `width` and `height`,
+     so a translate would in fact be harmless today; a fade is chosen
+     anyway, because that is a fact about six lines of a sibling file
+     and a component should not owe its entrance to one. An opacity
+     step cannot be measured wrong.
+
+     It is also the right move on the merits. B18 is a phrase that
+     appears where the pointer already is, on a hover the reader did
+     not commit to — a tip that travels 6px to reach a cursor that has
+     not moved is the page pointing at itself. Not posture-gated (it
+     answers an act), `--sv-t-fast`, and exit instant. */
+  .sv-tooltip:popover-open {
+    opacity: 1;
+    transition: opacity var(--sv-t-fast) ease-out;
+  }
+
+  @starting-style {
+    .sv-tooltip:popover-open {
+      opacity: 0;
+    }
+  }
 }

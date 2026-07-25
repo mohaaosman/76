@@ -343,6 +343,31 @@
     }
   }
 
+  /* ---- v0.9 · the sparkline draws too -----------------------------
+
+     The Sparkline was left out of the v0.6.1 block and it was an
+     omission rather than a decision: it is the same series as the plot
+     above, at cell size, and a dashboard where the chart draws in and
+     the sparkline beside it is simply already there has two rules about
+     one thing. It takes the plot's declarations verbatim — the same
+     dash-of-one on a pathLength-normalised line, the same fade on the
+     terminal dot, the same duration and the same curve.
+
+     It costs nothing where it is most likely to appear. A sparkline's
+     registered position is inside a table cell BESIDE a printed figure
+     (B5's own rule: a line with no scale states nothing alone), so
+     twenty of them in a column all draw on the same frame and all land
+     on the same frame — one move, twenty marks, no stagger and no
+     queue. The figure beside each was never hidden. */
+  [data-motion='on'] .sv-spark__line {
+    stroke-dasharray: 1;
+    animation: sv-trend-draw var(--sv-t-enter) cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  [data-motion='on'] .sv-spark__dot {
+    animation: sv-trend-in var(--sv-t-enter) cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
   /* Belt and braces. --sv-t-enter is already 0ms here, but base.css makes
      the point that a 0ms animation is not the same object as no animation,
      and it is right: a chart holds figures, so it gets the stronger of the
@@ -351,7 +376,9 @@
   @media (prefers-reduced-motion: reduce) {
     [data-motion='on'] .sv-trend__line,
     [data-motion='on'] .sv-trend__bar,
-    [data-motion='on'] .sv-trend__dot {
+    [data-motion='on'] .sv-trend__dot,
+    [data-motion='on'] .sv-spark__line,
+    [data-motion='on'] .sv-spark__dot {
       animation: none;
     }
 

@@ -23,7 +23,37 @@
     border-radius: var(--sv-r);
     box-shadow: var(--sv-shadow);
     border-left: 2px solid var(--sv-seed-line);
-    transition: opacity var(--sv-t);
+
+    /* ---- v0.9 · the toast arrives ------------------------------
+
+       The one entrance on this surface that answers no click, and it
+       is still not posture-gated: B14 is a statement that ARRIVES
+       UNANNOUNCED at the corner of a screen the reader is not looking
+       at, and the move is what tells them something appeared. That is
+       the whole job of the component. A toast that materialises with
+       no transition is a toast that was already there as far as
+       peripheral vision is concerned.
+
+       It costs nothing to delete, which is this surface's test: the
+       toast is in the DOM, in the accessible tree and announced by its
+       live region whatever this does. `--sv-t` rather than
+       `--sv-t-fast` because it is unprompted and the reader's eye has
+       to find it — and it collapses to 0ms under reduced motion and on
+       paper at the token layer, where B14 is hidden outright.
+
+       6px UP, from the corner it is anchored to. `@starting-style` is
+       what makes an element entering the DOM transition at all, and
+       without it in an older browser the toast simply appears. */
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity var(--sv-t) ease-out, transform var(--sv-t) ease-out;
+  }
+
+  @starting-style {
+    .sv-toast {
+      opacity: 0;
+      transform: translateY(6px);
+    }
   }
 
   .sv-toast--lg {
