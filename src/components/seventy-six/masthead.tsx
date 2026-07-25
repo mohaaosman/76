@@ -17,6 +17,12 @@
  * THE HEADER ANATOMY, and it is closed: a TITLE, ONE line under it, and ONE
  * or TWO buttons. Nothing above the title and nothing under the buttons.
  *
+ * v0.8 adds ONE prop, `scale`, and it buys type and nothing else. `issue`
+ * takes the STRUCTURE the Japanese editorial covers use — a title cut
+ * condensed on the display face's width axis, set to the page's own edge,
+ * over a deck in the ordinary UI voice. The anatomy above is untouched by
+ * it: the cover is a way of setting the claim, not a licence to add to it.
+ *
  * Don't: no kicker, eyebrow or category line above the title, and no mono note
  * under the actions — F12 refuses both by name, and the refusal is enforced by
  * the props not existing; no image, no video, no background of its own; no
@@ -45,6 +51,29 @@ export interface MastheadProps {
   /** ONE or TWO buttons, one of them primary. A third is a menu or a page. */
   actions?: ReactNode;
   align?: 'start' | 'center';
+  /**
+   * The TYPE, and only the type. `default` is what every page already
+   * ships — display-1 in the UI face — and is byte-for-byte unchanged.
+   *
+   * `issue` is the cover treatment the Japanese editorial references set:
+   * the same step in `--sv-font-display`, cut condensed on the face's WIDTH
+   * axis, heavy, and flush to the container's edge, with the statement left
+   * in the UI face at the ordinary step underneath it. THE CONTRAST IS THE
+   * DEVICE — a display title over a plain deck is what a magazine does, and
+   * setting the deck in the display face too would collapse the two voices
+   * into one poster and lose the thing being borrowed.
+   *
+   * It is a SCALE and not a variant, which is the whole of its licence: it
+   * changes type and nothing else. F11 still refuses the picture, F12 still
+   * refuses the kicker and the note — the props do not exist at either
+   * scale — and F14 still leaves the seed fill to the action. A scale that
+   * started admitting slots would be a second component wearing this one's
+   * name.
+   *
+   * ENGLISH ONLY, and the case is the CALLER's — see masthead.css, which
+   * argues why `issue` does not force uppercase.
+   */
+  scale?: 'default' | 'issue';
   /** 1 by default — a page has one h1. 2 only when embedded in a page that already owns one. */
   headingLevel?: 1 | 2;
   className?: string;
@@ -56,6 +85,7 @@ export function Masthead({
   statement,
   actions,
   align = 'start',
+  scale = 'default',
   headingLevel = 1,
   className,
 }: MastheadProps) {
@@ -66,7 +96,17 @@ export function Masthead({
   return (
     /* start is the default because left-aligned type is how the rest of the
        system sets everything; centring is the exception a page asks for. */
-    <header className={cx('sv-masthead', align === 'center' && 'sv-masthead--center', className)}>
+    <header
+      className={cx(
+        'sv-masthead',
+        align === 'center' && 'sv-masthead--center',
+        /* The default scale adds NO class, so the element every existing
+           page renders is the element it rendered before — the amendment
+           is unreachable from a call site that does not ask for it. */
+        scale === 'issue' && 'sv-masthead--issue',
+        className,
+      )}
+    >
       {/* Nothing above the title. F12 refuses the mono kicker outright: it is
           a line of type that states the page's category to a reader who is
           already on the page, it pushes the claim down the sheet, and it is

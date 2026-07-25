@@ -59,8 +59,98 @@
   }
 
 
+  /* ---- scale="issue" · the cover ---------------------------------------
+     The same claim, at the same step, in the third family — and the ONLY
+     thing that changes is type. No picture arrives with it (F11), no kicker
+     and no note (F12), and the seed fill stays the action's (F14). A scale
+     that admitted a slot would be a second component wearing this one's
+     name.
+
+     THE FACE. `--sv-font-display` is legal in exactly three files (firewall
+     rule 20) and this is one of them, because the display face exists so a
+     public page can set a poster title — not so a screen can pick a voice.
+     The statement below is deliberately NOT touched: it stays in the UI
+     face at 17px, and the distance between a display title and a plain deck
+     is the magazine device being borrowed. Set both in the display face and
+     there is no contrast left to read.
+
+     THE WIDTH AXIS, which is why this face and not a static one. Archivo
+     carries `wdth` 62–125 (default 100) alongside `wght` 100–900. At full
+     width the title is cut to `wdth` 78 — 22 points below normal on the 38
+     that separate normal from the extreme, so most of the way there. That
+     is far enough to read as a cut rather than as a normal face that
+     happens to be bold: it buys close to a quarter more characters per
+     line, so a claim that wrapped to three lines sets in two
+     and the block squares up against the container's edge the way a cover
+     does. It stops short of the extreme because past ~70 the counters at
+     800 weight start closing into each other and a 64px line becomes
+     texture rather than words.
+     The weight does NOT move between the scales — 800 at both — so there is
+     one axis in play and one reason for it.
+
+     `font-variation-settings` rather than `font-stretch`: the high-level
+     property only reaches the axis when the @font-face declares a
+     `font-stretch` RANGE, and the weight-only Archivo subset does not, so
+     `font-stretch: 78%` would be silently inert against it. The low-level
+     property addresses the axis in the file directly. If the loaded file
+     carries no `wdth` axis at all the declaration is inert too — but then
+     the title simply sets at normal width and the page loses the cut and
+     nothing else, which is the same way it degrades onto the fallback
+     stack.
+
+     UPPERCASE IS THE CALLER'S, and `issue` does not force it. The
+     references are set in caps, but caps there are what the copywriter
+     WROTE — and A3 governs copy, not this stylesheet. The system sets caps
+     in one place only, the mono metadata voice, and a `text-transform` here
+     would be the second: it would put a claim in the metadata register by
+     accident. It also cannot know what it is shouting — a product name, an
+     acronym, a proper noun that carries meaning in its case — and the
+     tracking below is tuned for the mixed-case line the system actually
+     sets, since caps at -0.035em jam. A caller who wants the cover's
+     register types it in caps, and owns the consequence.
+
+     THE EDGE. No inline padding at any scale — the Sheet (B2) owns the
+     gutter — so the title already begins at the container's edge and this
+     block adds nothing that would inset it. No optical negative margin
+     either: the correction differs per face, and the moment Archivo has
+     not loaded it would pull the claim a few pixels off the grid every
+     other element on the page is aligned to.
+     `text-wrap: balance` stays even though a balanced line does not run
+     fully to the right edge: an orphaned last word on a 64px claim is a
+     worse failure than a slightly short line, and it is the reason the
+     claim was set large in the first place. */
+  .sv-masthead--issue .sv-masthead__title {
+    font-family: var(--sv-font-display);
+    font-variation-settings: 'wdth' 78;
+    /* 0.94 — inside the 0.92–0.95 the reference sets. A condensed face is
+       narrower but no shorter, so the lines can close up until the
+       descender of one nearly meets the cap of the next, and the title
+       reads as a BLOCK of type rather than as stacked sentences. */
+    line-height: 0.94;
+    letter-spacing: -0.035em;
+  }
+
+  /* The deck's own step is unchanged; only the gap moves. 0.94 leading
+     pulls the title's last baseline up, so the metric space below it reads
+     shorter than it measures, and --sv-s5 after a 64px block looks like a
+     caption rather than a deck. */
+  .sv-masthead--issue .sv-masthead__statement {
+    margin-top: var(--sv-s6);
+  }
+
   /* Centring has to move the measure caps with the text, or the statement
-     stays pinned to the left of a centred column and reads as a mistake. */
+     stays pinned to the left of a centred column and reads as a mistake.
+
+     `align="center"` composes with `issue` and is supported, but it is the
+     wrong thing to ask for and this is the comment saying so: a masthead is
+     a LEFT EDGE. The whole argument for the cover treatment is that the
+     claim is set to the page's own edge and reads as a masthead rather than
+     as a centred hero — centring it hands back exactly what was bought, and
+     leaves a condensed, heavy display block floating in the middle of the
+     sheet, which is the hero A2 refuses with better type. It is still
+     honoured, because `align` is an existing prop and `scale` is a scale:
+     silently ignoring what a call site asked for is a worse component than
+     one that does the thing it was told. */
   .sv-masthead--center {
     text-align: center;
   }
@@ -88,6 +178,30 @@
 
     .sv-masthead__title {
       line-height: 1.12;
+      letter-spacing: -0.02em;
+    }
+
+    /* The cover degrades on the WIDTH axis exactly as it does on the size
+       one, and at the same threshold, because they are the same event:
+       --sv-display-1 reaches its 34px floor at 531px, so by 560px the type
+       is already down at the step the product ramp sets and there is
+       nothing left for a second breakpoint to do.
+       `wdth` goes back to 100 — all the way to normal, not part of the way.
+       78 removes about a fifth of every counter's width; that is a cut the
+       reader can spend at 64px and cannot at 34px, where a three-line
+       claim in the same cut turns into a wall. The face ends at the same
+       normal width the UI face has, which is the token's own argument in
+       the other axis: the page degrades INTO the system, never out of it.
+       Tracking and leading relax with it — -0.035em was steadying a wide
+       64px line and closes counters at 34px, and 0.94 leading crowds
+       descenders once the claim wraps to three lines. 1.05 stays tighter
+       than the product ramp's 1.12: this is still a cover, just a small
+       one. The three declarations have to be restated here rather than
+       inherited from the block above, because the compound selector
+       outranks it. */
+    .sv-masthead--issue .sv-masthead__title {
+      font-variation-settings: 'wdth' 100;
+      line-height: 1.05;
       letter-spacing: -0.02em;
     }
 

@@ -6,6 +6,67 @@ project uses [semantic versioning](https://semver.org).
 
 ## [Unreleased]
 
+**The cover.** The public surface takes its structure from Japanese editorial
+design — the *SUPER: Osaka* cover, *TOKYO PAPER*, the NAGANO and HOKKAIDO
+travel posters. English only, and **not one refusal was repealed to do it**:
+every reference is image-led, F11 bans photography and illustration by name,
+and where the poster puts a picture a 76° page puts **a live component**.
+F11's replacement column has always read "type, hairline, and *real data*",
+and a component library has the one asset that qualifies.
+
+### Added
+- **`IndexRow` (B56)** — the cover's contents strip: a row of cells on
+  vertical hairlines, each with a display-face ordinal, a label and an
+  optional mono count, each a link. A real `<nav>` around an `<ol>`, because
+  the ordinals are the point and an `<ol>` makes them meaning rather than
+  decoration. The boundary against B1: `BandNav` is what you move with, on
+  every page; `IndexRow` appears once, on the page that indexes the others.
+- **`CaptionRow` (B57)** — up to four short fragments across one rule, under
+  the specimen they caption. **It is the accent's one non-fill, non-link use
+  on the public surface**, and the argument is stated: F14 is about MASS, a
+  rectangle competes with a button, and a 12.5px line has no area.
+- **`Masthead scale="issue"` (B47 amendment)** — the poster treatment. The
+  title takes the display face flush to the container edge, condensed and
+  heavy via the width axis, relaxing back toward normal width at 320px. **The
+  deck under it stays in the UI face: the contrast between a display title and
+  a plain deck IS the magazine device.** `scale="default"` is untouched.
+- **`--sv-font-display` (Archivo Variable) and firewall rule 20.** A1's font
+  rule names three families now, and the third is fenced exactly as rule 17
+  fences the display steps: legal in `tokens.css`, `masthead.css` and
+  `index-row.css`, nowhere else. It is a VARIABLE face because it carries a
+  width axis as well as a weight one — the same font sets a condensed poster
+  title at 1440px and a readable one at 320px, so the title degrades *into*
+  the system.
+- **`useReveal`** — an IntersectionObserver entrance that returns `revealed:
+  true` immediately when the posture is off, under reduced motion, or where
+  `IntersectionObserver` is absent. A reveal hook that hides content on a
+  browser it does not understand has broken the page, not decorated it.
+
+### Changed
+- **Clean URLs.** `HashRouter` → `BrowserRouter`. `server.mjs` already
+  rewrote extensionless misses to the app shell, so no hosting change was
+  needed; two comments that still claimed hash routing were corrected.
+- **Motion is switched on.** The posture shipped in v0.7 with `data-motion`
+  declared **nowhere**, so every duration resolved to `0ms` and nothing moved
+  — plumbing with no tap. `index.html` now carries it at the document root.
+  The cost is recorded rather than hidden: an operator loading the same
+  dashboard forty times a shift sees the same entrance forty times.
+  `prefers-reduced-motion` still overrides it completely.
+- **The docs landing is the cover** — masthead, contents strip, a plate of
+  live components, a caption row, then the plain reading cards. The eight
+  documentation pages are deliberately unchanged: a magazine has one cover and
+  many inside pages set for reading.
+- **Counts are derived, not typed.** The component index read "54 components
+  across B1–B51" — a hand-written range that went stale three releases ago.
+
+### Fixed
+- **The Archivo import was the weight-only subset**, so the width axis would
+  have been declared and silently ignored. It is `/wdth.css` now, which is the
+  entire reason a variable face was registered instead of a static condensed
+  one.
+
+---
+
 **Motion, money, and the review.** Three things the owner asked for, each of
 which collided with binding text, and none of which was let through by
 quietly deleting the rule it collided with.

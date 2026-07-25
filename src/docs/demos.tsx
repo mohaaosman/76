@@ -8,6 +8,7 @@ import {
   Badge,
   Busy,
   CallToAction,
+  CaptionRow,
   ErrorSummary,
   Band,
   BandNav,
@@ -36,6 +37,7 @@ import {
   FileField,
   FilterBar,
   FilterLine,
+  IndexRow,
   Kbd,
   Masthead,
   MenuButton,
@@ -2466,6 +2468,29 @@ function SumBasic() {
   );
 }
 
+
+/* ------------------------------------------------ v0.8 · the cover */
+
+function IndexBasic() {
+  return (
+    <IndexRow
+      ariaLabel="Contents"
+      items={[
+        { id: 'foundations', label: 'Foundations', href: '#/foundations', meta: 'TOKENS' },
+        { id: 'components', label: 'Components', href: '#/components', meta: '56 SPECS' },
+        { id: 'blocks', label: 'Blocks', href: '#/blocks', meta: 'SECTIONS' },
+        { id: 'templates', label: 'Templates', href: '#/templates', meta: 'SCREENS' },
+      ]}
+    />
+  );
+}
+
+function CaptionBasic() {
+  return (
+    <CaptionRow captions={['never a screenshot', 'always the shipped code', 'figures that reconcile']} />
+  );
+}
+
 /* ------------------------------------------------ registry */
 
 export const demos: Record<string, ComponentType> = {
@@ -2570,4 +2595,6 @@ export const demos: Record<string, ComponentType> = {
   'errsum-form': ErrSumForm,
   'table-totals': TableTotals,
   'sum-basic': SumBasic,
+  'index-basic': IndexBasic,
+  'caption-basic': CaptionBasic,
 };

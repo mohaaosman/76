@@ -1,0 +1,90 @@
+/* B57 · CaptionRow — one hairline, a few fragments, and the full measure
+   between them. The distribution is the whole design: three captions
+   bunched at the left are a list, and the same three spread edge to edge
+   are a caption line under the thing they caption. */
+
+@layer sv-components {
+  /* space-between puts the first fragment on the page's own left edge and
+     the last on its right, which is what ties the row to the measure of the
+     block above it rather than to its own content width. It wraps rather
+     than compresses — nothing here scrolls sideways (A2, C7). */
+  .sv-captions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--sv-s2) var(--sv-s6);
+  }
+
+  /* The rule sits on ONE stated edge, and 'none' writes nothing at all: a
+     row with no rule is a row with no border declaration, not a border
+     declared transparent. 'top' is the default because a caption most often
+     closes the block above it — the rule is the line the specimen sits on. */
+  .sv-captions[data-rule='top'] {
+    padding-top: var(--sv-s3);
+    border-top: 1px solid var(--sv-line);
+  }
+
+  .sv-captions[data-rule='bottom'] {
+    padding-bottom: var(--sv-s3);
+    border-bottom: 1px solid var(--sv-line);
+  }
+
+  /* THE SEED TEXT, AND THE CASE FOR IT AGAINST F14.
+
+     F14 governs the seed FILL: "a view region gets one seed-filled primary,
+     and every figure on that screen is ink", because if the number is as
+     loud as the button the reader has two primaries and the screen has
+     none. That is an argument about MASS, not about hue — the fill is a
+     rectangle, and a rectangle is what competes with a button. A 12.5px
+     line of type has no area to compete with: squint at the page (Ship Gate
+     6) and this row blurs into a grey rule while the one seed rectangle on
+     the page stays the only coloured object in view. The test F14 sets
+     therefore still passes, and it passes for the reason F14 gives rather
+     than by exception.
+
+     What the seed BUYS here is the one thing the row is for. The block
+     above is a live component specimen — real, running, and made of the
+     same neutrals as everything else on the wall. The caption line is what
+     says "this, here, deliberately"; in ink-soft it reads as a footnote
+     under a widget, which is the reading the row exists to prevent. This is
+     the accent's one non-fill, non-link use on the public surface, and it
+     is registered here rather than assumed.
+
+     It does NOT wear B10's text-link voice, and the difference is
+     structural rather than a matter of degree: a text-link action is
+     inline, inside running copy or beside a control, and it underlines
+     under a pointer. These are isolated fragments on their own row, spread
+     across the full measure, with no underline, no hover, no cursor change
+     and nothing to click — the component refuses links by specification. No
+     mark in 76° is arranged like this and navigates.
+
+     Contrast: --sv-seed-text is the step verified as TEXT (5.70:1 on paper
+     in Cobalt, and per-seed variants exist exactly where the raw seed fails
+     — C1). 12.5/600 is above the small-text threshold on either count. */
+  .sv-captions__caption {
+    max-width: 22ch;
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--sv-seed-text);
+  }
+
+  /* ---- The floor ---- */
+
+  /* C7 · four fragments spread across 320px would each be two words wide,
+     so the row stands up instead. Nothing hides and nothing scrolls; the
+     rule stays where it was stated, because the block it captions is still
+     above (or below) it. The measure cap comes off — in a column each
+     fragment already has the full width, and 22ch would leave a ragged
+     stack with no gain. */
+  @media (max-width: 560px) {
+    .sv-captions {
+      flex-direction: column;
+      gap: var(--sv-s2);
+    }
+
+    .sv-captions__caption {
+      max-width: none;
+    }
+  }
+}

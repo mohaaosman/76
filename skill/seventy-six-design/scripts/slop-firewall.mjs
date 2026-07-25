@@ -113,6 +113,12 @@ function checkCardPadding(file, source, flag) {
   });
 }
 
+/* RULE 20's allowlist — the components that SET the display face. */
+const DISPLAY_FACE_FILES = new Set([
+  'masthead.css',   /* B47 · the claim */
+  'index-row.css',  /* B56 · the contents strip's ordinals */
+]);
+
 const DISPLAY_TYPE_FILES = new Set([
   'masthead.css',   /* B47 · display-1, the claim */
   'cta.css',        /* B49 · display-3, the ask */
@@ -215,8 +221,22 @@ function check(file, source) {
       flag('transition on layout property');
     }
 
-    if (/font-family\s*:/.test(line) && !/var\(--sv-font-(ui|mono)\)|inherit/.test(line)) {
+    if (/font-family\s*:/.test(line) && !/var\(--sv-font-(ui|mono|display)\)|inherit/.test(line)) {
       flag('unregistered font-family');
+    }
+
+    /* RULE 20 · The display FACE belongs to the public surface, exactly as
+       rule 17's display STEPS do. A1 names three families now, and the third
+       one exists so a landing page can set a poster title — not so a
+       dashboard can pick a different voice for its table headers. Legal in
+       tokens.css (where it is declared) and in the marketing components that
+       set it; adding a file here is a Book change. */
+    if (
+      /var\(--sv-font-display\)/.test(line) &&
+      base !== 'tokens.css' &&
+      !DISPLAY_FACE_FILES.has(base)
+    ) {
+      flag('display face outside the public surface (rule 20)');
     }
 
     /* ---- Part E · fundamentals gates ---- */

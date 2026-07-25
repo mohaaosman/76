@@ -369,4 +369,124 @@ export const marketing: DocEntry[] = [
       { q: 'Can it carry the product nav?', a: 'No. Navigation is the Band (B1). A footer holds what a page owes the reader — legal, resources, the wordmark — not the app\'s own routes.' },
     ],
   },
+
+  /* ================================================================ B56 */
+  {
+    slug: 'index-row',
+    name: 'IndexRow',
+    book: 'B56',
+    category: 'marketing',
+    tagline: 'The cover\'s contents strip — numbered sections on vertical hairlines.',
+    job: 'State a publication\'s sections as a numbered strip, and link to them.',
+    tags: ['index', 'contents', 'nav', 'marketing', 'landing', 'editorial', 'sections'],
+    exports: ['IndexRow'],
+    files: ['components/seventy-six/index-row.tsx', 'components/seventy-six/index-row.css'],
+    intro: [
+      'A row of cells divided by vertical hairlines, each carrying a display-face ordinal, a label, and an optional mono count — and each a link. It is the magazine cover\'s table of contents, and it is what makes a public page a <b>cover</b> rather than a hero: a cover indexes the pages behind it.',
+      'A real <code>&lt;nav&gt;</code> around an <code>&lt;ol&gt;</code>. Ordered, because the ordinals are the point — an <code>&lt;ol&gt;</code> makes them meaning rather than decoration — and the ordinal is derived from POSITION, never passed in. A hand-written number drifts the moment a section is inserted, and a contents page that miscounts itself is worse than an unnumbered one.',
+      '<b>The boundary against B1.</b> <code>BandNav</code> is the app\'s navigation: always present, <code>aria-current</code> on the active item, the thing you move with. IndexRow appears <i>once</i>, on the page that indexes the others, and it states what exists. A product screen never carries one.',
+    ],
+    examples: [
+      {
+        title: 'The contents strip',
+        description: 'Six sections, each a link, each with a mono note on what is behind it.',
+        demoKey: 'index-basic',
+        code: `import { IndexRow } from '@/components/seventy-six';
+
+<IndexRow
+  ariaLabel="Contents"
+  items={[
+    { id: 'foundations', label: 'Foundations', href: '/foundations', meta: 'TOKENS' },
+    { id: 'components', label: 'Components', href: '/components', meta: '56 SPECS' },
+    { id: 'blocks', label: 'Blocks', href: '/blocks', meta: 'SECTIONS' },
+    { id: 'templates', label: 'Templates', href: '/templates', meta: 'SCREENS' },
+  ]}
+/>`,
+      },
+    ],
+    props: [
+      {
+        component: 'IndexRow',
+        rows: [
+          { name: 'items', type: 'IndexItem[]', description: 'id · label · href · optional mono meta. Two to eight.' },
+          { name: 'ariaLabel', type: 'string', description: 'Required — it is navigation, and navigation is named.' },
+          { name: 'renderLink', type: '(item, className) => ReactNode', description: 'Router adapter, exactly as BandNav takes one.' },
+        ],
+      },
+    ],
+    a11y: {
+      notes: [
+        'A real <nav> with a required label around an ordered list, so the count and the order are both announced.',
+        'The ordinal is NOT aria-hidden — copy refers to sections by number, and hiding a visible figure from a screen reader is the asymmetry C5 warns about.',
+        'The anchor is the label, not the whole cell, so the link\'s accessible name never changes when a section is inserted above it.',
+        'It wraps at 860px and stands up at 560px. It never scrolls sideways — A2\'s ban is written for the band and reads on every nav-like row.',
+      ],
+    },
+    donts: [
+      'Never a substitute for the Band; the app\'s navigation is B1 and it is always present.',
+      'Never more than eight cells — a ninth section is a sitemap page.',
+      'Never a horizontal scroller.',
+      'Never on a product screen.',
+    ],
+    faq: [
+      { q: 'IndexRow or BandNav?', a: 'Do you move with it, on every page? That is BandNav. Does it appear once, on the page that indexes the others, to state what exists? That is IndexRow.' },
+      { q: 'Why is the ordinal in the display face?', a: 'It is the only element in the component that is not language — it is the cover\'s device. Set in 10px mono it would be B48\'s ordinal, and IndexRow would differ from a FeatureList by layout alone. It is fixed at 20px, below the 27px h1, so the strip can never speak above the claim above it.' },
+    ],
+  },
+
+  /* ================================================================ B57 */
+  {
+    slug: 'caption-row',
+    name: 'CaptionRow',
+    book: 'B57',
+    category: 'marketing',
+    tagline: 'Up to four short fragments spread across one rule.',
+    job: 'State up to four short captions across one rule.',
+    tags: ['caption', 'marketing', 'landing', 'editorial', 'specimen'],
+    exports: ['CaptionRow'],
+    files: ['components/seventy-six/caption-row.tsx', 'components/seventy-six/caption-row.css'],
+    intro: [
+      'The travel poster\'s <code>never too · far away · always there</code> line: three or four fragments spread across the full measure on a single hairline, under the thing they caption. In 76° the thing above them is a <b>live component specimen</b>, so the captions say what the reader is actually looking at.',
+      'Each caption is a PHRASE, not a sentence. Four is the cap — a fifth is a B48 <b>FeatureList</b>, which is the component for itemising a claim.',
+      '<b>It is the accent\'s one non-fill, non-link use on the public surface.</b> F14 governs the seed FILL, and the argument there is about mass: a rectangle competes with a button. A 12.5px line has no area, so at the squint test the row blurs to a grey rule while the one seed rectangle on the page stays the only coloured object. What the seed buys is the row\'s job — saying <i>this, here, deliberately</i> about a specimen made of the same neutrals as everything else on the wall.',
+    ],
+    examples: [
+      {
+        title: 'Under a specimen',
+        description: 'Three fragments, evenly spread, on the rule that separates them from the plate above.',
+        demoKey: 'caption-basic',
+        code: `import { CaptionRow } from '@/components/seventy-six';
+
+<CaptionRow
+  captions={['never a screenshot', 'always the shipped code', 'figures that reconcile']}
+/>`,
+      },
+    ],
+    props: [
+      {
+        component: 'CaptionRow',
+        rows: [
+          { name: 'captions', type: 'string[]', description: 'Two to four short fragments. Each is a phrase, not a sentence.' },
+          { name: 'rule', type: "'top' | 'bottom' | 'none'", defaultValue: "'top'", description: 'Which edge carries the hairline. Top captions the block above.' },
+        ],
+      },
+    ],
+    a11y: {
+      notes: [
+        'A real paragraph per caption — they are read in order, left to right, exactly as they are set.',
+        'Nothing is aria-hidden and nothing is a link: the row states, it does not navigate.',
+        'It stacks below 560px rather than compressing, so no fragment ever wraps mid-phrase (C7).',
+      ],
+    },
+    donts: [
+      'Never a sentence — a sentence under a specimen is a caption that became a paragraph, and a paragraph is B45 Prose.',
+      'Never a link; it states, it does not navigate.',
+      'Never more than four; a fifth is a B48 FeatureList.',
+      'Never used as navigation.',
+    ],
+    faq: [
+      { q: 'Why is it seed and not ink-soft?', a: 'Because in ink-soft it reads as a footnote under a widget. The row\'s job is to say "this, here, deliberately" about a specimen otherwise made of the same neutrals as the rest of the wall. F14 is an argument about mass, and a 12.5px line has none.' },
+      { q: 'CaptionRow or FeatureList?', a: 'Is each item a phrase describing the thing above it? CaptionRow. Is each item a capability with a title and a sentence? That is B48.' },
+    ],
+  },
 ];

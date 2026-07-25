@@ -99,6 +99,13 @@ export { CallToAction } from './cta';
 export type { CallToActionProps } from './cta';
 export { ProofRow } from './proof-row';
 export type { ProofItem, ProofRowProps } from './proof-row';
+/* v0.8 · the cover. The public surface's editorial furniture: the contents
+   strip and the caption line under a specimen. */
+export { IndexRow } from './index-row';
+export type { IndexItem, IndexRowProps } from './index-row';
+export { CaptionRow } from './caption-row';
+export type { CaptionRowProps } from './caption-row';
+
 export { SiteFooter } from './site-footer';
 export type { FooterGroup, FooterLink, SiteFooterProps } from './site-footer';
 

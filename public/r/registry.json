@@ -1044,6 +1044,44 @@
       ]
     },
     {
+      "name": "index-row",
+      "type": "registry:ui",
+      "title": "IndexRow",
+      "description": "The cover's contents strip — numbered sections on vertical hairlines. One job: State a publication's sections as a numbered strip, and link to them.",
+      "categories": [
+        "marketing"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/index-row.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/index-row.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "caption-row",
+      "type": "registry:ui",
+      "title": "CaptionRow",
+      "description": "Up to four short fragments spread across one rule. One job: State up to four short captions across one rule.",
+      "categories": [
+        "marketing"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/caption-row.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/caption-row.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "block-stats-row",
       "type": "registry:block",
       "title": "Stats row",

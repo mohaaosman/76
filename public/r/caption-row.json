@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "caption-row",
+  "type": "registry:ui",
+  "title": "CaptionRow",
+  "description": "Up to four short fragments spread across one rule. One job: State up to four short captions across one rule.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/caption-row.tsx",
+      "content": "import { cx } from '@/lib/cx';\nimport './caption-row.css';\n\n/**\n * B57 · CaptionRow — a few short fragments spread across one rule. One job:\n * state up to four short captions across one rule.\n *\n * It is the travel poster's `never too · far away · always there` line:\n * fragments distributed across the full measure under the thing they\n * caption, on a single hairline. In 76° the thing above it is never a\n * photograph — F11 stands, and where the reference puts a picture a 76°\n * page puts a LIVE COMPONENT — so the captions describe the specimen the\n * reader is actually looking at, running, with figures that reconcile.\n *\n * A CaptionRow is a STATEMENT, never a control: no state, no effects,\n * nothing in it is clickable, nothing in it is a landmark. It is not\n * navigation and it is not a feature list — B48 `FeatureList` states what\n * the product does, one item at a time, in sentences; this states three\n * fragments about ONE thing, in one line. The moment a caption needs a\n * verb and an object it has become a feature, and it belongs to B48.\n *\n * Don't: never a sentence (a fragment has no full stop and no subject);\n * never a link (the row carries no hit area and no affordance, and the\n * type it is set in is deliberately not B10's text-link voice — see\n * caption-row.css); never more than four; never used as a nav; never a\n * caption for something that is not directly above or below it.\n */\nexport interface CaptionRowProps {\n  /** Two to four short fragments. Each is a PHRASE, not a sentence. */\n  captions: string[];\n  /** Where the rule sits. 'top' (default) captions the block above. */\n  rule?: 'top' | 'bottom' | 'none';\n  className?: string;\n}\n\nexport function CaptionRow({ captions, rule = 'top', className }: CaptionRowProps) {\n  return (\n    /* A plain <div>, and the plainness is deliberate: this is not a list\n       (a list announces a count the reader did not ask for and the row does\n       not mean), not a <nav>, and not a landmark. The rule's position\n       travels as data — a literal in an inline style would put the border\n       back in the component and out of the stylesheet's reach (B48). */\n    <div className={cx('sv-captions', className)} data-rule={rule}>\n      {captions.map((caption) => (\n        /* A real <p> per caption, so each fragment is announced as its own\n           run of text rather than as one comma-less sentence. The caption\n           IS its own key: there is no id in the shape because there is no\n           record here, and two identical fragments in one row is a defect\n           no key could fix. */\n        <p className=\"sv-captions__caption\" key={caption}>\n          {caption}\n        </p>\n      ))}\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/caption-row.tsx"
+    },
+    {
+      "path": "registry/seventy-six/caption-row.css",
+      "content": "/* B57 · CaptionRow — one hairline, a few fragments, and the full measure\n   between them. The distribution is the whole design: three captions\n   bunched at the left are a list, and the same three spread edge to edge\n   are a caption line under the thing they caption. */\n\n@layer sv-components {\n  /* space-between puts the first fragment on the page's own left edge and\n     the last on its right, which is what ties the row to the measure of the\n     block above it rather than to its own content width. It wraps rather\n     than compresses — nothing here scrolls sideways (A2, C7). */\n  .sv-captions {\n    display: flex;\n    flex-wrap: wrap;\n    justify-content: space-between;\n    gap: var(--sv-s2) var(--sv-s6);\n  }\n\n  /* The rule sits on ONE stated edge, and 'none' writes nothing at all: a\n     row with no rule is a row with no border declaration, not a border\n     declared transparent. 'top' is the default because a caption most often\n     closes the block above it — the rule is the line the specimen sits on. */\n  .sv-captions[data-rule='top'] {\n    padding-top: var(--sv-s3);\n    border-top: 1px solid var(--sv-line);\n  }\n\n  .sv-captions[data-rule='bottom'] {\n    padding-bottom: var(--sv-s3);\n    border-bottom: 1px solid var(--sv-line);\n  }\n\n  /* THE SEED TEXT, AND THE CASE FOR IT AGAINST F14.\n\n     F14 governs the seed FILL: \"a view region gets one seed-filled primary,\n     and every figure on that screen is ink\", because if the number is as\n     loud as the button the reader has two primaries and the screen has\n     none. That is an argument about MASS, not about hue — the fill is a\n     rectangle, and a rectangle is what competes with a button. A 12.5px\n     line of type has no area to compete with: squint at the page (Ship Gate\n     6) and this row blurs into a grey rule while the one seed rectangle on\n     the page stays the only coloured object in view. The test F14 sets\n     therefore still passes, and it passes for the reason F14 gives rather\n     than by exception.\n\n     What the seed BUYS here is the one thing the row is for. The block\n     above is a live component specimen — real, running, and made of the\n     same neutrals as everything else on the wall. The caption line is what\n     says \"this, here, deliberately\"; in ink-soft it reads as a footnote\n     under a widget, which is the reading the row exists to prevent. This is\n     the accent's one non-fill, non-link use on the public surface, and it\n     is registered here rather than assumed.\n\n     It does NOT wear B10's text-link voice, and the difference is\n     structural rather than a matter of degree: a text-link action is\n     inline, inside running copy or beside a control, and it underlines\n     under a pointer. These are isolated fragments on their own row, spread\n     across the full measure, with no underline, no hover, no cursor change\n     and nothing to click — the component refuses links by specification. No\n     mark in 76° is arranged like this and navigates.\n\n     Contrast: --sv-seed-text is the step verified as TEXT (5.70:1 on paper\n     in Cobalt, and per-seed variants exist exactly where the raw seed fails\n     — C1). 12.5/600 is above the small-text threshold on either count. */\n  .sv-captions__caption {\n    max-width: 22ch;\n    font-size: 12.5px;\n    font-weight: 600;\n    line-height: 1.4;\n    color: var(--sv-seed-text);\n  }\n\n  /* ---- The floor ---- */\n\n  /* C7 · four fragments spread across 320px would each be two words wide,\n     so the row stands up instead. Nothing hides and nothing scrolls; the\n     rule stays where it was stated, because the block it captions is still\n     above (or below) it. The measure cap comes off — in a column each\n     fragment already has the full width, and 22ch would leave a ragged\n     stack with no gain. */\n  @media (max-width: 560px) {\n    .sv-captions {\n      flex-direction: column;\n      gap: var(--sv-s2);\n    }\n\n    .sv-captions__caption {\n      max-width: none;\n    }\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/caption-row.css"
+    }
+  ],
+  "categories": [
+    "marketing"
+  ],
+  "docs": "https://76.zifala.com/llms/caption-row.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B57",
+    "job": "State up to four short captions across one rule.",
+    "tags": [
+      "caption",
+      "marketing",
+      "landing",
+      "editorial",
+      "specimen"
+    ],
+    "exports": [
+      "CaptionRow"
+    ]
+  }
+}

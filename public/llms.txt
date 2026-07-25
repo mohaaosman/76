@@ -64,6 +64,8 @@
 - [CallToAction](https://76.zifala.com/llms/cta.md): The last row of a public page — the only one that asks. One job: Name the one act the page wants.
 - [ProofRow](https://76.zifala.com/llms/proof-row.md): The figures that carry the claim, between vertical hairlines. One job: State the few figures that prove the claim.
 - [SiteFooter](https://76.zifala.com/llms/site-footer.md): The one place a page is allowed to be a list of links. One job: Close a public page with everything it owes the reader.
+- [IndexRow](https://76.zifala.com/llms/index-row.md): The cover's contents strip — numbered sections on vertical hairlines. One job: State a publication's sections as a numbered strip, and link to them.
+- [CaptionRow](https://76.zifala.com/llms/caption-row.md): Up to four short fragments spread across one rule. One job: State up to four short captions across one rule.
 
 ## Blocks
 

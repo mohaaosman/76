@@ -1,5 +1,14 @@
 <!doctype html>
-<html lang="en" data-seed="cobalt">
+<!--
+  data-motion="on" is the posture, declared here and nowhere else in the
+  document. It is what makes every --sv-t-enter / --sv-t-count token
+  resolve to a duration instead of 0ms: the layer shipped in v0.7 with no
+  declaration anywhere, so the plumbing existed and nothing moved.
+  It stays a POSTURE rather than a default baked into the tokens, so a
+  product installing 76° gets a still system until it says otherwise, and
+  prefers-reduced-motion still overrides this attribute completely.
+-->
+<html lang="en" data-seed="cobalt" data-motion="on">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

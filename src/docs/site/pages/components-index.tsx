@@ -13,7 +13,10 @@ export function ComponentsIndexPage() {
       <HeroBand>
         <PageHero
           title="Components"
-          titleSoft={`· ${entries.length} components across B1–B51`}
+          /* Derived at build time, never typed: the last hand-written range
+             said B51 three releases after B57 shipped. A hardcoded count is
+             a lie waiting to happen. */
+          titleSoft={`· ${entries.length} components across B1–B${__HIGHEST_SPEC__}`}
           context="Every component: one job, a fixed anatomy, enumerated states, an accessibility contract, and a Don't list."
         />
       </HeroBand>
