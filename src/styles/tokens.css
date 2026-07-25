@@ -11,12 +11,25 @@
     --sv-band-line:  #2C323B;   /* hairlines on band */
     --sv-band-soft:  #8A93A2;   /* soft text on band */
     --sv-wall:       #F2F3F5;   /* platinum background */
-    --sv-paper:      #FFFFFF;   /* card surface */
+    --sv-paper:      #FFFFFF;   /* card surface — and ONLY that */
+    --sv-on-dark:    #FFFFFF;   /* the mark on dark chrome or on a seed fill:
+                                   band text, on-band focus ring, primary
+                                   button label, checkbox/radio mark. Never
+                                   overridden per mode — the band and the seed
+                                   do not invert, so neither does their mark. */
     --sv-ink:        #1C2026;   /* primary text */
     --sv-ink-soft:   #667080;   /* secondary text */
     --sv-ink-faint:  #99A1AD;   /* labels, hints — never sole carrier (C2) */
     --sv-line:       #E9EBEE;   /* internal hairlines */
     --sv-field-line: #D8DCE1;   /* form field borders */
+    --sv-field-line-strong: #7E8794; /* 3.63:1 on paper. For controls whose
+                                   BORDER is the ONLY affordance — an empty
+                                   PinField box carries no label, no value and
+                                   no fill, so the hairline above would leave
+                                   it at 1.38:1 and fail the 3:1 non-text bar
+                                   (WCAG 1.4.11). Ordinary fields keep the
+                                   hairline: their label and value identify
+                                   them, the border only decorates. */
     --sv-compare:    #D6DAE0;   /* comparison series in charts — the only
                                    permitted non-token chart color, aliased */
 
@@ -24,12 +37,24 @@
     --sv-seed:       #2C5BE0;
     --sv-seed-text:  #2C5BE0;   /* seed used AS text; differs when fills pass
                                    but text fails the C1 rule (see Signal) */
+    --sv-seed-line:  var(--sv-seed); /* seed used AS a 1–2px LINE: focus rings,
+                                   focus borders, accent rules. Splits from the
+                                   fill for exactly the reason --sv-seed-text
+                                   does — on dark paper the raw seed is 2.90:1
+                                   and misses the 3:1 non-text bar, so a focus
+                                   ring drawn in it is invisible. Tracks the
+                                   seed in light; tracks --sv-seed-text in
+                                   dark, where that step is already AA-verified. */
     --sv-seed-deep:  #1E44B4;   /* pressed */
     --sv-seed-tint:  #EEF3FE;   /* icon tiles, selected rows */
 
     /* functional — words and 6px dots ONLY (contrast-verified on paper) */
     --sv-ok:         #14804A;   /* 4.98:1 on white — AA */
     --sv-bad:        #C43D2E;   /* 5.18:1 on white — AA */
+    --sv-on-bad:     #FFFFFF;   /* the mark on a --sv-bad FILL (the dialog's
+                                   final confirm — the one red fill allowed).
+                                   Unlike --sv-on-dark this DOES flip per mode,
+                                   because --sv-bad itself brightens on dark. */
 
     /* scrim — Dialog only, flat, no blur */
     --sv-scrim:      rgba(27, 31, 38, 0.4);
@@ -78,6 +103,7 @@
   [data-seed='cobalt'] {
     --sv-seed:      #2C5BE0;   /* ERP · 5.70:1 both ways */
     --sv-seed-text: #2C5BE0;
+    --sv-seed-line: var(--sv-seed);  /* 5.71:1 on paper */
     --sv-seed-deep: #1E44B4;
     --sv-seed-tint: #EEF3FE;
   }
@@ -85,6 +111,7 @@
   [data-seed='verdigris'] {
     --sv-seed:      #12836F;   /* CRM · 5.0:1 both ways */
     --sv-seed-text: #12836F;
+    --sv-seed-line: var(--sv-seed);  /* 4.66:1 on paper */
     --sv-seed-deep: #0D6152;
     --sv-seed-tint: #EAF5F2;
   }
@@ -92,6 +119,7 @@
   [data-seed='signal'] {
     --sv-seed:      #D9531E;   /* POS · fills only (white on seed 4.6:1) */
     --sv-seed-text: #C24413;   /* seed-as-text variant — passes on white */
+    --sv-seed-line: var(--sv-seed);  /* 4.03:1 on paper */
     --sv-seed-deep: #A83E12;
     --sv-seed-tint: #FCF0EA;
   }
@@ -126,11 +154,14 @@
     --sv-ink-faint:  #6E7784;   /* never a sole carrier (C2), same as light */
     --sv-line:       #272D36;
     --sv-field-line: #3A414C;
+    --sv-field-line-strong: #6E7784; /* 3.65:1 on dark paper */
     --sv-compare:    #3C434E;   /* comparison series on dark grids */
 
     /* functional — brightened to hold AA on dark paper */
     --sv-ok:         #4CC38A;   /* ≥ 4.5:1 on #1B1F26 */
     --sv-bad:        #F0705F;   /* ≥ 4.5:1 on #1B1F26 */
+    --sv-on-bad:     #1B1F26;   /* 5.66:1 on the brightened fill (white is
+                                   2.92:1 there). --sv-on-dark stays white. */
 
     /* seed-as-surface is unchanged (white-on-seed already passed C1);
        seed-as-text brightens per seed below; tint derives from the seed
@@ -141,16 +172,24 @@
     --sv-shadow:     0 1px 2px rgba(0, 0, 0, 0.4);
   }
 
+  /* seed-as-LINE follows seed-as-text on dark: the raw seed is 2.90:1 on
+     dark paper, so every focus ring drawn in it would fail 1.4.11/2.4.11.
+     These steps are already AA as text, so they clear 3:1 as a line with
+     room to spare (cobalt 6.16:1, verdigris 7.19:1, signal 7.65:1). */
+
   [data-mode='dark'][data-seed='cobalt'],
   [data-mode='dark']:not([data-seed]) {
     --sv-seed-text: #7C9BF2;    /* cobalt as text on dark paper — AA */
+    --sv-seed-line: var(--sv-seed-text);
   }
 
   [data-mode='dark'][data-seed='verdigris'] {
     --sv-seed-text: #35BFA4;
+    --sv-seed-line: var(--sv-seed-text);
   }
 
   [data-mode='dark'][data-seed='signal'] {
     --sv-seed-text: #F59A6B;
+    --sv-seed-line: var(--sv-seed-text);
   }
 }

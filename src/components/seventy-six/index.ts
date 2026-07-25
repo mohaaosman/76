@@ -4,6 +4,8 @@
  */
 export { Band, BandTopbar, BandNav, BandSubTabs, PageHero } from './band';
 export type { BandNavItem, PageHeroProps } from './band';
+export { Plate, PlateHead } from './plate';
+export type { PlateProps, PlateHeadProps } from './plate';
 export { Sheet, Row } from './sheet';
 export { Card, CardHead } from './card';
 export { StatS1 } from './stat-s1';
@@ -24,6 +26,10 @@ export type { ButtonProps, ButtonVariant } from './button';
 export { StatusWord } from './status-word';
 export type { StatusTone } from './status-word';
 export { Field, Select, Checkbox, Radio, Toggle } from './field';
+export { PinField } from './pin-field';
+export type { PinFieldProps, PinCharset } from './pin-field';
+export { SocialButton } from './social-button';
+export type { SocialButtonProps, SocialProvider } from './social-button';
 export { Combobox } from './combobox';
 export type { ComboOption, ComboboxProps } from './combobox';
 export { MenuButton, SplitButton } from './menu';

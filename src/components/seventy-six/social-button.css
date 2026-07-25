@@ -1,0 +1,23 @@
+/* B26 · SocialButton — ghost anatomy, one currentColor mark */
+
+@layer sv-components {
+  /* Full width inside the plate card; the stack reads as one block, so
+     the marks carry the difference, not the widths. */
+  .sv-social {
+    width: 100%;
+    min-height: 40px;
+    font-weight: 600;
+  }
+
+  /* Rest / hover / focus-visible / disabled / loading all come from B10.
+     Press is the one state a full-width ghost needs of its own: a border
+     tint alone is invisible at this width. */
+  .sv-social:active:not(:disabled) {
+    background: var(--sv-seed-tint);
+  }
+
+  .sv-social .sv-btn__icon svg {
+    width: 16px;
+    height: 16px;
+  }
+}

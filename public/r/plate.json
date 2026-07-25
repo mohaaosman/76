@@ -1,0 +1,46 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "plate",
+  "type": "registry:ui",
+  "title": "Plate",
+  "description": "The band-less page — one card on the bare wall, under the mono 76° wordmark. One job: Carry a single decision on a page that has no navigation.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/card.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/plate.tsx",
+      "content": "import type { HTMLAttributes, ReactNode } from 'react';\nimport { cx } from '@/lib/cx';\nimport { Card } from './card';\nimport './plate.css';\n\n/**\n * B24 · Plate — the band-less page. Every other 76° template opens with\n * a Band; a plate has no nav, no sub-tabs, no hero, so it has no band at\n * all. One card on the bare wall, centred both axes, under the mono 76°\n * wordmark. Serves sign-in, sign-up, reset, verify, 404, 500, maintenance\n * and expired links — the wording is the caller's, the anatomy is fixed.\n *\n * NEVER carries nav. NEVER carries a PageHero. The h1 lives inside the\n * card (use PlateHead) because the card IS the page here.\n */\nexport interface PlateProps extends HTMLAttributes<HTMLElement> {\n  /** Overrides the built-in mono 76° mark. The degree sign is never dropped. */\n  wordmark?: ReactNode;\n  /** Card width: sm = 400px (default), md = 520px for two-column forms. */\n  width?: 'sm' | 'md';\n  /** One mono line under the card: legal, a support link, an error id. */\n  footer?: ReactNode;\n  /** The card's contents. Exactly one h1 — normally a PlateHead. */\n  children?: ReactNode;\n}\n\n/* role=\"img\" + aria-label: the mark is one word to a screen reader, not\n   three orphaned characters. Six in seed, ° in soft ink — same recipe as\n   the Band wordmark, restated in mono because there is no band to sit on. */\nconst WORDMARK = (\n  <span className=\"sv-plate__wordmark\" role=\"img\" aria-label=\"Seventy Six Degrees\">\n    <span aria-hidden=\"true\">7</span>\n    <span className=\"sv-plate__wordmark-six\" aria-hidden=\"true\">6</span>\n    <span className=\"sv-plate__wordmark-deg\" aria-hidden=\"true\">°</span>\n  </span>\n);\n\nexport function Plate({\n  wordmark = WORDMARK,\n  width = 'sm',\n  footer,\n  className,\n  children,\n  ...rest\n}: PlateProps) {\n  return (\n    <main {...rest} className={cx('sv-plate', className)}>\n      <div className={cx('sv-plate__inner', width === 'md' && 'sv-plate__inner--md')}>\n        <div className=\"sv-plate__mark\">{wordmark}</div>\n        <Card className=\"sv-plate__card\">{children}</Card>\n        {footer && <p className=\"sv-plate__footer\">{footer}</p>}\n      </div>\n    </main>\n  );\n}\n\n/**\n * The plate's head — the screen's one h1 plus a single sentence of\n * context. Names the task or the condition (\"Sign in\", \"Page not found\"),\n * never the app.\n */\nexport interface PlateHeadProps {\n  title: string;\n  /** One sentence: what this screen wants, or what went wrong and what's next. */\n  context?: string;\n  className?: string;\n}\n\nexport function PlateHead({ title, context, className }: PlateHeadProps) {\n  return (\n    <header className={cx('sv-plate__head', className)}>\n      <h1 className=\"sv-plate__title\">{title}</h1>\n      {context && <p className=\"sv-plate__context\">{context}</p>}\n    </header>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/plate.tsx"
+    },
+    {
+      "path": "registry/seventy-six/plate.css",
+      "content": "/* B24 · Plate — the band-less page (auth, 404, 500, maintenance) */\n\n@layer sv-components {\n  /* Grid + align-content centres on tall viewports but lets the box GROW\n     past min-height when the content is taller — so 200% zoom and 320px\n     scroll instead of clipping the top of the card. */\n  .sv-plate {\n    display: grid;\n    align-content: center;\n    justify-items: center;\n    min-height: 100vh;\n    min-height: 100dvh;\n    padding: var(--sv-s8) var(--sv-s4);\n    background: var(--sv-wall);\n  }\n\n  .sv-plate__inner {\n    width: 100%;\n    max-width: 400px;\n  }\n\n  .sv-plate__inner--md {\n    max-width: 520px;\n  }\n\n  /* ---- Wordmark ---- */\n\n  .sv-plate__mark {\n    display: flex;\n    justify-content: center;\n    margin-bottom: var(--sv-s6);\n  }\n\n  /* Mono advances are wide; the mark is one word, so the tracking is\n     pulled in and the degree tucked against the six. It is never a bare\n     \"76\" — the degree IS the name. */\n  .sv-plate__wordmark {\n    font-family: var(--sv-font-mono);\n    font-size: 18px;\n    letter-spacing: -0.05em;\n    color: var(--sv-ink);\n  }\n\n  .sv-plate__wordmark-six {\n    color: var(--sv-seed-text);\n  }\n\n  .sv-plate__wordmark-deg {\n    margin-left: -0.14em;\n    color: var(--sv-ink-soft);\n  }\n\n  /* ---- Card ---- */\n\n  /* The plate card is self-padded: its children are the page, so they\n     never need sv-card__body. Card still owns the A4 contract — one\n     --sv-shadow, radius --sv-r, --sv-paper, zero border. */\n  .sv-plate__card {\n    padding: var(--sv-s6);\n  }\n\n  @media (max-width: 380px) {\n    .sv-plate__card {\n      padding: var(--sv-s5);\n    }\n  }\n\n  .sv-plate__head {\n    margin-bottom: var(--sv-s5);\n  }\n\n  .sv-plate__title {\n    font-size: 19px;\n    line-height: 1.25;\n    font-weight: 800;\n  }\n\n  .sv-plate__context {\n    margin-top: var(--sv-s2);\n    font-size: 13px;\n    color: var(--sv-ink-soft);\n  }\n\n  /* ---- Footer ---- */\n\n  /* Mono voice, but sentence case: this line carries legal text, support\n     links and error ids, which uppercase tracking makes unreadable. */\n  .sv-plate__footer {\n    margin-top: var(--sv-s5);\n    font-family: var(--sv-font-mono);\n    font-size: 11px;\n    line-height: 1.6;\n    text-align: center;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-plate__footer a {\n    color: var(--sv-seed-text);\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/plate.css"
+    }
+  ],
+  "categories": [
+    "chrome"
+  ],
+  "docs": "https://76.zifala.com/llms/plate.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B24",
+    "job": "Carry a single decision on a page that has no navigation.",
+    "tags": [
+      "plate",
+      "auth",
+      "sign-in",
+      "centered-card",
+      "error-page",
+      "band-less"
+    ],
+    "exports": [
+      "Plate",
+      "PlateHead"
+    ]
+  }
+}

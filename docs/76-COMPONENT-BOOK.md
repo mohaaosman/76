@@ -15,14 +15,15 @@ These rules are written to be lintable. Grep the codebase; any hit is a violatio
 - `border-radius` values other than `var(--sv-r)` (4px), `50%` (avatars/dots), or `2px`–`3px` (bars). No 8, no 12, no 16, no `9999px` pills.
 - `box-shadow` values other than `var(--sv-shadow)`. No stacked shadows, no colored glows, no inset "depth."
 - `text-shadow`, `filter: drop-shadow` — never.
-- Any hex/rgb/hsl color literal outside `tokens.css`. Components reference tokens only.
+- Any hex/rgb/hsl color literal outside `tokens.css` — in `.css` and in `.tsx` alike (an inline SVG `fill="#4285F4"` is the same defect). Components reference tokens only. The Foundations page is the one registered exception: it is the palette specimen.
+- `color: var(--sv-paper)` — paper is the card surface, not a mark. Use `--sv-on-dark`.
 - `animation` durations > 200ms; any `transition` on layout properties (width/height/top/left/margin); keyframe bounces/springs.
 - `!important` — a component that needs it is mis-structured.
 - Font families other than Hanken Grotesk / Fragment Mono (system stack fallbacks only).
 
 **A2 · Banned patterns:**
 
-- Sidebars as primary navigation. Nav is horizontal in the band. Full stop.
+- Sidebars as primary navigation at ≥1000px. Horizontal band nav is binding on desktop, and the band's nav never scrolls horizontally at any width. BELOW 1000px primary navigation IS a left sidebar: a B21 Drawer (`side="left"`, `size="sm"`) opened by a ghost button LABELLED "Menu" with a glyph beside it — never icon-only, that ban stands. BandSubTabs leaves the band below 1000px and nests, indented, beneath its parent nav item inside the drawer.
 - Donut, pie, radial, and gauge charts in product screens. (W4 Meter list replaces them.)
 - Filled status pills/badges/chips. Status = 6px dot + colored word.
 - Icon-only buttons for primary actions; mystery-meat "⋯" as the only path to an action.
@@ -30,7 +31,7 @@ These rules are written to be lintable. Grep the codebase; any hit is a violatio
 - Emojis in product UI. Decorative illustrations in v1. Stock-photo cards.
 - Toasts for errors that belong inline next to the field that caused them.
 - More than one seed-colored primary button visible per view region.
-- Dark mode. 76° is light-first only until Max repeals this line.
+- Dark mode implemented anywhere but the tokens. Light-first stands as the default surface; dark is opt-in and token-only — the spec is "The dark surface" (Part B, v0.2.0) plus its v0.2.1 amendment. A component that branches on the mode is a defect.
 - KPI cards that are not the S1 anatomy. "Generic admin widget" is a defect class.
 
 **A3 · Banned copy (UX writing):**
@@ -60,9 +61,11 @@ Naming: React components in `resources/js/components/seventy-six/`, prefix-free 
 
 **`BandTopbar`** — wordmark `76°` (six in seed, degree mark in `--sv-band-soft`) + app name after a hairline · `BandNav` · right cluster (search trigger, notifications, avatar).
 - States: nav item default `--sv-band-soft` → hover white → active white + 2px seed underline flush with the row hairline. No background fills on nav items.
-- A11y: `<nav aria-label="Primary">`; active link `aria-current="page"`; underline is supplementary — active state is also carried by text color/weight (non-color cue: `aria-current` + weight 700).
+- Below 1000px: `BandNav` leaves the band and moves into a left Drawer (B21, `side="left"`, `size="sm"`), opened by a ghost "Menu" button with a glyph beside it — the topbar keeps wordmark, app name, and the right cluster. The nav never becomes a horizontal scroller (A2).
+- A11y: `<nav aria-label="Primary">`; active link `aria-current="page"`; underline is supplementary — active state is also carried by text color/weight (non-color cue: `aria-current` + weight 700). The drawer's nav keeps the same landmark and `aria-current`; the "Menu" button carries `aria-expanded`.
 
 **`BandSubTabs`** — children of the active nav item, Fragment Mono 10.5 uppercase, tracking .13em. Same underline behavior. Collapses (renders nothing) when the section has no children. Never nests deeper — a third level becomes in-card tabs (B8) or a page.
+- Below 1000px: the sub-tab row leaves the band and nests inside the drawer, indented one step under its parent nav item — same mono type, no underline, still links. It never becomes a horizontal scroller.
 - A11y: `<nav aria-label="Section">`, `aria-current="page"` on active. These are links, not ARIA tabs — they navigate.
 
 **`PageHero`** — `<h1>` (27/800; secondary word `--sv-band-soft`) → context line (13, `--sv-band-soft`: date · scope · last sync) → right: actions (max: one mono range control, two ghosts, ONE primary). Bottom padding 68px for the overlap.
@@ -184,6 +187,28 @@ The inline notice — the surface B14 sends every error at: in the flow, adjacen
 
 A small mono uppercase tag for CATEGORY metadata: environment, plan, type, version. Wall-toned, hairline border, rectilinear — never a pill. Seed tone marks the current/active category, one per group. Live state is a StatusWord (dot + word); quantities are stats or cells. If it can change while you watch, it is not a Badge.
 
+### B24 · `Plate` (v0.3.0)
+
+The band-less page type. Wall background edge to edge; one centred card, max 400px, holding the whole decision; the mono `76°` wordmark 20px above it (six in seed, degree mark `--sv-ink-faint`); nothing else on the page. The card is ordinary paper — radius 4, `--sv-shadow`, zero border, 28px padding — with title 15/700, at most one soft sentence, the fields or the statement, then ONE primary at full card width. Used by auth (sign in, register, reset, verify), 404, 500, maintenance, expired link. One job: carry a single decision on a page that has no navigation.
+- States: none — the Plate is a layout. Its contents carry their own states (B10, B11, B15, B22).
+- A11y: the card title is the page's `<h1>` (the wordmark is not a heading); `<main>` wraps the card; focus lands on the first meaningful control. The skip-link is omitted — a registered exception to C4, because a Plate has nothing to skip.
+- Don't: never carries nav, never carries a PageHero, never carries a second card, never a background image, never an illustration, never a "back to the app" band. Two decisions = two pages.
+
+### B25 · `PinField` (v0.3.0)
+
+The OTP / verification-code input: a row of fixed single-character boxes, 4–8 (default 6), B11 field chrome per box — white bg, 1px `--sv-field-line-strong`, radius 4 (NOT the ordinary `--sv-field-line`: an empty box carries no label, value or fill, so its border is the sole affordance and owes the 3:1 non-text bar, C1) — with the character in Fragment Mono 18, centred, box 40×46, 8px gaps. Label above per B11; hint below names the delivery and the window ("Sent to ···4192 · valid 10 minutes"). Typing advances, Backspace retreats, one paste fills every box. One job: enter a short fixed-length code.
+- States: default · focus — the active box takes the 1.5px seed border, no glow · filled · error — every box borders `--sv-bad` (the code is wrong as a unit, never per character) with 11.5 bad text stating what and how ("That code has expired. Request a new one.") · disabled (wall bg) · verifying — boxes lock, the primary reads "Verifying…" at locked width (B10).
+- A11y: ONE input semantically — `inputmode="numeric"`, `autocomplete="one-time-code"`, `aria-label` naming the code; boxes are presentation and `aria-hidden` where they duplicate. Error wired through `aria-describedby` + `aria-invalid="true"`, announced politely. Tab enters and leaves the field as a unit — never a keyboard trap.
+- Don't: no auto-submit without a visible primary; no masking (a code is not a password); no countdown that hides the resend action; never used for a variable-length secret — that is a B11 Field.
+
+### B26 · `SocialButton` (v0.3.0)
+
+The federated-identity button. B10 Ghost anatomy verbatim — transparent, hairline border, ink text 12.5/700, radius 4, padding 8/16, full card width on a Plate. The provider mark is ONE path drawn in `currentColor` at 16px, left of the label — never brand hexes, never a multi-color mark, never a raster image (Law 2, A1). The label names the provider and the act: "Continue with Google". Stacked, at most three, separated from the credential form by a hairline rule with a mono uppercase "OR". One job: hand authentication to one named provider.
+- States: per B10 Ghost — hover border → seed, text unchanged; loading label → "Redirecting…" at locked width; disabled per B10.
+- A11y: `<button>`/`<a>` only; the mark is `aria-hidden="true"` beside its text label (A4). The provider name lives in the text and is never carried by the mark alone.
+- Don't: no row of icon-only provider tiles (A2); no provider brand colors in the component layer; no mixing "Sign in with…" and "Continue with…" in one stack.
+- Registered override: a product bound by a provider's strict brand guidelines may restore that provider's mark and colors LOCALLY, declared in the product's own overrides. The 76° component layer stays currentColor.
+
 ### B14 · `Toast` — v0.2.0 amendment
 
 The toast grows into the full notification: 16px tone icon + 13/700 title + optional one-sentence description, tones `ok · info · warn · bad`, sizes 360/440, dismiss control. `warn` renders in ink (no amber, Law 2). ok/info auto-dismiss at 5s, polite; warn/bad persist until dismissed, assertive. The A2 discipline is unchanged: an error ALWAYS renders inline at its source first — a `bad` toast may ECHO a failure whose surface is elsewhere (a background job, another tab), never replace it. Max 3 stacked.
@@ -195,6 +220,8 @@ The toast grows into the full notification: 16px tone icon + 13/700 title + opti
 ### The dark surface — v0.2.0 amendment
 
 Light-first stands: light is the default, dark is opt-in via `<html data-mode="dark">`. Dark changes ONLY tokens — the same paper-on-a-wall physics, inverted: the band stays the darkest thing on screen, the wall recedes, cards stay the lightest surface in view. Functional and seed-as-text steps are re-verified AA on dark paper; per-seed dark text variants live in tokens.css and nowhere else. No component may branch on the mode.
+
+**Surfaces invert; marks do not — v0.2.1 amendment.** `--sv-paper` means the card surface and nothing else, so it inverts. The band and the seed do NOT invert, so the mark that sits on them must not either: band text, the on-band focus ring, the primary button label, and the checkbox/radio mark all paint with `--sv-on-dark`, white in both modes. `--sv-bad` is the exception that proves the rule — it brightens on dark, so the mark on its one legal fill uses `--sv-on-bad`, which flips with it. Painting a mark with `--sv-paper` is a firewall defect (rule 16).
 
 ---
 
@@ -232,18 +259,42 @@ Light-first stands: light is the default, dark is opt-in via `<html data-mode="d
 
 **C9 · Language:** `lang` attribute set; dates absolute in mono (24 JUL, not 7/24); numbers localized at the formatting layer, tabular always.
 
+**C10 · Direction — a stated scope boundary:** 76° is LTR only. The component layer uses physical direction properties (`left`/`right`, `margin-left`, `text-align:right` on numeric columns, `side="left"` on the nav drawer) and does not support RTL. Arabic, Hebrew, Persian and Urdu products are OUT OF SCOPE until this line is repealed. This is a weighed decision, not an oversight: logical properties were considered and rejected for v1 because a half-mirrored system — a band that flips while numeric alignment, the overlap, and focus order do not — reads as broken in a way a stated boundary does not. Repealing it is one system-wide change (band, overlap, drawer side, table alignment, focus order, tokens), never a per-component patch.
+
 ---
 
 ## PART D — THE SHIP GATE (run before showing Max anything)
 
 1. Grep Part A1 patterns — zero hits.
 2. Count colors on the screen: neutrals + one seed + at most both functional colors as words/dots. Anything else fails.
-3. Every widget is a registered type (S1, Progress, Trend, MeterList, DataTable, CardTabs, ActivityList — and from v0.2.0: Combobox, Menu, Drawer, Banner, Badge) — if a new type was needed, it is named, single-jobbed, and added to Part B in the same change.
+3. Every widget is a registered type (S1, Progress, Trend, MeterList, DataTable, CardTabs, ActivityList — from v0.2.0: Combobox, Menu, Drawer, Banner, Badge — from v0.3.0: Plate, PinField, SocialButton) — if a new type was needed, it is named, single-jobbed, and added to Part B in the same change. If Part F refuses it, it is a screen, not a component.
 4. Every S1 footnote passes the "so what" test (new information, not paraphrase).
-5. Tab through the screen: visible focus everywhere, order sane, skip-link present, ⌘K opens.
-6. Squint test: the page reads as ink band + white paper on a platinum wall; nothing glows, nothing floats, nothing performs.
+5. Tab through the screen: visible focus everywhere, order sane, skip-link present (a Plate is the one exception, B24), ⌘K opens.
+6. Squint test: the page reads as ink band + white paper on a platinum wall — a Plate (B24) reads as one card and a wordmark on the wall; nothing glows, nothing floats, nothing performs.
 7. Copy audit vs A3: no exclamation marks, buttons name objects, errors say what and how to fix.
 8. Contrast spot-check anything new against C1; new seeds through the C1 seed rule.
 9. The degree mark: every wordmark reads `76°` — never bare `76`.
+
+---
+
+## PART F — THE REFUSED
+
+The test: **if a widget's job needs more than one sentence, or it carries an internal toolbar or sub-taxonomy, it is a SCREEN composed of 76° parts — not a component.** These are refused by name so no one proposes them twice. Every refusal ships with the composition that replaces it.
+
+| # | Refused | Compose instead |
+|---|---|---|
+| F1 | Rich-text / WYSIWYG toolbar | A textarea + a preview |
+| F2 | Kanban board widget | A template (the CRM template already carries one) |
+| F3 | Data grid (column resize, pin, group) | DataTable (B7) + Drawer (B21) |
+| F4 | Calendar / scheduler grid | A screen, never a part |
+| F5 | Carousel / slider | A list or a grid |
+| F6 | Nested multi-level menus | One level, then a page |
+| F7 | Password strength meter | The rule stated up front + an inline error |
+| F8 | Tour / coachmark overlays | EmptyState (B15) + docs |
+| F9 | Color picker, star rating | Out of taxonomy |
+| F10 | Drag-drop dashboard layout | The fixed 12-column grid (B2) |
+| F11 | Hero imagery, stock photography, illustration | Type, hairline, and real data |
+
+**F4 is BINDING ON THE DATE RANGE.** 76° draws no month grid, ever. A date range is two native `<input type="date">` fields welded into one Field (B11), preceded by a mono uppercase preset row — `7D · 30D · QTD · YTD · CUSTOM` — and followed by a mono context line ("24 days · ends today"). The browser draws the calendar.
 
 *Seventy Six Degrees — the product is the design.*

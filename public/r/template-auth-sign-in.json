@@ -1,0 +1,38 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "template-auth-sign-in",
+  "type": "registry:block",
+  "title": "Sign in",
+  "description": "The credential screen: three providers, the form, and one seed button.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/plate.json",
+    "https://76.zifala.com/r/social-button.json",
+    "https://76.zifala.com/r/field.json",
+    "https://76.zifala.com/r/button.json",
+    "https://76.zifala.com/r/banner.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/templates/auth-sign-in.tsx",
+      "content": "// 76° template · Sign in — B24 Plate, band-less, seed cobalt (default root).\nimport { useState } from 'react';\nimport type { FormEvent } from 'react';\nimport { Field, Checkbox, Button, ButtonLink, Banner, Plate, PlateHead, SocialButton } from '@/components/seventy-six';\n\nconst providers = { display: 'grid', gap: 'var(--sv-s2)' } as const;\nconst rule = {\n  display: 'grid',\n  gridTemplateColumns: '1fr auto 1fr',\n  alignItems: 'center',\n  gap: 'var(--sv-s3)',\n  margin: 'var(--sv-s5) 0',\n} as const;\nconst hairline = { height: '1px', background: 'var(--sv-line)' } as const;\nconst word = { color: 'var(--sv-ink-soft)' } as const;\nconst stack = { display: 'grid', gap: 'var(--sv-s4)' } as const;\nconst notice = { marginBottom: 'var(--sv-s4)' } as const;\nconst wide = { width: '100%' } as const;\nconst foot = {\n  display: 'flex',\n  flexWrap: 'wrap',\n  gap: 'var(--sv-s3) var(--sv-s4)',\n  justifyContent: 'space-between',\n  marginTop: 'var(--sv-s4)',\n} as const;\nconst link = { color: 'var(--sv-seed-text)' } as const;\n\ntype Values = { email: string; password: string };\ntype Errors = Partial<Record<keyof Values, string>>;\ntype Status = 'idle' | 'invalid' | 'refused';\n\nconst EMAIL = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\n// A3: every message names what is wrong and what to do about it.\nfunction validate({ email, password }: Values): Errors {\n  const found: Errors = {};\n  if (!email.trim()) found.email = 'Enter the email address on the account.';\n  else if (!EMAIL.test(email))\n    found.email = 'That address is missing an @ or a domain. Use the form name@company.co.';\n  if (!password) found.password = 'Enter the password for this account.';\n  return found;\n}\n\nconst BANNERS: Record<Exclude<Status, 'idle'>, { title: string; body: string }> = {\n  invalid: {\n    title: 'Sign in was not sent',\n    body: 'One or more fields below need fixing. Each field names what to change.',\n  },\n  refused: {\n    title: 'That email and password do not match',\n    body: 'Retype the password, or use the reset link below to set a new one. After five failed tries the account locks for 15 minutes.',\n  },\n};\n\nexport function AuthSignIn() {\n  const [values, setValues] = useState<Values>({ email: '', password: '' });\n  const [errors, setErrors] = useState<Errors>({});\n  const [status, setStatus] = useState<Status>('idle');\n\n  /* B11 timing: validate on blur, then on every change once that field\n     already carries an error — never on the first keystroke. */\n  function change(key: keyof Values, value: string) {\n    const next = { ...values, [key]: value };\n    setValues(next);\n    if (errors[key]) setErrors({ ...errors, [key]: validate(next)[key] });\n  }\n\n  function blur(key: keyof Values) {\n    setErrors({ ...errors, [key]: validate(values)[key] });\n  }\n\n  /* noValidate: the browser's own bubbles are toasts by another name, and\n     A2 refuses toasts for errors. The banner and the field chrome carry it. */\n  function submit(event: FormEvent<HTMLFormElement>) {\n    event.preventDefault();\n    const found = validate(values);\n    setErrors(found);\n    setStatus(Object.values(found).some(Boolean) ? 'invalid' : 'refused');\n  }\n\n  return (\n    <Plate\n      footer={\n        <>\n          Trouble signing in? <a href=\"#support\" style={link}>Contact support</a>\n        </>\n      }\n    >\n      <PlateHead title=\"Sign in\" context=\"Northwind operations console\" />\n\n      {status !== 'idle' && (\n        <div style={notice}>\n          <Banner tone=\"bad\" title={BANNERS[status].title}>\n            {BANNERS[status].body}\n          </Banner>\n        </div>\n      )}\n\n      <div style={providers}>\n        <SocialButton provider=\"google\" />\n        <SocialButton provider=\"apple\" />\n        <SocialButton provider=\"github\" />\n      </div>\n\n      <div style={rule}>\n        <span style={hairline} aria-hidden=\"true\" />\n        <span className=\"sv-mono\" style={word}>\n          Or\n        </span>\n        <span style={hairline} aria-hidden=\"true\" />\n      </div>\n\n      <form style={stack} onSubmit={submit} noValidate>\n        <Field\n          label=\"Email\"\n          type=\"email\"\n          required\n          autoComplete=\"email\"\n          inputMode=\"email\"\n          value={values.email}\n          error={errors.email}\n          onChange={(e) => change('email', e.target.value)}\n          onBlur={() => blur('email')}\n        />\n        <Field\n          label=\"Password\"\n          type=\"password\"\n          required\n          autoComplete=\"current-password\"\n          value={values.password}\n          error={errors.password}\n          onChange={(e) => change('password', e.target.value)}\n          onBlur={() => blur('password')}\n        />\n        <Checkbox label=\"Keep me signed in\" name=\"persist\" />\n        {/* A2: the one seed button on this plate. Everything else is a link. */}\n        <Button type=\"submit\" variant=\"primary\" style={wide}>\n          Sign in\n        </Button>\n      </form>\n\n      <div style={foot}>\n        <ButtonLink href=\"#reset\">Forgot password?</ButtonLink>\n        <ButtonLink href=\"#sign-up\">Create an account</ButtonLink>\n      </div>\n    </Plate>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/templates/auth-sign-in.tsx"
+    }
+  ],
+  "categories": [
+    "templates"
+  ],
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "kind": "template",
+    "seed": "cobalt",
+    "tags": [
+      "auth",
+      "sign-in",
+      "login",
+      "plate",
+      "cobalt"
+    ]
+  }
+}

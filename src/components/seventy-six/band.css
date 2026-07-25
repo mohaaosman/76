@@ -3,7 +3,7 @@
 @layer sv-components {
   .sv-band {
     background: var(--sv-band);
-    color: var(--sv-paper);
+    color: var(--sv-on-dark);
   }
 
   .sv-band__container {
@@ -89,13 +89,13 @@
   }
 
   .sv-band__navlink:hover {
-    color: var(--sv-paper);
+    color: var(--sv-on-dark);
   }
 
   /* Active: white + weight 700 (non-color cue) + 2px seed underline
      flush with the row's bottom hairline. No background fills. */
   .sv-band__navlink--active {
-    color: var(--sv-paper);
+    color: var(--sv-on-dark);
     font-weight: 700;
   }
 
@@ -107,6 +107,14 @@
     bottom: -1px;
     height: 2px;
     background: var(--sv-seed);
+  }
+
+  /* The small-screen trigger. Never icon-only: the word "Menu" is the
+     label, the three-line glyph is aria-hidden decoration beside it. */
+  .sv-band .sv-band__menu {
+    display: none;
+    flex: none;
+    min-height: 40px;
   }
 
   .sv-band__utilities {
@@ -141,11 +149,11 @@
   }
 
   .sv-band__subtab:hover {
-    color: var(--sv-paper);
+    color: var(--sv-on-dark);
   }
 
   .sv-band__subtab--active {
-    color: var(--sv-paper);
+    color: var(--sv-on-dark);
     font-weight: 700;
   }
 
@@ -191,5 +199,107 @@
     display: flex;
     align-items: center;
     gap: var(--sv-s2);
+  }
+
+  /* ---- Drawer nav (the < 1000px primary nav, B21 composed) ----
+     The drawer is a DOM descendant of the band but paints on paper, so
+     base.css's white band focus ring would disappear inside it. */
+
+  .sv-drawer :focus-visible {
+    outline-color: var(--sv-seed-line);
+  }
+
+  .sv-band__drawerlist,
+  .sv-band__drawersublist {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sv-band__drawerlink {
+    display: block;
+    padding: var(--sv-s3);
+    border-left: 2px solid transparent;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--sv-ink);
+    text-decoration: none;
+    transition: color var(--sv-t-fast), border-color var(--sv-t-fast);
+  }
+
+  .sv-band__drawerlink:hover {
+    color: var(--sv-seed-text);
+  }
+
+  /* Same non-colour cue as the horizontal row: weight 700 plus a 2px
+     seed rule, here on the leading edge. aria-current does the rest (C5). */
+  .sv-band__drawerlink--active {
+    border-left-color: var(--sv-seed-line);
+    font-weight: 700;
+  }
+
+  /* The active section's children, indented under their parent. */
+  .sv-band__drawersublist {
+    padding-left: var(--sv-s6);
+    padding-bottom: var(--sv-s2);
+  }
+
+  .sv-band__drawersublink {
+    display: block;
+    padding: var(--sv-s2) var(--sv-s3);
+    color: var(--sv-ink-soft);
+    text-decoration: none;
+    transition: color var(--sv-t-fast);
+  }
+
+  .sv-band__drawersublink:hover {
+    color: var(--sv-ink);
+  }
+
+  .sv-band__drawersublink--active {
+    color: var(--sv-ink);
+    font-weight: 700;
+  }
+
+  /* ---- Below 1000px ----
+     The nav and sub-tab rows are REPLACED by the drawer; nothing here
+     scrolls sideways and nothing is dropped. Everything that stays in
+     the band wraps instead of overflowing, down to 320px. */
+
+  @media (max-width: 1000px) {
+    .sv-band__nav,
+    .sv-band__subtabs {
+      display: none;
+    }
+
+    .sv-band .sv-band__menu {
+      display: inline-flex;
+    }
+
+    .sv-band__topbar-inner {
+      flex-wrap: wrap;
+      gap: var(--sv-s3);
+      padding-top: var(--sv-s2);
+      padding-bottom: var(--sv-s2);
+    }
+
+    .sv-band__brand {
+      flex-wrap: wrap;
+    }
+
+    .sv-band__utilities,
+    .sv-band__actions {
+      flex-wrap: wrap;
+      row-gap: var(--sv-s2);
+    }
+
+    .sv-band__hero {
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
+    .sv-band__title {
+      font-size: 22px;
+    }
   }
 }

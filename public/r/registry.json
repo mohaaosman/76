@@ -455,6 +455,63 @@
       ]
     },
     {
+      "name": "plate",
+      "type": "registry:ui",
+      "title": "Plate",
+      "description": "The band-less page — one card on the bare wall, under the mono 76° wordmark. One job: Carry a single decision on a page that has no navigation.",
+      "categories": [
+        "chrome"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/plate.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/plate.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "pin-field",
+      "type": "registry:ui",
+      "title": "PinField",
+      "description": "The verification-code input — N boxes that are one value, with B11 field chrome. One job: Enter a short fixed-length code.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/pin-field.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/pin-field.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "social-button",
+      "type": "registry:ui",
+      "title": "SocialButton",
+      "description": "The federated-identity button — B10 Ghost anatomy, one currentColor mark, no brand hex. One job: Hand authentication to ONE named provider.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/social-button.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/social-button.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "field",
       "type": "registry:ui",
       "title": "Forms",
@@ -649,6 +706,96 @@
       "files": [
         {
           "path": "templates/ai-control-center.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "template-auth-sign-in",
+      "type": "registry:block",
+      "title": "Sign in",
+      "description": "The credential screen: three providers, the form, and one seed button.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/auth-sign-in.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "template-auth-sign-up",
+      "type": "registry:block",
+      "title": "Create account",
+      "description": "Registration — the password rule stated up front, no strength meter.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/auth-sign-up.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "template-auth-forgot",
+      "type": "registry:block",
+      "title": "Forgot password",
+      "description": "Request a reset link, with the same answer for every address.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/auth-forgot.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "template-auth-reset",
+      "type": "registry:block",
+      "title": "Reset password",
+      "description": "Set a new password from a link — or state that the link is dead.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/auth-reset.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "template-auth-verify",
+      "type": "registry:block",
+      "title": "Verify email",
+      "description": "A six-digit code, judged on submit.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/auth-verify.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "template-auth-invite",
+      "type": "registry:block",
+      "title": "Accept invitation",
+      "description": "Join a workspace, on a named invitation.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/auth-invite.tsx",
           "type": "registry:block"
         }
       ]

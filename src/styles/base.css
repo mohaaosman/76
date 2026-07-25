@@ -40,13 +40,13 @@
 
   /* C3 · Focus — every interactive element, no exceptions */
   :focus-visible {
-    outline: 2px solid var(--sv-seed);
+    outline: 2px solid var(--sv-seed-line);
     outline-offset: 2px;
   }
 
-  /* On the band, focus is white for contrast */
+  /* On the band, focus is white for contrast — in both modes */
   .sv-band :focus-visible {
-    outline-color: var(--sv-paper);
+    outline-color: var(--sv-on-dark);
   }
 
   /* A4 · numbers that can change are tabular, always */

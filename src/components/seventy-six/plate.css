@@ -1,0 +1,100 @@
+/* B24 · Plate — the band-less page (auth, 404, 500, maintenance) */
+
+@layer sv-components {
+  /* Grid + align-content centres on tall viewports but lets the box GROW
+     past min-height when the content is taller — so 200% zoom and 320px
+     scroll instead of clipping the top of the card. */
+  .sv-plate {
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: var(--sv-s8) var(--sv-s4);
+    background: var(--sv-wall);
+  }
+
+  .sv-plate__inner {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .sv-plate__inner--md {
+    max-width: 520px;
+  }
+
+  /* ---- Wordmark ---- */
+
+  .sv-plate__mark {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--sv-s6);
+  }
+
+  /* Mono advances are wide; the mark is one word, so the tracking is
+     pulled in and the degree tucked against the six. It is never a bare
+     "76" — the degree IS the name. */
+  .sv-plate__wordmark {
+    font-family: var(--sv-font-mono);
+    font-size: 18px;
+    letter-spacing: -0.05em;
+    color: var(--sv-ink);
+  }
+
+  .sv-plate__wordmark-six {
+    color: var(--sv-seed-text);
+  }
+
+  .sv-plate__wordmark-deg {
+    margin-left: -0.14em;
+    color: var(--sv-ink-soft);
+  }
+
+  /* ---- Card ---- */
+
+  /* The plate card is self-padded: its children are the page, so they
+     never need sv-card__body. Card still owns the A4 contract — one
+     --sv-shadow, radius --sv-r, --sv-paper, zero border. */
+  .sv-plate__card {
+    padding: var(--sv-s6);
+  }
+
+  @media (max-width: 380px) {
+    .sv-plate__card {
+      padding: var(--sv-s5);
+    }
+  }
+
+  .sv-plate__head {
+    margin-bottom: var(--sv-s5);
+  }
+
+  .sv-plate__title {
+    font-size: 19px;
+    line-height: 1.25;
+    font-weight: 800;
+  }
+
+  .sv-plate__context {
+    margin-top: var(--sv-s2);
+    font-size: 13px;
+    color: var(--sv-ink-soft);
+  }
+
+  /* ---- Footer ---- */
+
+  /* Mono voice, but sentence case: this line carries legal text, support
+     links and error ids, which uppercase tracking makes unreadable. */
+  .sv-plate__footer {
+    margin-top: var(--sv-s5);
+    font-family: var(--sv-font-mono);
+    font-size: 11px;
+    line-height: 1.6;
+    text-align: center;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-plate__footer a {
+    color: var(--sv-seed-text);
+  }
+}

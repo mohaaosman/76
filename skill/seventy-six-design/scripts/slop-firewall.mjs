@@ -9,6 +9,8 @@ import path from 'node:path';
  *
  * Registered exceptions (each traceable to a Book spec):
  *  - tokens.css may contain color literals (it is the ONLY such file).
+ *  - foundations.tsx may contain color literals — it is the palette
+ *    specimen page: it prints and paints the very tokens it documents.
  *  - button.css `sv-rotate` — the B10 loading spinner, the one
  *    continuous animation in the system.
  *  - `inset` box-shadows — structural rules (B7 selected-row left rule,
@@ -30,12 +32,26 @@ function check(file, source) {
     const flag = (rule) => violations.push(`${loc} · ${rule} · ${line.trim().slice(0, 90)}`);
 
     if (/linear-gradient|radial-gradient|conic-gradient/.test(line)) flag('gradient');
-    if (/backdrop-filter|blur\(/.test(line)) flag('glassmorphism');
+    /* blur( only counts as glassmorphism in a filter context — a bare blur()
+       in .tsx is a DOM call or an onBlur handler, not a visual effect. */
+    if (/backdrop-filter|filter\s*:[^;]*blur\(/.test(line)) flag('glassmorphism');
     if (/text-shadow|drop-shadow/.test(line)) flag('text/drop shadow');
     if (/!important/.test(line)) flag('!important');
 
-    if (base !== 'tokens.css' && /#[0-9a-fA-F]{3,8}\b/.test(line) && /\.css$/.test(file)) {
+    /* .tsx counts too: an inline SVG fill="#4285F4" is the same defect. */
+    if (
+      base !== 'tokens.css' &&
+      base !== 'foundations.tsx' &&
+      /#[0-9a-fA-F]{3,8}\b/.test(line) &&
+      /\.(css|tsx)$/.test(file)
+    ) {
       flag('color literal outside tokens.css');
+    }
+
+    /* RULE 16 · --sv-paper is the CARD SURFACE and nothing else. It inverts
+       on dark, so using it as a mark collapses every white-on-dark pair. */
+    if (base !== 'tokens.css' && /(?:(?<!-)color|outline-color)\s*:\s*var\(--sv-paper\)/.test(line)) {
+      flag('paper-as-text (use --sv-on-dark for marks on band/seed)');
     }
 
     if (/box-shadow\s*:/.test(line) && !/var\(--sv-shadow\)/.test(line) && !/inset/.test(line) && !/none/.test(line)) {

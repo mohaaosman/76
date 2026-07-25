@@ -8,7 +8,7 @@
     padding: var(--sv-s3) var(--sv-s4);
     background: var(--sv-paper);
     border: 1px solid var(--sv-line);
-    border-left: 2px solid var(--sv-seed);
+    border-left: 2px solid var(--sv-seed-line);
     border-radius: var(--sv-r);
   }
 
@@ -69,7 +69,7 @@
   }
 
   .sv-banner__dismiss:focus-visible {
-    outline: 2px solid var(--sv-seed);
+    outline: 2px solid var(--sv-seed-line);
     outline-offset: 2px;
   }
 }

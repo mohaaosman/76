@@ -1,0 +1,49 @@
+/* B25 · PinField — verification code, B11 chrome */
+
+@layer sv-components {
+  .sv-pin__boxes {
+    display: flex;
+    gap: var(--sv-s2);
+  }
+
+  /* Basis, not a fixed width: eight boxes still fit a 320px phone. */
+  .sv-pin__box {
+    flex: 0 1 40px;
+    min-width: 0;
+    height: 44px;
+    padding: 0;
+    background: var(--sv-paper);
+    /* Not the ordinary field hairline: an empty box has no label, no value
+       and no fill, so this border is the ONLY thing that says an input is
+       here. --sv-field-line would be 1.38:1 and fail 1.4.11. */
+    border: 1px solid var(--sv-field-line-strong);
+    border-radius: var(--sv-r);
+    font-family: var(--sv-font-mono);
+    font-size: 17px;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    text-align: center;
+    color: var(--sv-ink);
+    caret-color: var(--sv-seed-line);
+    transition: border-color var(--sv-t-fast);
+  }
+
+  /* 1px -> 1.5px seed via an inset hairline: a border WIDTH change would
+     shift layout. No glow. C3 outline sits on top. */
+  .sv-pin__box:focus-visible {
+    outline: 2px solid var(--sv-seed-line);
+    outline-offset: 2px;
+    border-color: var(--sv-seed-line);
+    box-shadow: inset 0 0 0 0.5px var(--sv-seed-line);
+  }
+
+  .sv-pin__box--error {
+    border-color: var(--sv-bad);
+  }
+
+  .sv-pin__box:disabled {
+    background: var(--sv-wall);
+    color: var(--sv-ink-faint);
+    cursor: not-allowed;
+  }
+}
