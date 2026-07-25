@@ -41,7 +41,7 @@
   /* Focus: 1.5px seed border, no glow rings. */
   .sv-field__input:focus-visible {
     outline: none;
-    border-color: var(--sv-seed);
+    border-color: var(--sv-seed-line);
     box-shadow: inset 0 0 0 0.5px var(--sv-seed);
   }
 
@@ -110,7 +110,7 @@
     border: 1.5px solid var(--sv-ink-soft);
     border-radius: var(--sv-r);
     background: var(--sv-paper);
-    color: var(--sv-paper);
+    color: var(--sv-on-dark);
     transition: background-color var(--sv-t-fast), border-color var(--sv-t-fast);
   }
 
@@ -125,7 +125,7 @@
 
   .sv-check__input:checked + .sv-check__box {
     background: var(--sv-seed);
-    border-color: var(--sv-seed);
+    border-color: var(--sv-seed-line);
   }
 
   .sv-check__input:checked + .sv-check__box svg {
@@ -136,7 +136,7 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: var(--sv-paper);
+    background: var(--sv-on-dark);
     opacity: 0;
     transition: opacity var(--sv-t-fast);
   }
@@ -146,7 +146,7 @@
   }
 
   .sv-check__input:focus-visible + .sv-check__box {
-    outline: 2px solid var(--sv-seed);
+    outline: 2px solid var(--sv-seed-line);
     outline-offset: 2px;
   }
 
@@ -190,7 +190,7 @@
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background: var(--sv-paper);
+    background: var(--sv-on-dark);
     transition: transform var(--sv-t-fast);
   }
 
@@ -203,7 +203,7 @@
   }
 
   .sv-toggle__input:focus-visible + .sv-toggle__track {
-    outline: 2px solid var(--sv-seed);
+    outline: 2px solid var(--sv-seed-line);
     outline-offset: 2px;
   }
 }

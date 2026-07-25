@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "template-auth-reset",
+  "type": "registry:block",
+  "title": "Reset password",
+  "description": "Set a new password from a link — or state that the link is dead.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/plate.json",
+    "https://76.zifala.com/r/field.json",
+    "https://76.zifala.com/r/button.json",
+    "https://76.zifala.com/r/banner.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/templates/auth-reset.tsx",
+      "content": "// 76° template · Reset password (B24 Plate, seed-neutral → default cobalt root).\nimport { useState } from 'react';\nimport type { FormEvent } from 'react';\nimport { Banner, Button, Field, Plate, PlateHead } from '@/components/seventy-six';\n\nconst EMAIL = 'maya@northwind.co';\n\n/* F7 refuses a strength meter: the rule is STATED before the field, and a\n   miss is an inline error naming what failed and how to fix it. */\nconst PASSWORD_RULE = 'At least 12 characters, including one number';\nconst MIN_LENGTH = 12;\n\nconst stack = { display: 'grid', gap: 'var(--sv-s4)' } as const;\nconst notice = { marginBottom: 'var(--sv-s5)' } as const;\nconst full = { width: '100%' } as const;\n\nfunction passwordError(value: string) {\n  if (!value) return 'No password entered. Type one of at least 12 characters, including one number.';\n  if (value.length < MIN_LENGTH || !/\\d/.test(value))\n    return 'That password misses the rule. Use at least 12 characters and include one number.';\n  return '';\n}\n\nfunction confirmError(password: string, confirm: string) {\n  if (!confirm) return 'The confirmation is empty. Retype the new password here.';\n  if (confirm !== password)\n    return 'The two passwords do not match. Retype it exactly as the password above.';\n  return '';\n}\n\ntype Errors = { password: string; confirm: string };\nconst CLEAR: Errors = { password: '', confirm: '' };\n\nfunction ResetForm() {\n  const [password, setPassword] = useState('');\n  const [confirm, setConfirm] = useState('');\n  const [errors, setErrors] = useState<Errors>(CLEAR);\n  const [failed, setFailed] = useState(false);\n\n  /* B11 timing. Nothing is judged on the first keystroke: `force` is passed\n     on blur, and after that the field carries an error, so it re-checks on\n     every change and the fix is confirmed the moment it lands. Changing the\n     password re-checks the confirmation too — the mismatch is a pair. */\n  function check(next: Partial<Errors>, force?: keyof Errors) {\n    const p = next.password ?? password;\n    const c = next.confirm ?? confirm;\n    setErrors((prev) => ({\n      password: force === 'password' || prev.password ? passwordError(p) : '',\n      confirm: force === 'confirm' || prev.confirm ? confirmError(p, c) : '',\n    }));\n  }\n\n  function submit(e: FormEvent<HTMLFormElement>) {\n    e.preventDefault();\n    const next = { password: passwordError(password), confirm: confirmError(password, confirm) };\n    setErrors(next);\n    setFailed(Boolean(next.password || next.confirm));\n  }\n\n  return (\n    <Plate footer={<a href=\"#signin\">Back to sign in</a>}>\n      {/* A2: the failure renders here, at its source — never as a toast. */}\n      {failed && (\n        <div style={notice}>\n          <Banner tone=\"bad\" title=\"Password not set\">\n            The password was not saved because the fields below do not pass the rule. Fix the ones\n            marked, then set the new password again.\n          </Banner>\n        </div>\n      )}\n\n      <PlateHead title=\"Set a new password\" context={`Resetting the password for ${EMAIL}`} />\n\n      <form style={stack} onSubmit={submit} noValidate>\n        <Field\n          label=\"New password\"\n          type=\"password\"\n          autoComplete=\"new-password\"\n          required\n          hint={PASSWORD_RULE}\n          value={password}\n          error={errors.password || undefined}\n          onChange={(e) => {\n            setPassword(e.target.value);\n            check({ password: e.target.value });\n          }}\n          onBlur={() => check({}, 'password')}\n        />\n        <Field\n          label=\"Confirm new password\"\n          type=\"password\"\n          autoComplete=\"new-password\"\n          required\n          value={confirm}\n          error={errors.confirm || undefined}\n          onChange={(e) => {\n            setConfirm(e.target.value);\n            check({ confirm: e.target.value });\n          }}\n          onBlur={() => check({}, 'confirm')}\n        />\n        <Button type=\"submit\" variant=\"primary\" style={full}>\n          Set new password\n        </Button>\n      </form>\n    </Plate>\n  );\n}\n\n/* The same plate, the other condition: the link is dead, so the screen has\n   one job left — get a live one sent. No form, one primary. */\nfunction ExpiredLink() {\n  return (\n    <Plate footer={<a href=\"#signin\">Back to sign in</a>}>\n      <div style={notice}>\n        <Banner tone=\"bad\" title=\"This reset link has expired\">\n          Reset links are single-use and last 60 minutes. Send a fresh link to {EMAIL} and open the\n          newest email.\n        </Banner>\n      </div>\n\n      <PlateHead title=\"Reset link expired\" context=\"Nothing on the account has changed.\" />\n\n      <Button variant=\"primary\" style={full}>\n        Send reset link\n      </Button>\n    </Plate>\n  );\n}\n\nexport type AuthResetState = 'form' | 'expired';\n\nexport interface AuthResetProps {\n  /** One screen at a time: one h1, one primary (A2, A4). */\n  state?: AuthResetState;\n}\n\nexport function AuthReset({ state = 'form' }: AuthResetProps) {\n  return state === 'expired' ? <ExpiredLink /> : <ResetForm />;\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/templates/auth-reset.tsx"
+    }
+  ],
+  "categories": [
+    "templates"
+  ],
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "kind": "template",
+    "seed": null,
+    "tags": [
+      "auth",
+      "password-reset",
+      "new-password",
+      "plate"
+    ]
+  }
+}

@@ -63,11 +63,13 @@ projects; it is the ONLY file allowed to contain color literals. The core:
 | Token | Value | Role |
 |---|---|---|
 | `--sv-band` / `--sv-band-line` / `--sv-band-soft` | #1B1F26 / #2C323B / #8A93A2 | ink band, its hairlines, its soft text |
-| `--sv-wall` / `--sv-paper` | #F2F3F5 / #FFFFFF | platinum background / card surface |
+| `--sv-wall` / `--sv-paper` | #F2F3F5 / #FFFFFF | platinum background / card surface (surface ONLY — never a mark) |
+| `--sv-on-dark` | #FFFFFF, both modes | the mark on the band or on a seed fill: band text, on-band focus, primary button label, check mark |
 | `--sv-ink` / `--sv-ink-soft` / `--sv-ink-faint` | #1C2026 / #667080 / #99A1AD | text ladder (faint never carries required info) |
 | `--sv-line` / `--sv-field-line` | #E9EBEE / #D8DCE1 | hairlines / field borders |
 | `--sv-seed` / `--sv-seed-deep` / `--sv-seed-tint` | per product | THE accent (default Cobalt #2C5BE0 / #1E44B4 / #EEF3FE) |
 | `--sv-ok` / `--sv-bad` | #14804A / #C43D2E | words + 6px dots only, AA-verified |
+| `--sv-on-bad` | #FFFFFF light / #1B1F26 dark | the mark on a `--sv-bad` fill (a dialog's final confirm) — flips, because `--sv-bad` brightens on dark |
 | `--sv-r` / `--sv-shadow` | 4px / 0 1px 2px rgba(16,20,28,.05) | the only radius (50% avatars, 2–3px bars) and only shadow |
 | `--sv-s1…s8` | 4→40px | 4px-base spacing scale |
 | `--sv-t-fast` / `--sv-t` | 120ms / 160ms | the only durations; collapse to 0 under reduced motion |

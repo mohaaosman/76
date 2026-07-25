@@ -29,7 +29,7 @@
 
   .sv-command__input:focus-visible {
     outline: none;
-    border-bottom-color: var(--sv-seed);
+    border-bottom-color: var(--sv-seed-line);
   }
 
   .sv-command__input::placeholder {

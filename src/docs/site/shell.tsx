@@ -7,7 +7,8 @@ import { categories } from '../content';
 
 /**
  * The docs site shell IS a 76° screen: ink band, horizontal nav,
- * paper on the platinum wall. No sidebar — the Book forbids it.
+ * paper on the platinum wall. No desktop sidebar — the Book forbids it;
+ * below 1000px BandNav swaps itself for the left drawer on its own.
  * Pages render their own PageHero inside <HeroBand> so the band reads
  * as one continuous ink zone.
  */

@@ -8,7 +8,7 @@
     border: 0;
     border-radius: var(--sv-r);
     background: var(--sv-band);
-    color: var(--sv-paper);
+    color: var(--sv-on-dark);
     font-family: var(--sv-font-ui);
     font-size: 11.5px;
     font-weight: 500;

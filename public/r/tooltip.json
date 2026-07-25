@@ -16,7 +16,7 @@
     },
     {
       "path": "registry/seventy-six/tooltip.css",
-      "content": "/* B18 · Tooltip — popover attribute, ink on white text */\n\n@layer sv-components {\n  .sv-tooltip {\n    position: fixed;\n    margin: 0;\n    padding: 6px 10px;\n    border: 0;\n    border-radius: var(--sv-r);\n    background: var(--sv-band);\n    color: var(--sv-paper);\n    font-family: var(--sv-font-ui);\n    font-size: 11.5px;\n    font-weight: 500;\n    max-width: 260px;\n  }\n}\n",
+      "content": "/* B18 · Tooltip — popover attribute, ink on white text */\n\n@layer sv-components {\n  .sv-tooltip {\n    position: fixed;\n    margin: 0;\n    padding: 6px 10px;\n    border: 0;\n    border-radius: var(--sv-r);\n    background: var(--sv-band);\n    color: var(--sv-on-dark);\n    font-family: var(--sv-font-ui);\n    font-size: 11.5px;\n    font-weight: 500;\n    max-width: 260px;\n  }\n}\n",
       "type": "registry:file",
       "target": "components/seventy-six/tooltip.css"
     }

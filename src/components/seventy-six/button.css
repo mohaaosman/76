@@ -19,7 +19,7 @@
 
   .sv-btn--primary {
     background: var(--sv-seed);
-    color: var(--sv-paper);
+    color: var(--sv-on-dark);
   }
 
   .sv-btn--primary:hover:not(:disabled),
@@ -35,11 +35,11 @@
 
   .sv-band .sv-btn--ghost {
     border-color: var(--sv-band-line);
-    color: var(--sv-paper);
+    color: var(--sv-on-dark);
   }
 
   .sv-btn--ghost:hover:not(:disabled) {
-    border-color: var(--sv-seed);
+    border-color: var(--sv-seed-line);
   }
 
   /* Danger = ghost anatomy with bad text. Never a red fill outside a
@@ -57,7 +57,7 @@
   .sv-btn--danger[data-confirm] {
     background: var(--sv-bad);
     border-color: transparent;
-    color: var(--sv-paper);
+    color: var(--sv-on-bad);
   }
 
   .sv-btn--link {

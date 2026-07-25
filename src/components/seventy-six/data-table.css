@@ -94,7 +94,7 @@
   }
 
   .sv-table__pagebtn:hover:not(:disabled) {
-    border-color: var(--sv-seed);
+    border-color: var(--sv-seed-line);
   }
 
   .sv-table__pagebtn:disabled {

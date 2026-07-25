@@ -33,6 +33,9 @@
 - [Drawer](https://76.zifala.com/llms/drawer.md): The slide-over: a paper panel from the screen edge for detail-in-context, on native <dialog>. One job: Inspect or edit ONE record without leaving the sheet.
 - [Banner](https://76.zifala.com/llms/banner.md): The inline notice — where B14 sends every error: in the flow, at the point of relevance. One job: State a condition of THIS place, in this place.
 - [Badge](https://76.zifala.com/llms/badge.md): A small mono tag for category metadata — never status, never numbers that matter. One job: Name the CATEGORY a thing belongs to.
+- [Plate](https://76.zifala.com/llms/plate.md): The band-less page — one card on the bare wall, under the mono 76° wordmark. One job: Carry a single decision on a page that has no navigation.
+- [PinField](https://76.zifala.com/llms/pin-field.md): The verification-code input — N boxes that are one value, with B11 field chrome. One job: Enter a short fixed-length code.
+- [SocialButton](https://76.zifala.com/llms/social-button.md): The federated-identity button — B10 Ghost anatomy, one currentColor mark, no brand hex. One job: Hand authentication to ONE named provider.
 - [Forms](https://76.zifala.com/llms/field.md): Field, Select, Checkbox, Radio, Toggle — labels above, seed focus without glow, errors that say how to fix. One job: Collect one value per control, honestly labeled.
 
 ## Blocks
@@ -56,6 +59,12 @@ Full screens built only from the taxonomy — install with npx shadcn@latest add
 - POS terminal (`template-pos-terminal`, seed signal): A point-of-sale register — scaled up, touch-first.
 - Settings (`template-settings-account`, seed neutral): An account settings screen — the forms showcase as a page.
 - AI agent control center (`template-ai-control-center`, seed cobalt): An ops console for a fleet of AI agents.
+- Sign in (`template-auth-sign-in`, seed cobalt): The credential screen: three providers, the form, and one seed button.
+- Create account (`template-auth-sign-up`, seed cobalt): Registration — the password rule stated up front, no strength meter.
+- Forgot password (`template-auth-forgot`, seed cobalt): Request a reset link, with the same answer for every address.
+- Reset password (`template-auth-reset`, seed neutral): Set a new password from a link — or state that the link is dead.
+- Verify email (`template-auth-verify`, seed neutral): A six-digit code, judged on submit.
+- Accept invitation (`template-auth-invite`, seed cobalt): Join a workspace, on a named invitation.
 
 ## Rules that bind every component
 

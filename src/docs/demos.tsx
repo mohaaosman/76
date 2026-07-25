@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { ComponentType } from 'react';
+import type { ComponentType, FormEvent } from 'react';
 import {
   ActivityList,
   Badge,
@@ -23,11 +23,15 @@ import {
   MenuButton,
   MeterList,
   PageHero,
+  PinField,
+  Plate,
+  PlateHead,
   Progress,
   Row,
   SearchCommand,
   Select,
   Skeleton,
+  SocialButton,
   SplitButton,
   StatS1,
   StatusWord,
@@ -1022,6 +1026,216 @@ function FormError() {
   );
 }
 
+/* ------------------------------------------------ v0.3.0 · auth layer */
+
+/* A Plate IS a page: inside a preview tile it drops its viewport height
+   and its own padding, and the preview wall stands in for the wall. */
+const plateFit = { minHeight: 0, padding: 0 } as const;
+const stackTight = { display: 'grid', gap: 'var(--sv-s2)' } as const;
+const stackForm = { display: 'grid', gap: 'var(--sv-s4)' } as const;
+const pairCols = { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--sv-s4)' } as const;
+const orRule = {
+  display: 'grid',
+  gridTemplateColumns: '1fr auto 1fr',
+  alignItems: 'center',
+  gap: 'var(--sv-s3)',
+  margin: 'var(--sv-s5) 0',
+} as const;
+const hairline = { height: '1px', background: 'var(--sv-line)' } as const;
+const softInk = { color: 'var(--sv-ink-soft)' } as const;
+const seedLink = { color: 'var(--sv-seed-text)' } as const;
+const fullWidth = { width: '100%' } as const;
+const plateFoot = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: 'var(--sv-s3) var(--sv-s4)',
+  justifyContent: 'space-between',
+  marginTop: 'var(--sv-s4)',
+} as const;
+const authNarrow = { maxWidth: 340 } as const;
+
+function hold(event: FormEvent<HTMLFormElement>) {
+  event.preventDefault();
+}
+
+/* ------------------------------------------------ Plate */
+
+function PlateBasic() {
+  return (
+    <Plate
+      style={plateFit}
+      footer={
+        <>
+          Trouble signing in?{' '}
+          <a href="#support" style={seedLink}>
+            Contact support
+          </a>
+        </>
+      }
+    >
+      <PlateHead title="Sign in" context="Northwind operations console" />
+
+      <div style={stackTight}>
+        <SocialButton provider="google" />
+        <SocialButton provider="apple" />
+        <SocialButton provider="github" />
+      </div>
+
+      <div style={orRule}>
+        <span style={hairline} aria-hidden="true" />
+        <span className="sv-mono" style={softInk}>
+          Or
+        </span>
+        <span style={hairline} aria-hidden="true" />
+      </div>
+
+      <form style={stackForm} onSubmit={hold} noValidate>
+        <Field label="Email" type="email" required autoComplete="email" inputMode="email" />
+        <Field label="Password" type="password" required autoComplete="current-password" />
+        <Button type="submit" variant="primary" style={fullWidth}>
+          Sign in
+        </Button>
+      </form>
+
+      <div style={plateFoot}>
+        <ButtonLink href="#reset">Forgot password?</ButtonLink>
+        <ButtonLink href="#sign-up">Create an account</ButtonLink>
+      </div>
+    </Plate>
+  );
+}
+
+function PlateError() {
+  return (
+    <Plate style={plateFit} footer="ERR-4041 · 25 JUL 09:14 UTC">
+      <PlateHead
+        title="Page not found"
+        context="The address is right but nothing is filed under it. It may have been renamed or archived."
+      />
+      <Button variant="primary" style={fullWidth}>
+        Back to the dashboard
+      </Button>
+    </Plate>
+  );
+}
+
+function PlateWide() {
+  return (
+    <Plate
+      width="md"
+      style={plateFit}
+      footer={
+        <a href="#signin" style={seedLink}>
+          Back to sign in
+        </a>
+      }
+    >
+      <PlateHead title="Create account" context="Northwind operations console" />
+      <form style={stackForm} onSubmit={hold} noValidate>
+        <div style={pairCols}>
+          <Field label="First name" required autoComplete="given-name" />
+          <Field label="Last name" required autoComplete="family-name" />
+        </div>
+        <Field label="Work email" type="email" required autoComplete="email" inputMode="email" />
+        <Field
+          label="Password"
+          type="password"
+          required
+          autoComplete="new-password"
+          hint="At least 12 characters. A phrase you have not used elsewhere works well."
+        />
+        <Button type="submit" variant="primary" style={fullWidth}>
+          Create account
+        </Button>
+      </form>
+    </Plate>
+  );
+}
+
+/* ------------------------------------------------ PinField */
+
+function PinBasic() {
+  const [code, setCode] = useState('');
+  return (
+    <form style={{ ...stackForm, ...authNarrow }} onSubmit={hold} noValidate>
+      <PinField
+        label="Verification code"
+        hint="Six digits, valid for 10 minutes"
+        name="code"
+        value={code}
+        onChange={setCode}
+      />
+      <Button type="submit" variant="primary" style={fullWidth}>
+        Verify email
+      </Button>
+    </form>
+  );
+}
+
+function PinError() {
+  return (
+    <div style={authNarrow}>
+      <PinField
+        label="Verification code"
+        hint="Six digits, valid for 10 minutes"
+        defaultValue="418311"
+        error="That code did not match. Retype it from the email, or resend the code."
+      />
+    </div>
+  );
+}
+
+function PinAlpha() {
+  return (
+    <div style={authNarrow}>
+      <PinField
+        label="Invitation code"
+        length={8}
+        charset="alphanumeric"
+        hint="Eight characters from the invitation email"
+        name="invite_code"
+      />
+    </div>
+  );
+}
+
+/* ------------------------------------------------ SocialButton */
+
+function SocialStack() {
+  const { notify } = useToast();
+  const start = (provider: string) => notify({ tone: 'info', title: `Handing off to ${provider}` });
+  return (
+    <div style={{ ...stackTight, ...authNarrow }}>
+      <SocialButton provider="google" onClick={() => start('Google')} />
+      <SocialButton provider="apple" onClick={() => start('Apple')} />
+      <SocialButton provider="github" onClick={() => start('GitHub')} />
+    </div>
+  );
+}
+
+function SocialSignup() {
+  return (
+    <div style={{ ...stackTight, ...authNarrow }}>
+      <SocialButton provider="google" action="Sign up with" />
+      <SocialButton provider="microsoft" action="Sign up with" />
+    </div>
+  );
+}
+
+function SocialLoading() {
+  const [handing, setHanding] = useState<string | null>(null);
+  const start = (provider: string) => {
+    setHanding(provider);
+    setTimeout(() => setHanding(null), 1800);
+  };
+  return (
+    <div style={{ ...stackTight, ...authNarrow }}>
+      <SocialButton provider="google" isLoading={handing === 'google'} onClick={() => start('google')} />
+      <SocialButton provider="github" isLoading={handing === 'github'} onClick={() => start('github')} />
+    </div>
+  );
+}
+
 /* ------------------------------------------------ registry */
 
 export const demos: Record<string, ComponentType> = {
@@ -1067,4 +1281,13 @@ export const demos: Record<string, ComponentType> = {
   'drawer-basic': DrawerBasic,
   'banner-tones': BannerTones,
   'badge-basic': BadgeBasic,
+  'plate-basic': PlateBasic,
+  'plate-error': PlateError,
+  'plate-wide': PlateWide,
+  'pin-basic': PinBasic,
+  'pin-error': PinError,
+  'pin-alpha': PinAlpha,
+  'social-stack': SocialStack,
+  'social-signup': SocialSignup,
+  'social-loading': SocialLoading,
 };

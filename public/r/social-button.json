@@ -1,0 +1,45 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "social-button",
+  "type": "registry:ui",
+  "title": "SocialButton",
+  "description": "The federated-identity button — B10 Ghost anatomy, one currentColor mark, no brand hex. One job: Hand authentication to ONE named provider.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/button.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/social-button.tsx",
+      "content": "import { forwardRef } from 'react';\nimport type { ReactNode } from 'react';\nimport { cx } from '@/lib/cx';\nimport { Button } from './button';\nimport type { ButtonProps } from './button';\nimport './social-button.css';\n\n/**\n * B26 · SocialButton — federated identity. Ghost anatomy, composed from\n * B10 rather than redrawn: the plate's card holds a stack of these, then\n * a hairline, then the email field. Full width inside the card.\n *\n * The mark is ONE path in currentColor — no brand hex ever enters the\n * system (A1, Law 2), so the row stays legible on both surfaces and\n * inherits the button's own ink. The label names the provider; the button\n * never says \"Login\".\n */\nexport type SocialProvider = 'google' | 'apple' | 'github' | 'microsoft';\n\nconst PROVIDER_NAMES: Record<SocialProvider, string> = {\n  google: 'Google',\n  apple: 'Apple',\n  github: 'GitHub',\n  microsoft: 'Microsoft',\n};\n\nconst PROVIDER_MARKS: Record<SocialProvider, ReactNode> = {\n  google: (\n    <svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" aria-hidden=\"true\">\n      <path\n        d=\"M12.76 5.25A5.5 5.5 0 1 0 13.5 8H8.4\"\n        fill=\"none\"\n        stroke=\"currentColor\"\n        strokeWidth=\"1.7\"\n        strokeLinecap=\"round\"\n        strokeLinejoin=\"round\"\n      />\n    </svg>\n  ),\n  apple: (\n    <svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" aria-hidden=\"true\">\n      <path\n        d=\"M13.05 11.75c-.2.47-.44.9-.72 1.3-.38.54-.7.92-.94 1.13-.37.35-.78.53-1.21.54-.31 0-.68-.09-1.12-.27-.44-.18-.84-.27-1.21-.27-.39 0-.8.09-1.24.27-.44.18-.79.28-1.06.29-.41.02-.82-.17-1.24-.55-.26-.23-.59-.62-.99-1.18-.43-.59-.78-1.28-1.06-2.06-.3-.85-.45-1.67-.45-2.46 0-.91.2-1.69.59-2.34.31-.52.72-.94 1.24-1.24.51-.3 1.07-.46 1.67-.47.33 0 .76.1 1.3.3.54.2.88.3 1.04.3.11 0 .5-.12 1.15-.35.62-.22 1.14-.31 1.57-.27 1.16.09 2.03.55 2.61 1.37-1.04.63-1.55 1.51-1.54 2.64.01.88.33 1.61.96 2.19.28.27.6.48.95.63-.08.22-.16.43-.25.63zM10.6 2.13c0 .68-.25 1.31-.74 1.9-.6.69-1.32 1.09-2.1 1.03a2.1 2.1 0 0 1-.02-.26c0-.65.28-1.35.79-1.92.25-.29.57-.53.96-.72.39-.19.75-.29 1.09-.31.01.09.02.19.02.28z\"\n        fill=\"currentColor\"\n      />\n    </svg>\n  ),\n  github: (\n    /* Inset viewBox: the octicon fills its box edge to edge, the other\n       three marks sit ~1px in. This equalises optical weight. */\n    <svg viewBox=\"-1.2 -1.2 18.4 18.4\" width=\"16\" height=\"16\" aria-hidden=\"true\">\n      <path\n        d=\"M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z\"\n        fill=\"currentColor\"\n      />\n    </svg>\n  ),\n  microsoft: (\n    <svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" aria-hidden=\"true\">\n      <path\n        d=\"M2.4 2.4h5.1v5.1H2.4zM8.5 2.4h5.1v5.1H8.5zM2.4 8.5h5.1v5.1H2.4zM8.5 8.5h5.1v5.1H8.5z\"\n        fill=\"currentColor\"\n      />\n    </svg>\n  ),\n};\n\nexport interface SocialButtonProps\n  extends Omit<ButtonProps, 'variant' | 'pos' | 'iconLeading' | 'loadingLabel' | 'children'> {\n  provider: SocialProvider;\n  /** Verb phrase before the provider name. Default \"Continue with\". */\n  action?: string;\n}\n\nexport const SocialButton = forwardRef<HTMLButtonElement, SocialButtonProps>(function SocialButton(\n  { provider, action = 'Continue with', type = 'button', className, ...rest },\n  ref,\n) {\n  return (\n    <Button\n      {...rest}\n      ref={ref}\n      type={type}\n      variant=\"ghost\"\n      className={cx('sv-social', className)}\n      iconLeading={PROVIDER_MARKS[provider]}\n      loadingLabel=\"Connecting…\"\n    >\n      {`${action} ${PROVIDER_NAMES[provider]}`}\n    </Button>\n  );\n});\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/social-button.tsx"
+    },
+    {
+      "path": "registry/seventy-six/social-button.css",
+      "content": "/* B26 · SocialButton — ghost anatomy, one currentColor mark */\n\n@layer sv-components {\n  /* Full width inside the plate card; the stack reads as one block, so\n     the marks carry the difference, not the widths. */\n  .sv-social {\n    width: 100%;\n    min-height: 40px;\n    font-weight: 600;\n  }\n\n  /* Rest / hover / focus-visible / disabled / loading all come from B10.\n     Press is the one state a full-width ghost needs of its own: a border\n     tint alone is invisible at this width. */\n  .sv-social:active:not(:disabled) {\n    background: var(--sv-seed-tint);\n  }\n\n  .sv-social .sv-btn__icon svg {\n    width: 16px;\n    height: 16px;\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/social-button.css"
+    }
+  ],
+  "categories": [
+    "forms"
+  ],
+  "docs": "https://76.zifala.com/llms/social-button.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B26",
+    "job": "Hand authentication to ONE named provider.",
+    "tags": [
+      "social-login",
+      "oauth",
+      "sso",
+      "provider",
+      "federated-identity",
+      "sign-in"
+    ],
+    "exports": [
+      "SocialButton"
+    ]
+  }
+}

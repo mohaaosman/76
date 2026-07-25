@@ -1,0 +1,37 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "template-auth-forgot",
+  "type": "registry:block",
+  "title": "Forgot password",
+  "description": "Request a reset link, with the same answer for every address.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/plate.json",
+    "https://76.zifala.com/r/field.json",
+    "https://76.zifala.com/r/button.json",
+    "https://76.zifala.com/r/banner.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/templates/auth-forgot.tsx",
+      "content": "// 76° template · Forgot password — B24 Plate, band-less, seed cobalt (default root).\nimport { useState } from 'react';\nimport type { FormEvent } from 'react';\nimport { Field, Button, ButtonLink, Banner, Plate, PlateHead } from '@/components/seventy-six';\n// v0.3 component; the barrel does not export it yet.\n\nconst stack = { display: 'grid', gap: 'var(--sv-s4)' } as const;\nconst notice = { marginBottom: 'var(--sv-s4)' } as const;\nconst wide = { width: '100%' } as const;\nconst prose = { display: 'grid', gap: 'var(--sv-s3)', fontSize: '13px' } as const;\nconst soft = { color: 'var(--sv-ink-soft)' } as const;\nconst sentActions = { display: 'grid', gap: 'var(--sv-s4)', marginTop: 'var(--sv-s5)' } as const;\nconst foot = { marginTop: 'var(--sv-s4)' } as const;\nconst link = { color: 'var(--sv-seed-text)' } as const;\n\nconst EMAIL = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\n// A3: the message names what is wrong and what to do about it.\nfunction validate(email: string) {\n  if (!email.trim()) return 'Enter the email address on the account.';\n  if (!EMAIL.test(email))\n    return 'That address is missing an @ or a domain. Use the form name@company.co.';\n  return undefined;\n}\n\nexport function AuthForgot() {\n  const [email, setEmail] = useState('');\n  const [error, setError] = useState<string>();\n  const [failed, setFailed] = useState(false);\n  const [sent, setSent] = useState(false);\n  const [resent, setResent] = useState(false);\n\n  /* B11 timing: validate on blur, then on every change once the field\n     already carries an error — never on the first keystroke. */\n  function change(value: string) {\n    setEmail(value);\n    if (!error) return;\n    const found = validate(value);\n    setError(found);\n    if (!found) setFailed(false);\n  }\n\n  /* noValidate: the browser's own bubbles are toasts by another name, and\n     A2 refuses toasts for errors. The banner and the field chrome carry it. */\n  function submit(event: FormEvent<HTMLFormElement>) {\n    event.preventDefault();\n    const found = validate(email);\n    setError(found);\n    setFailed(Boolean(found));\n    /* The server answers the same way whether or not the address has an\n       account, and so does this screen: one state, one wording, no leak. */\n    if (!found) setSent(true);\n  }\n\n  return (\n    <Plate\n      footer={\n        <>\n          Still stuck? <a href=\"#support\" style={link}>Contact support</a>\n        </>\n      }\n    >\n      {sent ? (\n        <>\n          <PlateHead\n            title=\"Check your email\"\n            context={`If ${email} has an account, a reset link is on its way.`}\n          />\n          <div style={prose}>\n            <p style={soft}>\n              The link works once and stops working after 30 minutes. Opening it lets you set a new\n              password without the old one.\n            </p>\n            <p style={soft}>\n              Nothing after a few minutes? Look in spam and junk, confirm the address was typed\n              correctly, then send the link again.\n            </p>\n          </div>\n          <div style={{ ...stack, marginTop: 'var(--sv-s5)' }}>\n            <Button type=\"button\" variant=\"ghost\" style={wide} onClick={() => setSent(true)}>\n              Send the link again\n            </Button>\n            <ButtonLink href=\"#sign-in\">Back to sign in</ButtonLink>\n          </div>\n        </>\n      ) : (\n        <>\n          <PlateHead\n            title=\"Reset password\"\n            context=\"We send a one-time link to the address on the account.\"\n          />\n\n          {failed && (\n            <div style={notice}>\n              <Banner tone=\"bad\" title=\"The reset link was not sent\">\n                The email address below needs fixing. It names what to change.\n              </Banner>\n            </div>\n          )}\n\n          <form style={stack} onSubmit={submit} noValidate>\n            <Field\n              label=\"Email\"\n              type=\"email\"\n              required\n              autoComplete=\"email\"\n              inputMode=\"email\"\n              value={email}\n              error={error}\n              onChange={(e) => change(e.target.value)}\n              onBlur={() => setError(validate(email))}\n            />\n            {/* A2: the one seed button on this plate. Everything else is a link. */}\n            <Button type=\"submit\" variant=\"primary\" style={wide}>\n              Send reset link\n            </Button>\n          </form>\n\n          <div style={foot}>\n            <ButtonLink href=\"#sign-in\">Back to sign in</ButtonLink>\n          </div>\n        </>\n      )}\n    </Plate>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/templates/auth-forgot.tsx"
+    }
+  ],
+  "categories": [
+    "templates"
+  ],
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "kind": "template",
+    "seed": "cobalt",
+    "tags": [
+      "auth",
+      "password-reset",
+      "forgot-password",
+      "plate",
+      "cobalt"
+    ]
+  }
+}

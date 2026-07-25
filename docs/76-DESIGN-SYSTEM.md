@@ -16,7 +16,7 @@
 
 Taste sources (what Max approved): Shreyu's airy light shell and widget clarity; Surface/Bissaa/Triangl's ink header-band architecture with overlapping white cards; Stripe-level craft in restraint; instrument-panel discipline (mono metadata, tabular numerals).
 
-Explicitly rejected — never propose again: gradients of any kind, layered/decorative shadows, glassmorphism, dark-first UI, large radii and pillowy cards, sidebars as primary nav, decorative sparkline clutter on stat cards, more than three colors on a screen, dial/gauge theatrics, "card that screams it's a card."
+Explicitly rejected — never propose again: gradients of any kind, layered/decorative shadows, glassmorphism, dark-first UI, large radii and pillowy cards, sidebars as primary nav on desktop (below 1000px the nav is a left drawer — Component Book A2), decorative sparkline clutter on stat cards, more than three colors on a screen, dial/gauge theatrics, "card that screams it's a card."
 
 ## 2 · THE SIX LAWS
 
@@ -93,7 +93,7 @@ POS surfaces scale up: body 16–18, values 28–40, touch targets ≥48px — s
 Every 76 app screen is two zones:
 
 **Zone 1 — Ink band** (--sv-band), three stacked rows, all inside a 1280px container:
-1. **Topbar:** wordmark `76` + app name (hairline-separated) · horizontal nav (NEVER a sidebar) · search + avatar right. Active item: white text + 2px seed underline flush to the row's bottom hairline.
+1. **Topbar:** wordmark `76` + app name (hairline-separated) · horizontal nav (NEVER a sidebar at ≥1000px; below 1000px it moves into a left drawer behind a labelled "Menu" button — Component Book A2 and B1) · search + avatar right. Active item: white text + 2px seed underline flush to the row's bottom hairline.
 2. **Sub-tabs:** the active menu item's children, grouped as mono uppercase tabs directly under the header (Triangl pattern). Same underline behavior. If a section has no children, this row collapses.
 3. **Page context (hero):** H1 greeting or page title → soft context line (date · scope · last sync). Right side: page-level actions (ghost buttons on band + one seed primary). Bottom padding ~68px to make room for the overlap.
 

@@ -22,7 +22,7 @@
     background: var(--sv-paper);
     border-radius: var(--sv-r);
     box-shadow: var(--sv-shadow);
-    border-left: 2px solid var(--sv-seed);
+    border-left: 2px solid var(--sv-seed-line);
     transition: opacity var(--sv-t);
   }
 
@@ -84,7 +84,7 @@
   }
 
   .sv-toast__dismiss:focus-visible {
-    outline: 2px solid var(--sv-seed);
+    outline: 2px solid var(--sv-seed-line);
     outline-offset: 2px;
   }
 }

@@ -14,7 +14,7 @@ The machine-checkable banned-CSS/pattern list (A1–A4), the registered exceptio
 | 2 | **glassmorphism** | `backdrop-filter` \| `blur(` | Frosted glass floats and glows; the scrim is flat by law | `--sv-scrim: rgba(27,31,38,0.4)` — flat, no blur (Dialog only) |
 | 3 | **text/drop shadow** | `text-shadow` \| `drop-shadow` | Type must sit on the surface, not hover above it | None. Use weight/size/color hierarchy |
 | 4 | **!important** | `!important` | Specificity war = the design has lost control | Fix the selector / layer order (`@layer sv-tokens/sv-base/…`) |
-| 5 | **color literal outside tokens.css** | `#[0-9a-fA-F]{3,8}` in any `.css` file whose basename is **not** `tokens.css` | One palette, one source of truth; stray hexes are how a fourth color sneaks in | Reference a token var; add the literal to `tokens.css` only (the sole file allowed to hold literals) |
+| 5 | **color literal outside tokens.css** | `#[0-9a-fA-F]{3,8}` in any `.css` **or `.tsx`** file whose basename is **not** `tokens.css` or `foundations.tsx` (a `.tsx` counts because an inline SVG `fill="#4285F4"` is the same defect) | One palette, one source of truth; stray hexes are how a fourth color sneaks in | Reference a token var; add the literal to `tokens.css` only (the sole file allowed to hold literals) |
 | 6 | **non-token box-shadow** | a `box-shadow:` line that does **not** contain `var(--sv-shadow)`, is **not** `inset`, and is **not** `none` | Custom elevation = things floating; the system has exactly one shadow | `var(--sv-shadow)` (`0 1px 2px rgba(16,20,28,.05)`), a structural `inset` rule, or `none` |
 | 7 | **unregistered border-radius** | any token in the `border-radius:` value not in the legal set | One corner radius keeps the geometry coherent | Legal set only: **`var(--sv-r)` (4px), `50%`, `0`, `2px`, `3px`**. |
 | 8 | **animation > 200ms** | `animation: … <N>ms` where `N > 200`, unless the line contains `sv-rotate` | Long motion performs; 76° motion is functional and brief | Keep ≤200ms; use `var(--sv-t)` (160ms) / `var(--sv-t-fast)` (120ms), both of which collapse to 0ms under `prefers-reduced-motion` |
@@ -25,16 +25,18 @@ The machine-checkable banned-CSS/pattern list (A1–A4), the registered exceptio
 | 13 | **overflow-x hidden** | `overflow-x: hidden` | `hidden` silently kills sticky positioning and programmatic scroll | `overflow-x: clip` to clip; `auto`/`scroll` for real scroll regions (B7 tables) |
 | 14 | **image motion on hover** | `:hover` selector targeting `img`, or Tailwind `group-hover:scale/rotate/translate` | The image isn't the action target; animated images "perform" | Hover feedback goes to the row/card: seed-tint background or border shift per spec |
 | 15 | **bounce/overshoot easing** | `cubic-bezier()` with a y-component outside [0, 1] | Bounce is celebration; 76° motion informs | Plain ease-out curves; both durations collapse to 0ms under reduced motion anyway |
+| 16 | **paper-as-text** | `color: var(--sv-paper)` in any file but `tokens.css` | `--sv-paper` is the CARD SURFACE; it inverts to #1B1F26 on dark, so a mark painted with it collapses to 1.15:1 on the band and 2.90:1 on the seed | `var(--sv-on-dark)` for marks on the band or on a seed fill (white in both modes); `var(--sv-on-bad)` for the mark on a `--sv-bad` fill |
 
 ---
 
 ## Registered exceptions
 
-Three, each allowlisted in the lint and traceable to a Component Book spec:
+Four, each allowlisted in the lint and traceable to a Component Book spec:
 
 1. **`sv-rotate` spinner — B10.** The loading spinner is the one continuous animation in the system, so the `animation > 200ms` check skips any line containing `sv-rotate`. Nothing else may run a long/looping animation.
 2. **`inset` box-shadows as structural rules — B7 / B11.** Inset shadows are allowed by the `box-shadow` check because they draw *structure*, not *elevation*: B7 the selected-row left rule, B11 the focus border. A non-inset custom shadow is still a defect.
 3. **The single width-fill transition — B4 (bar fill).** Only `progress.css` and `meter-list.css` may transition `width`; that's B4's single 160ms (`var(--sv-t)`) fill animation on progress bars and meters. Any other layout-property transition, and any width transition in any other file, is a defect.
+4. **`foundations.tsx` color literals — the palette specimen.** The Foundations page prints the token table and paints its swatches, so it necessarily holds the literals it documents. It is the only `.tsx` exempt from rule 5; every other component paints from a token var.
 
 ---
 
