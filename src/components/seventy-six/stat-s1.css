@@ -8,7 +8,14 @@
     padding: 14px 18px 0;
   }
 
+  /* The label yields before the delta does: the delta is two glyphs and a
+     figure and cannot shrink, so a long label truncates rather than pushing
+     the card past its column (C7). Both stay readable in the aria-label. */
   .sv-stat__label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     color: var(--sv-ink-soft);
   }
 

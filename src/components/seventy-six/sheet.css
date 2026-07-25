@@ -24,25 +24,39 @@
     margin-top: -44px;
   }
 
+  /* minmax(0, …) on every track, never a bare 1fr: a grid item's default
+     min-width is auto, so one wide table or one long tabular figure widens
+     its own column and pushes the page into a horizontal scroll. Ship Gate
+     point 11 requires the zero floor, and the C7 320px floor depends on it. */
   .sv-row--stats {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .sv-row--main {
-    grid-template-columns: 1.7fr 1fr;
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
   }
 
   .sv-row--full {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   @media (max-width: 1000px) {
     .sv-row--stats {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .sv-row--main {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* The S1 anatomy does not compress below about 200px — a 34px tile, a
+     24px value and a delta chip on one row need the width they need. Two
+     columns of 141px would truncate the numbers, so the row goes single
+     file instead. Nothing is hidden and nothing scrolls (C7). */
+  @media (max-width: 560px) {
+    .sv-row--stats {
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 }
