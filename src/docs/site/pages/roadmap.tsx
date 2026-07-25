@@ -61,6 +61,47 @@ const ROADMAP: Phase[] = [
     ],
   },
   {
+    title: 'Next',
+    note: 'v0.6.0 · the promises already made',
+    items: [
+      { t: 'The gaps are the Book’s own binding text', d: 'Six independent inventories — ERP, CRM, finance, admin, analytics, platform — produced 47 candidates; 25 survived an adversarial vet. What stops a build hardest is not a missing idea but <b>a mandate with nothing behind it</b>.' },
+      { t: 'ErrorSummary (B52)', d: 'B11 mandates a top-of-form error summary linking to each failed field, and it is not in the barrel. Index a failed submit as one list of links to the fields that caused it.' },
+      { t: 'DataTable totals and leadHold (B7)', d: 'The closing row every ledger, invoice and transfer ends with — a real <code>&lt;tfoot&gt;</code>, outside the row, focus, selection and pagination models — and the identity column that today slides away at column seven of a wide line table. <b>F3 stands</b>: it refuses a table the reader rearranges, and neither of these lets the reader rearrange anything.' },
+      { t: 'The printed surface', d: 'C7 promises tables scroll and never truncate, and there is not one <code>@media print</code> rule in the repository. Specified the way dark was — <b>tokens only</b>, and a component that branches on the medium is a defect.' },
+      { t: 'Two templates', d: '<b>erp-purchase-order</b>, the record page thirteen shipped templates never drew, and <b>crm-deal-board</b>, which makes F2’s citation true — the Kanban widget stays refused, and only the screen ships.' },
+    ],
+  },
+  {
+    title: 'Planned',
+    note: 'v0.7.0 · posting the work',
+    items: [
+      { t: 'The system reads an operation; it cannot run one', d: 'B7 is a reader by spec — <code>render</code> returns a node, Enter opens the row, Space selects it, which are the two keys a typist presses most. The act with no vocabulary is the one a clerk performs forty times an hour.' },
+      { t: 'EntryTable (B53) · ScanField (B54)', d: 'Type one bounded number into every row of a fixed list and post the lot once. Take one identifier at a time, scanned or typed, and state what the last one resolved to.' },
+      { t: 'SumList (B55)', d: 'The invoice footer, and B44’s arithmetic sibling: <b>B44 divides ONE total into its shares; SumList builds ONE total from its lines</b>.' },
+      { t: 'JobList (B56) · rowSync (B7)', d: 'The ninety seconds after a bulk verb, today answered by a 5-second toast that auto-dismisses the only path to the file. And the row whose save has not landed, which has no surface at all.' },
+      { t: 'Density', d: 'Three registered postures on a wrapper, resolved at the nearest declaration exactly as <code>data-seed</code> and <code>data-mode</code> are. B10 already carries a bespoke POS variant — that per-component branching is what the dark-surface amendment exists to forbid.' },
+    ],
+  },
+  {
+    title: 'Planned',
+    note: 'v0.8.0 · the number in relation',
+    items: [
+      { t: 'Measured, changed — and against what?', d: '76° states a number that is measured (B4, B6, B44) and a number that changed (<b>Delta</b>). It has almost no vocabulary for a number read against something else. Every delta today asserts a change without naming what it changed from.' },
+      { t: 'TreeTable (B57) · CrossTable (B58)', d: 'A hierarchy of rows where every parent is the sum of its children, and one measure at every intersection of two dimensions. A trial balance is not grouped at runtime — its depth IS the chart of accounts, which B40 already accepted as structure.' },
+      { t: 'FunnelList (B59) · PathLine (B60)', d: 'How one total narrows through an ordered sequence, and the drill path a reader took, every level above the current one a link back.' },
+      { t: 'The stated baseline (B35)', d: 'Print what a comparison is against, so no delta on any 76° screen is an unsourced assertion. Ship Gate 12 is not checkable against a denominator nobody printed.' },
+    ],
+  },
+  {
+    title: 'Planned',
+    note: 'v0.9.0 · the record and the console',
+    items: [
+      { t: 'MessageThread (B61)', d: 'The primary content of every service-desk record, which B41 forbids by its own Don’t list — never two sentences of body, never an interactive row — and whose tones are lifecycle, not direction.' },
+      { t: 'SettingList (B62)', d: 'The settable twin of B28, which is the right anatomy and refuses editing controls by name. <b>settings-account</b> today ships four bare switches with no statement of what flipping one does — an A3 failure with no component to prevent it.' },
+      { t: 'Two templates', d: '<b>crm-deal</b>, the record as a relationship rather than a document, editing in a Drawer without leaving the page; and <b>settings-team</b>, the administration console none of the fifteen shipped templates is.' },
+    ],
+  },
+  {
     title: 'Exploring',
     note: 'later',
     items: [
