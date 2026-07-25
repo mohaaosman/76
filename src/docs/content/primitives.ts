@@ -805,4 +805,81 @@ const search = useSearchCommand(); // ⌘K binds automatically
       { q: 'Why is the copy control sometimes missing?', a: 'Because <code>navigator.clipboard</code> is unavailable — an insecure origin, or a browser that withholds it. A button that would fail on press is worse than no button, so it is not rendered, and the code stays selectable.' },
     ],
   },
+
+  /* ================================================================ B45 */
+  {
+    slug: 'prose',
+    name: 'Prose',
+    book: 'B45',
+    category: 'primitives',
+    tagline: 'One component that styles a whole subtree — markdown, on-system.',
+    job: 'Set running copy the system did not author.',
+    tags: ['prose', 'typography', 'markdown', 'article', 'documentation', 'rich text'],
+    exports: ['Prose'],
+    files: ['components/seventy-six/prose.tsx', 'components/seventy-six/prose.css'],
+    intro: [
+      'The only component in 76° that styles elements it does not own. It exists because a changelog, a help article, a policy page and a public page are <b>running copy</b>, and the product ramp — 13px, tight leading, built for scanning tables — is the wrong instrument for reading paragraphs. Inside <code>Prose</code> the body is 16/1.6 on a ~66ch measure, the heading ramp stays inside the product ramp, and markdown rendered to HTML drops straight in.',
+      'It is also where <b>F1 is answered</b>. 76° refuses the rich-text toolbar and composes a textarea plus a preview instead; <code>Prose</code> is that preview, and the same component sets the published article afterwards.',
+      'Part E permits italic in running body copy and nowhere else. This is that one place — the firewall\'s italic rule carries <code>prose.css</code> as a registered exception, and a heading inside it is still upright.',
+    ],
+    examples: [
+      {
+        title: 'An article',
+        description: 'Headings, paragraphs, a list, a quote, inline code, a link.',
+        demoKey: 'prose-basic',
+        surface: 'paper',
+        code: `import { Prose } from '@/components/seventy-six';
+
+<Prose>
+  <h2>Why the donut is refused</h2>
+  <p>A2 has banned donut, pie, radial and gauge charts since v0.1.0 …</p>
+  <ul>
+    <li><b>B6</b> measures each part against its own maximum.</li>
+    <li><b>B44</b> divides one total into its shares.</li>
+  </ul>
+  <blockquote>Every donut a team has drawn was asking B44's question.</blockquote>
+</Prose>`,
+      },
+      {
+        title: 'Rendered markdown',
+        description: 'The subtree came from a markdown renderer; nothing was styled by hand.',
+        demoKey: 'prose-markdown',
+        surface: 'paper',
+        code: `<Prose dangerouslySetInnerHTML={{ __html: renderedMarkdown }} />
+
+/* Or, with a renderer that returns elements: */
+<Prose>{renderMarkdown(source)}</Prose>`,
+      },
+    ],
+    props: [
+      {
+        component: 'Prose',
+        rows: [
+          { name: 'children', type: 'ReactNode', description: 'The subtree. Every element inside is styled by the stylesheet.' },
+          { name: 'measure', type: 'boolean', defaultValue: 'true', description: 'The ~66ch cap. Set false inside a column that is already narrow.' },
+          { name: 'className', type: 'string', description: 'Appended to sv-prose.' },
+        ],
+      },
+    ],
+    a11y: {
+      notes: [
+        'Prose adds no roles and no ARIA — it is typography, not structure.',
+        'Heading LEVELS belong to the author: the component styles what it is given and never renumbers, so an article dropped into a page keeps the outline the author wrote (A4).',
+        'The measure is capped in ch, so it holds at 200% zoom and reflows rather than truncating at 320px (C7).',
+        'Links keep the base focus contract (C3) and are underlined, never colour-only (C5).',
+      ],
+    },
+    donts: [
+      'Never wraps application UI — a card, a table or a form inside Prose inherits type it was not designed for.',
+      'Never italic outside running copy: a heading, a label and a caption stay upright (Part E).',
+      'Never for a real snippet — a command with a filename and a copy control is B43 CodeBlock.',
+      'Never nested inside another Prose.',
+      'Never used to smuggle a second type scale into a product screen.',
+    ],
+    faq: [
+      { q: 'Why style elements the component does not own?', a: 'Because the alternative is a component per tag, and markdown does not emit components. One stylesheet with a scoped root is the only honest way to make arbitrary authored HTML land on-system.' },
+      { q: 'Does it use the display tokens?', a: 'No. Its h1 is 27px — the top of the product ramp. The display steps belong to the marketing components alone (firewall rule 17), and an article is not a masthead.' },
+      { q: 'What about tables inside an article?', a: 'They take the table-header voice and hairlines so they read as 76°, but a table a user must sort, filter or select in is a B7 DataTable, not markdown.' },
+    ],
+  },
 ];

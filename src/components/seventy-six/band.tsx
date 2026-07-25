@@ -61,9 +61,13 @@ export function Band({ className, children, ...rest }: HTMLAttributes<HTMLElemen
 /* ---------- Topbar ---------- */
 
 export interface BandTopbarProps {
-  /** App name shown after the wordmark hairline, e.g. "Warehouse". */
-  app: string;
-  nav: ReactNode;
+  /** App name shown after the wordmark hairline, e.g. "Warehouse".
+      Omitted on the PUBLIC surface (v0.5): a marketing page is not an app,
+      so the wordmark stands alone and the hairline has nothing to divide. */
+  app?: string;
+  /** Omitted on the public surface, where the band carries marketing links
+      and one primary rather than product navigation. */
+  nav?: ReactNode;
   /** Right cluster: search trigger, notifications, avatar. */
   utilities?: ReactNode;
 }
@@ -79,7 +83,7 @@ export function BandTopbar({ app, nav, utilities }: BandTopbarProps) {
             <span className="sv-band__wordmark-six" aria-hidden="true">6</span>
             <span className="sv-band__wordmark-deg" aria-hidden="true">°</span>
           </span>
-          <span className="sv-band__appname">{app}</span>
+          {app && <span className="sv-band__appname">{app}</span>}
         </span>
         {nav}
         {utilities && <div className="sv-band__utilities">{utilities}</div>}

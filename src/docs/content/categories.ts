@@ -10,4 +10,5 @@ export const categories: { id: Category; label: string; note: string }[] = [
   { id: 'widgets', label: 'Widgets', note: 'ONE TYPE · ONE JOB' },
   { id: 'primitives', label: 'Primitives', note: 'NATIVE-FIRST · ZERO DEPS' },
   { id: 'forms', label: 'Forms', note: 'B11 · HONEST INPUTS' },
+  { id: 'marketing', label: 'Marketing', note: 'THE PUBLIC SURFACE' },
 ];

@@ -1,0 +1,83 @@
+/* B48 · FeatureList — the rule IS the structure. No tile, no icon, no
+   card per item: a hairline over each column is what makes the set read
+   as a page rather than as a row of products. */
+
+@layer sv-components {
+  .sv-features {
+    /* minmax(0, …) on every track, never a bare 1fr: a grid item's
+       default min-width is auto, so one unbreakable word — a URL, a SKU —
+       widens its track and pushes the page sideways (Part E, C7). */
+    --sv-features-cols: 3;
+    display: grid;
+    grid-template-columns: repeat(var(--sv-features-cols), minmax(0, 1fr));
+    gap: var(--sv-s6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sv-features[data-columns='2'] {
+    --sv-features-cols: 2;
+  }
+
+  .sv-features[data-columns='3'] {
+    --sv-features-cols: 3;
+  }
+
+  /* The 1px top rule spans the item and the content hangs below it — the
+     column rule of a newspaper, drawn once per item and never closed into
+     a box. */
+  .sv-features__item {
+    border-top: 1px solid var(--sv-line);
+    padding-top: var(--sv-s3);
+    overflow-wrap: anywhere;
+  }
+
+  .sv-features__ordinal {
+    display: block;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-features__title {
+    margin-top: var(--sv-s2);
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--sv-ink);
+  }
+
+  /* The ordinal already opens the item, so the title does not open it
+     twice. */
+  .sv-features__ordinal + .sv-features__title {
+    margin-top: var(--sv-s1);
+  }
+
+  .sv-features__body {
+    margin-top: var(--sv-s2);
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-features__meta {
+    margin-top: var(--sv-s3);
+    color: var(--sv-ink-soft);
+  }
+
+  /* C7 · the set reflows and nothing else happens: no item hides, no
+     track scrolls. Three columns at 320px would be four words wide, so
+     the grid steps down twice instead. The attribute selector is repeated
+     here so these rules outrank the [data-columns='3'] declaration above
+     — a 3-across list must be able to become 1-across. */
+  @media (max-width: 1000px) {
+    .sv-features[data-columns] {
+      --sv-features-cols: 2;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .sv-features[data-columns] {
+      --sv-features-cols: 1;
+    }
+  }
+}

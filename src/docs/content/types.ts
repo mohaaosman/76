@@ -3,7 +3,7 @@
  * feed the site, the copy-as-markdown button, llms.txt, and the registry.
  * Live demos are looked up separately by demoKey (see ../demos.tsx).
  */
-export type Category = 'chrome' | 'widgets' | 'primitives' | 'forms';
+export type Category = 'chrome' | 'widgets' | 'primitives' | 'forms' | 'marketing';
 
 export interface DocExample {
   title: string;

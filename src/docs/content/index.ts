@@ -6,6 +6,7 @@ import { interaction } from './interaction';
 import { auth } from './auth';
 import { structure } from './structure';
 import { inputs } from './inputs';
+import { marketing } from './marketing';
 
 export { categories } from './categories';
 
@@ -18,6 +19,7 @@ export const entries: DocEntry[] = [
   ...structure,
   ...forms,
   ...inputs,
+  ...marketing,
 ];
 
 export type { DocEntry } from './types';

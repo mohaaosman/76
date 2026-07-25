@@ -13,7 +13,7 @@ export function ComponentsIndexPage() {
       <HeroBand>
         <PageHero
           title="Components"
-          titleSoft={`· 18 Book specs, ${entries.length} components`}
+          titleSoft={`· ${entries.length} components across B1–B51`}
           context="Every component: one job, a fixed anatomy, enumerated states, an accessibility contract, and a Don't list."
         />
       </HeroBand>

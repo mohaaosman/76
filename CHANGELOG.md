@@ -6,6 +6,90 @@ project uses [semantic versioning](https://semver.org).
 
 ## [Unreleased]
 
+**The public surface.** 76° now dresses the pitch as well as the product, and
+**not one refusal was repealed to do it** — no photography, no illustration,
+no 3D, no logo cloud. F11 survived the surface it was written against, which
+is how a refusal proves it was right. What actually changed is the type ramp:
+three display steps, fenced by a new firewall rule to the three components
+that set them.
+
+### Added
+- **Display tokens** — `--sv-display-1/2/3`. 64/48/34 at full width, clamping
+  to 34/27/21 at 320px, which is the size each line takes in the product ramp,
+  so a public page degrades *into* the system rather than out of it (C7).
+- **Firewall rule 17** — `var(--sv-display-*)` is legal in `tokens.css` and in
+  `masthead.css`, `cta.css`, `proof-row.css`, and nowhere else. B48
+  `FeatureList` and B51 `SiteFooter` are marketing components too and are
+  deliberately absent from that list: an allowance nobody uses is an allowance
+  somebody will.
+- **Prose (B45)** — the one component in the system that styles elements it
+  does not own. A second type ramp scoped to one subtree: 16/1.6 on a ~66ch
+  measure, a heading ramp that stays *inside* the product ramp (27/21/17/15 —
+  the display steps are refused here), real list markers, a 2px blockquote
+  rule, inline `<code>` on a wall inset, tables in the table-header voice.
+  Markdown rendered to HTML drops straight in. It is also where **F1 is
+  answered**: the refused WYSIWYG composes to a textarea plus a preview, and
+  this is the preview. Part E's one italic lives here, and `prose.css` is the
+  firewall's registered exception for it.
+- **Masthead (B47)** — the hero, refused as imagery and rebuilt as type. No
+  image slot, no video slot, no background slot; adding one is a Book change,
+  not a prop. It speaks `PageHero`'s vocabulary — `title`, a receded
+  `titleSoft` inside the same heading, one line of context, one primary — at
+  display size on the wall instead of at 27px on the band. The buttons keep
+  B10's registered geometry: a taller marketing button is a third button size
+  the Book does not carry.
+- **FeatureList (B48)** — the claim itemised as a newspaper column: a hairline
+  over each item, a mono ordinal derived from position, a title, one sentence.
+  A statement, never a control — nothing in an item is clickable. The ordinal
+  is *not* `aria-hidden`, because copy refers to items by number and hiding a
+  visible figure from a screen reader is the asymmetry C5 warns about.
+- **CallToAction (B49)** — the last row of a public page and the only one that
+  asks. Exactly one primary: B10 is not relaxed here, it is at its most
+  binding, because a page that asks for two things has asked for neither.
+  `tone="band"` paints the ink surface and rides the existing `.sv-band`
+  re-toning, so it writes no ghost-button or focus rules of its own. Ink takes
+  no shadow — it is the wall's opposite, not a card resting on it.
+- **ProofRow (B50)** — figures at display size between vertical hairlines. It
+  is **not** a StatS1, and the Book now says so by name: B3 is a measurement on
+  paper with an icon tile, a delta and a footnote; this is a claim on the wall
+  with none of the three. "Generic marketing widget" is the same defect class
+  A2 already named "generic admin widget". A real `<dl>` with `<dt>` first in
+  the DOM and one CSS `order` on the figure, so reading order and visual order
+  are both honest.
+- **SiteFooter (B51)** — one `<nav aria-label="Footer">` over the whole link
+  region, and each group's `<ul>` labelled by its own title through
+  `aria-labelledby`. The group titles are **not headings**: four h2s at the end
+  of a document re-open an outline the content already closed. The wordmark
+  carries one accessible name and its glyphs are `aria-hidden`, so `76°` is
+  never spelled out.
+- **`marketing-home` template** — the public page: masthead, proof row,
+  feature columns, an FAQ on the B27 Accordion rather than a widget invented
+  for it, and a band-toned close.
+- **`pricing-page` template** — **pricing is a DataTable.** No tier cards, no
+  "Most popular" pill, no three competing primaries. The plan is the column
+  and the capability is the row, so every capability is stated for every plan
+  instead of implied by its absence from a card. CardTabs filter which
+  capabilities show, never which plans — hiding two of three is exactly what
+  the card row does.
+
+### Changed
+- **BandTopbar (B1 amendment)** — `app` and `nav` are now optional. The
+  marketing shell is the band with its product navigation removed: wordmark and
+  right cluster kept, marketing links carried, no sub-tab row, because a public
+  page has no section to sub-divide. Below 1000px `BandNav` still swaps to the
+  left Drawer, so the public surface inherits the 320px floor rather than
+  re-solving it.
+- **Row (B2 amendment)** — `space="section"` sets a 64px top margin (40px below
+  1000px). 14px separates two cards of one dashboard; it does not separate two
+  arguments of one page. The `[data-overlap]` rule still wins on the one row
+  that carries it.
+- **Docs** — a fifth category, **Marketing**, holding B47–B51. The component
+  index no longer claims "18 Book specs".
+
+---
+
+## [0.4.0] — 2026-07-25
+
 **The taxonomy, closed.** The line-by-line inventory against Bootstrap,
 Tailwind UI, shadcn/ui and Material — minus everything Part F refuses — is now
 empty. Nine components (B36–B44) and three amendments finish what

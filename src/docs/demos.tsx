@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { ComponentType, FormEvent } from 'react';
+import type { ComponentType, FormEvent, ReactNode } from 'react';
 import {
   Accordion,
   ActivityList,
@@ -7,6 +7,7 @@ import {
   AvatarGroup,
   Badge,
   Busy,
+  CallToAction,
   Band,
   BandNav,
   BandSubTabs,
@@ -29,11 +30,13 @@ import {
   Divider,
   Drawer,
   EmptyState,
+  FeatureList,
   Field,
   FileField,
   FilterBar,
   FilterLine,
   Kbd,
+  Masthead,
   MenuButton,
   MeterList,
   NumberField,
@@ -42,13 +45,16 @@ import {
   Plate,
   PlateHead,
   Popover,
+  ProofRow,
   Progress,
+  Prose,
   Radio,
   Row,
   SearchCommand,
   SearchField,
   Select,
   SelectionHead,
+  SiteFooter,
   Skeleton,
   Slider,
   SocialButton,
@@ -2102,6 +2108,238 @@ function SplitStacked() {
   return <SplitFrame src="auth-stacked" label="Sign in, ink band above the form" />;
 }
 
+/* ------------------------------------------------ v0.5 · the public surface */
+
+/* Every heading in these demos is level 2: the docs page already owns its
+   h1, and a Masthead that ships a second one breaks the outline (A4). */
+
+function MastheadBasic() {
+  return (
+    <Masthead
+      headingLevel={2}
+      eyebrow="COMPONENT LIBRARY · v0.5"
+      title="Flat, informational, corporate."
+      titleSoft="Paper on a wall."
+      statement="Fifty-one component specifications with one job each, zero runtime dependencies, and WCAG 2.2 AA verified on both surfaces."
+      actions={
+        <>
+          <Button variant="primary">Install the registry</Button>
+          <ButtonLink href="#/components">Browse the components</ButtonLink>
+        </>
+      }
+      note="MIT · ZERO DEPENDENCIES · REACT 19"
+    />
+  );
+}
+
+function MastheadCentred() {
+  return (
+    <Masthead
+      headingLevel={2}
+      align="center"
+      title="One system, stated once."
+      statement="Every widget is a registered type. If it is not in the Book, it is not on the screen."
+      actions={<ButtonLink href="#/components">Open the taxonomy</ButtonLink>}
+    />
+  );
+}
+
+function FeaturesThree() {
+  return (
+    <FeatureList
+      ariaLabel="What the system ships"
+      items={[
+        {
+          id: 'taxonomy',
+          title: 'A closed taxonomy',
+          body: 'Fifty-one specifications, each with one job. A screen that needs a type the Book does not carry either gets the type named, or gets composed from the ones that exist.',
+          meta: 'B1 — B51',
+        },
+        {
+          id: 'deps',
+          title: 'Zero runtime dependencies',
+          body: 'Native element first: details, dialog, popover, and input type="date". The browser already draws the calendar, and it draws it localized.',
+          meta: 'REACT 19 ONLY',
+        },
+        {
+          id: 'a11y',
+          title: 'AA on both surfaces',
+          body: 'Every token pair is contrast-verified on light and dark paper, and no meaning anywhere is carried by colour alone.',
+          meta: 'WCAG 2.2 AA',
+        },
+      ]}
+    />
+  );
+}
+
+function CtaPaper() {
+  return (
+    <CallViewFrame>
+      <CallToAction
+        headingLevel={3}
+        title="Install the registry"
+        statement="Every component installs on its own, with the tokens as the one shared dependency."
+        actions={
+          <>
+            <Button variant="primary">Copy the install command</Button>
+            <ButtonLink href="#/components">Browse the components</ButtonLink>
+          </>
+        }
+        note="NPX SHADCN@LATEST ADD 76.ZIFALA.COM/R/TOKENS.JSON"
+      />
+    </CallViewFrame>
+  );
+}
+
+function CtaBand() {
+  return (
+    <CallViewFrame>
+      <CallToAction
+        headingLevel={3}
+        tone="band"
+        title="Read the Component Book"
+        statement="Every specification, every refusal by name, and the fourteen-point gate each screen passes before it ships."
+        actions={<Button variant="primary">Open the Book</Button>}
+      />
+    </CallViewFrame>
+  );
+}
+
+/* The CTA is a full-bleed row; the demo surface is narrower than a page, so
+   it is framed rather than stretched — the component's own layout is what is
+   being shown, not the wall's width. */
+function CallViewFrame({ children }: { children: ReactNode }) {
+  return <div style={{ maxWidth: 860 }}>{children}</div>;
+}
+
+function ProofBasic() {
+  return (
+    <ProofRow
+      ariaLabel="The system in figures"
+      items={[
+        { id: 'components', figure: '51', label: 'BOOK SPECS', note: 'B1 to B51, each with one job' },
+        { id: 'deps', figure: '0', label: 'RUNTIME DEPS', note: 'React and the platform, nothing else' },
+        { id: 'contrast', figure: '4.5:1', label: 'MINIMUM CONTRAST', note: 'Verified on light and dark paper' },
+        { id: 'floor', figure: '320px', label: 'LAYOUT FLOOR', note: 'Nothing hidden, nothing scrolled sideways' },
+      ]}
+    />
+  );
+}
+
+function FooterBasic() {
+  return (
+    <SiteFooter
+      statement="A component library for products that state their information rather than perform it."
+      groups={[
+        {
+          title: 'SYSTEM',
+          links: [
+            { label: 'Components', href: '#/components' },
+            { label: 'Foundations', href: '#/foundations' },
+            { label: 'Blocks', href: '#/blocks' },
+          ],
+        },
+        {
+          title: 'RESOURCES',
+          links: [
+            { label: 'Templates', href: '#/templates' },
+            { label: 'AI-ready layer', href: '#/ai' },
+          ],
+        },
+        {
+          title: 'PROJECT',
+          links: [
+            { label: 'Roadmap', href: '#/roadmap' },
+            { label: 'Introduction', href: '#/' },
+          ],
+        },
+      ]}
+      legal="© 2026 SEVENTY SIX DEGREES · MIT"
+      secondary={[
+        { label: 'Licence', href: '#/' },
+        { label: 'Status', href: '#/' },
+      ]}
+    />
+  );
+}
+
+function ProseBasic() {
+  return (
+    <Prose>
+      <h2>Why the donut is refused</h2>
+      <p>
+        A2 has banned donut, pie, radial and gauge charts since v0.1.0, and pointed at{' '}
+        <code>MeterList</code> as the replacement — but that was a different question. The two
+        components answer two questions, and picking the wrong one is how the donut keeps getting
+        proposed.
+      </p>
+      <ul>
+        <li>
+          <b>B6 MeterList</b> measures each part against <i>its own</i> maximum: “Zone A is 92%
+          full.”
+        </li>
+        <li>
+          <b>B44 DistributionStrip</b> divides one total into its shares: “46% of 128,953 clicks
+          were mobile.”
+        </li>
+      </ul>
+      <blockquote>
+        Every donut a team has ever drawn was asking B44’s question and being handed B6’s answer.
+      </blockquote>
+      <p>
+        Both require the absolute figure beside the share. A percentage on its own is a defect, in
+        either component — see <a href="#/components/distribution-strip">DistributionStrip</a>.
+      </p>
+    </Prose>
+  );
+}
+
+function ProseMarkdown() {
+  return (
+    <Prose>
+      <h3>Release checklist</h3>
+      <p>Four gates, in this order. None of them is optional:</p>
+      <ol>
+        <li>
+          <code>npm run firewall</code> — zero hits across <code>src</code>.
+        </li>
+        <li>
+          <code>npm run check:sync</code> — the skill mirrors match their sources.
+        </li>
+        <li>
+          <code>tsc -b</code> and <code>vite build</code>.
+        </li>
+        <li>The fourteen-point Ship Gate, by hand.</li>
+      </ol>
+      <table>
+        <thead>
+          <tr>
+            <th>Gate</th>
+            <th>Checks</th>
+            <th>Blocking</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Firewall</td>
+            <td>17</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <td>Ship Gate</td>
+            <td>14</td>
+            <td>Yes</td>
+          </tr>
+        </tbody>
+      </table>
+      <hr />
+      <p>
+        <small>Rendered from markdown. Nothing on this page was styled by hand.</small>
+      </p>
+    </Prose>
+  );
+}
+
 /* ------------------------------------------------ registry */
 
 export const demos: Record<string, ComponentType> = {
@@ -2193,4 +2431,13 @@ export const demos: Record<string, ComponentType> = {
   'combobox-multi': ComboboxMulti,
   'split-side': SplitSide,
   'split-stacked': SplitStacked,
+  'masthead-basic': MastheadBasic,
+  'masthead-centred': MastheadCentred,
+  'features-three': FeaturesThree,
+  'cta-paper': CtaPaper,
+  'cta-band': CtaBand,
+  'proof-basic': ProofBasic,
+  'footer-basic': FooterBasic,
+  'prose-basic': ProseBasic,
+  'prose-markdown': ProseMarkdown,
 };

@@ -1,0 +1,430 @@
+/* B45 · Prose — a second type ramp, scoped to one subtree. Every selector
+   here is a bare element selector INSIDE .sv-prose, because the markup was
+   written by an author and there are no classes to hang anything on. */
+
+@layer sv-components {
+  /* 16/1.6/400 against the product's 13/1.5/500: the product ramp is sized to
+     scan, this one is sized to read. 66ch sits inside the 65–75ch measure the
+     fundamentals require — the cap is on the ROOT, so a table or a code block
+     is capped with the copy and the column stays one column. */
+  .sv-prose {
+    max-width: 66ch;
+    font-family: var(--sv-font-ui);
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 400;
+    color: var(--sv-ink);
+    /* A raw URL in a policy page is content, not an excuse to scroll the
+       page sideways (C7). */
+    overflow-wrap: break-word;
+  }
+
+  /* Already inside a narrow column — a Drawer, a Plate, a 4-col cell — where
+     a second cap would leave the copy floating short of its own container. */
+  .sv-prose--full {
+    max-width: none;
+  }
+
+  /* ---- vertical rhythm ------------------------------------------------
+     Every block states its BOTTOM gap and only headings add a top one, so
+     two adjacent blocks never negotiate a collapse. The subtree's outer
+     edges are the caller's to space, never Prose's. */
+
+  .sv-prose p,
+  .sv-prose ul,
+  .sv-prose ol,
+  .sv-prose dl,
+  .sv-prose pre,
+  .sv-prose table,
+  .sv-prose figure,
+  .sv-prose blockquote {
+    margin: 0 0 var(--sv-s4);
+  }
+
+  .sv-prose > :first-child {
+    margin-top: 0;
+  }
+
+  .sv-prose > :last-child {
+    margin-bottom: 0;
+  }
+
+  .sv-prose p {
+    text-wrap: pretty;
+  }
+
+  /* ---- the heading ramp -----------------------------------------------
+     27 · 21 · 17 · 15 — the whole ramp stays INSIDE the product ramp, which
+     tops out at the 27px PageHero title. A help article does not outrank the
+     dashboard it explains, and rule 17 keeps the display steps on the
+     marketing surface regardless.
+     Upright at every level (Part E: no italic headings, ever), weight and
+     tracking carry the rank. More space above than below, so a section reads
+     as attached to its own heading rather than floating between two. */
+
+  .sv-prose h1,
+  .sv-prose h2,
+  .sv-prose h3,
+  .sv-prose h4,
+  .sv-prose h5,
+  .sv-prose h6 {
+    color: var(--sv-ink);
+    line-height: 1.25;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+
+  .sv-prose h1 {
+    margin: var(--sv-s8) 0 var(--sv-s4);
+    font-size: 27px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .sv-prose h2 {
+    margin: var(--sv-s7) 0 var(--sv-s3);
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+  }
+
+  .sv-prose h3 {
+    margin: var(--sv-s6) 0 var(--sv-s2);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .sv-prose h4 {
+    margin: var(--sv-s5) 0 var(--sv-s2);
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  /* Markdown emits h5/h6 whether or not a system planned for them. They bottom
+     out at the product body step rather than inventing a fifth size. */
+  .sv-prose h5,
+  .sv-prose h6 {
+    margin: var(--sv-s5) 0 var(--sv-s2);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  /* A heading that follows running copy is closing one section and opening the
+     next, so it takes the full step; a heading following another heading is a
+     stack and keeps the tighter one. The `+` reads the document's own shape —
+     a class here would ask the author to mark up what the markup already says. */
+  .sv-prose p + h2 {
+    margin-top: var(--sv-s8);
+  }
+
+  .sv-prose p + h3 {
+    margin-top: var(--sv-s7);
+  }
+
+  /* ---- inline ---------------------------------------------------------- */
+
+  .sv-prose strong,
+  .sv-prose b {
+    font-weight: 600;
+    color: var(--sv-ink);
+  }
+
+  /* Part E permits italic in running body copy and NOWHERE else — this file is
+     the firewall's one registered exception, and it is registered for exactly
+     this declaration. Headings above stay upright. */
+  .sv-prose em,
+  .sv-prose i,
+  .sv-prose cite {
+    font-style: italic;
+  }
+
+  .sv-prose small {
+    font-size: 12px;
+    color: var(--sv-ink-soft);
+  }
+
+  /* The seed tint is the system's "this one" surface (B7 selected row); a
+     highlight keeps ink on it, so the text never depends on the tint to read. */
+  .sv-prose mark {
+    padding: 0 2px;
+    border-radius: 2px;
+    background: var(--sv-seed-tint);
+    color: var(--sv-ink);
+  }
+
+  /* ---- links ----------------------------------------------------------- */
+
+  /* Focus is base.css's contract (C3) and is NOT restated here. */
+  .sv-prose a {
+    color: var(--sv-seed-text);
+    text-decoration: underline;
+    text-decoration-color: var(--sv-seed-line);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+    transition: text-decoration-thickness var(--sv-t-fast);
+  }
+
+  /* Hover strengthens the rule rather than recolouring it. `--sv-seed-line` IS
+     the full seed in light; on dark paper it tracks the AA-verified text step
+     while the raw `--sv-seed` sits at 2.90:1, so reaching for the raw seed here
+     would change nothing in light and DIM the underline in dark. A hover state
+     that removes contrast is not a hover state — the weight goes up instead. */
+  .sv-prose a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  /* ---- lists ----------------------------------------------------------- */
+
+  /* Real markers, indented enough that a two-digit ordinal still sits inside
+     the measure rather than hanging into the page gutter. */
+  .sv-prose ul {
+    padding-left: var(--sv-s6);
+    list-style: disc;
+  }
+
+  .sv-prose ol {
+    padding-left: var(--sv-s6);
+    list-style: decimal;
+  }
+
+  .sv-prose li::marker {
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-prose li {
+    margin-top: var(--sv-s2);
+  }
+
+  .sv-prose li:first-child {
+    margin-top: 0;
+  }
+
+  /* A loose markdown list wraps each item in a <p>; the item, not the
+     paragraph, owns the spacing. */
+  .sv-prose li > p {
+    margin-bottom: var(--sv-s2);
+  }
+
+  .sv-prose li > :last-child {
+    margin-bottom: 0;
+  }
+
+  /* Nesting tightens: the indent already states the level, so a sub-list that
+     also breathes like a top-level one stops reading as subordinate. */
+  .sv-prose li > ul,
+  .sv-prose li > ol {
+    margin: var(--sv-s1) 0 0;
+    padding-left: var(--sv-s5);
+  }
+
+  .sv-prose li li {
+    margin-top: var(--sv-s1);
+  }
+
+  /* ---- quotation -------------------------------------------------------- */
+
+  /* A 2px NEUTRAL rule. Part E confines coloured left-edge rules to the B7
+     selected row and the B14 toast; a quotation is not a state, so it is drawn
+     in the hairline. Italic is legal here for the same reason it is legal on
+     <em> — this is body copy. */
+  .sv-prose blockquote {
+    padding-left: var(--sv-s4);
+    border-left: 2px solid var(--sv-line);
+    color: var(--sv-ink-soft);
+    font-style: italic;
+  }
+
+  .sv-prose blockquote > :first-child {
+    margin-top: 0;
+  }
+
+  .sv-prose blockquote > :last-child {
+    margin-bottom: 0;
+  }
+
+  /* ---- code ------------------------------------------------------------- */
+
+  /* Inline code is a printed token, so it takes the Kbd cap treatment: the
+     wall inside a hairline at the registered 3px radius — bars and caps. 0.86em
+     because Fragment Mono runs large next to Hanken at the same nominal size. */
+  .sv-prose code {
+    padding: 1px 4px;
+    border: 1px solid var(--sv-line);
+    border-radius: 3px;
+    background: var(--sv-wall);
+    font-family: var(--sv-font-mono);
+    font-size: 0.86em;
+    color: var(--sv-ink);
+  }
+
+  /* A real snippet — with a filename, a copy control and a line gutter — is
+     B43 CodeBlock, and a page that owns its markup should compose that. This is
+     the fallback for markdown that arrived carrying a fenced block: same
+     physics (wall inside a hairline, 12/1.6 mono, no highlighting), no chrome.
+     `auto`, never `hidden`: C7 forbids silently truncating a command. */
+  .sv-prose pre {
+    padding: var(--sv-s3);
+    overflow-x: auto;
+    border: 1px solid var(--sv-line);
+    border-radius: var(--sv-r);
+    background: var(--sv-wall);
+    font-family: var(--sv-font-mono);
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--sv-ink);
+    tab-size: 2;
+  }
+
+  /* Inside a pre the cap would be a box drawn on a box. */
+  .sv-prose pre code {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    font-size: inherit;
+  }
+
+  /* ---- rules ------------------------------------------------------------ */
+
+  /* A section break earns more air than any heading gap, or it reads as one
+     more paragraph boundary. */
+  .sv-prose hr {
+    margin: var(--sv-s8) 0;
+    border: 0;
+    border-top: 1px solid var(--sv-line);
+  }
+
+  /* ---- tables ----------------------------------------------------------- */
+
+  /* An authored table cannot be wrapped in a scroller — Prose does not own the
+     markup and will not inject one — so it is made WRAP-safe instead: cells
+     break rather than force the page sideways at 320px (C7). A table that
+     genuinely needs to scroll with its headers intact is B7 DataTable. */
+  .sv-prose table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  /* The table-header voice, restated for `th` alone. base.css owns .sv-mono and
+     .sv-num and every other component reuses them — this is the one place that
+     cannot, because there is no class to add to markup an author wrote. */
+  .sv-prose th {
+    padding: var(--sv-s2) var(--sv-s3);
+    border-bottom: 1px solid var(--sv-line);
+    font-family: var(--sv-font-mono);
+    font-size: 9.5px;
+    font-weight: 400;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    text-align: left;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-prose td {
+    padding: 9px var(--sv-s3);
+    border-bottom: 1px solid var(--sv-line);
+    font-size: 13px;
+    line-height: 1.5;
+    font-weight: 500;
+    vertical-align: top;
+  }
+
+  /* A4 · a figure in a table can change, so it is tabular. */
+  .sv-prose th,
+  .sv-prose td {
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: break-word;
+  }
+
+  /* Flush to the measure at both edges, so the table's own text lines up with
+     the paragraphs above it instead of sitting in a shallow inset. */
+  .sv-prose th:first-child,
+  .sv-prose td:first-child {
+    padding-left: 0;
+  }
+
+  .sv-prose th:last-child,
+  .sv-prose td:last-child {
+    padding-right: 0;
+  }
+
+  /* The last rule would fence the table off from the copy below it. */
+  .sv-prose tr:last-child td {
+    border-bottom: 0;
+  }
+
+  /* ---- figures ---------------------------------------------------------- */
+
+  /* F11 refuses hero imagery, stock photography and illustration — and it still
+     does. This exists because an author's diagram or screenshot inside a help
+     article is CONTENT: the thing being explained, not decoration wrapped
+     around it. Radius --sv-r so it sits on the system's one corner. */
+  .sv-prose img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--sv-r);
+  }
+
+  .sv-prose figure {
+    margin: var(--sv-s6) 0;
+  }
+
+  /* Flush left with the copy. A centred caption is a magazine; this is a
+     document, and the caption is read in the same column as everything else. */
+  .sv-prose figcaption {
+    margin-top: var(--sv-s2);
+    font-size: 12px;
+    color: var(--sv-ink-soft);
+  }
+
+  /* ---- definition lists -------------------------------------------------- */
+
+  /* An authored <dl> in running copy — a glossary, a changelog's terms. B28
+     DescriptionList is the component form and states FACTS about one record on
+     hairlines; this is prose, so it keeps the copy voice. */
+  .sv-prose dt {
+    margin-top: var(--sv-s3);
+    font-weight: 600;
+    color: var(--sv-ink);
+  }
+
+  .sv-prose dt:first-child {
+    margin-top: 0;
+  }
+
+  .sv-prose dd {
+    margin: var(--sv-s1) 0 0 var(--sv-s5);
+    color: var(--sv-ink-soft);
+  }
+
+  /* ---- the 320px floor ---------------------------------------------------
+     Below 560px the CONTAINER is the measure — 66ch of a 16px face is wider
+     than the viewport, so the cap does nothing but stop the copy from using
+     the width it has. The ramp steps down with it: at 27px an h1 of five words
+     takes four lines at 320px, which is a heading nobody reads (C7). */
+  @media (max-width: 560px) {
+    .sv-prose {
+      max-width: none;
+    }
+
+    .sv-prose h1 {
+      font-size: 23px;
+      margin-top: var(--sv-s7);
+    }
+
+    .sv-prose h2 {
+      font-size: 19px;
+    }
+
+    .sv-prose h3 {
+      font-size: 16px;
+    }
+
+    .sv-prose p + h2 {
+      margin-top: var(--sv-s7);
+    }
+  }
+}

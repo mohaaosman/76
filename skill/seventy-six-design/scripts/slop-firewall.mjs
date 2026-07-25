@@ -17,7 +17,21 @@ import path from 'node:path';
  *    B11 focus border), not elevation.
  *  - width transitions in progress.css / meter-list.css — B4's single
  *    160ms fill transition.
+ *  - the --sv-display-* steps in the marketing component CSS (rule 17).
  */
+
+/* RULE 17 · The display steps belong to the PUBLIC surface and to nothing
+   else. The product ramp tops out at 27px; a dashboard that grows a 64px
+   number has left the system. Only the three marketing components that
+   actually SET display type are listed — B48 FeatureList and B51
+   SiteFooter are marketing too and are deliberately absent, because an
+   allowance nobody uses is an allowance somebody will. Adding a file here
+   is a Book change, not a convenience. */
+const DISPLAY_TYPE_FILES = new Set([
+  'masthead.css',   /* B47 · display-1, the claim */
+  'cta.css',        /* B49 · display-3, the ask */
+  'proof-row.css',  /* B50 · display-3, the figures */
+]);
 /* Usage: node slop-firewall.mjs [dir ...]  (dirs relative to cwd; default: src) */
 const root = process.cwd();
 const SCAN_DIRS = process.argv.slice(2).length ? process.argv.slice(2) : ['src'];
@@ -54,6 +68,15 @@ function check(file, source) {
       flag('paper-as-text (use --sv-on-dark for marks on band/seed)');
     }
 
+    /* RULE 17 · display type outside the public surface (see the set above). */
+    if (
+      /var\(--sv-display-[1-3]\)/.test(line) &&
+      base !== 'tokens.css' &&
+      !DISPLAY_TYPE_FILES.has(base)
+    ) {
+      flag('display type outside the marketing surface (rule 17)');
+    }
+
     if (/box-shadow\s*:/.test(line) && !/var\(--sv-shadow\)/.test(line) && !/inset/.test(line) && !/none/.test(line)) {
       flag('non-token box-shadow');
     }
@@ -86,7 +109,10 @@ function check(file, source) {
 
     /* ---- Part E · fundamentals gates ---- */
 
-    if (/font-style\s*:\s*italic/.test(line)) {
+    /* prose.css is the registered exception: B45 IS running body copy, and
+       Part E permits italic there and nowhere else. A heading inside it is
+       still upright — the rule lives in the stylesheet, not in this grep. */
+    if (/font-style\s*:\s*italic/.test(line) && base !== 'prose.css') {
       flag('italic (E: legal only inside running body copy — never headings)');
     }
 

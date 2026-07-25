@@ -1,6 +1,8 @@
 # library.md — the built React library (`seventy-six-ui`)
 
-Purpose: when you work in React, **consume** these components — don't rebuild what already ships. Every widget below exists, is exported, and installs via the shadcn registry. Reach for the export first; only compose new UI from primitives when no widget covers the job.
+Purpose: when you work in React, **consume** these components — don't rebuild what already ships. All **52 components** below exist, are exported, and install via the shadcn registry. Reach for the export first; only compose new UI from primitives when no widget covers the job.
+
+The doc site files them under **five categories** — chrome (4) · widgets (8) · primitives (26) · forms (9) · marketing (5). Marketing is the v0.5 public surface (B47–B51) and a product screen imports none of it.
 
 - npm package: `seventy-six-ui`
 - Registry / doc site: **https://76.zifala.com**
@@ -15,17 +17,26 @@ src/
   styles/tokens.css            the ONLY file allowed to contain color literals (CSS variables/seeds)
   styles/base.css              reset · focus contract · mono/tabular voices
   lib/cx.ts                    class combiner — the only "utility" (import { cx } from '@/lib/cx')
-  components/seventy-six/      the library — ONE component per widget type
+  components/seventy-six/      the library — ONE component per widget type (52 of them)
     index.ts                   the export barrel (source of truth for names below)
-    band.tsx  band.css         chrome
-    sheet.tsx sheet.css        chrome
-    card.tsx  card.css         chrome / paper primitive
-    stat-s1.tsx  ...           widgets (each is a .tsx + scoped .css pair)
-    ...                        progress, trend, meter-list, data-table, card-tabs, activity-list
-    button.tsx ...             primitives (button, status-word, field, dialog, toast,
-                               empty-state, search-command, skeleton, tooltip)
+    band.tsx  band.css         chrome (band, sheet, plate, split)
+    card.tsx  card.css         the paper primitive
+    stat-s1.tsx  ...           widgets (each is a .tsx + scoped .css pair): progress, trend,
+                               meter-list, distribution-strip, data-table, card-tabs, activity-list
+    button.tsx ...             primitives: status-word, dialog, drawer, toast, banner, badge,
+                               menu, popover, tooltip, empty-state, skeleton, spinner,
+                               search-command, accordion, description-list, divider, avatar,
+                               kbd, tabs, stepper, tree-list, timeline, code-block, prose
+    field.tsx ...              forms: combobox, pin-field, social-button, number-field, slider,
+                               date-range-field, search-field, file-field
+    masthead.tsx ...           marketing (v0.5, public surface only): feature-list, cta,
+                               proof-row, site-footer
   docs/
     content/                   pure-data doc entries → drive site + markdown + registry
+      categories.ts            the five categories: chrome · widgets · primitives · forms · marketing
+      chrome-forms.ts widgets.ts primitives.ts interaction.ts auth.ts
+      structure.ts inputs.ts marketing.ts    the 52 entries
+      compositions.ts          7 blocks + 15 templates
     demos.tsx                  live preview components
     site/                      shell, blocks, pages
 scripts/
@@ -47,18 +58,21 @@ Every name below is exported from `src/components/seventy-six/index.ts`. Do not 
 | Import | One job | Type exports |
 | --- | --- | --- |
 | `Band`, `BandTopbar`, `BandNav`, `BandSubTabs`, `PageHero` | Carry ALL navigation + page context (topbar, wordmark, horizontal nav, mono sub-tabs, hero). Nav is horizontal — never a sidebar. | `BandNavItem`, `PageHeroProps` |
-| `Sheet`, `Row` | The platinum wall + its 12-col grid, including the one signature `-44px` overlap row per page. | — |
+| `Sheet`, `Row` | The platinum wall + its 12-col grid, including the one signature `-44px` overlap row per page. `Row space="section"` is the v0.5 public-page break (64px / 40px). | — |
+| `Plate`, `PlateHead` | B24 — the band-less page: wall edge to edge, one centred ≤400px card, the `76°` wordmark above. Auth, 404, 500, maintenance. | `PlateProps`, `PlateHeadProps` |
+| `Split` | B46 — the band-less page cut in half, with the Plate straddling the seam (B2's overlap, finished). | `SplitProps` |
 | `Card`, `CardHead` | The paper primitive: one shadow, one radius, zero border. Every widget composes it. | — |
 
 ### Widgets — the answer-a-question units
 
 | Import | One job | Type exports |
 | --- | --- | --- |
-| `StatS1` | The signature stat and the ONLY legal KPI card — "how much, and so what." | `StatS1Props` |
+| `StatS1`, `Delta` | The signature stat and the ONLY legal KPI card — "how much, and so what." `Delta` is the extracted ▲/▼ chip, reusable in a cell or a head (`polarity="down-good"` for inverse metrics). | `StatS1Props`, `DeltaProps` |
 | `Progress` | Value against target with one 3px bar — "how far along." | — |
-| `Trend` | Flat single-weight SVG lines on a hairline grid — "which direction." | `TrendSeries` |
-| `MeterList` | Named items with 3px bars + mandatory absolute numbers (the donut's replacement). | `MeterItem` |
-| `DataTable` | The ERP workhorse: mono headers/IDs, dot+word statuses, tabular numbers, keyboard contract. | `Column` |
+| `Trend`, `Sparkline` | Flat single-weight SVG lines on a hairline grid — "which direction." `kind` is `line`/`bar`/`stacked`; `yTicks` and `highlight` state the axis and the one column the chart is about. `Sparkline` is the series at cell size, legal ONLY beside a printed figure. | `TrendSeries`, `SparklineProps` |
+| `MeterList` | Named items with 3px bars + mandatory absolute numbers — each part against ITS OWN maximum. | `MeterItem` |
+| `DistributionStrip` | B44 — one total divided into its shares (the donut, answered). Not the same question as `MeterList`. | `DistributionPart`, `DistributionStripProps` |
+| `DataTable`, `SelectionHead`, `FilterLine`, `FilterBar` | The ERP workhorse: mono headers/IDs, dot+word statuses, tabular numbers, keyboard contract. `FilterBar` SETS filters, `FilterLine` STATES what is set, `SelectionHead` replaces the CardHead in place while rows are selected. | `Column`, `SelectionHeadProps`, `FilterLineProps`, `FilterBarProps`, `ActiveFilter` |
 | `CardTabs` | In-card filter tabs on the card hairline — filter one card's content in place. | `CardTab` |
 | `ActivityList` | Mono timestamp column beside sentence rows with bold entities — "what needs me." | `ActivityItem` |
 
@@ -68,13 +82,55 @@ Every name below is exported from `src/components/seventy-six/index.ts`. Do not 
 | --- | --- | --- |
 | `Button`, `ButtonLink` | Native `<button>`, four registered variants, one primary per region. | `ButtonProps`, `ButtonVariant` |
 | `StatusWord` | A 6px currentColor dot + a colored word — one thing's status, one word. | `StatusTone` |
-| `Field`, `Select`, `Checkbox`, `Radio`, `Toggle` | Collect one value per control, honestly labeled (labels above, seed focus, fix-it errors). | — |
-| `Dialog` | Native `<dialog>` in a paper card — interrupt for one decision or form. | — |
-| `ToastProvider`, `useToast` | Bottom-left slips for success/neutral only — errors render inline at source. | — |
-| `EmptyState` | One soft sentence + one primary action. | — |
-| `SearchCommand`, `useSearchCommand` | The ⌘K palette — the keyboard front door to everything. | `CommandItem` |
-| `Skeleton`, `SkeletonGate` | Static wall-colored blocks matching target anatomy (no shimmer, 300ms gate). | — |
+| `Dialog` | Native `<dialog>` in a paper card — interrupt for one decision or form. `size`: `default` 480 · `wide` 640 · `full`. | — |
+| `Drawer` | Full-height paper panel from the screen edge — a workspace beside the work. sm/md/lg/full. | `DrawerProps` |
+| `ToastProvider`, `useToast` | Bottom-left notifications, tones ok/info/warn/bad — errors still render inline at source FIRST. | `NotifyOptions`, `ToastTone` |
+| `Banner` | The inline notice, adjacent to its cause — where every error goes. warn renders in INK. | `BannerProps`, `BannerTone` |
+| `Badge` | Mono uppercase CATEGORY tag — never a pill, never live state (that is `StatusWord`). | `BadgeProps` |
+| `MenuButton`, `SplitButton` | The actions dropdown of VERBS on the native `popover` top layer. | `MenuItem`, `MenuItemSpec`, `MenuButtonProps`, `SplitButtonProps` |
+| `Popover` | B42 — a few controls parked beside their trigger, non-modal, focus never trapped. | `PopoverProps` |
 | `Tooltip` | One line of supplementary context via the `popover` attribute. | — |
+| `EmptyState` | One soft sentence + one primary action. | — |
+| `SearchCommand`, `useSearchCommand` | The ⌘K palette — the keyboard front door to everything. It NAVIGATES (`SearchField` filters). | `CommandItem` |
+| `Skeleton`, `SkeletonGate` | Static wall-colored blocks matching target anatomy (no shimmer, 300ms gate) — FIRST paint. | — |
+| `Spinner`, `Busy` | The one continuous animation; `Busy` names what a region is fetching. Not first paint — that is `Skeleton`. | `SpinnerProps`, `BusyProps` |
+| `Accordion` | Native `<details>` sections with a mono meta column — fold SECONDARY detail away. | `AccordionProps`, `AccordionSection` |
+| `DescriptionList` | A real `<dl>`: labelled facts about ONE record, in the table-header voice. | `DescriptionListProps`, `DescriptionRow` |
+| `Divider` | A hairline, or a rule carrying mono uppercase text ("OR", "DANGER ZONE"). | `DividerProps` |
+| `Avatar`, `AvatarGroup` | Initials (or a real photo) beside a name — never the sole carrier of it. | `AvatarProps`, `AvatarGroupProps` |
+| `Kbd` | A key, printed — real `<kbd>` caps, never clickable, never an unbound shortcut. | `KbdProps` |
+| `Tabs`, `TabPanel` | B38 — switches a WHOLE CONTENT REGION of the sheet (`CardTabs` filters one card; `BandSubTabs` navigate). Cap five. | `Tab`, `TabsProps`, `TabPanelProps` |
+| `Stepper` | Position in a named sequence — a STATEMENT, not a control. Max five steps. | `Step`, `StepperProps` |
+| `TreeList` | The full ARIA tree pattern for a hierarchy whose DEPTH is the information. | `TreeNode`, `TreeListProps` |
+| `Timeline` | One record's life in order, including what has NOT happened yet (`ActivityList` is the flat live feed). | `TimelineItem`, `TimelineTone`, `TimelineProps` |
+| `CodeBlock` | Code printed exactly as it must be typed — no syntax highlighting, ever. | `CodeBlockProps` |
+| `Prose` | B45 — the second type ramp, scoped to running copy the system did not author. | `ProseProps` |
+
+### Forms — honest inputs (B11 chrome throughout)
+
+| Import | One job | Type exports |
+| --- | --- | --- |
+| `Field`, `Select`, `Checkbox`, `Radio`, `Toggle` | Collect one value per control, honestly labeled (labels above, seed focus, fix-it errors). | — |
+| `Combobox` | The searchable select past ~10 options. `multiple` gives a `string[]` whose selection is STATED in a mono line, never worn as pills. | `ComboOption`, `ComboboxProps` |
+| `SearchField` | Filter a set ALREADY on screen by typing, with a live "n of m" line. | `SearchFieldProps` |
+| `FileField` | Attach files and state each one's state. Owns NO transport. | `FileRow`, `FileStatus`, `FileFieldProps` |
+| `NumberField` | A bounded QUANTITY: −/+ pair, enforced clamping, the unit beside the field. | `NumberFieldProps` |
+| `Slider` | A value whose POSITION in a range matters more than its digits. No filled track. | `SliderProps` |
+| `DateRangeField`, `presetRange` | A date range with no month grid (F4) — mono presets + two native date inputs. | `DateRange`, `DateRangePreset`, `DateRangeFieldProps` |
+| `PinField` | A short fixed-length code — one semantic input behind 4–8 boxes. | `PinFieldProps`, `PinCharset` |
+| `SocialButton` | Hand authentication to one named provider; the mark is one `currentColor` path. | `SocialButtonProps`, `SocialProvider` |
+
+### Marketing — the public surface (v0.5, B47–B51)
+
+These five set the display steps, and **firewall rule 17 fences `--sv-display-1|2|3` to `tokens.css` plus `masthead.css`, `cta.css` and `proof-row.css`**. A product screen imports none of them; the product ramp still tops out at 27px.
+
+| Import | One job | Type exports |
+| --- | --- | --- |
+| `Masthead` | Open a public page with the claim, set in type. No image, video or background slot — ever. | `MastheadProps` |
+| `FeatureList` | State what the product does, one item at a time. A statement, never a control. | `FeatureItem`, `FeatureListProps` |
+| `CallToAction` | Name the one act the page wants — exactly ONE primary. `tone="paper"` or `"band"`. | `CallToActionProps` |
+| `ProofRow` | The few figures that prove the claim. Not a `StatS1`: no card, no icon, no delta. | `ProofItem`, `ProofRowProps` |
+| `SiteFooter` | Close a public page — one `<nav aria-label="Footer">`, up to four groups of six links. | `FooterGroup`, `FooterLink`, `SiteFooterProps` |
 
 ---
 
@@ -94,7 +150,15 @@ What an item carries and does:
 - **Alias rewriting**: imports (`@/lib/cx`, `@/components/...`) are rewritten through the consumer's `components.json` aliases on install. You own the code afterward.
 - **Docs link**: each item's `docs` points at `https://76.zifala.com/llms/<slug>.md`.
 
-Registry slugs (from `public/r/registry.json`): `tokens` (theme) · chrome `band`, `sheet`, `card` · widgets `stat-s1`, `progress`, `trend`, `meter-list`, `data-table`, `card-tabs`, `activity-list` · primitives `button`, `status-word`, `dialog`, `toast`, `tooltip`, `empty-state`, `skeleton`, `search-command` · forms `field` (installs Field/Select/Checkbox/Radio/Toggle together).
+Registry slugs (from `public/r/registry.json` — 1 theme + 52 components + 22 blocks/templates):
+
+- theme: `tokens`
+- chrome: `band`, `sheet`, `plate`, `split`
+- widgets: `stat-s1`, `progress`, `trend`, `meter-list`, `distribution-strip`, `data-table`, `card-tabs`, `activity-list`
+- primitives: `button`, `status-word`, `card`, `dialog`, `drawer`, `toast`, `banner`, `badge`, `menu`, `popover`, `tooltip`, `empty-state`, `skeleton`, `spinner`, `search-command`, `accordion`, `description-list`, `divider`, `avatar`, `kbd`, `tabs`, `stepper`, `tree-list`, `timeline`, `code-block`, `prose`
+- forms: `field` (installs Field/Select/Checkbox/Radio/Toggle together), `combobox`, `search-field`, `file-field`, `number-field`, `slider`, `date-range-field`, `pin-field`, `social-button`
+- marketing: `masthead`, `feature-list`, `cta`, `proof-row`, `site-footer`
+- compositions: 7 `block-*` items and 15 `template-*` items (dashboards, auth screens, marketing home, pricing page)
 
 **Manual path** (no shadcn CLI): copy `styles/tokens.css`, `styles/base.css`, and `lib/cx.ts` once, then copy any component `.tsx`/`.css` pair from `components/seventy-six/`.
 
@@ -174,7 +238,8 @@ This is what stamps `https://76.zifala.com/r/tokens.json` into each item's `regi
 
 ## Don't
 
-- **Don't rebuild a widget that already exists.** Need a KPI card → `StatS1`. A table → `DataTable`. Part-by-part breakdown → `MeterList`. A ⌘K palette → `SearchCommand`. Loading shape → `Skeleton`/`SkeletonGate`. Check "The exports" before writing a component.
+- **Don't rebuild a widget that already exists.** Need a KPI card → `StatS1`. A table → `DataTable` (+ `FilterBar`/`FilterLine`/`SelectionHead`). Each part against its own maximum → `MeterList`; one total split into shares → `DistributionStrip`. A ⌘K palette → `SearchCommand`; an in-place filter → `SearchField`. Loading shape → `Skeleton`/`SkeletonGate`; a region already holding content → `Busy`. A hierarchy → `TreeList`; one record's history → `Timeline`. Running copy → `Prose`; a snippet → `CodeBlock`. A public page → `Masthead`/`FeatureList`/`CallToAction`/`ProofRow`/`SiteFooter`. Check "The exports" before writing a component.
 - **Don't add a component without registering it** in `components/seventy-six/index.ts` **and** the registry (a doc `content/` entry → `public/r/<slug>.json`). An unbarreled, unregistered component is invisible to consumers and to the AI layer.
+- **Don't use `--sv-display-1|2|3` outside `tokens.css`, `masthead.css`, `cta.css` and `proof-row.css`** — firewall rule 17. The product ramp tops out at 27px; a dashboard that grows a 64px number has left the system.
 - **Don't hardcode color literals** in a component — every color comes from `tokens.css` seeds.
 - **Don't import fonts other than Hanken Grotesk / Fragment Mono** (`@fontsource-variable/hanken-grotesk`, `@fontsource/fragment-mono`). Mono is the `sv-mono` voice; tabular numbers are `sv-num`.

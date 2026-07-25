@@ -86,7 +86,11 @@ Roboto, or system UI as the designed choice. Key sizes: H1 greeting 27/800 on
 band; card title 13.5/700 + faint 11.5 subtitle; stat value 24/800 tabular,
 tracking −.025em; body/table 13/500 (numeric cells 600); micro labels Mono
 10/400 UPPERCASE tracking .13em; column headers Mono 9.5; IDs/timestamps Mono
-10–11.5. POS scales up: body 16–18, values 28–40, targets ≥48px.
+10–11.5. POS scales up: body 16–18, values 28–40, targets ≥48px. The product
+ramp tops out at 27px; `--sv-display-1|2|3` (display-1 clamps 64px → 34px at
+320px) is fenced by firewall rule 17 to `tokens.css` and the three marketing
+components that set display type — `masthead.css`, `cta.css`, `proof-row.css`.
+A dashboard that grows a 64px number has left the system.
 
 ## Layout — the ink band + the sheet
 
@@ -100,21 +104,47 @@ the 76° signature, exactly once per page. Canonical splits: stats
 
 ## The widget taxonomy (compose from these ONLY)
 
+**B1–B51, 52 registered components.** The dashboard core:
+
 - **S1 Signature stat** — the only KPI card: mono label + colored delta /
   34px seed-tint icon tile + bold tabular value / hairline footnote that adds
   NEW information (target, exposure, age). *How much, and so what.*
 - **Progress** — value vs target + one 3px bar. *How far along.*
 - **Trend** — flat 2–2.5px lines on hairline grid; seed = now, line-gray
-  #D6DAE0 = before; no area fills, no donuts/gauges ever. *Which direction.*
+  #D6DAE0 = before; no area fills, no donuts/gauges ever. `stacked` and
+  `Sparkline` ride the same contract. *Which direction.*
 - **MeterList** — label + bold value + 3px bar + REQUIRED absolute-numbers
-  subtitle ("4,320 of 4,700 pallet positions"). Replaces every donut. *How is
-  each part doing.*
+  subtitle ("4,320 of 4,700 pallet positions"). Each part against ITS OWN
+  maximum. *How is each part doing.*
+- **DistributionStrip** — one total divided into its shares, with the legend
+  carrying the absolute figures. The donut, answered. *How does it split.*
 - **DataTable** — mono headers, mono IDs, dot+word statuses, right-aligned
-  tabular numbers, seed-tint row hover, full keyboard contract. *What exactly
-  happened.*
+  tabular numbers, seed-tint row hover, full keyboard contract. `FilterBar`
+  sets filters, `FilterLine` states them, `SelectionHead` owns the selection.
+  *What exactly happened.*
 - **CardTabs** — in-card filters on the card hairline.
 - **ActivityList** — mono timestamp column + sentences with bold entities;
   absolute time in ERP contexts.
+
+The rest of the registered taxonomy, by category — read
+`references/component-specs.md` before building any of them:
+
+- **Chrome** — Band (+ Topbar/Nav/SubTabs/PageHero), Sheet/Row, Plate, Split.
+- **Primitives** — Button, StatusWord, Card, Dialog, Drawer, Toast, Banner,
+  Badge, Menu/SplitButton, Popover, Tooltip, EmptyState, Skeleton,
+  Spinner/Busy, SearchCommand, Accordion, DescriptionList, Divider,
+  Avatar/AvatarGroup, Kbd, Tabs, Stepper, TreeList, Timeline, CodeBlock,
+  Prose.
+- **Forms** — Field/Select/Checkbox/Radio/Toggle, Combobox (single or
+  `multiple`), SearchField, FileField, NumberField, Slider, DateRangeField,
+  PinField, SocialButton.
+- **Marketing (v0.5, public surface only)** — Masthead, FeatureList,
+  CallToAction, ProofRow, SiteFooter. These five own the display steps; a
+  product screen imports none of them.
+
+Three lookalikes, picked by what CHANGES: `BandSubTabs` navigate ·
+`CardTabs` filter one card's content in place · `Tabs` switch a whole content
+region of the sheet.
 
 Card head is universal: bold title + faint subtitle left, ONE seed text-link
 action right. Inventing a new widget type requires naming it, giving it one
@@ -174,15 +204,17 @@ Honor `prefers-reduced-motion` (all durations → 0; the design loses nothing).
   lifecycle contracts, responsive floor, motion/layering physics, and the
   stamp. Read when starting work in an existing project, running audit or
   redesign, or unsure what "done" means for a component.
-- `references/component-specs.md` — condensed B1–B35: anatomy, states, a11y,
-  and Don't list per component. Read the relevant section BEFORE implementing
-  or reviewing any specific component.
+- `references/component-specs.md` — condensed B1–B51 plus the amendments:
+  anatomy, states, a11y, and Don't list per component. Read the relevant
+  section BEFORE implementing or reviewing any specific component.
 - `references/firewall-and-copy.md` — the machine-checkable banned-CSS/pattern
   list (A1–A4), the Part E fundamentals gates, and the full Ship Gate. Read
   when reviewing code or when unsure whether something is legal.
-- `references/library.md` — the built React library (seventy-six-ui): file
-  map, imports, registry install, doc-site conventions. Read when working in
-  React so you consume the existing components instead of rebuilding them.
+- `references/library.md` — the built React library (seventy-six-ui): the 52
+  exported components across five categories (chrome · widgets · primitives ·
+  forms · marketing), file map, imports, registry install, doc-site
+  conventions. Read when working in React so you consume the existing
+  components instead of rebuilding them.
 - `references/tokens.css` — copy verbatim into any new project.
 - `references/system-dials.md` — per-system-type dials (ERP/CRM/POS/health…)
   and the three-layer ecosystem model. Read when starting a NEW product or
@@ -193,9 +225,11 @@ Honor `prefers-reduced-motion` (all durations → 0; the design loses nothing).
 ## Ship Gate — run before showing anything
 
 1. Zero firewall hits (gradients, blur, non-token radius/shadow/colors,
-   `!important`, >200ms animation, layout transitions, off-system fonts).
+   `!important`, >200ms animation, layout transitions, off-system fonts,
+   display steps outside their three marketing files — rule 17).
 2. Count colors: neutrals + one seed + functional words/dots. Nothing else.
-3. Every widget is a registered type; new types got registered first.
+3. Every widget is a registered type (B1–B51, and the marketing five on the
+   PUBLIC surface only); new types got registered first.
 4. Every S1 footnote passes the "so what" test (new info, not paraphrase).
 5. Keyboard pass: visible focus everywhere, sane order, skip-link, ⌘K.
 6. Squint test: ink band + white paper on platinum wall; nothing glows,

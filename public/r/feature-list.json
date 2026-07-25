@@ -1,0 +1,44 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "feature-list",
+  "type": "registry:ui",
+  "title": "FeatureList",
+  "description": "The claim, itemised — type on hairlines, never icon tiles. One job: State what the product does, one item at a time.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/feature-list.tsx",
+      "content": "import type { ReactNode } from 'react';\nimport { cx } from '@/lib/cx';\nimport './feature-list.css';\n\n/**\n * B48 · FeatureList — the public page's claim, itemised. One job: state\n * what the product does, one item at a time. Every competing library\n * answers this with a grid of tinted icon tiles; 76° answers it with type\n * on hairlines, because A2 refuses the icon-led card and F11 refuses the\n * illustration that follows it. What is left is a newspaper column: a\n * rule, a number, a title, one sentence.\n *\n * A FeatureList is a STATEMENT, never a control — no state, no effects,\n * nothing inside it is clickable. If an item needs to link, the link\n * lives in its body, where a reader can see what it points at.\n */\nexport interface FeatureItem {\n  id: string;\n  /** 13/700 ink. Names the capability, not the benefit. */\n  title: string;\n  /** ONE sentence. Two is a page. */\n  body: ReactNode;\n  /** Optional mono uppercase line under the body: a count, a spec, a limit. */\n  meta?: string;\n}\n\nexport interface FeatureListProps {\n  items: FeatureItem[];\n  /** 2 or 3 across at full width. Default 3. */\n  columns?: 2 | 3;\n  /** Mono ordinals (01, 02, …) above each title. Default true. */\n  numbered?: boolean;\n  /** Names the set for a screen reader when the section heading is elsewhere. */\n  ariaLabel?: string;\n  className?: string;\n}\n\n/* The ordinal is derived from POSITION, never passed in: a hand-written\n   number drifts the moment an item is inserted, and a claim that\n   miscounts itself is worse than an unnumbered one. Nine items is the\n   ceiling the two digits assume — a tenth feature is a page, not a list. */\nconst ordinal = (index: number) => String(index + 1).padStart(2, '0');\n\nexport function FeatureList({\n  items,\n  columns = 3,\n  numbered = true,\n  ariaLabel,\n  className,\n}: FeatureListProps) {\n  return (\n    /* A real <ul> so the count is announced, and the column count travels\n       as data — a literal in an inline style would put layout back in the\n       component and out of the stylesheet's reach. */\n    <ul className={cx('sv-features', className)} data-columns={columns} aria-label={ariaLabel}>\n      {items.map((item, index) => (\n        <li key={item.id} className=\"sv-features__item\">\n          {numbered && (\n            /* NOT aria-hidden. The ordinal is how the item is referred to\n               in copy (\"see 03\"), and hiding a visible number from a\n               screen reader is exactly the asymmetry C5 warns about. It\n               takes --sv-ink-soft rather than --sv-ink-faint for the same\n               reason C2 gives: a number read aloud is content. */\n            <span className=\"sv-features__ordinal sv-mono\">{ordinal(index)}</span>\n          )}\n          {/* A paragraph, not a heading: the component cannot know what\n              level it sits at, and a guessed h3 skips levels on half the\n              pages that use it (A4). The section around it carries the\n              heading. */}\n          <p className=\"sv-features__title\">{item.title}</p>\n          <p className=\"sv-features__body\">{item.body}</p>\n          {item.meta && <p className=\"sv-features__meta sv-mono\">{item.meta}</p>}\n        </li>\n      ))}\n    </ul>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/feature-list.tsx"
+    },
+    {
+      "path": "registry/seventy-six/feature-list.css",
+      "content": "/* B48 · FeatureList — the rule IS the structure. No tile, no icon, no\n   card per item: a hairline over each column is what makes the set read\n   as a page rather than as a row of products. */\n\n@layer sv-components {\n  .sv-features {\n    /* minmax(0, …) on every track, never a bare 1fr: a grid item's\n       default min-width is auto, so one unbreakable word — a URL, a SKU —\n       widens its track and pushes the page sideways (Part E, C7). */\n    --sv-features-cols: 3;\n    display: grid;\n    grid-template-columns: repeat(var(--sv-features-cols), minmax(0, 1fr));\n    gap: var(--sv-s6);\n    margin: 0;\n    padding: 0;\n    list-style: none;\n  }\n\n  .sv-features[data-columns='2'] {\n    --sv-features-cols: 2;\n  }\n\n  .sv-features[data-columns='3'] {\n    --sv-features-cols: 3;\n  }\n\n  /* The 1px top rule spans the item and the content hangs below it — the\n     column rule of a newspaper, drawn once per item and never closed into\n     a box. */\n  .sv-features__item {\n    border-top: 1px solid var(--sv-line);\n    padding-top: var(--sv-s3);\n    overflow-wrap: anywhere;\n  }\n\n  .sv-features__ordinal {\n    display: block;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-features__title {\n    margin-top: var(--sv-s2);\n    font-size: 15px;\n    font-weight: 700;\n    line-height: 1.3;\n    color: var(--sv-ink);\n  }\n\n  /* The ordinal already opens the item, so the title does not open it\n     twice. */\n  .sv-features__ordinal + .sv-features__title {\n    margin-top: var(--sv-s1);\n  }\n\n  .sv-features__body {\n    margin-top: var(--sv-s2);\n    font-size: 13.5px;\n    line-height: 1.55;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-features__meta {\n    margin-top: var(--sv-s3);\n    color: var(--sv-ink-soft);\n  }\n\n  /* C7 · the set reflows and nothing else happens: no item hides, no\n     track scrolls. Three columns at 320px would be four words wide, so\n     the grid steps down twice instead. The attribute selector is repeated\n     here so these rules outrank the [data-columns='3'] declaration above\n     — a 3-across list must be able to become 1-across. */\n  @media (max-width: 1000px) {\n    .sv-features[data-columns] {\n      --sv-features-cols: 2;\n    }\n  }\n\n  @media (max-width: 620px) {\n    .sv-features[data-columns] {\n      --sv-features-cols: 1;\n    }\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/feature-list.css"
+    }
+  ],
+  "categories": [
+    "marketing"
+  ],
+  "docs": "https://76.zifala.com/llms/feature-list.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B48",
+    "job": "State what the product does, one item at a time.",
+    "tags": [
+      "features",
+      "marketing",
+      "landing",
+      "list",
+      "grid",
+      "benefits"
+    ],
+    "exports": [
+      "FeatureList"
+    ]
+  }
+}

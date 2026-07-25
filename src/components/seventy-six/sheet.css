@@ -24,6 +24,21 @@
     margin-top: -44px;
   }
 
+  /* v0.5 · the section break, for the public surface only. 14px separates two
+     cards of one dashboard; it does not separate two arguments of one page.
+     The overlap rule above still wins on the one row that carries it — it is
+     an attribute selector and this is a class — so a break can never cancel
+     the signature move by accident. */
+  .sv-row--break {
+    margin-top: calc(var(--sv-s8) + var(--sv-s6));
+  }
+
+  @media (max-width: 1000px) {
+    .sv-row--break {
+      margin-top: var(--sv-s8);
+    }
+  }
+
   /* minmax(0, …) on every track, never a bare 1fr: a grid item's default
      min-width is auto, so one wide table or one long tabular figure widens
      its own column and pushes the page into a horizontal scroll. Ship Gate

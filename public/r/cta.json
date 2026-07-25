@@ -1,0 +1,44 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "cta",
+  "type": "registry:ui",
+  "title": "CallToAction",
+  "description": "The last row of a public page — the only one that asks. One job: Name the one act the page wants.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/cta.tsx",
+      "content": "import type { ReactNode } from 'react';\nimport { cx } from '@/lib/cx';\nimport './cta.css';\n\n/**\n * B49 · CallToAction — the last row of a public page, and the only one that\n * asks for anything. One job: name the one act the page wants.\n *\n * Everything above it states; this asks. That is why it holds exactly ONE\n * primary. B10's rule is not relaxed on the public surface — it is at its\n * most binding here, because a page that asks for two things has asked for\n * neither. `actions` is a slot rather than a `label`/`onClick` pair so a\n * ghost may stand beside the primary; the discipline is the caller's, and\n * the prop doc is where it is written down.\n *\n * There is no `urgency`, no `countdown` and no `scarcity` prop, and there\n * never will be: 76° speaks like a competent colleague (A3), and a clock\n * that pressures the reader is the opposite of that. There is no `form`\n * slot either — a form is a page, or a B24 Plate.\n */\nexport interface CallToActionProps {\n  /** The ask, at display size. Not a slogan — name the act's object (A3). */\n  title: string;\n  /** ONE sentence: what happens after the click, or what it costs. */\n  statement?: string;\n  /** ONE primary. A ghost beside it is permitted; a second primary is not. */\n  actions: ReactNode;\n  /** A mono line under the actions: the terms, the trial length, the card requirement. */\n  note?: string;\n  /** 'paper' — a card on the wall. 'band' — the ink surface, edge to edge. */\n  tone?: 'paper' | 'band';\n  /** 2 by default: a page's h1 is its Masthead (B47), and levels never skip (A4). */\n  headingLevel?: 2 | 3;\n  className?: string;\n}\n\nexport function CallToAction({\n  title,\n  statement,\n  actions,\n  note,\n  tone = 'paper',\n  headingLevel = 2,\n  className,\n}: CallToActionProps) {\n  const Heading = headingLevel === 3 ? 'h3' : 'h2';\n\n  return (\n    /* `sv-band` rides along on the ink tone because the re-toning already\n       exists system-wide: button.css re-borders `.sv-band .sv-btn--ghost` in\n       --sv-band-line, and base.css turns `.sv-band :focus-visible` white. A\n       ghost and a focus ring inside this row therefore need no rules of their\n       own — verified against both files, so cta.css writes none.\n       A real <section> carries the row, with the heading inside it and no\n       aria-label beside it: the heading is the name already, and a second one\n       would only give one row two. */\n    <section className={cx('sv-cta', `sv-cta--${tone}`, tone === 'band' && 'sv-band', className)}>\n      <div className=\"sv-cta__text\">\n        <Heading className=\"sv-cta__title\">{title}</Heading>\n        {statement && <p className=\"sv-cta__statement\">{statement}</p>}\n      </div>\n      <div className=\"sv-cta__side\">\n        <div className=\"sv-cta__actions\">{actions}</div>\n        {/* The terms sit UNDER the button, in the mono metadata voice — the\n            cost is stated where the click is, not in a footnote nobody reads. */}\n        {note && <p className=\"sv-cta__note sv-mono\">{note}</p>}\n      </div>\n    </section>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/cta.tsx"
+    },
+    {
+      "path": "registry/seventy-six/cta.css",
+      "content": "/* B49 · CallToAction — the ask. One primary, stated once, at display size. */\n\n@layer sv-components {\n  /* The ask on the left, the act on the right, centred to each other: the\n     eye finishes the sentence exactly where the button is. */\n  .sv-cta {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    gap: var(--sv-s7);\n    padding: var(--sv-s8);\n    border-radius: var(--sv-r);\n  }\n\n  /* min-width:0 so a long unbroken word shrinks the column instead of\n     pushing the actions off the row (C7). */\n  .sv-cta__text {\n    min-width: 0;\n  }\n\n  /* The one display step the public surface may speak in at this scale\n     (rule 17). It clamps to 21px at 320px — the size the same line takes in\n     the product ramp — so the page degrades INTO the system, not out of it. */\n  .sv-cta__title {\n    font-size: var(--sv-display-3);\n    line-height: 1.15;\n    font-weight: 800;\n    letter-spacing: -0.025em;\n    text-wrap: balance;\n  }\n\n  /* Capped near 52ch because a measure wider than that stops being one\n     sentence to read and starts being a paragraph to skim. */\n  .sv-cta__statement {\n    margin-top: var(--sv-s3);\n    max-width: 52ch;\n    font-size: 14.5px;\n    line-height: 1.55;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-cta__side {\n    display: flex;\n    flex: none;\n    flex-direction: column;\n    align-items: flex-end;\n    gap: var(--sv-s3);\n  }\n\n  .sv-cta__actions {\n    display: flex;\n    align-items: center;\n    gap: var(--sv-s2);\n  }\n\n  /* The terms carry real information — what it costs, whether a card is\n     needed — so they take the soft step, never the faint one (C2). */\n  .sv-cta__note {\n    color: var(--sv-ink-soft);\n    text-align: right;\n  }\n\n  /* ---- tone=\"paper\" · an ordinary card on the wall (A4) ---- */\n\n  .sv-cta--paper {\n    background: var(--sv-paper);\n    box-shadow: var(--sv-shadow);\n  }\n\n  /* ---- tone=\"band\" · the ink surface ----\n     No shadow, and the omission is the rule: ink is the wall's opposite,\n     not a card sitting on it. Nothing here floats.\n     The mark on ink is --sv-on-dark, never --sv-paper: paper inverts with\n     the mode and the band does not, so paper-as-text would collapse the\n     pair on dark (rule 16). */\n\n  .sv-cta--band {\n    background: var(--sv-band);\n  }\n\n  .sv-cta--band .sv-cta__title {\n    color: var(--sv-on-dark);\n  }\n\n  .sv-cta--band .sv-cta__statement,\n  .sv-cta--band .sv-cta__note {\n    color: var(--sv-band-soft);\n  }\n\n  /* ---- The floor ----\n     Below 720px the row stacks and the act stops being a right-hand\n     accessory: it takes the full width, at the reading order's end, where\n     a thumb already is. Nothing is dropped and nothing scrolls sideways. */\n\n  @media (max-width: 720px) {\n    .sv-cta {\n      flex-direction: column;\n      align-items: stretch;\n      gap: var(--sv-s6);\n      padding: var(--sv-s7);\n    }\n\n    .sv-cta__side {\n      align-items: stretch;\n    }\n\n    /* Column, not a wrapping row: two half-width buttons on a 320px screen\n       are two two-line clickables. Each one gets the whole width. */\n    .sv-cta__actions {\n      flex-direction: column;\n      align-items: stretch;\n    }\n\n    .sv-cta__note {\n      text-align: left;\n    }\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/cta.css"
+    }
+  ],
+  "categories": [
+    "marketing"
+  ],
+  "docs": "https://76.zifala.com/llms/cta.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B49",
+    "job": "Name the one act the page wants.",
+    "tags": [
+      "cta",
+      "call to action",
+      "marketing",
+      "conversion",
+      "landing",
+      "band"
+    ],
+    "exports": [
+      "CallToAction"
+    ]
+  }
+}
