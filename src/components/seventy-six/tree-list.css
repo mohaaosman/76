@@ -1,0 +1,82 @@
+/* B40 · TreeList — indentation is the data, so it is drawn, not decorated. */
+
+@layer sv-components {
+  .sv-tree,
+  .sv-tree__group {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* The treeitem owns the tabindex, so it also owns the ring — but it also
+     owns its whole subtree, and a ring around that reads as a selection of
+     the branch. Draw it on the row instead; equal replacement, per C3. */
+  .sv-tree__item:focus-visible {
+    outline: none;
+  }
+
+  .sv-tree__item:focus-visible > .sv-tree__row {
+    outline: 2px solid var(--sv-seed-line);
+    outline-offset: -2px;
+  }
+
+  /* 18px per level, set inline as --sv-tree-depth: the indent is the only
+     thing that varies down the tree, so nothing else needs a per-row style. */
+  .sv-tree__row {
+    display: flex;
+    align-items: center;
+    gap: var(--sv-s2);
+    padding: 6px var(--sv-s3) 6px calc(var(--sv-s2) + var(--sv-tree-depth, 0) * 18px);
+    cursor: pointer;
+    transition: background-color var(--sv-t-fast);
+  }
+
+  .sv-tree__row:hover {
+    background: var(--sv-seed-tint);
+  }
+
+  /* Selected: seed-tint + 2px seed left rule — B7's row language, and the
+     only other place in the system a left rule is allowed. */
+  .sv-tree__item--selected > .sv-tree__row {
+    background: var(--sv-seed-tint);
+    box-shadow: inset 2px 0 0 var(--sv-seed);
+  }
+
+  .sv-tree__chevron {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-right: 1.5px solid var(--sv-ink-soft);
+    border-bottom: 1.5px solid var(--sv-ink-soft);
+    transform: rotate(-45deg);
+    transition: transform var(--sv-t-fast);
+  }
+
+  .sv-tree__item[aria-expanded='true'] > .sv-tree__row > .sv-tree__chevron {
+    transform: rotate(45deg);
+  }
+
+  /* A leaf holds the 7px slot open so every label on a level starts at the
+     same x — the ragged alternative reads as a broken indent. */
+  .sv-tree__chevron--leaf {
+    visibility: hidden;
+  }
+
+  .sv-tree__label {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--sv-ink);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sv-tree__meta {
+    flex: none;
+    padding-left: var(--sv-s3);
+    font-size: 10.5px;
+    color: var(--sv-ink-soft);
+  }
+}

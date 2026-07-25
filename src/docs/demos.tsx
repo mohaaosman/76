@@ -19,15 +19,19 @@ import {
   CardHead,
   CardTabs,
   Checkbox,
+  CodeBlock,
   DataTable,
   DateRangeField,
   Delta,
   DescriptionList,
   Dialog,
+  DistributionStrip,
   Divider,
   Drawer,
   EmptyState,
   Field,
+  FileField,
+  FilterBar,
   FilterLine,
   Kbd,
   MenuButton,
@@ -37,9 +41,12 @@ import {
   PinField,
   Plate,
   PlateHead,
+  Popover,
   Progress,
+  Radio,
   Row,
   SearchCommand,
+  SearchField,
   Select,
   SelectionHead,
   Skeleton,
@@ -50,12 +57,18 @@ import {
   SplitButton,
   StatS1,
   StatusWord,
+  Stepper,
+  TabPanel,
+  Tabs,
+  Timeline,
   Toggle,
   Tooltip,
   Trend,
+  TreeList,
   useSearchCommand,
   useToast,
 } from '@/components/seventy-six';
+import type { FileRow } from '@/components/seventy-six';
 
 /* Shared demo icons — 16px stroke, seed color comes from the tile. */
 const IconCoins = (
@@ -1550,6 +1563,545 @@ function TableSelectionHead() {
   );
 }
 
+/* ------------------------------------------------ SearchField */
+
+const SEARCH_ORDERS = [
+  { ref: 'ORD-10482', customer: 'Northwind Trading' },
+  { ref: 'ORD-10481', customer: 'Contoso Freight' },
+  { ref: 'ORD-10479', customer: 'Fabrikam Retail' },
+  { ref: 'ORD-10478', customer: 'Adventure Works' },
+  { ref: 'ORD-10476', customer: 'Tailspin Depot' },
+  { ref: 'ORD-10475', customer: 'Wingtip Supply' },
+];
+
+function SearchBasic() {
+  const [query, setQuery] = useState('');
+  const q = query.trim().toLowerCase();
+  const matches = SEARCH_ORDERS.filter(
+    (o) => o.ref.toLowerCase().includes(q) || o.customer.toLowerCase().includes(q),
+  );
+  return (
+    <div className="demo-form">
+      <SearchField
+        label="Search orders"
+        placeholder="Reference, customer, or PO number"
+        hint="Filters the list below as you type."
+        value={query}
+        onValueChange={setQuery}
+        resultText={`${matches.length} of ${SEARCH_ORDERS.length} match`}
+      />
+      <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
+        {matches.map((o) => (
+          <li
+            key={o.ref}
+            style={{ display: 'flex', gap: 12, padding: '6px 0', borderBottom: '1px solid var(--sv-line)', fontSize: 12.5 }}
+          >
+            <span className="sv-mono" style={{ color: 'var(--sv-ink-soft)' }}>{o.ref}</span>
+            <span>{o.customer}</span>
+          </li>
+        ))}
+        {matches.length === 0 && (
+          <li style={{ padding: '6px 0', fontSize: 12.5, color: 'var(--sv-ink-soft)' }}>
+            No order matches “{query}”. Search by reference, customer, or PO number.
+          </li>
+        )}
+      </ul>
+    </div>
+  );
+}
+
+function SearchInline() {
+  const [query, setQuery] = useState('');
+  /* No resultText inside a FilterBar: the FilterLine below it announces
+     the change, and two live regions for one change is a defect (B7). */
+  return (
+    <FilterBar
+      label="Order filters"
+      active={query !== ''}
+      onClearAll={() => setQuery('')}
+      controls={
+        <SearchField
+          label="Search orders"
+          labelHidden
+          placeholder="Search orders"
+          value={query}
+          onValueChange={setQuery}
+        />
+      }
+    />
+  );
+}
+
+/* ------------------------------------------------ FileField */
+
+const FILE_ROWS: FileRow[] = [
+  { id: '1', name: 'july-actuals.csv', size: '2.4 MB', status: 'uploading', percent: 62 },
+  { id: '2', name: 'q2-forecast.xlsx', size: '1.1 MB', status: 'done' },
+  { id: '3', name: 'depot-codes.csv', size: '318 KB', status: 'uploading', percent: 0 },
+];
+
+function FileBasic() {
+  const [files, setFiles] = useState<FileRow[]>(FILE_ROWS);
+  const { notify } = useToast();
+  return (
+    <div className="demo-form" style={{ maxWidth: 460 }}>
+      <FileField
+        label="Import files"
+        hint="The importer reads the first sheet of each workbook."
+        constraint="CSV · XLSX · MAX 10 MB"
+        accept=".csv,.xlsx"
+        files={files}
+        onAdd={(added) => {
+          notify({ tone: 'info', title: `${added.length} file${added.length === 1 ? '' : 's'} queued` });
+          setFiles((prev) => [
+            ...prev,
+            ...added.map((f, i) => ({
+              id: `new-${prev.length + i}`,
+              name: f.name,
+              size: `${Math.max(1, Math.round(f.size / 1024))} KB`,
+              status: 'uploading' as const,
+              percent: 0,
+            })),
+          ]);
+        }}
+        onRemove={(id) => setFiles((prev) => prev.filter((f) => f.id !== id))}
+      />
+    </div>
+  );
+}
+
+function FileError() {
+  const [files, setFiles] = useState<FileRow[]>([
+    {
+      id: '1',
+      name: 'full-export.xlsx',
+      size: '18.2 MB',
+      status: 'error',
+      error: 'Over the 10 MB limit. Compress it or split it into two files.',
+    },
+  ]);
+  return (
+    <div className="demo-form" style={{ maxWidth: 460 }}>
+      <FileField
+        label="Import files"
+        constraint="CSV · XLSX · MAX 10 MB"
+        files={files}
+        onAdd={() => undefined}
+        onRemove={(id) => setFiles((prev) => prev.filter((f) => f.id !== id))}
+      />
+    </div>
+  );
+}
+
+/* ------------------------------------------------ Tabs */
+
+function TabsBasic() {
+  const [section, setSection] = useState('summary');
+  return (
+    <div>
+      <Tabs
+        label="Report sections"
+        idBase="demo-report"
+        active={section}
+        onChange={setSection}
+        tabs={[
+          { id: 'summary', label: 'Summary' },
+          { id: 'lines', label: 'Line items', count: 148 },
+          { id: 'audit', label: 'Audit', count: 6 },
+        ]}
+      />
+      <TabPanel idBase="demo-report" tabId="summary" active={section === 'summary'}>
+        <Card style={{ marginTop: 14 }}>
+          <CardHead title="Summary" subtitle="July · warehouse A" />
+          <div className="trend-pad">
+            <MeterList
+              items={[
+                { label: 'Invoiced', current: 412, max: 480, value: '86%', subtitle: '412 of 480 lines invoiced' },
+                { label: 'Reconciled', current: 388, max: 480, value: '81%', subtitle: '388 of 480 lines reconciled' },
+              ]}
+            />
+          </div>
+        </Card>
+      </TabPanel>
+      <TabPanel idBase="demo-report" tabId="lines" active={section === 'lines'}>
+        <Card style={{ marginTop: 14 }}>
+          <CardHead title="Line items" subtitle="148 lines · July" />
+          <DataTable
+            caption="Report line items"
+            rows={draftInvoices.slice(0, 3)}
+            rowKey={(r) => r.id}
+            columns={[
+              { key: 'id', header: 'LINE', kind: 'id', render: (r) => r.id },
+              { key: 'customer', header: 'CUSTOMER', render: (r) => r.customer },
+              { key: 'total', header: 'TOTAL', kind: 'num', render: (r) => r.total },
+            ]}
+          />
+        </Card>
+      </TabPanel>
+      <TabPanel idBase="demo-report" tabId="audit" active={section === 'audit'}>
+        <Card style={{ marginTop: 14 }}>
+          <CardHead title="Audit" subtitle="6 events" />
+          <ActivityList
+            items={[
+              { id: 'a', time: '14:28', children: <><b>M. Reyes</b> reopened the period</> },
+              { id: 'b', time: '11:04', children: <>Report locked by <b>A. Yusuf</b></> },
+            ]}
+          />
+        </Card>
+      </TabPanel>
+    </div>
+  );
+}
+
+/* ------------------------------------------------ Stepper */
+
+const ONBOARDING = [
+  { id: 'account', label: 'Account', note: 'Created 12 Jul' },
+  { id: 'contract', label: 'Contract', note: 'Signed 14 Jul' },
+  { id: 'kyc', label: 'Verification' },
+  { id: 'live', label: 'Go live' },
+];
+
+function StepperBasic() {
+  return (
+    <div style={{ maxWidth: 620 }}>
+      <Stepper label="Onboarding progress" current={2} steps={ONBOARDING} />
+    </div>
+  );
+}
+
+function StepperNavigable() {
+  const [step, setStep] = useState(2);
+  return (
+    <div className="demo-form" style={{ maxWidth: 620 }}>
+      <Stepper label="Checkout" current={step} steps={ONBOARDING} onStepSelect={setStep} />
+      <p style={{ fontSize: 12.5, color: 'var(--sv-ink-soft)' }}>
+        Completed steps are buttons; <b>{ONBOARDING[step].label}</b> and everything after it are not
+        yet earned.
+      </p>
+    </div>
+  );
+}
+
+/* ------------------------------------------------ TreeList */
+
+const ACCOUNTS = [
+  {
+    id: 'assets',
+    label: 'Assets',
+    meta: '1000',
+    children: [
+      {
+        id: 'current',
+        label: 'Current assets',
+        meta: '1100',
+        children: [
+          { id: 'cash', label: 'Cash at bank', meta: '1110' },
+          { id: 'receivable', label: 'Trade receivables', meta: '1120' },
+        ],
+      },
+      { id: 'fixed', label: 'Fixed assets', meta: '1200' },
+    ],
+  },
+  {
+    id: 'liabilities',
+    label: 'Liabilities',
+    meta: '2000',
+    children: [{ id: 'payable', label: 'Trade payables', meta: '2100' }],
+  },
+  { id: 'equity', label: 'Equity', meta: '3000' },
+];
+
+function TreeBasic() {
+  const [expanded, setExpanded] = useState<Set<string>>(new Set(['assets']));
+  const [selected, setSelected] = useState<string | null>('current');
+  return (
+    <div style={{ maxWidth: 360 }}>
+      <TreeList
+        label="Chart of accounts"
+        nodes={ACCOUNTS}
+        expanded={expanded}
+        onExpandedChange={setExpanded}
+        selected={selected}
+        onSelect={(id) => setSelected(id)}
+      />
+    </div>
+  );
+}
+
+/* ------------------------------------------------ Timeline */
+
+function TimelineRecord() {
+  return (
+    <div style={{ maxWidth: 460 }}>
+      <Timeline
+        items={[
+          {
+            id: 'placed',
+            group: '22 JUL',
+            time: '09:14',
+            dateTime: '2026-07-22T09:14:00+03:00',
+            title: 'Order placed',
+            actor: 'Halcyon Freight',
+          },
+          {
+            id: 'picked',
+            time: '11:02',
+            dateTime: '2026-07-22T11:02:00+03:00',
+            title: 'Picked',
+            body: '14 SKUs from warehouse A.',
+            actor: 'A. Yusuf',
+          },
+          {
+            id: 'shipped',
+            group: '24 JUL',
+            time: '08:40',
+            dateTime: '2026-07-24T08:40:00+03:00',
+            title: 'Shipped',
+            body: 'DHL · 4820 1183 55',
+          },
+          { id: 'delivered', time: '26 JUL', title: 'Delivery expected', tone: 'pending' },
+        ]}
+      />
+    </div>
+  );
+}
+
+function TimelineFailed() {
+  return (
+    <div style={{ maxWidth: 460 }}>
+      <Timeline
+        items={[
+          { id: 'queued', time: '02:00', dateTime: '2026-07-25T02:00:00+03:00', title: 'Run queued' },
+          {
+            id: 'extract',
+            time: '02:01',
+            dateTime: '2026-07-25T02:01:00+03:00',
+            title: 'Extract complete',
+            body: '18,402 rows read.',
+          },
+          {
+            id: 'load',
+            time: '02:06',
+            dateTime: '2026-07-25T02:06:00+03:00',
+            title: 'Load failed',
+            tone: 'bad',
+            body: 'Duplicate key on invoice_no at row 9,118.',
+            actor: 'etl-worker-3',
+          },
+        ]}
+      />
+    </div>
+  );
+}
+
+/* ------------------------------------------------ Popover */
+
+function PopoverBasic() {
+  return (
+    <div className="demo-row">
+      <Popover label="Columns" ariaLabel="Choose visible columns" align="end">
+        <div className="demo-form" style={{ gap: 'var(--sv-s2)' }}>
+          <Checkbox label="Customer" defaultChecked />
+          <Checkbox label="Total" defaultChecked />
+          <Checkbox label="Dispatched" />
+        </div>
+      </Popover>
+    </div>
+  );
+}
+
+function PopoverTitled() {
+  return (
+    <div className="demo-row">
+      <Popover label="About this total" title="How the total is calculated">
+        <p style={{ fontSize: 12.5, color: 'var(--sv-ink-soft)' }}>
+          Line totals, less order-level discounts, plus shipping. Tax is applied at invoicing, so
+          this figure can differ from the invoice by the tax line.
+        </p>
+        <ButtonLink href="#totals">Read the totals rules</ButtonLink>
+      </Popover>
+    </div>
+  );
+}
+
+/* ------------------------------------------------ CodeBlock */
+
+const CODE_SNIPPET = `<DataTable
+  columns={columns}
+  rows={rows}
+  empty="No orders match this filter."
+/>`;
+
+function CodeBasic() {
+  return (
+    <CodeBlock label="TERMINAL" code="npx shadcn@latest add https://76.zifala.com/r/code-block.json" />
+  );
+}
+
+function CodeNumbered() {
+  return <CodeBlock label="orders-table.tsx" numbered code={CODE_SNIPPET} />;
+}
+
+/* ------------------------------------------------ DistributionStrip */
+
+function DistBasic() {
+  return (
+    <div style={{ maxWidth: 420 }}>
+      <DistributionStrip
+        label="DEVICES ACCESSED · JULY"
+        ariaLabel="128,953 sessions: mobile 46%, desktop 31%, tablet 15%, other 8%"
+        parts={[
+          { label: 'Mobile', value: 59318 },
+          { label: 'Desktop', value: 39975 },
+          { label: 'Tablet', value: 19343 },
+          { label: 'Other', value: 10317 },
+        ]}
+      />
+    </div>
+  );
+}
+
+function DistPartial() {
+  return (
+    <div style={{ maxWidth: 420 }}>
+      <DistributionStrip
+        label="OPEN TICKETS · TOP THREE QUEUES"
+        ariaLabel="Three queues hold 3,180 of 4,720 open tickets: billing 33%, shipping 21%, returns 13%; the remaining 1,540 are spread across nine smaller queues"
+        total={4720}
+        parts={[
+          { label: 'Billing', value: 1540 },
+          { label: 'Shipping', value: 1010 },
+          { label: 'Returns', value: 630 },
+        ]}
+      />
+    </div>
+  );
+}
+
+/* ------------------------------------------------ Trend · the stated column */
+
+function TrendHighlight() {
+  return (
+    <div style={{ maxWidth: 560 }}>
+      <Trend
+        kind="bar"
+        ariaLabel="Orders per weekday peak on Thursday at 312, a quarter above the weekday average"
+        series={[{ label: 'Orders', data: [180, 224, 251, 312, 296, 142, 98], tone: 'seed' }]}
+        xLabels={['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']}
+        yTicks={['90', '180', '270', '360']}
+        highlight={{ index: 3, label: 'THU · 312' }}
+        height={140}
+      />
+    </div>
+  );
+}
+
+/* ------------------------------------------------ FilterBar · set, stated, applied */
+
+function FilterBarBasic() {
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState('pending');
+  const q = query.trim().toLowerCase();
+  const rows = draftInvoices.filter((r) => r.customer.toLowerCase().includes(q) || r.id.toLowerCase().includes(q));
+  const active = query !== '' || status !== 'all';
+  const filters = [
+    ...(status !== 'all' ? [{ label: 'Status', value: status === 'pending' ? 'Pending' : 'On hold' }] : []),
+    { label: 'Period', value: 'July' },
+  ];
+
+  function clearAll() {
+    setQuery('');
+    setStatus('all');
+  }
+
+  return (
+    <Card>
+      <CardHead title="Orders" subtitle="July · warehouse A" />
+      <FilterBar
+        label="Filter orders"
+        active={active}
+        onClearAll={clearAll}
+        controls={
+          <>
+            <SearchField
+              label="Search orders"
+              labelHidden
+              placeholder="Search orders"
+              value={query}
+              onValueChange={setQuery}
+            />
+            <Select label="Status" value={status} onChange={(e) => setStatus(e.target.value)}>
+              <option value="all">All</option>
+              <option value="pending">Pending</option>
+              <option value="hold">On hold</option>
+            </Select>
+          </>
+        }
+        actions={
+          <Popover label="Saved views" ariaLabel="Saved views" align="end">
+            <div className="demo-form" style={{ gap: 'var(--sv-s2)' }}>
+              <Radio name="demo-view" label="Everything open" defaultChecked />
+              <Radio name="demo-view" label="Awaiting my approval" />
+              <Radio name="demo-view" label="Overdue by 7 days" />
+            </div>
+          </Popover>
+        }
+      />
+      <FilterLine count={`${rows.length} of 248`} filters={filters} onClearAll={clearAll} />
+      <DataTable
+        caption="Open orders"
+        rows={rows}
+        rowKey={(r) => r.id}
+        announcement={`${rows.length} orders shown`}
+        columns={[
+          { key: 'id', header: 'INVOICE', kind: 'id', render: (r) => r.id },
+          { key: 'customer', header: 'CUSTOMER', render: (r) => r.customer },
+          { key: 'total', header: 'TOTAL', kind: 'num', render: (r) => r.total },
+        ]}
+      />
+    </Card>
+  );
+}
+
+/* ------------------------------------------------ Combobox · the stated selection */
+
+function ComboboxMulti() {
+  const [picked, setPicked] = useState<string[]>(['c-127', 'c-152']);
+  return (
+    <div style={{ maxWidth: 340 }}>
+      <Combobox
+        multiple
+        noun="account"
+        label="Accounts in this report"
+        options={DEMO_CUSTOMERS}
+        value={picked}
+        onChange={(values) => setPicked(values)}
+        placeholder="Type a name or C-number"
+        hint="Pick as many as the report covers — the list stays open."
+      />
+    </div>
+  );
+}
+
+/* ------------------------------------------------ Split (B46) */
+
+/* Both orientations preview as the real screens they are, scaled into the
+   doc surface. A miniature of a page type is a lie about the page type. */
+function SplitFrame({ src, label }: { src: string; label: string }) {
+  return (
+    <iframe className="demo-screen" src={`${window.location.pathname}#/templates/${src}`} title={label} />
+  );
+}
+
+function SplitSide() {
+  return <SplitFrame src="auth-sign-in" label="Sign in, panel beside the form" />;
+}
+
+function SplitStacked() {
+  return <SplitFrame src="auth-stacked" label="Sign in, ink band above the form" />;
+}
+
 /* ------------------------------------------------ registry */
 
 export const demos: Record<string, ComponentType> = {
@@ -1620,4 +2172,25 @@ export const demos: Record<string, ComponentType> = {
   'delta-inline': DeltaInline,
   'trend-stacked': TrendStacked,
   'table-selection': TableSelectionHead,
+  'search-basic': SearchBasic,
+  'search-inline': SearchInline,
+  'file-basic': FileBasic,
+  'file-error': FileError,
+  'tabs-basic': TabsBasic,
+  'stepper-basic': StepperBasic,
+  'stepper-navigable': StepperNavigable,
+  'tree-basic': TreeBasic,
+  'timeline-record': TimelineRecord,
+  'timeline-failed': TimelineFailed,
+  'popover-basic': PopoverBasic,
+  'popover-titled': PopoverTitled,
+  'code-basic': CodeBasic,
+  'code-numbered': CodeNumbered,
+  'dist-basic': DistBasic,
+  'dist-partial': DistPartial,
+  'trend-highlight': TrendHighlight,
+  'filterbar-basic': FilterBarBasic,
+  'combobox-multi': ComboboxMulti,
+  'split-side': SplitSide,
+  'split-stacked': SplitStacked,
 };

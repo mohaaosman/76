@@ -446,6 +446,18 @@
   }
 
   /* Back link on the full-screen template view (outside the docs shell) */
+  /* A page type previews as the page it is: a 1000px-wide frame of the real
+     screen, because a Split below its own 1000px floor stops being a Split. */
+  .demo-screen {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: 520px;
+    border: 1px solid var(--sv-line);
+    border-radius: var(--sv-r);
+    background: var(--sv-wall);
+  }
+
   .tpl-back {
     position: fixed;
     left: var(--sv-s4);

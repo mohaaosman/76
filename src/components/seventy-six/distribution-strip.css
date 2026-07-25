@@ -1,0 +1,93 @@
+/* B44 · DistributionStrip — one total split into parts, with structural
+   seams instead of a gradient, and a legend that carries every number. */
+
+@layer sv-components {
+  .sv-dist {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sv-s2);
+  }
+
+  .sv-dist__line {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sv-s3);
+  }
+
+  .sv-dist__label {
+    color: var(--sv-ink-soft);
+  }
+
+  /* B4's value voice — the figure, not the bar, is the information. */
+  .sv-dist__total {
+    font-size: 19px;
+    font-weight: 700;
+  }
+
+  /* The wall shows through when the parts are a subset of the total. */
+  .sv-dist__strip {
+    display: flex;
+    height: 10px;
+    border-radius: 2px;
+    background: var(--sv-wall);
+    overflow: hidden;
+  }
+
+  /* The 2px paper seam is what makes this read as PARTS. It is structure,
+     not decoration: without it the strip is one continuous smear. */
+  .sv-dist__seg {
+    flex-grow: 0;
+    flex-shrink: 0;
+    min-width: 0;
+    border-right: 2px solid var(--sv-paper);
+  }
+
+  .sv-dist__seg:last-child {
+    border-right: 0;
+  }
+
+  .sv-dist__legend {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sv-s2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sv-dist__row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--sv-s2);
+  }
+
+  .sv-dist__swatch {
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+  }
+
+  .sv-dist__name {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--sv-ink);
+  }
+
+  .sv-dist__figure {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-dist__tone--seed    { background: var(--sv-seed); }
+  .sv-dist__tone--compare { background: var(--sv-compare); }
+  .sv-dist__tone--faint   { background: var(--sv-ink-faint); }
+  /* The fourth tone is --sv-field-line-strong, NOT the hairline: it is the
+     last distinguishable step (3.63:1 on paper) and a segment drawn at
+     --sv-line would be 1.06:1 — a part of the total that nobody can see is
+     a part that was not stated (WCAG 1.4.11). The hairline stays what it is:
+     a rule, not a fill. */
+  .sv-dist__tone--edge    { background: var(--sv-field-line-strong); }
+}

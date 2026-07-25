@@ -1,0 +1,40 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "template-auth-stacked",
+  "type": "registry:block",
+  "title": "Sign in · stacked band",
+  "description": "The other Split orientation — ink across the top, the card over its edge.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/split.json",
+    "https://76.zifala.com/r/plate.json",
+    "https://76.zifala.com/r/social-button.json",
+    "https://76.zifala.com/r/field.json",
+    "https://76.zifala.com/r/button.json",
+    "https://76.zifala.com/r/banner.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/templates/auth-stacked.tsx",
+      "content": "// 76° template · Sign in, stacked band — B46 Split orientation=\"stacked\", seed cobalt.\nimport { useState } from 'react';\nimport type { FormEvent } from 'react';\nimport {\n  Field, Checkbox, Button, ButtonLink, Banner, Split, PlateHead, SocialButton,\n} from '@/components/seventy-six';\n\n/* The same screen as auth-sign-in, on the other orientation: the ink is a\n   full-width band across the top and the card climbs 44px over its edge —\n   B2's overlap, spent here because a Plate has no Sheet to spend it in.\n   Which orientation a product picks is one prop, not two codebases.\n   The panel is type only, exactly as on the side orientation. */\n\nconst providers = { display: 'grid', gap: 'var(--sv-s2)' } as const;\nconst rule = {\n  display: 'grid',\n  gridTemplateColumns: '1fr auto 1fr',\n  alignItems: 'center',\n  gap: 'var(--sv-s3)',\n  margin: 'var(--sv-s5) 0',\n} as const;\nconst hairline = { height: '1px', background: 'var(--sv-line)' } as const;\nconst word = { color: 'var(--sv-ink-soft)' } as const;\nconst stack = { display: 'grid', gap: 'var(--sv-s4)' } as const;\nconst notice = { marginBottom: 'var(--sv-s4)' } as const;\nconst wide = { width: '100%' } as const;\nconst foot = {\n  display: 'flex',\n  flexWrap: 'wrap',\n  gap: 'var(--sv-s3) var(--sv-s4)',\n  justifyContent: 'space-between',\n  marginTop: 'var(--sv-s4)',\n} as const;\nconst link = { color: 'var(--sv-seed-text)' } as const;\n\ntype Values = { email: string; password: string };\ntype Errors = Partial<Record<keyof Values, string>>;\n\nconst EMAIL = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\n// A3: every message names what is wrong and what to do about it.\nfunction validate({ email, password }: Values): Errors {\n  const found: Errors = {};\n  if (!email.trim()) found.email = 'Enter the email address on the account.';\n  else if (!EMAIL.test(email))\n    found.email = 'That address is missing an @ or a domain. Use the form name@company.co.';\n  if (!password) found.password = 'Enter the password for this account.';\n  return found;\n}\n\nexport function AuthStacked() {\n  const [values, setValues] = useState<Values>({ email: '', password: '' });\n  const [errors, setErrors] = useState<Errors>({});\n  const [refused, setRefused] = useState(false);\n\n  /* B11 timing: on blur, then on change once the field already has an error. */\n  function change(key: keyof Values, value: string) {\n    const next = { ...values, [key]: value };\n    setValues(next);\n    if (errors[key]) setErrors({ ...errors, [key]: validate(next)[key] });\n  }\n\n  function submit(event: FormEvent<HTMLFormElement>) {\n    event.preventDefault();\n    const found = validate(values);\n    setErrors(found);\n    setRefused(!Object.values(found).some(Boolean));\n  }\n\n  return (\n    <Split\n      orientation=\"stacked\"\n      footer={\n        <>\n          Trouble signing in? <a href=\"#support\" style={link}>Contact support</a>\n        </>\n      }\n    >\n      <PlateHead title=\"Sign in\" context=\"Northwind operations console\" />\n\n      {refused && (\n        <div style={notice}>\n          <Banner tone=\"bad\" title=\"That email and password do not match\">\n            Retype the password, or use the reset link below to set a new one. After five failed\n            tries the account locks for 15 minutes.\n          </Banner>\n        </div>\n      )}\n\n      <div style={providers}>\n        <SocialButton provider=\"google\" />\n        <SocialButton provider=\"github\" />\n      </div>\n\n      <div style={rule}>\n        <span style={hairline} aria-hidden=\"true\" />\n        <span className=\"sv-mono\" style={word}>\n          Or\n        </span>\n        <span style={hairline} aria-hidden=\"true\" />\n      </div>\n\n      {/* noValidate: the browser's bubbles are toasts by another name (A2). */}\n      <form style={stack} onSubmit={submit} noValidate>\n        <Field\n          label=\"Email\"\n          type=\"email\"\n          required\n          autoComplete=\"email\"\n          inputMode=\"email\"\n          value={values.email}\n          error={errors.email}\n          onChange={(e) => change('email', e.target.value)}\n          onBlur={() => setErrors({ ...errors, email: validate(values).email })}\n        />\n        <Field\n          label=\"Password\"\n          type=\"password\"\n          required\n          autoComplete=\"current-password\"\n          value={values.password}\n          error={errors.password}\n          onChange={(e) => change('password', e.target.value)}\n          onBlur={() => setErrors({ ...errors, password: validate(values).password })}\n        />\n        <Checkbox label=\"Keep me signed in\" name=\"persist\" />\n        {/* A2: the one seed button on this plate. Everything else is a link. */}\n        <Button type=\"submit\" variant=\"primary\" style={wide}>\n          Sign in\n        </Button>\n      </form>\n\n      <div style={foot}>\n        <ButtonLink href=\"#reset\">Forgot password?</ButtonLink>\n        <ButtonLink href=\"#sign-up\">Create an account</ButtonLink>\n      </div>\n    </Split>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/templates/auth-stacked.tsx"
+    }
+  ],
+  "categories": [
+    "templates"
+  ],
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "kind": "template",
+    "seed": "cobalt",
+    "tags": [
+      "auth",
+      "sign-in",
+      "split",
+      "stacked",
+      "overlap",
+      "cobalt"
+    ]
+  }
+}

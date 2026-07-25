@@ -1,0 +1,147 @@
+/* B39 · Stepper — a fixed sequence, stated: where you are and what remains */
+
+@layer sv-components {
+  .sv-stepper {
+    display: flex;
+    align-items: center;
+    gap: var(--sv-s3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sv-stepper__step {
+    display: flex;
+    align-items: center;
+    gap: var(--sv-s3);
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .sv-stepper__step:last-child {
+    flex: 0 1 auto;
+  }
+
+  /* The connector is the li's own ::after, never an extra element: an empty
+     <span> between steps would land inside the ordered list as a phantom. */
+  .sv-stepper__step::after {
+    content: '';
+    flex: 1 1 var(--sv-s5);
+    min-width: var(--sv-s3);
+    height: 1px;
+    background: var(--sv-line);
+  }
+
+  /* Behind the current step the sequence is earned, so the rule is seed;
+     ahead of it, hairline. A done step's connector is the span it closed. */
+  .sv-stepper__step--done::after {
+    background: var(--sv-seed);
+  }
+
+  .sv-stepper__step:last-child::after {
+    content: none;
+  }
+
+  .sv-stepper__hit {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sv-s3);
+    min-width: 0;
+    text-align: left;
+  }
+
+  .sv-stepper__hit--button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .sv-stepper__marker {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: var(--sv-r);
+    font-size: 11px;
+    /* mono tracking would shove a single digit off centre */
+    letter-spacing: 0;
+  }
+
+  .sv-stepper__step--done .sv-stepper__marker,
+  .sv-stepper__step--current .sv-stepper__marker {
+    background: var(--sv-seed);
+    color: var(--sv-on-dark);
+  }
+
+  /* The border is this marker's only affordance against the wall, so it
+     owes 3:1 and takes the strong field line, not the hairline. */
+  .sv-stepper__step--upcoming .sv-stepper__marker {
+    background: var(--sv-wall);
+    border: 1px solid var(--sv-field-line-strong);
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-stepper__text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .sv-stepper__label {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--sv-ink-soft);
+    transition: color var(--sv-t-fast);
+  }
+
+  .sv-stepper__step--current .sv-stepper__label {
+    font-weight: 700;
+    color: var(--sv-ink);
+  }
+
+  .sv-stepper__hit--button:hover .sv-stepper__label {
+    color: var(--sv-ink);
+  }
+
+  .sv-stepper__note {
+    font-size: 11px;
+    color: var(--sv-ink-soft);
+  }
+
+  /* C7 · below 620px the sequence stands up. Nothing is hidden and nothing
+     scrolls: the connectors simply become vertical rules in the marker
+     column, and the list reads top to bottom. */
+  @media (max-width: 620px) {
+    .sv-stepper {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    .sv-stepper__step {
+      position: relative;
+      flex: 0 0 auto;
+      align-items: flex-start;
+      padding-bottom: var(--sv-s6);
+    }
+
+    .sv-stepper__step:last-child {
+      padding-bottom: 0;
+    }
+
+    .sv-stepper__step::after {
+      position: absolute;
+      left: 11.5px;
+      top: 28px;
+      bottom: var(--sv-s1);
+      flex: none;
+      width: 1px;
+      min-width: 0;
+      height: auto;
+    }
+  }
+}

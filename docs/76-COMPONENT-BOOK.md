@@ -24,7 +24,7 @@ These rules are written to be lintable. Grep the codebase; any hit is a violatio
 **A2 · Banned patterns:**
 
 - Sidebars as primary navigation at ≥1000px. Horizontal band nav is binding on desktop, and the band's nav never scrolls horizontally at any width. BELOW 1000px primary navigation IS a left sidebar: a B21 Drawer (`side="left"`, `size="sm"`) opened by a ghost button LABELLED "Menu" with a glyph beside it — never icon-only, that ban stands. BandSubTabs leaves the band below 1000px and nests, indented, beneath its parent nav item inside the drawer.
-- Donut, pie, radial, and gauge charts in product screens. (W4 Meter list replaces them.)
+- Donut, pie, radial, and gauge charts in product screens. Two components replace them, and picking the wrong one is how the donut keeps getting proposed: **B44 `DistributionStrip`** divides ONE total into its shares, **B6 `MeterList`** measures each part against its own maximum.
 - Filled status pills/badges/chips. Status = 6px dot + colored word.
 - Icon-only buttons for primary actions; mystery-meat "⋯" as the only path to an action.
 - Skeleton shimmer animations (use static skeleton blocks at `--sv-wall`).
@@ -271,6 +271,112 @@ The range, without a calendar — **F4 is binding, 76° draws no month grid, eve
 - A11y: a real `<fieldset>`/`<legend>`; each input adds its own `aria-label` ("Reporting period, start date"); presets are buttons with `aria-pressed` so the active range is a state, not a colour (C5); the context line is `aria-live="polite"`. The end field takes the start date as its `min`, so the invalid half is unreachable rather than merely rejected.
 - Don't: never a month grid, a scheduler, or a compare-to-previous overlay (F4); never relative-only ranges without the absolute dates (C9); never more than five presets; never silently clamps an inverted range.
 
+### B36 · `SearchField` (v0.4.0)
+
+The in-place filter: a native `<input type="search">` in B11 chrome with a 14px magnifier left, a NAMED clear button right (the WebKit cancel button is suppressed — it is unstyleable, unlabelled, and invisible on the wall), and an optional mono `aria-live="polite"` result line under the field stating how many of how many now match. Escape clears and keeps focus. The live region is rendered even when empty, so the FIRST announcement is not lost. One job: filter a set that is ALREADY on screen by typing.
+- The B16 boundary: `SearchCommand` is ⌘K, a dialog, the keyboard front door to the whole app, and it NAVIGATES. This filters what you are already looking at. Shipping one does not excuse skipping the other.
+- `labelHidden` is a REGISTERED EXCEPTION to A4, legal only inside a CardHead or a B7 `FilterBar` that already names the set. The placeholder is still never the label (B11).
+- Don't: never a submit button (the list filters as you type, or it is a form); never `resultText` inside a FilterBar that also carries a FilterLine — two live regions for one change is a defect.
+
+### B37 · `FileField` (v0.4.0)
+
+Attach files, and state what happened to each. B11 label and hint over a drop zone whose 1px DASHED border is `--sv-field-line-strong` — the border is the zone's only affordance and owes the 3:1 non-text bar (WCAG 1.4.11), the same reasoning as B25's PinField box. The zone is a TARGET, not a control: a real `<input type="file">` and a named "Choose files" button carry the interaction, so the keyboard reaches everything without a fake `tabIndex` on a div. A mono constraint line names what is accepted and the ceiling. Rows below are hairline-separated: name, mono size, then B4's bar geometry worn directly (`progress.css` is imported rather than restated) while uploading, the WORD "Uploaded" while done, and an error stating what and how while failed. One job: attach files and report each one's state.
+- It owns NO transport. Uploading, retrying, cancelling and measuring are the product's; the component renders the state it is handed. A component that owns the network cannot be installed from a registry.
+- A11y: the row list is a live region rendered from the start; each uploading row is a `role="progressbar"` named for its file; the remove button reads "Remove" and carries `aria-label="Remove july-actuals.csv"` (A3, A4).
+- Don't: never a status carried by colour alone (C5); never a formatted byte count computed in the component (C9 — `size` is a string); never a drop zone with no button, which is unreachable by keyboard.
+
+### B38 · `Tabs` (v0.4.0)
+
+Three components look alike and are not interchangeable. **`BandSubTabs` (B1) NAVIGATE** — links, a URL change, on the band. **`CardTabs` (B8) FILTER ONE CARD'S CONTENT** in place, on that card's hairline. **`Tabs` (B38) SWITCH A WHOLE CONTENT REGION OF THE SHEET**, on the wall, directly above the region they switch. Pick by what changes, never by what it looks like. 14/700 labels soft → active `--sv-seed-text` under a 2px seed underline sitting ON the row's own hairline, an optional mono tabular count, no fill on a tab ever — a tinted tab on the wall reads as a pill. Each tab owns its OWN `TabPanel`, tied by a shared `idBase`. One job: switch which set of cards the sheet shows without touching the URL.
+- Real ARIA tabs only: `role="tablist"`, roving tabindex, ←/→ wrap, Home/End, automatic activation. There is no `filters` mode — `aria-pressed` buttons are B8's job, and a tablist that is sometimes not a tablist is a defect.
+- Below 1000px the row WRAPS. It never becomes a horizontal scroller: A2's ban is written for the band and it reads on every nav-like row.
+- Cap: five. A sixth section is a band nav item.
+- Don't: never for state a user should be able to link to or reload into — that is navigation, and it belongs on the band.
+
+### B39 · `Stepper` (v0.4.0)
+
+Where you are in a fixed sequence, and what remains. An `<ol>` of 24px markers at `--sv-r` carrying mono step numbers — done: seed fill plus a check in `--sv-on-dark`; current: seed fill plus the number; upcoming: `--sv-wall` with a 1px `--sv-field-line-strong` border, because that border is its only affordance against the wall (C1). Beside each, the label and an optional note; between them, a 1px connector that runs seed behind the current step and `--sv-line` ahead of it. Below 620px the sequence stands up vertically — nothing hides, nothing scrolls (C7). One job: state position in a named sequence.
+- **A Stepper is a STATEMENT, not a control.** Steps are plain text unless `onStepSelect` is passed, and even then only ALREADY-COMPLETED steps become buttons: you cannot click into a step you have not earned.
+- The B4 boundary: a Progress bar measures a quantity against a target; a Stepper counts named steps.
+- A11y: `aria-current="step"` on the current one, and every step's state ALSO stated in visually-hidden words ("Step 2 of 4, completed") — a seed fill is a colour, and colour never carries meaning alone (C5).
+- Don't: never more than five steps (that is a checklist, or a screen); never a percentage beside it; never a step that can be skipped silently.
+
+### B40 · `TreeList` (v0.4.0)
+
+A hierarchy whose DEPTH is itself the information: a chart of accounts, a bill of materials, a folder tree, an org. The full ARIA tree pattern, hand-rolled, zero dependencies — `role="tree"` / `treeitem` / `group`, ONE tab stop for the whole tree (roving tabindex), a border-drawn chevron that rotates on expand, 18px of indent per level, and a mono meta column right of the label. The selected row wears B7's language: `--sv-seed-tint` plus a 2px seed left rule. Fully controlled: `expanded` is a `Set` the caller owns. One job: move through a hierarchy.
+- The boundaries: B27 `Accordion` folds SECONDARY detail, never nests, never navigates. B7 `DataTable` holds flat records sharing columns. F3 refuses the data grid. A tree is none of those.
+- Keyboard: ↑/↓ move through VISIBLE nodes · → expands, or moves to the first child · ← collapses, or moves to the parent · Home/End · Enter/Space select.
+- The `<li>` itself is the `treeitem` and carries the tabindex — a focusable `<button>` inside a treeitem breaks the pattern.
+- Don't: no checkbox tree in v1; no inline row verbs (that is a B20 Menu on a record page); no lazy-load spinner inside a row; never deeper than the data genuinely is.
+
+### B41 · `Timeline` (v0.4.0)
+
+The ordered history of ONE record, with the gaps visible. An `<ol>` on a 1px `--sv-line` rail, clipped at the first and last markers so the line never dangles past the sequence, with a 7px dot on it ringed in paper by an `inset` shadow: `done` in seed, `pending` in paper behind a 1.5px `--sv-field-line-strong` ring, `bad` in `--sv-bad`. Content is a mono absolute timestamp in a real `<time dateTime>`, a 13/600 title, an optional one-sentence body, and an optional mono actor. An item's `group` renders a mono uppercase day divider above it. One job: state one record's life in order.
+- The B9 boundary: `ActivityList` is a live, flat feed answering "what needs me", newest first, across many records. A Timeline is one record, and it shows what has NOT happened yet as well as what has — that is why it has a `pending` tone and a feed does not.
+- A11y: the tone is ALSO stated in visually-hidden words ("Completed", "Not started", "Failed") — a coloured dot is colour-only meaning (C5). Timestamps absolute in mono (C9). Day dividers are `role="presentation"` siblings, so they stay out of the `<ol>` count.
+- Don't: never relative time ("3 minutes ago") as the only form; never two sentences of body (that is a record page); never an interactive row — a step that opens something is a link in its body.
+
+### B42 · `Popover` (v0.4.0)
+
+The non-modal panel that holds a FEW CONTROLS beside the control that asked for it: a column chooser, a saved-view picker, a short explanation with a link. It earns its place only at the boundaries of four neighbours — **B18 `Tooltip`** is a phrase with no interactive content, on hover or focus; **B20 `Menu`** is a list of verbs with `role="menu"` and its own keyboard model; **B21 `Drawer`** is a workspace beside the work; **B13 `Dialog`** interrupts for one decision, modally. Built on the native `popover` attribute: top layer, light dismiss, Esc, and NO z-index. Paper, hairline, one shadow, `min-width` 220 / `max-width` 320 — wider is a Drawer. One job: park a few controls next to their trigger.
+- It OWNS its trigger, exactly as `MenuButton` does, so `aria-expanded` and `aria-controls` cannot drift from what is on screen. Labelling is enforced by the type system: `title` and `ariaLabel` are a mutually exclusive union, so an unlabelled panel does not compile.
+- Focus is never trapped: opening moves focus into the panel, and tabbing past the last control CLOSES it and carries on into the page — a panel left standing behind the focus ring is one nobody can see they have left. Focus returns to the trigger only when the panel still held it.
+- **B20 Menu now stands on this component.** `usePopoverAnchor` — which places a top-layer panel under its trigger, since the top layer does not anchor itself until CSS anchor positioning is baseline — lives here and Menu imports it. It is deliberately not re-exported from the barrel: it is those two components' implementation, not public API.
+- Don't: never the only path to an action (C4); never navigation (that is the Band); never nested inside another popover; never an error surface (that is B22 Banner, inline at its cause).
+
+### B43 · `CodeBlock` (v0.4.0)
+
+Code or a command, printed exactly as it must be typed. `--sv-wall` inside a 1px `--sv-line` border — the one place in the system a bordered inset panel is right, because the code is a quotation and not a card. An optional mono head naming the file or language, a copy control, and `<pre><code>` in Fragment Mono 12/1.6 with `overflow-x: auto` (never `hidden` — the firewall rejects it and C7 forbids silent truncation). `numbered` puts the gutter OUTSIDE the `<code>`, `aria-hidden` and unselectable, sticky so the numbers hold while the code scrolls under them. One job: print code exactly.
+- **No syntax highlighting, ever.** Highlighting is six to nine colours on one surface; Ship Gate point 2 counts the colours on a screen and Law 2 allows neutrals plus one seed. A reader who needs colour to parse a snippet has been handed a snippet that is too long. A product that overrides this owns the gate consequence and declares it in its own overrides, exactly as B26 permits for provider brand marks.
+- The copy control reads "Copy", becomes "Copied" for two seconds at a locked minimum width (B10: buttons never resize on state change), announces through a visually-hidden polite region rather than through the label alone, and is NOT RENDERED when `navigator.clipboard` is absent — a control that cannot work is not shown.
+- A11y: `role="region"` and `tabIndex={0}` are applied only when the block actually scrolls, measured at runtime. A keyboard user must be able to scroll it; an unnecessary tab stop on a block that does not scroll is its own defect.
+- Don't: no highlighting; no inline `<code>` use (that is running copy, and B45 `Prose`); no code as an image; no tab row of filenames (that is B38 Tabs holding several CodeBlocks).
+
+### B44 · `DistributionStrip` (v0.4.0)
+
+**The donut, answered.** A2 has banned donut, pie, radial and gauge charts since v0.1.0 and pointed at B6 `MeterList` as the replacement — but that was a different question. **B6 measures each part against ITS OWN maximum** (utilization: "Zone A is 92% full"). **B44 divides ONE total into its shares** ("46% of 128,953 clicks were mobile"). Every donut a team has ever drawn was asking B44's question and being handed B6's answer.
+
+Anatomy: a B4-voiced value line — mono uppercase label left, the formatted total right at 19/700 tabular — then one 10px strip at radius 2, its segments laid in the given order and separated by a 2px `--sv-paper` seam, which is STRUCTURAL precisely because a gradient is banned (A1) and the parts must read as parts. Tones run `--sv-seed` → `--sv-compare` → `--sv-ink-faint` → `--sv-field-line-strong`, which is the last step still visibly a FILL — the hairline stays a rule, because a part of the total nobody can see is a part that was not stated (WCAG 1.4.11). A fifth part reuses the fourth tone. Then a legend, one row per part: an 8px swatch, the label, and — REQUIRED, inherited whole from B6 — the absolute figure beside the share. **A percentage alone is a defect.** One job: state how one total divides.
+- A11y: the strip is `role="img"` carrying the takeaway. The legend is THE DATA: it repeats every figure as text, so nothing is carried by colour or width alone (C5). Delete the strip and the card still answers the question — that is the test it must pass.
+- `total` is the denominator when the parts are a subset; the unclaimed remainder stays wall, and the `ariaLabel` says so in words rather than leaving a gap to be inferred from a width.
+- Don't: more than five rows is a B7 DataTable; a stack of strips comparing periods is B5 `kind="stacked"`; a strip whose parts do not sum to the stated total without saying so; and it is never bent into a ring.
+
+### B46 · `Split` (v0.4.0)
+
+The band-less page, cut in half, with the card ACROSS THE CUT. Two flat surfaces meet on one seam — ink and wall, side by side or stacked — and the Plate sits centred on that seam, so half the card is on ink and half is on wall. There is no panel, no hero, no second column, and nothing to read on either half. One job: carry a single decision on the line between two surfaces.
+
+**This is B2's overlap, finished.** The Sheet spends that move once per page by pulling its first row 44px over the band edge, so the stat cards on every 76° dashboard straddle the boundary between the ink band and the platinum wall. A Plate has no Sheet and no band, so the same physics arrive as a page type: not a card that peeks over an edge, a card that STRADDLES one. It is the only 76° layout in which paper crosses a surface boundary rather than resting on one.
+
+**The halves carry nothing.** No statement, no widget, no screenshot, no illustration, no photograph. They hold no text, so they are `aria-hidden` and the page reads to a screen reader as exactly the Plate it composes — the cut is a visual fact, not information. A1 refuses gradients, so it is two real elements rather than a colour stop; that is also why it lands on a hard pixel instead of a soft blend, which is what gives the card an edge to straddle.
+
+**B24 is composed verbatim, with one consequence: everything the Plate puts on the wall moves INTO the card.** Centred above and below a seam-straddling card, the wordmark and the footer would each land half on ink and half on paper — ink type on ink, which reads as a rendering fault rather than a design. Both become hairline-ruled rows of the card, left-aligned like every other line in it, and the Plate's own slots are emptied (`wordmark={null}`, footer intercepted). Nothing else changes: same anatomy, same one h1, same one primary, same 400px measure.
+
+- **Two orientations, one prop.** `side` cuts left/right, card on the vertical seam. `stacked` cuts top/bottom, card on the horizontal one. Below 1000px `side` becomes `stacked` on its own, because a vertical seam behind a card grown to full width is a seam nobody can see. The card stays centred at every width, so it never stops straddling — nothing is hidden and nothing scrolls (C7).
+- **No skip link, and that is deliberate.** B24 waives C4's skip link because a Plate has nothing to skip; a Split has nothing either, since the halves are empty. The first tab stop is the first control in the card.
+- **No new z-index.** The halves and the Plate share one grid cell, so the card floats over the seam by DOM order rather than by stacking context.
+- Don't: no text on either half (a statement there is a landing page, and F11 refuses the imagery it grows into next); no widget, screenshot or illustration (A2, F11); no gradient between the surfaces (A1 — and a soft blend leaves no edge to straddle); no second card and no second decision (B24); no Split for 404, 500, maintenance or an expired link, where a plain Plate is the whole answer; no wordmark or footer left on the wall for the seam to cut through.
+
+### B19 · `Combobox` — v0.4.0 amendment
+
+**Multi-select is specified, and the refusal it replaces was aimed at the wrong thing.** "Never multi-select" refused the implementation every library ships — a growing wall of dismissible pills that reflows the form on every pick — not the job. Pass `multiple` and `value` becomes a `string[]`: Enter and click TOGGLE the active option and LEAVE THE LIST OPEN, the query survives the toggle so three matches of one search are taken without retyping it, and Backspace on an empty query drops the value taken last. The two modes are a discriminated union, so they cannot be mixed and every single-select call site is untouched.
+
+The selection is **STATED, never worn**: one mono line of running text under the field in the B7 `FilterLine` voice — a tabular count, at most three named values, `+N more`, and one "Clear". A2 bans pills, B23 keeps Badge category-only and non-dismissible, and that line is the component's only live region. Free text is still refused: a Combobox may never mint an option its caller did not supply. The job becomes "pick one value — or a set of them — from a list too long to scan."
+
+### B7 · `DataTable` — v0.4.0 amendment · `FilterBar`
+
+The third of three, and the division is now complete and binding: **`CardTabs` (B8) switches between mutually exclusive presets · `FilterBar` SETS the filters · `FilterLine` STATES what is set.** A card may carry all three, in that order, and each does exactly one of the three jobs.
+
+`FilterBar` is a layout with slots, not a filter engine: a hairline-bottomed row under the CardHead holding a `SearchField` and at most three Selects or Comboboxes on the left, an `actions` slot and a "Clear all" pushed right, appearing only when something is actually set. It wraps when it runs out of room and never scrolls. `role="group"` with an `aria-label`, deliberately NOT `role="search"` — this filters a set in place, it does not search a site. It holds **no live region**: the announcement is `FilterLine`'s job, and two live regions for one change is a defect.
+- Don't: never put the same dimension in both a FilterBar control and a CardTab — the reader cannot tell which one won.
+
+### B5 · `Trend` — v0.4.0 amendment · the stated column
+
+**`yTicks`** takes up to four PRE-FORMATTED labels, bottom to top, pinned to the four gridlines the plot already draws at 25/50/75/100 percent. The chart never formats a number (C9), and the column is `aria-hidden` because the required `ariaLabel` already carries the takeaway.
+
+**`highlight`** names the ONE column the chart is ABOUT. It is a PRINTED STATEMENT, never a hover tooltip — C8 forbids hover-dependent information, so the chip is always visible. The other columns recede to `--sv-compare`, the chip is drawn in HTML rather than SVG because the plot is `preserveAspectRatio="none"` and would stretch any `<text>`, and the matching x label goes ink at 700. A chart that only tells the truth under a pointer has failed C8, and `highlight` is not a substitute for interaction.
+
+(`.sv-trend__x` moved from `space-between` to a real column grid in the same change, fixing a latent misalignment: every x label between the first and the last used to drift off its bar.)
+
 ### B3 · `StatS1` — v0.4.0 amendment
 
 The delta chip is extracted as **`Delta`** — `▲`/`▼` + tabular figure, 12/700, `--sv-ok`/`--sv-bad` — so a table cell, a DescriptionList row or a Trend head states a change in exactly the S1 voice, from one implementation. `polarity` handles inverse metrics honestly: `down-good` colours a fall as ok, and the previous guidance to flip the sign is WITHDRAWN — a card that prints ▲ for a figure that fell is lying. Direction stays non-colour-carried: the arrow glyph plus a visually-hidden "up"/"down" is the cue (C5). `StatS1` takes `deltaPolarity` and passes it through. The A2 ban stands: a stat that needs a sparkline is a Trend.
@@ -298,6 +404,8 @@ The toast grows into the full notification: 16px tone icon + 13/700 title + opti
 ### The dark surface — v0.2.0 amendment
 
 Light-first stands: light is the default, dark is opt-in via `<html data-mode="dark">`. Dark changes ONLY tokens — the same paper-on-a-wall physics, inverted: the band stays the darkest thing on screen, the wall recedes, cards stay the lightest surface in view. Functional and seed-as-text steps are re-verified AA on dark paper; per-seed dark text variants live in tokens.css and nowhere else. No component may branch on the mode.
+
+**A seed declared on a wrapper is still a seed — v0.4.0 amendment.** A product screen declares its seed on its own element (`<div data-seed="cobalt">`), not on `<html>`. A custom property resolves at the NEAREST declaration, so that wrapper's light-mode literals shadow every dark step below it: the whole screen paints seed-as-text at 2.90:1 and a white tint on dark paper. `tokens.css` therefore matches each seed in the DESCENDANT position as well as the same-element one, and derives the dark tint there too. A seeded region inside a dark document is exactly as AA-verified as a seeded document — and the fix lives in the tokens, where every dark-mode fix lives.
 
 **Surfaces invert; marks do not — v0.2.1 amendment.** `--sv-paper` means the card surface and nothing else, so it inverts. The band and the seed do NOT invert, so the mark that sits on them must not either: band text, the on-band focus ring, the primary button label, and the checkbox/radio mark all paint with `--sv-on-dark`, white in both modes. `--sv-bad` is the exception that proves the rule — it brightens on dark, so the mark on its one legal fill uses `--sv-on-bad`, which flips with it. Painting a mark with `--sv-paper` is a firewall defect (rule 16).
 
@@ -347,7 +455,7 @@ Light-first stands: light is the default, dark is opt-in via `<html data-mode="d
 
 1. Grep Part A1 patterns — zero hits.
 2. Count colors on the screen: neutrals + one seed + at most both functional colors as words/dots. Anything else fails.
-3. Every widget is a registered type (S1, Progress, Trend, MeterList, DataTable, CardTabs, ActivityList — from v0.2.0: Combobox, Menu, Drawer, Banner, Badge — from v0.3.0: Plate, PinField, SocialButton — from v0.4.0: Accordion, DescriptionList, Divider, Avatar, Spinner/Busy, Kbd, NumberField, Slider, DateRangeField) — if a new type was needed, it is named, single-jobbed, and added to Part B in the same change. If Part F refuses it, it is a screen, not a component.
+3. Every widget is a registered type (S1, Progress, Trend, MeterList, DataTable, CardTabs, ActivityList — from v0.2.0: Combobox, Menu, Drawer, Banner, Badge — from v0.3.0: Plate, PinField, SocialButton — from v0.4.0: Accordion, DescriptionList, Divider, Avatar, Spinner/Busy, Kbd, NumberField, Slider, DateRangeField, SearchField, FileField, Tabs, Stepper, TreeList, Timeline, Popover, CodeBlock, DistributionStrip, Split) — if a new type was needed, it is named, single-jobbed, and added to Part B in the same change. If Part F refuses it, it is a screen, not a component.
 4. Every S1 footnote passes the "so what" test (new information, not paraphrase).
 5. Tab through the screen: visible focus everywhere, order sane, skip-link present (a Plate is the one exception, B24), ⌘K opens.
 6. Squint test: the page reads as ink band + white paper on a platinum wall — a Plate (B24) reads as one card and a wordmark on the wall; nothing glows, nothing floats, nothing performs.

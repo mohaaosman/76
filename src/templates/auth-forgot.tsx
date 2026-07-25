@@ -1,7 +1,10 @@
-// 76° template · Forgot password — B24 Plate, band-less, seed cobalt (default root).
+// 76° template · Forgot password — B46 Split, seed cobalt (default root).
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { Field, Button, ButtonLink, Banner, Plate, PlateHead } from '@/components/seventy-six';
+import { Field, Button, ButtonLink, Banner, Split, PlateHead } from '@/components/seventy-six';
+
+/* A recovery screen gets no pitch and no widgets. The panel states the one
+   fact a worried reader wants: what a reset does to the account. */
 // v0.3 component; the barrel does not export it yet.
 
 const stack = { display: 'grid', gap: 'var(--sv-s4)' } as const;
@@ -53,7 +56,7 @@ export function AuthForgot() {
   }
 
   return (
-    <Plate
+    <Split
       footer={
         <>
           Still stuck? <a href="#support" style={link}>Contact support</a>
@@ -121,6 +124,6 @@ export function AuthForgot() {
           </div>
         </>
       )}
-    </Plate>
+    </Split>
   );
 }

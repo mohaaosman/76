@@ -1,0 +1,79 @@
+/* B43 · CodeBlock — a quotation of code on the wall: mono, ink, no highlighting. */
+
+@layer sv-components {
+  .sv-code {
+    /* 12px x 1.6 — the gutter must share the code's line box or the
+       numbers drift away from their lines. */
+    --sv-code-line: 19.2px;
+    background: var(--sv-wall);
+    border: 1px solid var(--sv-line);
+    border-radius: var(--sv-r);
+  }
+
+  .sv-code__head {
+    display: flex;
+    align-items: center;
+    gap: var(--sv-s3);
+    padding: var(--sv-s2) var(--sv-s3);
+    border-bottom: 1px solid var(--sv-line);
+  }
+
+  .sv-code__label {
+    font-size: 11px;
+    color: var(--sv-ink-soft);
+  }
+
+  /* B10: a button never resizes on state change, so "Copy" and "Copied"
+     share one width. */
+  .sv-code__copy {
+    min-width: 46px;
+    margin-left: auto;
+    text-align: right;
+  }
+
+  .sv-code__pre {
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    /* auto, never hidden: C7 forbids silently truncating a command. */
+    overflow-x: auto;
+    font-family: var(--sv-font-mono);
+    font-size: 12px;
+    line-height: var(--sv-code-line);
+    color: var(--sv-ink);
+    tab-size: 2;
+  }
+
+  .sv-code__pre:focus-visible {
+    outline: 2px solid var(--sv-seed-line);
+    outline-offset: 2px;
+  }
+
+  .sv-code__code {
+    flex: 1 0 auto;
+    padding: 14px;
+    font: inherit;
+    white-space: pre;
+  }
+
+  /* Sticky so the numbers stay put while the code scrolls under them. */
+  .sv-code__gutter {
+    position: sticky;
+    left: 0;
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    padding: 14px var(--sv-s2);
+    border-right: 1px solid var(--sv-line);
+    background: var(--sv-wall);
+    font-size: 10px;
+    color: var(--sv-ink-faint);
+    text-align: right;
+    user-select: none;
+  }
+
+  .sv-code__num {
+    display: block;
+    line-height: var(--sv-code-line);
+  }
+}

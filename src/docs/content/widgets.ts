@@ -201,6 +201,7 @@ export const widgets: DocEntry[] = [
       'Hand-rolled SVG, no chart library: 2.25px round-joined lines, horizontal hairlines only, a 4px terminal dot on the live series, and the color convention that removes most legends — <b>seed is this period, line-gray is last period</b>. Bars are flat seed with faint-ink secondaries and 2px top radius.',
       'Trend cards live on report pages, not overviews (overviews use S1 stats). Maximum three series; a chart needing more is a table wearing a costume.',
       '<b>v0.4.0</b> adds two things. <code>kind="stacked"</code> sums the series per column and scales the plot to the total — legal only when the segments are parts of ONE total, never unrelated measures sharing an axis. <b>Sparkline</b> is the same shape at cell size: no axes, no grid, no labels, and legal only BESIDE a printed figure, because a line with no scale states nothing on its own.',
+      'The <b>v0.4.0 remainder amendment</b> adds the two things a printed chart was still missing. <code>yTicks</code> takes up to four PRE-FORMATTED labels, given bottom-to-top, pinned to the four gridlines the chart already draws at 25, 50, 75 and 100 percent of the plot — the component never formats a number (C9), and the column is <code>aria-hidden</code> because the required <code>ariaLabel</code> already carries the takeaway. <code>highlight</code> names the one column the chart is ABOUT, and it is a <b>printed statement, never a hover tooltip</b>: C8 forbids hover-dependent information, so the chip is always visible. The other columns recede to <code>--sv-compare</code>, the chip is drawn in HTML rather than SVG because the plot is <code>preserveAspectRatio="none"</code> and would stretch any <code>&lt;text&gt;</code> inside it, and the matching x label goes ink at 700.',
       'The <code>ariaLabel</code> prop is required and must state the takeaway, because a chart\'s role="img" summary is the accessible content. For decision-critical data, pair the chart with a "View data" affordance or a visually-hidden table.',
     ],
     examples: [
@@ -251,6 +252,21 @@ export const widgets: DocEntry[] = [
   height={140}
 />`,
       },
+      {
+        title: 'The bar the chart is about',
+        description: 'Thursday is the point, so Thursday is stated: the chip is printed above the peak, the other six bars recede to compare, and the THU label goes ink at 700. Nothing here waits for a pointer. The yTicks are formatted upstream and land on the gridlines the plot already draws.',
+        demoKey: 'trend-highlight',
+        surface: 'paper',
+        code: `<Trend
+  kind="bar"
+  ariaLabel="Orders per weekday peak on Thursday at 312, a quarter above the weekday average"
+  series={[{ label: 'Orders', data: [180, 224, 251, 312, 296, 142, 98], tone: 'seed' }]}
+  xLabels={['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']}
+  yTicks={['90', '180', '270', '360']}
+  highlight={{ index: 3, label: 'THU · 312' }}
+  height={140}
+/>`,
+      },
     ],
     props: [
       {
@@ -262,6 +278,8 @@ export const widgets: DocEntry[] = [
           { name: 'xLabels', type: 'string[]', description: 'Mono labels spread under the plot.' },
           { name: 'height', type: 'number', defaultValue: '160', description: 'Plot height in viewBox units.' },
           { name: 'legend', type: 'boolean', defaultValue: 'false', description: 'Show 14×2px swatch legend when the seed/gray convention is not enough.' },
+          { name: 'yTicks', type: 'string[]', description: 'Up to four PRE-FORMATTED labels, bottom-to-top, pinned to the 25/50/75/100% gridlines. The chart never formats a number (C9); the column is aria-hidden.' },
+          { name: 'highlight', type: '{ index: number; label: string }', description: 'The one column the chart is about. Prints a chip above it, recedes the rest to compare, and takes its x label to ink/700. Never a hover state (C8).' },
         ],
       },
       {
@@ -278,6 +296,7 @@ export const widgets: DocEntry[] = [
       notes: [
         'The SVG is <code>role="img"</code> with the takeaway as its label — screen-reader users get the conclusion, not a coordinate dump.',
         'Series are never referenced by color alone in copy (C5): label them directly or via the legend.',
+        'The y-tick column is <code>aria-hidden</code>, and so is the highlight chip: both are ordinary HTML text in the flow rather than stretched SVG, but the required <code>ariaLabel</code> already states the takeaway and two readings of one fact is a defect.',
       ],
     },
     donts: [
@@ -288,11 +307,13 @@ export const widgets: DocEntry[] = [
       'No more than three series.',
       'No stacked bars for measures that do not sum to a real total.',
       'No Sparkline standing alone — it sits beside the figure that carries the value.',
+      'No <code>highlight</code> standing in for interaction — a chart that only tells the truth on hover has failed C8.',
     ],
     faq: [
       { q: 'Which colors do series use?', a: 'tone: "seed" (current), "compare" (line-gray #D6DAE0, the one aliased non-token color), or "faint" for secondary bars. There is no palette to pick from — the convention is the palette.' },
       { q: 'Why no chart library?', a: 'A flat line on hairlines is ~60 lines of SVG. A library would add a dependency, its own theme system to fight, and animation defaults that violate the firewall.' },
       { q: 'How do users get exact values?', a: 'Pair the card with a "View data" text-link action in the CardHead that opens the underlying table — decision-critical numbers always exist as text somewhere.' },
+      { q: 'Did the x labels move in v0.4.0?', a: 'Yes, and it was a fix. <code>.sv-trend__x</code> went from <code>space-between</code> to a real column grid of <code>xLabels.length</code> equal columns, matching the columns the bars are centred in. Under space-between only the first and last label ever sat on their bar; every label between them drifted, and the more labels a chart had the further off they were.' },
     ],
   },
 
@@ -370,6 +391,92 @@ export const widgets: DocEntry[] = [
     ],
   },
 
+  /* =============================================================== B44 */
+  {
+    slug: 'distribution-strip',
+    name: 'DistributionStrip',
+    book: 'B44',
+    category: 'widgets',
+    tagline: 'One total divided into its shares: a 10px strip with structural seams and a legend that prints every figure.',
+    job: 'Answer "what share is each part."',
+    tags: ['distribution', 'share', 'part-to-whole', 'composition', 'donut-replacement', 'legend', 'strip'],
+    exports: ['DistributionStrip'],
+    files: ['components/seventy-six/distribution-strip.tsx', 'components/seventy-six/distribution-strip.css'],
+    intro: [
+      'A2 bans donut, pie, radial and gauge charts. Until now the Book answered "use B6 MeterList", but that is a different question. <b>B6 measures each part against ITS OWN maximum</b> — utilization, "Zone A is 92% full". <b>B44 divides ONE total into its shares</b> — "46% of 128,953 sessions were mobile". Every donut a team has ever drawn was asking B44\'s question and being handed B6\'s answer.',
+      'The anatomy is fixed: a B4-voiced value line (mono label left, the 19/700 tabular total right), one 10px strip, and a legend beneath it. Segments are parted by a 2px <code>--sv-paper</code> seam, and that seam is structure rather than decoration — a gradient is banned (A1), so the seam is the only thing making the parts read as parts instead of one continuous smear. Four tones run in fixed order — seed, compare, ink-faint, and <code>--sv-field-line-strong</code>, which is the last step that is still visibly a fill; the hairline stays a rule, because a part of the total nobody can see is a part that was not stated. A fifth part reuses the fourth tone, which is the component saying the list should have ended at "Other".',
+      'The legend is <b>the data</b>. It repeats every figure as text, which is why the strip itself is <code>role="img"</code> illustration and nothing is carried by colour or width alone (C5). B6\'s rule is inherited whole: <b>an absolute figure sits beside every percentage, because a percentage alone is a defect</b>. "46%" states nothing until "59,318 · 46%" says how many.',
+      '<code>total</code> defaults to the sum of the parts. Pass it when the parts are a subset of something larger — the top three queues out of all of them — and the wall shows through for the remainder. A strip whose parts do not reach its stated total is legal only when the label and the <code>ariaLabel</code> say so.',
+    ],
+    examples: [
+      {
+        title: 'Device share of one session total',
+        description: 'The four parts sum to the total, so no total is passed. Each legend row prints the count and the share — the strip could be deleted and the card would still answer the question.',
+        demoKey: 'dist-basic',
+        surface: 'paper',
+        code: `import { DistributionStrip } from '@/components/seventy-six';
+
+<DistributionStrip
+  label="DEVICES ACCESSED · JULY"
+  ariaLabel="128,953 sessions: mobile 46%, desktop 31%, tablet 15%, other 8%"
+  parts={[
+    { label: 'Mobile', value: 59318 },
+    { label: 'Desktop', value: 39975 },
+    { label: 'Tablet', value: 19343 },
+    { label: 'Other', value: 10317 },
+  ]}
+/>`,
+      },
+      {
+        title: 'Parts that are a subset of the total',
+        description: 'The three named queues hold 3,180 of 4,720 tickets. <code>total</code> becomes the denominator, the unclaimed third stays wall, and the ariaLabel states the shortfall in words rather than leaving the gap to be inferred from a width.',
+        demoKey: 'dist-partial',
+        surface: 'paper',
+        code: `<DistributionStrip
+  label="OPEN TICKETS · TOP THREE QUEUES"
+  ariaLabel="Three queues hold 3,180 of 4,720 open tickets: billing 33%, shipping 21%, returns 13%; the remaining 1,540 are spread across nine smaller queues"
+  total={4720}
+  parts={[
+    { label: 'Billing', value: 1540 },
+    { label: 'Shipping', value: 1010 },
+    { label: 'Returns', value: 630 },
+  ]}
+/>`,
+      },
+    ],
+    props: [
+      {
+        component: 'DistributionStrip',
+        rows: [
+          { name: 'ariaLabel', type: 'string', description: 'REQUIRED. The whole division stated in words, total included.' },
+          { name: 'label', type: 'string', description: 'Mono uppercase name for the total, e.g. "DEVICES ACCESSED".' },
+          { name: 'parts', type: 'DistributionPart[]', description: '{ label, value } — five at most; the fifth reuses the fourth tone.' },
+          { name: 'total', type: 'number', defaultValue: 'sum of parts', description: 'The denominator. Pass it when the parts are a subset; the remainder shows as wall.' },
+          { name: 'format', type: '(value: number) => string', defaultValue: 'grouped integer', description: 'Formats the total and every absolute figure. Resolved per call, never at module scope.' },
+        ],
+      },
+    ],
+    a11y: {
+      notes: [
+        'The strip is <code>role="img"</code> with the takeaway as its label — one reading of the division, not four segment announcements.',
+        'The legend is an ordinary list under it, so every name and figure is read as text whether or not the illustration is. Swatches are <code>aria-hidden</code>: colour never carries a part (C5).',
+        '<code>tabular-nums</code> on the total and on every legend figure, per A4.',
+      ],
+    },
+    donts: [
+      'No sixth part — five rows is the ceiling, and beyond it the answer is a B7 DataTable.',
+      'No stack of strips comparing periods; parts of one total over time are B5 <code>kind="stacked"</code>.',
+      'No strip whose parts do not sum to the stated total without saying so in the label and the ariaLabel.',
+      'No hand-picked colour per part — the four tones run in order (Law 2).',
+      'No bending it into a ring. That is the chart this component exists to replace.',
+    ],
+    faq: [
+      { q: 'Why not just a donut, everyone reads them?', a: 'They do not. Angle is the least accurately judged visual channel there is, so two slices of similar size are guesswork and the reader falls back on the printed labels — at which point the ring is decoration wrapped around a legend. A 10px strip plus the printed figures is both smaller and exact.' },
+      { q: 'What about a single percentage?', a: 'That is B4 Progress — one value against one target. A strip with one segment is a bar with extra steps.' },
+      { q: 'MeterList or DistributionStrip?', a: 'Does each item have its own ceiling? B6. Do the items divide one number between them? B44. "Zone A is 92% full" is B6; "mobile is 46% of sessions" is B44.' },
+    ],
+  },
+
   /* ================================================================ B7 */
   {
     slug: 'data-table',
@@ -379,13 +486,14 @@ export const widgets: DocEntry[] = [
     tagline: 'The ERP workhorse: mono headers, mono IDs, dot+word statuses, right-aligned tabular numbers, full keyboard contract.',
     job: 'Answer "what exactly happened."',
     tags: ['table', 'data-grid', 'keyboard-navigation', 'sorting', 'selection', 'bulk-actions', 'filters', 'pagination', 'erp'],
-    exports: ['DataTable', 'SelectionHead', 'FilterLine'],
+    exports: ['DataTable', 'SelectionHead', 'FilterLine', 'FilterBar'],
     files: ['components/seventy-six/data-table.tsx', 'components/seventy-six/data-table.css'],
     intro: [
       'Column headers are Fragment Mono 9.5 uppercase; cells are 13/500 with 10.5px vertical padding; IDs render in mono soft; numeric columns are right-aligned, tabular, 600. Rows hover in seed-tint; a selected row adds the system\'s only 2px left rule. The last row is unruled.',
       'Column <code>kind</code> does the type discipline for you: <code>id</code> gets mono, <code>num</code> gets right/tabular, <code>status</code> expects a StatusWord. Sorting is the caller\'s job — the table renders <code>aria-sort</code> and header buttons, your code reorders the rows.',
       'On narrow screens the table scrolls horizontally inside its card. It never reflows into stacked blobs, and the header row never disappears.',
       '<b>v0.4.0 closes the table\'s missing half</b> — what a selection DOES, and how filter state is shown. <b>SelectionHead</b> replaces the CardHead in place while rows are selected: mono count, the verbs, "Clear". No floating action bar and no new z-index, because the card\'s own header already owns that row. <b>FilterLine</b> states the active filters as one mono line of running text with a single "Clear all", and that line doubles as the <code>aria-live</code> announcement — no chips, no pills, because B23 Badge stays category-only and non-dismissible.',
+      '<b>FilterBar</b> closes the third side of that row, and the division of labour is exact: <b><code>CardTabs</code> switches between mutually exclusive presets · <code>FilterBar</code> sets the filters · <code>FilterLine</code> states what is set.</b> A card may carry all three, in that order, and each does one of the three jobs — a control that does two of them is the defect. FilterBar itself is a layout with slots, not a filter engine: it takes a SearchField and at most three Selects or Comboboxes in <code>controls</code>, anything that is not a filter in <code>actions</code>, and your code owns every value. It is <code>role="group"</code> with an <code>aria-label</code>, deliberately NOT <code>role="search"</code>, because this filters a set in place and does not search a site. It holds no live region either, because the announcement is FilterLine\'s job and two live regions for one change is a defect. It wraps when it runs out of room and never scrolls — a horizontally scrolling filter row hides the filters it is offering — and "Clear all" appears only when <code>active</code> says something is actually set.',
     ],
     examples: [
       {
@@ -472,6 +580,51 @@ const count = selected.size;
   onClearAll={clearFilters}
 />`,
       },
+      {
+        title: 'The whole stack: set, stated, applied',
+        description: 'FilterBar sets the filters, FilterLine states what is set and announces the change, the table shows the result. Three components, three jobs, one direction of travel.',
+        demoKey: 'filterbar-basic',
+        code: `import { FilterBar, FilterLine, DataTable, SearchField, Select, Popover } from '@/components/seventy-six';
+
+const active = query !== '' || status !== 'all';
+
+<Card>
+  <CardHead title="Orders" subtitle="July · warehouse A" />
+  <FilterBar
+    label="Filter orders"
+    active={active}
+    onClearAll={clearFilters}
+    controls={
+      <>
+        <SearchField
+          label="Search orders"
+          labelHidden
+          placeholder="Search orders"
+          value={query}
+          onValueChange={setQuery}
+        />
+        <Select label="Status" value={status} onChange={(e) => setStatus(e.target.value)}>
+          <option value="all">All</option>
+          <option value="pending">Pending</option>
+          <option value="hold">On hold</option>
+        </Select>
+      </>
+    }
+    actions={
+      <Popover label="Saved views" ariaLabel="Saved views" align="end">
+        <Radio name="view" label="Everything open" defaultChecked />
+        <Radio name="view" label="Awaiting my approval" />
+      </Popover>
+    }
+  />
+  <FilterLine
+    count={\`\${filtered.length} of 248\`}
+    filters={[{ label: 'Status', value: 'Pending' }, { label: 'Period', value: 'July' }]}
+    onClearAll={clearFilters}
+  />
+  <DataTable caption="Open orders" rows={filtered} rowKey={(o) => o.id} columns={columns} />
+</Card>`,
+      },
     ],
     props: [
       {
@@ -503,6 +656,16 @@ const count = selected.size;
           { name: 'count', type: 'string', description: 'Optional lead, e.g. "12 of 248". Rendered first, tabular.' },
         ],
       },
+      {
+        component: 'FilterBar',
+        rows: [
+          { name: 'controls', type: 'ReactNode', description: 'The filters themselves — a SearchField, then at most three Selects or Comboboxes.' },
+          { name: 'actions', type: 'ReactNode', description: 'Anything that is not a filter: a saved-view Popover, an export Button.' },
+          { name: 'active', type: 'boolean', defaultValue: 'false', description: 'Is anything actually set. "Clear all" exists only when it is true.' },
+          { name: 'onClearAll', type: '() => void', description: 'Backs that single "Clear all"; individual controls are cleared by their own empty value.' },
+          { name: 'label', type: 'string', defaultValue: "'Filters'", description: 'The group\'s aria-label. Name the set: "Filter orders".' },
+        ],
+      },
     ],
     a11y: {
       keyboard: [
@@ -526,6 +689,7 @@ const count = selected.size;
       'No relative timestamps in ERP contexts — absolute, in mono.',
       'No floating bulk-action bar — the selection head swaps the card head in place.',
       'No dismissible filter chips; filters state themselves in one line with one "Clear all".',
+      'No dimension in both a FilterBar control and a CardTab — the reader cannot tell which one won.',
     ],
     faq: [
       { q: 'How do I make a column sortable?', a: 'Set sortable, render your current order into sorted ("ascending" | "descending"), and reorder rows in onSort. The table is deliberately headless about sort logic.' },

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "code-block",
+  "type": "registry:ui",
+  "title": "CodeBlock",
+  "description": "Code as a quotation: monospace, ink, an inset panel on wall — and no syntax highlighting, ever. One job: Print code or a command exactly as it must be typed.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/button.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/code-block.tsx",
+      "content": "import { useEffect, useRef, useState } from 'react';\nimport { cx } from '@/lib/cx';\nimport './code-block.css';\n\n/**\n * B43 · CodeBlock — code or a command, printed exactly as it must be typed.\n * No syntax highlighting, ever. Highlighting is six to nine colours on one\n * surface; Ship Gate point 2 counts the colours on a screen and Law 2 allows\n * neutrals plus one seed, so a rainbow token theme fails the gate before it\n * renders. Code in 76° is monospace, ink, and correct — a reader who needs\n * colour to parse a snippet has been handed a snippet that is too long.\n * The block is a quotation, not a card: an inset panel on --sv-wall, the one\n * place paper carries a bordered inset.\n */\nexport interface CodeBlockProps {\n  code: string;\n  /** Filename or language, mono, in the head. */\n  label?: string;\n  numbered?: boolean;\n  copyable?: boolean;\n  ariaLabel?: string;\n  className?: string;\n}\n\nconst COPIED_MS = 2000;\n\nexport function CodeBlock({\n  code,\n  label,\n  numbered = false,\n  copyable = true,\n  ariaLabel,\n  className,\n}: CodeBlockProps) {\n  const preRef = useRef<HTMLPreElement>(null);\n  const timer = useRef<number>(0);\n  const [copied, setCopied] = useState(false);\n  const [scrollable, setScrollable] = useState(false);\n\n  /* A control that cannot work is not shown. */\n  const canCopy = copyable && typeof navigator !== 'undefined' && !!navigator.clipboard;\n  const name = ariaLabel ?? (label ? `Code, ${label}` : 'Code');\n  const lines = code.replace(/\\n$/, '').split('\\n');\n\n  /* Only a block that actually overflows becomes a focusable scroll region —\n     an unnecessary tab stop is as much a defect as an unreachable one. */\n  useEffect(() => {\n    const pre = preRef.current;\n    if (!pre) return;\n    const measure = () => setScrollable(pre.scrollWidth > pre.clientWidth);\n    measure();\n    const observer = new ResizeObserver(measure);\n    observer.observe(pre);\n    return () => observer.disconnect();\n  }, [code]);\n\n  useEffect(() => () => window.clearTimeout(timer.current), []);\n\n  function copy() {\n    navigator.clipboard\n      .writeText(code)\n      .then(() => {\n        setCopied(true);\n        window.clearTimeout(timer.current);\n        timer.current = window.setTimeout(() => setCopied(false), COPIED_MS);\n      })\n      /* A failed write must not claim success — the label stays \"Copy\". */\n      .catch(() => undefined);\n  }\n\n  return (\n    <div className={cx('sv-code', className)}>\n      {(label || canCopy) && (\n        <div className=\"sv-code__head\">\n          {label && <span className=\"sv-code__label sv-mono\">{label}</span>}\n          {canCopy && (\n            <button type=\"button\" className=\"sv-btn sv-btn--link sv-code__copy\" onClick={copy}>\n              {copied ? 'Copied' : 'Copy'}\n            </button>\n          )}\n        </div>\n      )}\n      <pre\n        ref={preRef}\n        className=\"sv-code__pre\"\n        aria-label={name}\n        role={scrollable ? 'region' : undefined}\n        tabIndex={scrollable ? 0 : undefined}\n      >\n        {numbered && (\n          /* Outside the <code> and unselectable, so a copy never picks up\n             the numbers along with the code. */\n          <span className=\"sv-code__gutter sv-mono sv-num\" aria-hidden=\"true\">\n            {lines.map((_, i) => (\n              <span key={i} className=\"sv-code__num\">\n                {i + 1}\n              </span>\n            ))}\n          </span>\n        )}\n        <code className=\"sv-code__code\">{code}</code>\n      </pre>\n      <span className=\"sv-visually-hidden\" aria-live=\"polite\">\n        {copied ? 'Copied to clipboard' : ''}\n      </span>\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/code-block.tsx"
+    },
+    {
+      "path": "registry/seventy-six/code-block.css",
+      "content": "/* B43 · CodeBlock — a quotation of code on the wall: mono, ink, no highlighting. */\n\n@layer sv-components {\n  .sv-code {\n    /* 12px x 1.6 — the gutter must share the code's line box or the\n       numbers drift away from their lines. */\n    --sv-code-line: 19.2px;\n    background: var(--sv-wall);\n    border: 1px solid var(--sv-line);\n    border-radius: var(--sv-r);\n  }\n\n  .sv-code__head {\n    display: flex;\n    align-items: center;\n    gap: var(--sv-s3);\n    padding: var(--sv-s2) var(--sv-s3);\n    border-bottom: 1px solid var(--sv-line);\n  }\n\n  .sv-code__label {\n    font-size: 11px;\n    color: var(--sv-ink-soft);\n  }\n\n  /* B10: a button never resizes on state change, so \"Copy\" and \"Copied\"\n     share one width. */\n  .sv-code__copy {\n    min-width: 46px;\n    margin-left: auto;\n    text-align: right;\n  }\n\n  .sv-code__pre {\n    display: flex;\n    align-items: flex-start;\n    margin: 0;\n    /* auto, never hidden: C7 forbids silently truncating a command. */\n    overflow-x: auto;\n    font-family: var(--sv-font-mono);\n    font-size: 12px;\n    line-height: var(--sv-code-line);\n    color: var(--sv-ink);\n    tab-size: 2;\n  }\n\n  .sv-code__pre:focus-visible {\n    outline: 2px solid var(--sv-seed-line);\n    outline-offset: 2px;\n  }\n\n  .sv-code__code {\n    flex: 1 0 auto;\n    padding: 14px;\n    font: inherit;\n    white-space: pre;\n  }\n\n  /* Sticky so the numbers stay put while the code scrolls under them. */\n  .sv-code__gutter {\n    position: sticky;\n    left: 0;\n    display: flex;\n    flex: none;\n    flex-direction: column;\n    padding: 14px var(--sv-s2);\n    border-right: 1px solid var(--sv-line);\n    background: var(--sv-wall);\n    font-size: 10px;\n    color: var(--sv-ink-faint);\n    text-align: right;\n    user-select: none;\n  }\n\n  .sv-code__num {\n    display: block;\n    line-height: var(--sv-code-line);\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/code-block.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/code-block.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B43",
+    "job": "Print code or a command exactly as it must be typed.",
+    "tags": [
+      "code-block",
+      "no-highlighting",
+      "copy-to-clipboard",
+      "monospace",
+      "line-numbers",
+      "scroll-region"
+    ],
+    "exports": [
+      "CodeBlock"
+    ]
+  }
+}

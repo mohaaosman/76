@@ -1,7 +1,10 @@
-// 76° template · Accept invitation — B24 Plate, band-less, seed cobalt (default root).
+// 76° template · Accept invitation — B46 Split, seed cobalt (default root).
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { Field, Button, ButtonLink, Banner, Plate, PlateHead } from '@/components/seventy-six';
+import { Field, Button, ButtonLink, Banner, Split, PlateHead } from '@/components/seventy-six';
+
+/* Type only. An invitation with no author is a phish, so the panel names
+   the room — the card names who invited whom, to what. */
 
 const INVITER = 'Maria Okonjo';
 const WORKSPACE = 'Acme Operations';
@@ -78,7 +81,7 @@ export function AuthInvite({ account = 'new' }: { account?: Account }) {
   }
 
   return (
-    <Plate>
+    <Split>
       <PlateHead
         title="Accept invitation"
         context={`Join ${WORKSPACE} and start where ${INVITER} left off.`}
@@ -141,6 +144,6 @@ export function AuthInvite({ account = 'new' }: { account?: Account }) {
           <ButtonLink href="#decline">Decline this invitation</ButtonLink>
         )}
       </div>
-    </Plate>
+    </Split>
   );
 }

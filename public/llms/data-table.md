@@ -3,7 +3,7 @@
 The ERP workhorse: mono headers, mono IDs, dot+word statuses, right-aligned tabular numbers, full keyboard contract.
 
 **One job:** Answer "what exactly happened."
-**Category:** widgets · **Exports:** DataTable, SelectionHead, FilterLine · **Tags:** table, data-grid, keyboard-navigation, sorting, selection, bulk-actions, filters, pagination, erp
+**Category:** widgets · **Exports:** DataTable, SelectionHead, FilterLine, FilterBar · **Tags:** table, data-grid, keyboard-navigation, sorting, selection, bulk-actions, filters, pagination, erp
 
 ## Installation
 
@@ -22,6 +22,8 @@ Column `kind` does the type discipline for you: `id` gets mono, `num` gets right
 On narrow screens the table scrolls horizontally inside its card. It never reflows into stacked blobs, and the header row never disappears.
 
 **v0.4.0 closes the table's missing half** — what a selection DOES, and how filter state is shown. **SelectionHead** replaces the CardHead in place while rows are selected: mono count, the verbs, "Clear". No floating action bar and no new z-index, because the card's own header already owns that row. **FilterLine** states the active filters as one mono line of running text with a single "Clear all", and that line doubles as the `aria-live` announcement — no chips, no pills, because B23 Badge stays category-only and non-dismissible.
+
+**FilterBar** closes the third side of that row, and the division of labour is exact: **`CardTabs` switches between mutually exclusive presets · `FilterBar` sets the filters · `FilterLine` states what is set.** A card may carry all three, in that order, and each does one of the three jobs — a control that does two of them is the defect. FilterBar itself is a layout with slots, not a filter engine: it takes a SearchField and at most three Selects or Comboboxes in `controls`, anything that is not a filter in `actions`, and your code owns every value. It is `role="group"` with an `aria-label`, deliberately NOT `role="search"`, because this filters a set in place and does not search a site. It holds no live region either, because the announcement is FilterLine's job and two live regions for one change is a defect. It wraps when it runs out of room and never scrolls — a horizontally scrolling filter row hides the filters it is offering — and "Clear all" appears only when `active` says something is actually set.
 
 ## Examples
 
@@ -115,6 +117,53 @@ Selecting rows swaps the head in place. Filters state themselves in one mono lin
 />
 ```
 
+### The whole stack: set, stated, applied
+
+FilterBar sets the filters, FilterLine states what is set and announces the change, the table shows the result. Three components, three jobs, one direction of travel.
+
+```tsx
+import { FilterBar, FilterLine, DataTable, SearchField, Select, Popover } from '@/components/seventy-six';
+
+const active = query !== '' || status !== 'all';
+
+<Card>
+  <CardHead title="Orders" subtitle="July · warehouse A" />
+  <FilterBar
+    label="Filter orders"
+    active={active}
+    onClearAll={clearFilters}
+    controls={
+      <>
+        <SearchField
+          label="Search orders"
+          labelHidden
+          placeholder="Search orders"
+          value={query}
+          onValueChange={setQuery}
+        />
+        <Select label="Status" value={status} onChange={(e) => setStatus(e.target.value)}>
+          <option value="all">All</option>
+          <option value="pending">Pending</option>
+          <option value="hold">On hold</option>
+        </Select>
+      </>
+    }
+    actions={
+      <Popover label="Saved views" ariaLabel="Saved views" align="end">
+        <Radio name="view" label="Everything open" defaultChecked />
+        <Radio name="view" label="Awaiting my approval" />
+      </Popover>
+    }
+  />
+  <FilterLine
+    count={`${filtered.length} of 248`}
+    filters={[{ label: 'Status', value: 'Pending' }, { label: 'Period', value: 'July' }]}
+    onClearAll={clearFilters}
+  />
+  <DataTable caption="Open orders" rows={filtered} rowKey={(o) => o.id} columns={columns} />
+</Card>
+```
+
 ## Props
 
 ### DataTable
@@ -146,6 +195,16 @@ Selecting rows swaps the head in place. Filters state themselves in one mono lin
 | `onClearAll` | `() => void` | — | The single clear affordance — filters are not individually dismissible. |
 | `count` | `string` | — | Optional lead, e.g. "12 of 248". Rendered first, tabular. |
 
+### FilterBar
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `controls` | `ReactNode` | — | The filters themselves — a SearchField, then at most three Selects or Comboboxes. |
+| `actions` | `ReactNode` | — | Anything that is not a filter: a saved-view Popover, an export Button. |
+| `active` | `boolean` | `false` | Is anything actually set. "Clear all" exists only when it is true. |
+| `onClearAll` | `() => void` | — | Backs that single "Clear all"; individual controls are cleared by their own empty value. |
+| `label` | `string` | `'Filters'` | The group's aria-label. Name the set: "Filter orders". |
+
 ## Accessibility
 
 | Keys | Action |
@@ -169,6 +228,7 @@ Selecting rows swaps the head in place. Filters state themselves in one mono lin
 - No relative timestamps in ERP contexts — absolute, in mono.
 - No floating bulk-action bar — the selection head swaps the card head in place.
 - No dismissible filter chips; filters state themselves in one line with one "Clear all".
+- No dimension in both a FilterBar control and a CardTab — the reader cannot tell which one won.
 
 ## FAQ
 

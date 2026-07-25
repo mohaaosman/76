@@ -1,0 +1,45 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "search-field",
+  "type": "registry:ui",
+  "title": "SearchField",
+  "description": "The in-place filter — native search, B11 chrome, one named clear, a live count. One job: Filter a set that is ALREADY on screen by typing.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/field.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/search-field.tsx",
+      "content": "import { forwardRef, useId, useRef } from 'react';\nimport type { ForwardedRef, InputHTMLAttributes, KeyboardEvent } from 'react';\nimport { cx } from '@/lib/cx';\nimport './search-field.css';\n\n/**\n * B36 · SearchField — one job: filter a set that is ALREADY on screen by\n * typing. It is NOT B16 SearchCommand (⌘K, a dialog, navigating the whole\n * app), and it is not a submit form — there is no button to press and no\n * page to wait for, the caller filters on every keystroke. The platform\n * choice is a native <input type=\"search\">, for the semantics, the mobile\n * keyboard and the Esc-to-clear muscle memory; the only native part removed\n * is WebKit's cancel button, which is unlabelled and unstyleable, replaced\n * by a named button that hands focus back where it found it.\n */\nexport interface SearchFieldProps\n  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'value' | 'onChange'> {\n  /** Names the set being filtered: \"Search orders\", not \"Search\". */\n  label: string;\n  value: string;\n  onValueChange: (value: string) => void;\n  /** States the scope. Never the label — it vanishes on the first keystroke. */\n  placeholder?: string;\n  /**\n   * REGISTERED EXCEPTION, not a convenience. Moves the visible label into\n   * sv-visually-hidden, and is legal ONLY where a surrounding CardHead or\n   * FilterBar already names the set on screen. The placeholder must then\n   * state the scope (\"Search orders\") — and it is still not the label.\n   */\n  labelHidden?: boolean;\n  hint?: string;\n  /** Mono count under the field, announced politely: \"12 OF 248 MATCH\". */\n  resultText?: string;\n  /** What is wrong AND how to fix it (B11). */\n  error?: string;\n}\n\nexport const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(function SearchField(\n  {\n    label,\n    value,\n    onValueChange,\n    placeholder = 'Search',\n    labelHidden,\n    hint,\n    resultText,\n    error,\n    disabled,\n    id: explicitId,\n    className,\n    ...rest\n  },\n  ref,\n) {\n  const auto = useId();\n  const id = explicitId ?? auto;\n  const hintId = `${id}-hint`;\n  const errorId = `${id}-error`;\n  const resultId = `${id}-result`;\n  /* The result line is announced by its own live region; naming it in\n     aria-describedby too would read the count twice on every focus. */\n  const describedBy = [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(' ') || undefined;\n\n  const inner = useRef<HTMLInputElement | null>(null);\n  const attach = (node: HTMLInputElement | null) => {\n    inner.current = node;\n    assignRef(ref, node);\n  };\n\n  const clear = () => {\n    onValueChange('');\n    inner.current?.focus();\n  };\n\n  function onKeyDown(e: KeyboardEvent<HTMLInputElement>) {\n    /* Esc clears the filter and stays put. preventDefault only when there is\n       something to clear, so an empty field still lets Esc reach an enclosing\n       dialog or popover. */\n    if (e.key === 'Escape' && value !== '') {\n      e.preventDefault();\n      onValueChange('');\n    }\n    rest.onKeyDown?.(e);\n  }\n\n  return (\n    <div className={cx('sv-field sv-search', className)}>\n      <label className={cx('sv-field__label', labelHidden && 'sv-visually-hidden')} htmlFor={id}>\n        {label}\n      </label>\n      {hint && (\n        <p className=\"sv-field__hint\" id={hintId}>\n          {hint}\n        </p>\n      )}\n      <div className=\"sv-search__wrap\">\n        <svg className=\"sv-search__icon\" viewBox=\"0 0 14 14\" width=\"14\" height=\"14\" aria-hidden=\"true\">\n          <circle cx=\"6\" cy=\"6\" r=\"4.25\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.5\" />\n          <path d=\"M9.3 9.3L12.6 12.6\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.5\" strokeLinecap=\"round\" />\n        </svg>\n        <input\n          {...rest}\n          ref={attach}\n          id={id}\n          type=\"search\"\n          className={cx('sv-field__input', 'sv-search__input', error && 'sv-field__input--error')}\n          value={value}\n          placeholder={placeholder}\n          disabled={disabled}\n          onChange={(e) => onValueChange(e.target.value)}\n          onKeyDown={onKeyDown}\n          aria-invalid={error ? true : undefined}\n          aria-describedby={describedBy}\n        />\n        {value !== '' && (\n          <button\n            type=\"button\"\n            className=\"sv-search__clear\"\n            aria-label={`Clear ${label}`}\n            disabled={disabled}\n            onClick={clear}\n          >\n            <svg viewBox=\"0 0 10 10\" width=\"10\" height=\"10\" aria-hidden=\"true\">\n              <path\n                d=\"M1.2 1.2L8.8 8.8M8.8 1.2L1.2 8.8\"\n                fill=\"none\"\n                stroke=\"currentColor\"\n                strokeWidth=\"1.6\"\n                strokeLinecap=\"round\"\n              />\n            </svg>\n          </button>\n        )}\n      </div>\n      {/* The live region exists even when empty — a region added at the same\n          moment as its first text is routinely missed by screen readers. */}\n      <p className=\"sv-search__result sv-mono sv-num\" id={resultId} aria-live=\"polite\">\n        {resultText}\n      </p>\n      {error && (\n        <p className=\"sv-field__error\" id={errorId}>\n          {error}\n        </p>\n      )}\n    </div>\n  );\n});\n\nfunction assignRef(ref: ForwardedRef<HTMLInputElement>, node: HTMLInputElement | null) {\n  if (typeof ref === 'function') ref(node);\n  else if (ref) ref.current = node;\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/search-field.tsx"
+    },
+    {
+      "path": "registry/seventy-six/search-field.css",
+      "content": "/* B36 · SearchField — B11 chrome plus a magnifier and one named clear. */\n\n@layer sv-components {\n  .sv-search__wrap {\n    position: relative;\n    display: flex;\n  }\n\n  .sv-search__input {\n    width: 100%;\n    /* Left clears the 14px magnifier; right is reserved permanently so the\n       text never shifts when the clear button appears on the first keystroke. */\n    padding-left: 32px;\n    padding-right: 30px;\n  }\n\n  /* WebKit's native cancel button is unlabelled, unstyleable and duplicates\n     ours — ours is a real button with a name (A4). */\n  .sv-search__input::-webkit-search-cancel-button {\n    appearance: none;\n  }\n\n  .sv-search__icon {\n    position: absolute;\n    left: 11px;\n    top: 50%;\n    transform: translateY(-50%);\n    color: var(--sv-ink-faint);\n    pointer-events: none;\n  }\n\n  .sv-search__clear {\n    position: absolute;\n    right: 6px;\n    top: 50%;\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 20px;\n    height: 20px;\n    padding: 0;\n    border: 0;\n    border-radius: var(--sv-r);\n    background: none;\n    color: var(--sv-ink-soft);\n    cursor: pointer;\n    transform: translateY(-50%);\n    transition: background-color var(--sv-t-fast), color var(--sv-t-fast);\n  }\n\n  .sv-search__clear:hover:not(:disabled) {\n    background: var(--sv-wall);\n    color: var(--sv-ink);\n  }\n\n  .sv-search__clear:disabled {\n    color: var(--sv-ink-faint);\n    cursor: not-allowed;\n  }\n\n  .sv-search__result {\n    color: var(--sv-ink-soft);\n  }\n\n  /* Collapsed, not removed: display:none would drop the live region out of\n     the accessibility tree and lose the first announcement. The negative\n     margin eats the .sv-field flex gap so an absent count leaves no hole. */\n  .sv-search__result:empty {\n    height: 0;\n    margin-top: calc(-1 * var(--sv-s1));\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/search-field.css"
+    }
+  ],
+  "categories": [
+    "forms"
+  ],
+  "docs": "https://76.zifala.com/llms/search-field.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B36",
+    "job": "Filter a set that is ALREADY on screen by typing.",
+    "tags": [
+      "search",
+      "filter",
+      "input",
+      "live region",
+      "clear",
+      "form"
+    ],
+    "exports": [
+      "SearchField"
+    ]
+  }
+}

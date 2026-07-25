@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import type { CSSProperties } from 'react';
 import { cx } from '@/lib/cx';
 import './trend.css';
 
@@ -27,10 +28,24 @@ export interface TrendProps {
   /** Show a small legend row (14×2px swatches). Omit when the seed/gray
       convention carries it. */
   legend?: boolean;
+  /** B5 amendment (v0.4.0) · up to four PRE-FORMATTED axis labels, given
+      bottom-to-top: yTicks[0] sits on the 25% gridline, yTicks[3] on the
+      100% one — the gridlines the chart already draws. The component never
+      formats a number (C9), and the column is aria-hidden because the
+      required ariaLabel already carries the takeaway. */
+  yTicks?: string[];
+  /** B5 amendment (v0.4.0) · the ONE column this chart is ABOUT. Printed,
+      never hovered (C8 forbids hover-dependent information): the other
+      columns recede to --sv-compare, a chip states the label above the
+      highlighted column, and its x label goes ink/700. */
+  highlight?: { index: number; label: string };
   className?: string;
 }
 
 const X_PAD = 4;
+
+/** The gridlines the plot already draws, bottom-to-top. */
+const GRID_YS = [0.25, 0.5, 0.75, 1];
 
 /** Stacked segments read bottom-up: the live part in seed, the rest receding. */
 const STACK_TONES = ['seed', 'compare', 'faint'] as const;
@@ -83,6 +98,8 @@ export function Trend({
   kind = 'line',
   height = 160,
   legend = false,
+  yTicks,
+  highlight,
   className,
 }: TrendProps) {
   const capped = series.slice(0, 3); // max 3 series (B5)
@@ -96,11 +113,33 @@ export function Trend({
         ? capped[0]?.data.map((_, i) => capped.reduce((sum, s) => sum + (s.data[i] ?? 0), 0)) ?? []
         : capped.flatMap((s) => s.data);
     const top = Math.max(1, ...tops);
-    return { max: top * 1.15, gridYs: [0.25, 0.5, 0.75, 1] };
+    return { max: top * 1.15, gridYs: GRID_YS };
   }, [capped, kind]);
 
   const toneClass = (tone: TrendSeries['tone'], i: number) =>
     tone ?? (i === 0 ? 'seed' : 'compare');
+
+  /* The chip is drawn in HTML, not SVG: the plot is preserveAspectRatio
+     ="none", so any <text> inside it would be stretched with the geometry.
+     Both percentages come from the same arithmetic the marks use. */
+  const chipAt = useMemo(() => {
+    if (!highlight) return null;
+    const i = highlight.index;
+    const n = capped[0]?.data.length ?? 0;
+    if (n === 0 || i < 0 || i >= n) return null;
+    if (kind === 'line') {
+      const v = capped[0]?.data[i];
+      if (v === undefined) return null;
+      const step = (width - X_PAD * 2) / Math.max(1, n - 1);
+      return { left: ((X_PAD + i * step) / width) * 100, bottom: (v / max) * 100 };
+    }
+    const group = (width - X_PAD * 2) / n;
+    const top =
+      kind === 'stacked'
+        ? capped.reduce((sum, s) => sum + (s.data[i] ?? 0), 0)
+        : Math.max(...capped.map((s) => s.data[i] ?? 0));
+    return { left: ((X_PAD + i * group + group / 2) / width) * 100, bottom: (top / max) * 100 };
+  }, [highlight, capped, kind, max, width]);
 
   function linePath(data: number[]) {
     const n = data.length;
@@ -112,7 +151,7 @@ export function Trend({
   }
 
   return (
-    <div className={cx('sv-trend', className)}>
+    <div className={cx('sv-trend', chipAt && 'sv-trend--chipped', className)}>
       {legend && (
         <div className="sv-trend__legend">
           {capped.map((s, i) => (
@@ -123,94 +162,133 @@ export function Trend({
           ))}
         </div>
       )}
-      <svg
-        className="sv-trend__plot"
-        viewBox={`0 0 ${width} ${height}`}
-        role="img"
-        aria-label={ariaLabel}
-        preserveAspectRatio="none"
-      >
-        {gridYs.map((g) => (
-          <line
-            key={g}
-            className="sv-trend__grid"
-            x1="0"
-            x2={width}
-            y1={height - g * height + 0.5}
-            y2={height - g * height + 0.5}
-          />
-        ))}
-        {kind === 'line' &&
-          capped.map((s, i) => {
-            const cls = toneClass(s.tone, i);
-            const last = s.data[s.data.length - 1];
-            const step = (width - X_PAD * 2) / Math.max(1, s.data.length - 1);
-            return (
-              <g key={s.label}>
-                <path className={cx('sv-trend__line', `sv-trend__stroke--${cls}`)} d={linePath(s.data)} />
-                {cls === 'seed' && s.data.length > 0 && (
-                  <circle
-                    className="sv-trend__dot"
-                    cx={X_PAD + (s.data.length - 1) * step}
-                    cy={height - (last / max) * height}
-                    r="4"
-                  />
-                )}
-              </g>
-            );
-          })}
-        {kind === 'bar' &&
-          capped.map((s, si) => {
-            const cls = toneClass(s.tone === 'compare' ? 'faint' : s.tone, si === 0 ? 0 : 2);
-            const n = s.data.length;
-            const group = (width - X_PAD * 2) / n;
-            const barW = Math.min(18, (group / capped.length) * 0.7);
-            return (
-              <g key={s.label}>
-                {s.data.map((v, i) => (
-                  <rect
-                    key={i}
-                    className={cx('sv-trend__bar', `sv-trend__fill--${cls}`)}
-                    x={X_PAD + i * group + group / 2 - (barW * capped.length) / 2 + si * barW}
-                    y={height - (v / max) * height}
-                    width={barW}
-                    height={(v / max) * height}
-                    rx="2"
-                  />
-                ))}
-              </g>
-            );
-          })}
-        {kind === 'stacked' &&
-          (capped[0]?.data ?? []).map((_, i) => {
-            const group = (width - X_PAD * 2) / (capped[0]?.data.length ?? 1);
-            const barW = Math.min(26, group * 0.62);
-            let base = height;
-            return (
-              <g key={i}>
-                {capped.map((s, si) => {
-                  const v = s.data[i] ?? 0;
-                  const h = (v / max) * height;
-                  base -= h;
-                  return (
-                    <rect
-                      key={s.label}
-                      className={cx('sv-trend__bar', `sv-trend__fill--${s.tone ?? STACK_TONES[si]}`)}
-                      x={X_PAD + i * group + (group - barW) / 2}
-                      y={base}
-                      width={barW}
-                      height={h}
-                    />
-                  );
-                })}
-              </g>
-            );
-          })}
-      </svg>
+      <div className="sv-trend__plotwrap">
+        {yTicks && yTicks.length > 0 && (
+          <div className="sv-trend__y sv-mono sv-num" aria-hidden="true">
+            {yTicks.slice(0, 4).map((tick, i) => (
+              <span key={tick} className="sv-trend__ytick" style={{ top: `${(1 - GRID_YS[i]) * 100}%` }}>
+                {tick}
+              </span>
+            ))}
+          </div>
+        )}
+        <div className="sv-trend__plotarea">
+          <svg
+            className="sv-trend__plot"
+            viewBox={`0 0 ${width} ${height}`}
+            role="img"
+            aria-label={ariaLabel}
+            preserveAspectRatio="none"
+          >
+            {gridYs.map((g) => (
+              <line
+                key={g}
+                className="sv-trend__grid"
+                x1="0"
+                x2={width}
+                y1={height - g * height + 0.5}
+                y2={height - g * height + 0.5}
+              />
+            ))}
+            {kind === 'line' &&
+              capped.map((s, i) => {
+                const cls = toneClass(s.tone, i);
+                const last = s.data[s.data.length - 1];
+                const step = (width - X_PAD * 2) / Math.max(1, s.data.length - 1);
+                return (
+                  <g key={s.label}>
+                    <path className={cx('sv-trend__line', `sv-trend__stroke--${cls}`)} d={linePath(s.data)} />
+                    {cls === 'seed' && s.data.length > 0 && (
+                      <circle
+                        className="sv-trend__dot"
+                        cx={X_PAD + (s.data.length - 1) * step}
+                        cy={height - (last / max) * height}
+                        r="4"
+                      />
+                    )}
+                  </g>
+                );
+              })}
+            {kind === 'bar' &&
+              capped.map((s, si) => {
+                const cls = toneClass(s.tone === 'compare' ? 'faint' : s.tone, si === 0 ? 0 : 2);
+                const n = s.data.length;
+                const group = (width - X_PAD * 2) / n;
+                const barW = Math.min(18, (group / capped.length) * 0.7);
+                return (
+                  <g key={s.label}>
+                    {s.data.map((v, i) => (
+                      <rect
+                        key={i}
+                        className={cx(
+                          'sv-trend__bar',
+                          `sv-trend__fill--${highlight && i !== highlight.index ? 'compare' : cls}`,
+                        )}
+                        x={X_PAD + i * group + group / 2 - (barW * capped.length) / 2 + si * barW}
+                        y={height - (v / max) * height}
+                        width={barW}
+                        height={(v / max) * height}
+                        rx="2"
+                      />
+                    ))}
+                  </g>
+                );
+              })}
+            {kind === 'stacked' &&
+              (capped[0]?.data ?? []).map((_, i) => {
+                const group = (width - X_PAD * 2) / (capped[0]?.data.length ?? 1);
+                const barW = Math.min(26, group * 0.62);
+                /* A highlighted chart is ABOUT one column: the others recede
+                   whole, stack tones and all, rather than half-receding. */
+                const dim = highlight !== undefined && i !== highlight.index;
+                let base = height;
+                return (
+                  <g key={i}>
+                    {capped.map((s, si) => {
+                      const v = s.data[i] ?? 0;
+                      const h = (v / max) * height;
+                      base -= h;
+                      return (
+                        <rect
+                          key={s.label}
+                          className={cx(
+                            'sv-trend__bar',
+                            `sv-trend__fill--${dim ? 'compare' : s.tone ?? STACK_TONES[si]}`,
+                          )}
+                          x={X_PAD + i * group + (group - barW) / 2}
+                          y={base}
+                          width={barW}
+                          height={h}
+                        />
+                      );
+                    })}
+                  </g>
+                );
+              })}
+          </svg>
+          {/* aria-hidden: the required ariaLabel on the plot already states
+              the takeaway, and two readings of one fact is a defect. */}
+          {highlight && chipAt && (
+            <span
+              className="sv-trend__chip sv-mono sv-num"
+              style={{ left: `${chipAt.left}%`, bottom: `${chipAt.bottom}%` }}
+              aria-hidden="true"
+            >
+              {highlight.label}
+            </span>
+          )}
+        </div>
+      </div>
       {xLabels && (
-        <div className="sv-trend__x sv-mono" aria-hidden="true">
-          {xLabels.map((l) => (
-            <span key={l}>{l}</span>
+        <div
+          className={cx('sv-trend__x sv-mono', yTicks && yTicks.length > 0 && 'sv-trend__x--inset')}
+          style={{ '--sv-trend-cols': xLabels.length } as CSSProperties}
+          aria-hidden="true"
+        >
+          {xLabels.map((l, i) => (
+            <span key={l} className={cx(highlight?.index === i && 'sv-trend__x-item--on')}>
+              {l}
+            </span>
           ))}
         </div>
       )}

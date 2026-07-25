@@ -1,7 +1,11 @@
-// 76° template · Reset password (B24 Plate, seed-neutral → default cobalt root).
+// 76° template · Reset password — B46 Split, seed-neutral → default cobalt root.
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { Banner, Button, Field, Plate, PlateHead } from '@/components/seventy-six';
+import { Banner, Button, Field, Split, PlateHead } from '@/components/seventy-six';
+
+/* Two conditions, two panels — type only. Neither is a place to sell: one
+   states what the new password must clear, the other that nothing has
+   changed yet. */
 
 const EMAIL = 'maya@northwind.co';
 
@@ -58,7 +62,9 @@ function ResetForm() {
   }
 
   return (
-    <Plate footer={<a href="#signin">Back to sign in</a>}>
+    <Split
+      footer={<a href="#signin">Back to sign in</a>}
+    >
       {/* A2: the failure renders here, at its source — never as a toast. */}
       {failed && (
         <div style={notice}>
@@ -103,18 +109,20 @@ function ResetForm() {
           Set new password
         </Button>
       </form>
-    </Plate>
+    </Split>
   );
 }
 
-/* The same plate, the other condition: the link is dead, so the screen has
+/* The same split, the other condition: the link is dead, so the screen has
    one job left — get a live one sent. No form, one primary. */
 function ExpiredLink() {
   return (
-    <Plate footer={<a href="#signin">Back to sign in</a>}>
+    <Split
+      footer={<a href="#signin">Back to sign in</a>}
+    >
       <div style={notice}>
         <Banner tone="bad" title="This reset link has expired">
-          Reset links are single-use and last 60 minutes. Send a fresh link to {EMAIL} and open the
+          Reset links are single-use and last 30 minutes. Send a fresh link to {EMAIL} and open the
           newest email.
         </Banner>
       </div>
@@ -124,7 +132,7 @@ function ExpiredLink() {
       <Button variant="primary" style={full}>
         Send reset link
       </Button>
-    </Plate>
+    </Split>
   );
 }
 

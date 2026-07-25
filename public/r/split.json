@@ -1,0 +1,46 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "split",
+  "type": "registry:ui",
+  "title": "Split",
+  "description": "The band-less page cut in half, with the card across the cut. One job: Carry a single decision on the line between two surfaces.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/plate.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/split.tsx",
+      "content": "import { cx } from '@/lib/cx';\nimport { Plate } from './plate';\nimport type { PlateProps } from './plate';\nimport './split.css';\n\n/**\n * B46 · Split — the band-less page, cut in half, with the card ACROSS THE\n * CUT. Two flat surfaces meet on one seam — ink and wall, side by side or\n * stacked — and the Plate sits centred on that seam, so half the card is on\n * ink and half is on wall.\n *\n * This is B2's overlap, finished. The Sheet spends it once per page by\n * pulling its first row 44px over the band edge; a Plate has no Sheet and no\n * band, so the same physics arrive as a page type: not a card that peeks\n * over an edge, a card that STRADDLES one. It is the only 76° layout where\n * paper crosses a surface boundary rather than resting on one.\n *\n * The halves are BACKGROUND and nothing else. No statement, no widget, no\n * screenshot, no illustration: they carry no text, so they are marked\n * aria-hidden and the page reads as exactly the Plate it is. A1 refuses\n * gradients, so the cut is two real elements rather than a colour stop —\n * which is also why it lands on a hard pixel instead of a soft blend.\n *\n * B24 is composed verbatim, with one consequence: everything the Plate puts\n * on the WALL moves INTO the card. Centred above and below a card that\n * straddles the seam, the wordmark and the footer would each land half on\n * ink and half on paper — ink type on ink, which reads as a rendering fault.\n * Both become rows of the card, hairline-ruled, and the Plate's own slots\n * are emptied. Nothing else about the Plate changes: same anatomy, same one\n * h1, same one primary, same 400px measure.\n *\n * One job: carry a single decision on the line between two surfaces.\n */\nexport interface SplitProps extends PlateProps {\n  /**\n   * `side` (default) cuts the page left/right: ink, then wall, with the card\n   * on the vertical seam. `stacked` cuts it top/bottom, card on the\n   * horizontal seam. Below 1000px `side` becomes `stacked` on its own — a\n   * vertical seam behind a full-width card is a seam nobody can see.\n   */\n  orientation?: 'side' | 'stacked';\n}\n\n/* The mark, inside the card. It keeps the Plate's own recipe — six in seed,\n   degree in faint ink — and takes a hairline under it so it reads as the\n   card's first row rather than a badge floating over the title. Left, not\n   centred: every other line in a 76° card starts on the same edge. */\nconst CARD_MARK = (\n  <div className=\"sv-split__mark\">\n    <span className=\"sv-plate__wordmark\" role=\"img\" aria-label=\"Seventy Six Degrees\">\n      <span aria-hidden=\"true\">7</span>\n      <span className=\"sv-plate__wordmark-six\" aria-hidden=\"true\">6</span>\n      <span className=\"sv-plate__wordmark-deg\" aria-hidden=\"true\">°</span>\n    </span>\n  </div>\n);\n\nexport function Split({ orientation = 'side', footer, className, children, ...plate }: SplitProps) {\n  return (\n    <div className={cx('sv-split', `sv-split--${orientation}`, className)}>\n      {/* Decoration, stated as such: two empty surfaces meeting on a seam.\n          There is no skip link, because B24's exception holds — a Split has\n          nothing to skip past to reach the decision. */}\n      <div className=\"sv-split__halves\" aria-hidden=\"true\">\n        <div className=\"sv-split__ink\" />\n        <div className=\"sv-split__wall\" />\n      </div>\n      {/* wordmark and footer are intercepted, not passed: on a Split they are\n          rows of the card, and the Plate's wall-side slots stay empty. */}\n      <Plate {...plate} wordmark={null} className=\"sv-split__plate\">\n        {CARD_MARK}\n        {children}\n        {footer && <p className=\"sv-split__foot\">{footer}</p>}\n      </Plate>\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/split.tsx"
+    },
+    {
+      "path": "registry/seventy-six/split.css",
+      "content": "/* B46 · Split — two surfaces, one seam, and the card across it. */\n\n@layer sv-components {\n  /* The halves and the Plate share ONE grid cell, so the card floats over\n     the seam without absolute positioning and without a z-index: they are\n     both ordinary grid items, and the later one in the DOM paints on top. */\n  .sv-split {\n    display: grid;\n    min-height: 100vh;\n    min-height: 100dvh;\n  }\n\n  .sv-split__halves,\n  .sv-split__plate {\n    grid-area: 1 / 1;\n  }\n\n  /* Two real elements, not a colour stop: A1 bans gradients, and a hard cut\n     is the point — the seam has to be a line the card can straddle. */\n  .sv-split__halves {\n    display: grid;\n  }\n\n  .sv-split__ink {\n    background: var(--sv-band);\n  }\n\n  .sv-split__wall {\n    background: var(--sv-wall);\n  }\n\n  .sv-split--side .sv-split__halves {\n    grid-template-columns: 1fr 1fr;\n  }\n\n  .sv-split--stacked .sv-split__halves {\n    grid-template-rows: 1fr 1fr;\n  }\n\n  /* Centred on the seam in BOTH axes, and TRANSPARENT: the Plate paints\n     --sv-wall on its own, which over two halves would read as a pale box\n     bleeding across the seam. Here the halves are the surface and only the\n     card is paper. */\n  .sv-split__plate {\n    place-self: center;\n    min-height: 0;\n    background: none;\n  }\n\n  /* The Plate's wall-side mark slot is emptied by wordmark={null}, so the\n     row it would have occupied goes with it. */\n  .sv-split__plate .sv-plate__mark {\n    display: none;\n  }\n\n  /* ---- The mark and the footer, now the card's first and last rows ---- */\n\n  .sv-split__mark {\n    padding-bottom: var(--sv-s4);\n    margin-bottom: var(--sv-s5);\n    border-bottom: 1px solid var(--sv-line);\n  }\n\n  /* Mono voice, sentence case, left like every other line in the card —\n     this line carries legal text, support links and error ids, which\n     uppercase tracking makes unreadable. */\n  .sv-split__foot {\n    padding-top: var(--sv-s4);\n    margin-top: var(--sv-s5);\n    border-top: 1px solid var(--sv-line);\n    font-family: var(--sv-font-mono);\n    font-size: 11px;\n    line-height: 1.6;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-split__foot a {\n    color: var(--sv-seed-text);\n  }\n\n  /* ---- The floor ---- */\n\n  /* A vertical seam behind a card that has grown to the full width is a seam\n     nobody can see, so side turns into stacked and keeps the signature. The\n     card is still centred, so it still straddles (C7 — nothing is lost). */\n  @media (max-width: 1000px) {\n    .sv-split--side .sv-split__halves {\n      grid-template-columns: none;\n      grid-template-rows: 1fr 1fr;\n    }\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/split.css"
+    }
+  ],
+  "categories": [
+    "chrome"
+  ],
+  "docs": "https://76.zifala.com/llms/split.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B46",
+    "job": "Carry a single decision on the line between two surfaces.",
+    "tags": [
+      "auth",
+      "split-screen",
+      "sign-in",
+      "plate",
+      "page-type",
+      "layout",
+      "overlap"
+    ],
+    "exports": [
+      "Split"
+    ]
+  }
+}

@@ -6,6 +6,158 @@ project uses [semantic versioning](https://semver.org).
 
 ## [Unreleased]
 
+**The taxonomy, closed.** The line-by-line inventory against Bootstrap,
+Tailwind UI, shadcn/ui and Material — minus everything Part F refuses — is now
+empty. Nine components (B36–B44) and three amendments finish what
+`0.4.0-alpha.1` started, and a twelfth template puts most of them on one
+screen. Zero runtime dependencies held: the new work runs on
+`<input type="search">`, `<input type="file">`, the native `popover`
+attribute, real `<ol>`/`<pre>` semantics, and one hand-rolled ARIA tree.
+
+Numbering note: the remainder took **B36–B44**, so `Prose` — pencilled in as
+B36 for 0.5 — becomes **B45**.
+
+### Added
+- **SearchField (B36)** — the in-place filter. A native `<input type="search">`
+  in B11 chrome with a named clear button (the WebKit cancel button is
+  suppressed: unstyleable, unlabelled, invisible on the wall) and an optional
+  mono result line that is a live region from first paint, so the first
+  announcement is not lost. It is not B16 `SearchCommand`: ⌘K is a dialog and
+  it navigates; this filters what you are already looking at.
+- **FileField (B37)** — attach files and state what happened to each. It owns
+  no transport, by design: uploading, retrying and measuring are the product's
+  work, and a component that owns the network cannot be installed from a
+  registry. The drop zone is a target, not a control — a real file input and a
+  named button carry the interaction, so the keyboard reaches everything
+  without a fake `tabIndex` on a div. Its dashed border is
+  `--sv-field-line-strong` for the same reason B25's PinField box is.
+- **Tabs (B38)** — the wall-level tab row, and the third leg of a distinction
+  that had gone unstated: `BandSubTabs` NAVIGATE, `CardTabs` FILTER one card,
+  `Tabs` SWITCH a whole content region of the sheet. Real ARIA tabs only —
+  there is no `filters` mode, because a tablist that is sometimes not a
+  tablist is a defect. The row wraps below 1000px; it never scrolls.
+- **Stepper (B39)** — where you are in a fixed sequence. A STATEMENT, not a
+  control: steps are plain text unless `onStepSelect` is passed, and even then
+  only already-completed steps become buttons. Every state is also carried in
+  visually-hidden words, because a seed fill is a colour (C5).
+- **TreeList (B40)** — a hierarchy whose depth is the information. The full
+  ARIA tree pattern hand-rolled: one tab stop for the whole tree, ↑/↓/←/→/
+  Home/End, and the `<li>` itself as the `treeitem` — a focusable inside a
+  treeitem breaks the pattern.
+- **Timeline (B41)** — one record's life, in order, with the gaps visible. The
+  rail is clipped at the first and last markers so it never dangles past the
+  sequence. It is not B9 `ActivityList`: a feed answers "what needs me" across
+  many records, a Timeline shows what has NOT happened yet as well as what has.
+- **Popover (B42)** — the non-modal panel that holds a few controls, defined
+  entirely by its four neighbours (Tooltip, Menu, Drawer, Dialog). Labelling is
+  enforced by the type system: `title` and `ariaLabel` are a mutually exclusive
+  union, so an unlabelled panel does not compile. Tabbing past the last control
+  closes it, and focus is returned to the trigger only when the panel still
+  held it.
+- **CodeBlock (B43)** — code printed exactly as it must be typed, and **no
+  syntax highlighting, ever**: highlighting is six to nine colours on one
+  surface, Ship Gate point 2 counts them, and Law 2 allows neutrals plus one
+  seed. The line-number gutter sits outside the `<code>` so a copy never picks
+  it up; the copy control is not rendered at all where `navigator.clipboard`
+  is absent.
+- **DistributionStrip (B44)** — the donut, answered. A2 has banned donuts since
+  v0.1.0 and pointed at B6 `MeterList`, which answers a different question:
+  **B6 measures each part against its own maximum, B44 divides ONE total into
+  its shares.** Every donut a team has drawn was asking B44's question. One
+  10px strip with structural 2px seams (a gradient is banned, so the seam does
+  the work) over a legend that prints the absolute figure beside every
+  percentage — B6's rule, inherited whole.
+- **Split (B46)** — the band-less page, cut in half, with the card ACROSS the
+  cut. Two flat surfaces meet on one seam — ink and wall — and the Plate sits
+  centred on it, so half the card is on ink and half is on wall. **This is B2's
+  overlap, finished**: the Sheet spends that move by pulling its first row 44px
+  over the band edge so the dashboard stat cards straddle ink and wall; a Plate
+  has no Sheet and no band, so the same physics arrive as a page type. It is
+  the only 76° layout where paper crosses a surface boundary rather than
+  resting on one. The halves carry **nothing** — no statement, no widget, no
+  screenshot — so they are `aria-hidden` and the page reads as exactly the
+  Plate it composes. A1 refuses gradients, so the cut is two real elements, and
+  the hard pixel is what gives the card an edge to straddle. B24 is composed
+  verbatim, with one consequence: the wordmark and footer move INTO the card as
+  hairline-ruled rows, because centred above and below a seam-straddling card
+  they would land half on ink and half on paper. Two orientations on one prop —
+  `side` cuts left/right, `stacked` cuts top/bottom, and below 1000px `side`
+  becomes `stacked` because a vertical seam behind a full-width card is a seam
+  nobody can see.
+- **All seven auth screens ride it.** Sign in, sign up, forgot, reset, verify,
+  invite and the stacked variant are each a Plate on a cut surface and nothing
+  else — the form is the only thing on the page with controls in it.
+- **Sign in · stacked band** — the thirteenth template, the same screen with
+  the cut rotated, so the gallery carries both types.
+- **Analytics overview template** — the twelfth screen: four reconciling
+  stats, a `Trend` whose peak column is printed rather than hovered,
+  wall-level `Tabs` that switch the analysis while the KPIs stay put, the full
+  `FilterBar` → `FilterLine` → `DataTable` stack, and a donut refused in
+  favour of a strip.
+
+### Changed
+- **Combobox (B19) — multi-select, without the chip wall.** The "never
+  multi-select" refusal is repealed: it was aimed at the implementation, not
+  the job. `multiple` switches the props to a discriminated union, the list
+  stays open while you pick, the query survives each toggle, and Backspace on
+  an empty query drops the last value. The selection is **stated, never worn** —
+  one mono line in the B7 `FilterLine` voice with a single "Clear", because A2
+  bans pills and B23 keeps Badge category-only. Every single-select call site
+  is untouched.
+- **DataTable (B7) — `FilterBar`.** The division is now complete and binding:
+  `CardTabs` switches presets · `FilterBar` sets · `FilterLine` states. A
+  layout with slots, `role="group"` and not `role="search"`, and deliberately
+  holding no live region — the announcement is FilterLine's, and two live
+  regions for one change is a defect.
+- **Trend (B5) — the stated column.** `highlight` prints a chip above the one
+  column the chart is about and recedes the rest; `yTicks` labels the four
+  gridlines the plot already drew. Printed, never hovered: C8 forbids
+  hover-dependent information, and a chart that only tells the truth under a
+  pointer has failed it.
+- **Menu (B20) now stands on B42.** `usePopoverAnchor` moved into `popover.tsx`
+  and Menu imports it. The hook no longer knows what a menu item is — each
+  component supplies its own on-open focus — and it now declines to steal focus
+  back when the panel closed because focus had already left it.
+
+### Fixed
+- **A seeded template drew light seed steps on dark paper.** Every product
+  screen declares its seed on its own wrapper (`<div data-seed="cobalt">`), and
+  a custom property resolves at the NEAREST declaration — so that wrapper's
+  light-mode literals shadowed every dark step beneath it. On a dark surface,
+  all five seeded templates were painting seed-as-text at 2.90:1 (an AA
+  failure) and a white tint on dark paper. `tokens.css` now matches each seed
+  in the descendant position as well as the same-element one, and derives the
+  tint there too. Same class of defect as the v0.2.1 chrome hotfix, and fixed
+  the same way: in the tokens, and nowhere else.
+- **The 320px floor leaked on every dashboard template.** `.sv-row--stats` and
+  `.sv-row--main` used bare `1fr` tracks, and a grid item's default
+  `min-width: auto` let one wide table or one long tabular figure widen its own
+  column and push the page into a horizontal scroll — 161px of it on the
+  densest screen. Every track is `minmax(0, …)` now, as Ship Gate point 11 has
+  always required, and the stat row goes single-file below 560px, because the
+  S1 anatomy does not compress under about 200px. The S1 label truncates before
+  the delta chip does. Verified at 0px overflow on ERP, AI and analytics.
+- **`.sv-split` was two components.** B20's SplitButton had claimed the class
+  since v0.2.0, and it silently won the cascade over B46's page type — the
+  split screen rendered as an `inline-flex` button. The button's classes are
+  `.sv-splitbtn*` now: a button holding the page type's name was the misnomer,
+  and the collision was a live hazard for anyone else reaching for `sv-split`.
+- **The cascade layer order was whatever the bundler emitted.** No
+  `@layer` statement declared it, so a product's own rules could silently lose
+  to a component's — and layer order beats specificity, so no amount of
+  selector weight recovers it. `tokens.css` now declares
+  `@layer sv-tokens, sv-base, sv-components, sv-site` once, where it loads
+  first. The docs site's own back button was the first casualty.
+- **The Trend highlight chip could escape its own component.** Printed above
+  the tallest mark, it landed on the card head on a short plot. The plot takes
+  the headroom now, so the bars keep their scale.
+- **Trend x labels were misaligned.** `.sv-trend__x` used `justify-content:
+  space-between`, which only ever lined up the first and last label; every one
+  between them drifted off its bar. It is a real column grid now.
+- **`DistributionStrip`'s fourth tone was invisible.** It drew at `--sv-line`
+  (1.06:1 on paper) — a part of the total nobody can see is a part that was not
+  stated. It is `--sv-field-line-strong` now; the hairline stays a rule.
+
 ## [0.4.0-alpha.1] — 2026-07-25
 
 **Closing the product taxonomy.** The table's missing half, plus the nine

@@ -4,6 +4,13 @@
    (Slop Firewall A1: any hex/rgb/hsl outside this file is a defect.)
    ============================================================ */
 
+/* The cascade order, declared once and here because this file loads first.
+   Without it the order is whatever the bundler happened to emit, and a
+   product's own rules can silently lose to a component's — layer order
+   beats specificity, so no amount of selector weight recovers it.
+   A consuming app appends its own layer after these four. */
+@layer sv-tokens, sv-base, sv-components, sv-site;
+
 @layer sv-tokens {
   :root {
     /* neutrals — the wall & the ink */
@@ -175,21 +182,40 @@
   /* seed-as-LINE follows seed-as-text on dark: the raw seed is 2.90:1 on
      dark paper, so every focus ring drawn in it would fail 1.4.11/2.4.11.
      These steps are already AA as text, so they clear 3:1 as a line with
-     room to spare (cobalt 6.16:1, verdigris 7.19:1, signal 7.65:1). */
+     room to spare (cobalt 6.16:1, verdigris 7.19:1, signal 7.65:1).
+
+     Each seed is matched in TWO positions, and the second is not optional.
+     A product screen declares its seed on its own wrapper — <div data-seed>
+     inside the document, not on <html> — and a custom property resolves at
+     the NEAREST declaration, so that wrapper's light-mode literals would
+     shadow every dark step below it: the whole template would draw seed
+     text at 2.90:1 and a light tint on dark paper. The descendant form
+     outranks the bare [data-seed] block and restates the dark steps for the
+     subtree, so a seeded region inside a dark document is exactly as
+     AA-verified as a seeded document. */
 
   [data-mode='dark'][data-seed='cobalt'],
+  [data-mode='dark'] [data-seed='cobalt'],
   [data-mode='dark']:not([data-seed]) {
     --sv-seed-text: #7C9BF2;    /* cobalt as text on dark paper — AA */
     --sv-seed-line: var(--sv-seed-text);
   }
 
-  [data-mode='dark'][data-seed='verdigris'] {
+  [data-mode='dark'][data-seed='verdigris'],
+  [data-mode='dark'] [data-seed='verdigris'] {
     --sv-seed-text: #35BFA4;
     --sv-seed-line: var(--sv-seed-text);
   }
 
-  [data-mode='dark'][data-seed='signal'] {
+  [data-mode='dark'][data-seed='signal'],
+  [data-mode='dark'] [data-seed='signal'] {
     --sv-seed-text: #F59A6B;
     --sv-seed-line: var(--sv-seed-text);
+  }
+
+  /* The tint derives from the seed, so it needs no per-seed branch — only
+     the same reach past a nested wrapper's light literal. */
+  [data-mode='dark'] [data-seed] {
+    --sv-seed-tint: color-mix(in srgb, var(--sv-seed) 16%, var(--sv-paper));
   }
 }

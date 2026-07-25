@@ -1,0 +1,92 @@
+/* B46 · Split — two surfaces, one seam, and the card across it. */
+
+@layer sv-components {
+  /* The halves and the Plate share ONE grid cell, so the card floats over
+     the seam without absolute positioning and without a z-index: they are
+     both ordinary grid items, and the later one in the DOM paints on top. */
+  .sv-split {
+    display: grid;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .sv-split__halves,
+  .sv-split__plate {
+    grid-area: 1 / 1;
+  }
+
+  /* Two real elements, not a colour stop: A1 bans gradients, and a hard cut
+     is the point — the seam has to be a line the card can straddle. */
+  .sv-split__halves {
+    display: grid;
+  }
+
+  .sv-split__ink {
+    background: var(--sv-band);
+  }
+
+  .sv-split__wall {
+    background: var(--sv-wall);
+  }
+
+  .sv-split--side .sv-split__halves {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .sv-split--stacked .sv-split__halves {
+    grid-template-rows: 1fr 1fr;
+  }
+
+  /* Centred on the seam in BOTH axes, and TRANSPARENT: the Plate paints
+     --sv-wall on its own, which over two halves would read as a pale box
+     bleeding across the seam. Here the halves are the surface and only the
+     card is paper. */
+  .sv-split__plate {
+    place-self: center;
+    min-height: 0;
+    background: none;
+  }
+
+  /* The Plate's wall-side mark slot is emptied by wordmark={null}, so the
+     row it would have occupied goes with it. */
+  .sv-split__plate .sv-plate__mark {
+    display: none;
+  }
+
+  /* ---- The mark and the footer, now the card's first and last rows ---- */
+
+  .sv-split__mark {
+    padding-bottom: var(--sv-s4);
+    margin-bottom: var(--sv-s5);
+    border-bottom: 1px solid var(--sv-line);
+  }
+
+  /* Mono voice, sentence case, left like every other line in the card —
+     this line carries legal text, support links and error ids, which
+     uppercase tracking makes unreadable. */
+  .sv-split__foot {
+    padding-top: var(--sv-s4);
+    margin-top: var(--sv-s5);
+    border-top: 1px solid var(--sv-line);
+    font-family: var(--sv-font-mono);
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-split__foot a {
+    color: var(--sv-seed-text);
+  }
+
+  /* ---- The floor ---- */
+
+  /* A vertical seam behind a card that has grown to the full width is a seam
+     nobody can see, so side turns into stacked and keeps the signature. The
+     card is still centred, so it still straddles (C7 — nothing is lost). */
+  @media (max-width: 1000px) {
+    .sv-split--side .sv-split__halves {
+      grid-template-columns: none;
+      grid-template-rows: 1fr 1fr;
+    }
+  }
+}

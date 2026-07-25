@@ -103,31 +103,31 @@
 
   /* ---- SplitButton ---- */
 
-  .sv-split {
+  .sv-splitbtn {
     display: inline-flex;
   }
 
-  .sv-split .sv-split__main {
+  .sv-splitbtn .sv-splitbtn__main {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
   }
 
-  .sv-split .sv-split__toggle {
+  .sv-splitbtn .sv-splitbtn__toggle {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     padding-inline: var(--sv-s2);
   }
 
-  .sv-split .sv-split__toggle .sv-menubtn__chevron {
+  .sv-splitbtn .sv-splitbtn__toggle .sv-menubtn__chevron {
     margin-left: 0;
   }
 
   /* A hairline seam between the halves, drawn structurally. */
-  .sv-split .sv-split__toggle {
+  .sv-splitbtn .sv-splitbtn__toggle {
     box-shadow: inset 1px 0 0 var(--sv-seed-deep);
   }
 
-  .sv-split .sv-btn--ghost.sv-split__toggle {
+  .sv-splitbtn .sv-btn--ghost.sv-splitbtn__toggle {
     box-shadow: inset 1px 0 0 var(--sv-line);
   }
 }

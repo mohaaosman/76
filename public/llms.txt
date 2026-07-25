@@ -16,6 +16,7 @@
 - [Progress](https://76.zifala.com/llms/progress.md): Value against target with one 3px bar. The numbers are the information; the bar is illustration. One job: Answer "how far along."
 - [Trend](https://76.zifala.com/llms/trend.md): Flat single-weight SVG lines on a hairline grid — seed for now, line-gray for before. No fills, no draw-in. One job: Answer "which direction."
 - [MeterList](https://76.zifala.com/llms/meter-list.md): Named items with 3px bars and mandatory absolute numbers — the donut chart's replacement. One job: Answer "how is each part doing."
+- [DistributionStrip](https://76.zifala.com/llms/distribution-strip.md): One total divided into its shares: a 10px strip with structural seams and a legend that prints every figure. One job: Answer "what share is each part."
 - [DataTable](https://76.zifala.com/llms/data-table.md): The ERP workhorse: mono headers, mono IDs, dot+word statuses, right-aligned tabular numbers, full keyboard contract. One job: Answer "what exactly happened."
 - [CardTabs](https://76.zifala.com/llms/card-tabs.md): In-card filter tabs on the card hairline — honest ARIA in both of its two modes. One job: Filter one card's content in place.
 - [ActivityList](https://76.zifala.com/llms/activity-list.md): A mono timestamp column beside sentence rows with bold entities. Absolute time, always. One job: Answer "what needs me."
@@ -28,12 +29,15 @@
 - [EmptyState](https://76.zifala.com/llms/empty-state.md): One soft sentence + one primary action. No illustration, no humor, max two lines. One job: Say what would appear here, why it is empty, and the one way forward.
 - [Skeleton](https://76.zifala.com/llms/skeleton.md): Static wall-colored blocks matching the target anatomy. No shimmer, no pulse, 300ms gate. One job: Hold the exact shape of content that is still loading.
 - [SearchCommand](https://76.zifala.com/llms/search-command.md): The ⌘K palette every 76° app ships — dialog anatomy, mono input, grouped results. One job: Be the keyboard front door to everything.
-- [Combobox](https://76.zifala.com/llms/combobox.md): The searchable select — ARIA 1.2 combobox pattern, hand-rolled, zero dependencies. One job: Pick ONE value from a list too long to scan.
+- [CodeBlock](https://76.zifala.com/llms/code-block.md): Code as a quotation: monospace, ink, an inset panel on wall — and no syntax highlighting, ever. One job: Print code or a command exactly as it must be typed.
+- [Combobox](https://76.zifala.com/llms/combobox.md): The searchable select — ARIA 1.2 combobox pattern, hand-rolled, zero dependencies. One job: Pick one value — or a set of them — from a list too long to scan.
 - [Menu](https://76.zifala.com/llms/menu.md): An actions dropdown on the native popover top layer — plus the SplitButton that carries one. One job: Hold the secondary VERBS one control cannot.
 - [Drawer](https://76.zifala.com/llms/drawer.md): The slide-over: a paper panel from the screen edge for detail-in-context, on native <dialog>. One job: Inspect or edit ONE record without leaving the sheet.
 - [Banner](https://76.zifala.com/llms/banner.md): The inline notice — where B14 sends every error: in the flow, at the point of relevance. One job: State a condition of THIS place, in this place.
 - [Badge](https://76.zifala.com/llms/badge.md): A small mono tag for category metadata — never status, never numbers that matter. One job: Name the CATEGORY a thing belongs to.
+- [Popover](https://76.zifala.com/llms/popover.md): The non-modal panel on the native popover attribute — a few controls beside their trigger, 320px at the widest. One job: Hold a FEW controls beside the control that asked for them.
 - [Plate](https://76.zifala.com/llms/plate.md): The band-less page — one card on the bare wall, under the mono 76° wordmark. One job: Carry a single decision on a page that has no navigation.
+- [Split](https://76.zifala.com/llms/split.md): The band-less page cut in half, with the card across the cut. One job: Carry a single decision on the line between two surfaces.
 - [PinField](https://76.zifala.com/llms/pin-field.md): The verification-code input — N boxes that are one value, with B11 field chrome. One job: Enter a short fixed-length code.
 - [SocialButton](https://76.zifala.com/llms/social-button.md): The federated-identity button — B10 Ghost anatomy, one currentColor mark, no brand hex. One job: Hand authentication to ONE named provider.
 - [Accordion](https://76.zifala.com/llms/accordion.md): Native <details> sections on hairlines — secondary detail, folded away. One job: Fold SECONDARY detail out of the way until it is asked for.
@@ -42,10 +46,16 @@
 - [Avatar](https://76.zifala.com/llms/avatar.md): A person, named — initials on wall, or their photo if the product has one. One job: Identify a PERSON beside their name.
 - [Spinner & Busy](https://76.zifala.com/llms/spinner.md): The wait, stated — the one continuous animation the system allows. One job: State that a region is fetching, and name what.
 - [Kbd](https://76.zifala.com/llms/kbd.md): A key, printed — mono cap on wall, for shortcuts that exist. One job: Print the key that triggers something.
+- [Tabs](https://76.zifala.com/llms/tabs.md): A hairline row on the wall — the sheet's whole content region, switched. One job: Switch which set of cards the sheet shows, without touching the URL.
+- [Stepper](https://76.zifala.com/llms/stepper.md): A fixed sequence, stated — where you are, and what remains. One job: State where you are in a FIXED sequence, and what remains.
+- [TreeList](https://76.zifala.com/llms/tree-list.md): The full ARIA tree, hand-rolled — depth drawn, one tab stop, no dependency. One job: Move through a HIERARCHY whose depth is itself the information.
+- [Timeline](https://76.zifala.com/llms/timeline.md): One record's history on a clipped rail — including what has not happened. One job: State the ordered HISTORY of ONE record, with the gaps visible.
 - [Forms](https://76.zifala.com/llms/field.md): Field, Select, Checkbox, Radio, Toggle — labels above, seed focus without glow, errors that say how to fix. One job: Collect one value per control, honestly labeled.
 - [NumberField](https://76.zifala.com/llms/number-field.md): The quantity input — native number, B11 chrome, a − / + pair, stated unit. One job: Enter a bounded QUANTITY.
 - [Slider](https://76.zifala.com/llms/slider.md): A native range in 76° clothes — position matters, and the number is still printed. One job: Set a value whose POSITION in a range matters more than its digits.
 - [DateRangeField](https://76.zifala.com/llms/date-range-field.md): Two native date inputs, a mono preset row, and a context line — no month grid, ever. One job: Choose a DATE RANGE.
+- [SearchField](https://76.zifala.com/llms/search-field.md): The in-place filter — native search, B11 chrome, one named clear, a live count. One job: Filter a set that is ALREADY on screen by typing.
+- [FileField](https://76.zifala.com/llms/file-field.md): The attachment field — a dashed target, a real file input behind a named button, one row per file stating its outcome. One job: Attach files, and state what happened to each one.
 
 ## Blocks
 
@@ -68,7 +78,9 @@ Full screens built only from the taxonomy — install with npx shadcn@latest add
 - POS terminal (`template-pos-terminal`, seed signal): A point-of-sale register — scaled up, touch-first.
 - Settings (`template-settings-account`, seed neutral): An account settings screen — the forms showcase as a page.
 - AI agent control center (`template-ai-control-center`, seed cobalt): An ops console for a fleet of AI agents.
+- Analytics overview (`template-analytics-overview`, seed cobalt): A marketing analytics screen — and the donut it refuses to draw.
 - Sign in (`template-auth-sign-in`, seed cobalt): The credential screen: three providers, the form, and one seed button.
+- Sign in · stacked band (`template-auth-stacked`, seed cobalt): The other Split orientation — ink across the top, the card over its edge.
 - Create account (`template-auth-sign-up`, seed cobalt): Registration — the password rule stated up front, no strength meter.
 - Forgot password (`template-auth-forgot`, seed cobalt): Request a reset link, with the same answer for every address.
 - Reset password (`template-auth-reset`, seed neutral): Set a new password from a link — or state that the link is dead.
