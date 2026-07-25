@@ -40,9 +40,15 @@ import path from 'node:path';
    inside <div className="sv-card__body">. Adding a name to this list is a
    Book change — it is a claim that the component draws to the card's edge
    on purpose. */
-const CARD_DIRECT_CHILD_OK = new Set([
-  /* Full-bleed BY SPECIFICATION — hairline rows that draw to the paper's
-     edge, which is why .sv-card carries no padding in the first place. */
+/* The exemption has TWO halves and they are not the same KIND of claim, which
+   is why they are no longer one list.
+
+   FULL-BLEED is a claim about STRUCTURE — "this component draws hairline rows
+   to the paper's edge on purpose" — and no stylesheet can confirm it. A
+   DataTable's rows are flush because that is what a table is, and nothing in
+   `data-table.css` distinguishes that from an oversight. It stays a hand-kept
+   list, and adding a name to it stays a Book change. */
+const CARD_DIRECT_CHILD_FULL_BLEED = new Set([
   'CardHead',        /* the card's own head row */
   'SelectionHead',   /* B7 · replaces the head row in place */
   'CardTabs',        /* B8 · sits ON the card's hairline */
@@ -52,16 +58,125 @@ const CARD_DIRECT_CHILD_OK = new Set([
   'ActivityList',    /* B9 · hairline rows, edge to edge */
   'DescriptionList', /* B28 · hairline pairs, edge to edge */
   'Accordion',       /* B27 · hairline sections, edge to edge */
-  /* SELF-PADDED — they carry their own inset and would double up inside a
-     body. Verified against each one's own stylesheet, not assumed. */
-  'StatS1',          /* B3 · the three zones pad themselves (14/18/0 …) */
-  'EmptyState',      /* B15 */
-  'Banner',          /* B22 */
-  'ErrorSummary',    /* B52 */
-  'Stepper',         /* B39 */
-  'FeatureList',     /* B48 */
-  'DateRangeField',  /* B35 */
 ]);
+
+/* SELF-PADDED is a claim about a DECLARATION — "this component carries its own
+   inset, so a `sv-card__body` around it would double up" — and that is a claim
+   the firewall can CHECK instead of believe.
+
+   It used to be seven names in the same set as the list above, under a comment
+   reading "Verified against each one's own stylesheet, not assumed." Three of
+   the seven were assumed. `.sv-stepper`, `.sv-features` and `.sv-daterange`
+   each declare `padding: 0` — a list reset and a fieldset reset, not an inset —
+   so the gate was actively waving through the one defect it exists to catch.
+   B39 shipped flush against a card's corners in `payment-checkout`, with a
+   comment at the call site asserting the exemption it did not qualify for, and
+   `analytics-overview` wrapped the SAME component in a body two files away.
+   Two call sites, two contradictory beliefs, and a green build either way.
+
+   So the list now names the SELECTOR that carries the inset, and
+   `verifySelfPadded` reads it. A name only earns the exemption while its
+   stylesheet still backs it: delete the padding and the build fails on this
+   rule rather than on somebody's screenshot, months later. Adding a name here
+   is still a Book change — it is just no longer a claim that can be wrong. */
+const CARD_DIRECT_CHILD_SELF_PADDED = {
+  StatS1:       ['stat-s1.css',      '.sv-stat__top'],  /* B3 · the three zones pad themselves */
+  EmptyState:   ['empty-state.css',  '.sv-empty'],      /* B15 */
+  Banner:       ['banner.css',       '.sv-banner'],     /* B22 */
+  ErrorSummary: ['error-summary.css','.sv-errsum'],     /* B52 */
+};
+
+const CARD_DIRECT_CHILD_OK = new Set([
+  ...CARD_DIRECT_CHILD_FULL_BLEED,
+  ...Object.keys(CARD_DIRECT_CHILD_SELF_PADDED),
+]);
+
+/**
+ * The declaration bodies of every rule whose selector list contains `selector`
+ * as a whole token. Deliberately dumb about nesting, because component CSS is:
+ * these files are flat declaration blocks inside one @layer.
+ */
+function ruleBodies(source, selector) {
+  const bodies = [];
+  for (let from = 0; ; ) {
+    const at = source.indexOf(selector, from);
+    if (at === -1) return bodies;
+    const after = at + selector.length;
+    from = after;
+
+    /* `.sv-stat` must not match `.sv-stat__top`, and `.sv-empty` must not
+       match `.sv-empty__sentence`. */
+    if (/[A-Za-z0-9_-]/.test(source[after] ?? '')) continue;
+
+    const open = source.indexOf('{', after);
+    if (open === -1) return bodies;
+
+    /* Everything between the name and the brace has to be selector
+       punctuation, or this is a DESCENDANT of the thing we are asking about
+       (`.sv-empty .sv-btn { … }`) and its padding is not the component's. */
+    if (!/^[\s,]*$/.test(source.slice(after, open))) continue;
+
+    const close = source.indexOf('}', open);
+    bodies.push(source.slice(open + 1, close === -1 ? source.length : close));
+  }
+}
+
+/**
+ * Rule 18's defect is a widget flush against the card's LEFT AND RIGHT
+ * corners, so the inline axis is the one that has to be inset — a component
+ * padded 16px top and bottom and zero at the sides is exactly as flush as one
+ * padded nowhere. Only the inline values of the shorthand are read.
+ */
+function inlinePadding(body) {
+  const values = [];
+  for (const m of body.matchAll(/(?:^|[;{\s])padding(-inline|-left|-right)?\s*:\s*([^;}]+)/g)) {
+    const parts = m[2].trim().split(/\s+/);
+    if (m[1]) {
+      values.push(...parts);            /* padding-inline / -left / -right */
+    } else {
+      /* 1 → all · 2 and 3 → [_, inline] · 4 → [_, right, _, left] */
+      values.push(parts.length === 1 ? parts[0] : parts[1]);
+      if (parts.length === 4) values.push(parts[3]);
+    }
+  }
+  return values.filter(Boolean);
+}
+
+const isZero = (v) => /^0[a-z%]*$/i.test(v);
+
+/**
+ * The SELF-PADDED claims, checked rather than trusted. This runs once, before
+ * any file is scanned, because a false claim here is not a defect in one
+ * component — it is the gate itself being wrong about every card in the
+ * system.
+ */
+async function verifySelfPadded(flag) {
+  for (const [name, [file, selector]] of Object.entries(CARD_DIRECT_CHILD_SELF_PADDED)) {
+    const rel = path.join('src/components/seventy-six', file);
+    let source;
+    try {
+      source = await readFile(path.join(root, rel), 'utf8');
+    } catch {
+      flag(`${rel} · rule 18: <${name}> is claimed SELF-PADDED but ${file} is not there`);
+      continue;
+    }
+
+    const bodies = ruleBodies(source, selector);
+    if (!bodies.length) {
+      flag(`${rel} · rule 18: <${name}> is claimed SELF-PADDED via ${selector}, which no rule declares`);
+      continue;
+    }
+
+    const values = bodies.flatMap(inlinePadding);
+    if (!values.length || values.every(isZero)) {
+      flag(
+        `${rel} · rule 18: <${name}> is claimed SELF-PADDED but ${selector} sets no inline padding` +
+          ` — it renders flush against the card's corners (drop it from CARD_DIRECT_CHILD_SELF_PADDED,` +
+          ` or give it an inset)`,
+      );
+    }
+  }
+}
 
 /**
  * Rule 18 reads STRUCTURE, so it cannot be a grep. It is deliberately
@@ -279,6 +394,8 @@ async function walk(dir) {
     else if (/\.(css|tsx|ts)$/.test(item.name)) check(rel, await readFile(path.join(root, rel), 'utf8'));
   }
 }
+
+await verifySelfPadded((v) => violations.push(v));
 
 for (const dir of SCAN_DIRS) await walk(dir);
 

@@ -277,13 +277,23 @@ export function PaymentCheckout() {
       <Sheet aria-label="Checkout">
         <Row overlap>
           <Card>
-            {/* B39 is self-padded, so it is a legal direct child of the
-                card (rule 18). It states position; it does not offer to
-                move you — you cannot click into a step you have not
-                earned, and you cannot click back into one from here
-                either, because this screen does not draw the delivery
-                step and a control that goes nowhere is worse than none. */}
-            <Stepper steps={STEPS} current={done ? 2 : 1} label="Checkout progress" />
+            {/* B39 is NOT self-padded — `.sv-stepper` is a bare <ol> whose
+                `padding: 0` is a list reset, so it takes the body like a
+                MeterList or a Timeline (rule 18). The comment that used to
+                sit here claimed the opposite and the firewall's allowlist
+                agreed with it, which is how this row shipped with its
+                markers flush against the card's corners and the last step
+                clipped at the right edge. The gate verifies that claim
+                against the stylesheet now.
+
+                It states position; it does not offer to move you — you
+                cannot click into a step you have not earned, and you cannot
+                click back into one from here either, because this screen
+                does not draw the delivery step and a control that goes
+                nowhere is worse than none. */}
+            <div className="sv-card__body">
+              <Stepper steps={STEPS} current={done ? 2 : 1} label="Checkout progress" />
+            </div>
           </Card>
         </Row>
 
