@@ -1,0 +1,45 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spinner",
+  "type": "registry:ui",
+  "title": "Spinner & Busy",
+  "description": "The wait, stated — the one continuous animation the system allows. One job: State that a region is fetching, and name what.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/spinner.tsx",
+      "content": "import type { ReactNode } from 'react';\nimport { cx } from '@/lib/cx';\nimport './spinner.css';\n\n/**\n * B31 · Spinner & Busy — the wait, stated. A Spinner is the inline\n * 12–16px mark beside a label; Busy covers a whole region with one\n * centred spinner and a sentence naming what is loading. Skeleton (B17)\n * still owns first paint — a spinner is for a region that already has\n * content and is fetching the next of it.\n */\nexport interface SpinnerProps {\n  size?: 12 | 16 | 20;\n  /** Announced label. Omit only when an adjacent live region says it. */\n  label?: string;\n  className?: string;\n}\n\nexport function Spinner({ size = 12, label, className }: SpinnerProps) {\n  return (\n    <span className={cx('sv-spin', className)} role={label ? 'status' : undefined}>\n      <svg\n        className=\"sv-spin__mark\"\n        viewBox=\"0 0 12 12\"\n        width={size}\n        height={size}\n        aria-hidden=\"true\"\n      >\n        <circle\n          cx=\"6\"\n          cy=\"6\"\n          r=\"5\"\n          fill=\"none\"\n          stroke=\"currentColor\"\n          strokeWidth=\"1.5\"\n          strokeDasharray=\"23\"\n          strokeDashoffset=\"8\"\n          strokeLinecap=\"round\"\n        />\n      </svg>\n      {label && <span className=\"sv-visually-hidden\">{label}</span>}\n    </span>\n  );\n}\n\nexport interface BusyProps {\n  /** REQUIRED sentence naming what is loading: \"Loading July orders…\". */\n  label: string;\n  /** Region height while empty. Match the component it replaces. */\n  minHeight?: number;\n  /** Rendered underneath at reduced emphasis when refreshing in place. */\n  children?: ReactNode;\n  className?: string;\n}\n\nexport function Busy({ label, minHeight = 160, children, className }: BusyProps) {\n  return (\n    <div\n      className={cx('sv-busy', children != null && 'sv-busy--over', className)}\n      style={{ minHeight }}\n      aria-busy=\"true\"\n      aria-live=\"polite\"\n    >\n      {children}\n      <p className=\"sv-busy__line\">\n        <Spinner size={16} />\n        <span>{label}</span>\n      </p>\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/spinner.tsx"
+    },
+    {
+      "path": "registry/seventy-six/spinner.css",
+      "content": "/* B31 · Spinner & Busy — the ONE continuous animation in the system\n   (`sv-rotate`, allowlisted by the Slop Firewall). The keyframes are\n   redeclared here rather than imported so the registry item installs\n   standalone; they are identical to button.css by contract. */\n\n@layer sv-components {\n  .sv-spin {\n    display: inline-flex;\n    align-items: center;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-spin__mark {\n    animation: sv-rotate 800ms linear infinite;\n  }\n\n  @keyframes sv-rotate {\n    to {\n      transform: rotate(360deg);\n    }\n  }\n\n  .sv-busy {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;\n    gap: var(--sv-s3);\n  }\n\n  /* Refreshing in place: the stale content stays legible underneath — it\n     is still true, it is only about to change. No blur, no scrim. */\n  .sv-busy--over {\n    position: relative;\n    align-items: stretch;\n    justify-content: flex-start;\n  }\n\n  .sv-busy--over > :not(.sv-busy__line) {\n    opacity: 0.4;\n  }\n\n  .sv-busy--over .sv-busy__line {\n    position: absolute;\n    inset: 0;\n    align-items: center;\n    justify-content: center;\n  }\n\n  .sv-busy__line {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    gap: var(--sv-s2);\n    font-size: 12.5px;\n    font-weight: 500;\n    color: var(--sv-ink-soft);\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/spinner.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/spinner.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B31",
+    "job": "State that a region is fetching, and name what.",
+    "tags": [
+      "spinner",
+      "loading",
+      "busy",
+      "progress",
+      "wait",
+      "fetching"
+    ],
+    "exports": [
+      "Spinner",
+      "Busy"
+    ]
+  }
+}

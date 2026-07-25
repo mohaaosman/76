@@ -15,7 +15,7 @@ Manual: copy components/seventy-six/search-command.tsx, components/seventy-six/s
 
 ## Overview
 
-Every 76° app ships ⌘K — it is the keyboard front door (C4). The palette reuses Dialog anatomy on native `&lt;dialog&gt;`: a mono input, results grouped under mono labels, arrow keys + Enter, Esc to leave.
+Every 76° app ships ⌘K — it is the keyboard front door (C4). The palette reuses Dialog anatomy on native `<dialog>`: a mono input, results grouped under mono labels, arrow keys + Enter, Esc to leave.
 
 Feed it a flat list of `CommandItem`s (id, group, label, optional mono hint and keywords); it filters client-side and calls `onPick`. For server-backed search, debounce upstream and swap the items prop.
 
@@ -52,6 +52,7 @@ const search = useSearchCommand(); // ⌘K binds automatically
 | `items` | `CommandItem[]` | — | { id, group, label, hint?, keywords? } — groups render as mono labels. |
 | `onPick` | `(item) => void` | — | Called on Enter or click; the palette closes itself. |
 | `placeholder` | `string` | `'Search…'` | Mono placeholder; also the input's aria-label. |
+| `onOpen` | `() => void` | — | Called when ⌘K opens the palette — pass the same setter that drives <code>open</code>, or the shortcut and the state desync. |
 | `bindShortcut` | `boolean` | `true` | Binds ⌘K / Ctrl-K globally while mounted. |
 
 ## Accessibility

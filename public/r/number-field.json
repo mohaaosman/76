@@ -1,0 +1,45 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "number-field",
+  "type": "registry:ui",
+  "title": "NumberField",
+  "description": "The quantity input — native number, B11 chrome, a − / + pair, stated unit. One job: Enter a bounded QUANTITY.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/field.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/number-field.tsx",
+      "content": "import { forwardRef, useId, useState } from 'react';\nimport type { InputHTMLAttributes } from 'react';\nimport { cx } from '@/lib/cx';\nimport './number-field.css';\n\n/**\n * B33 · NumberField — the quantity input: a native number input wearing\n * B11 chrome, with a − / + pair for the small adjustments a keyboard\n * makes clumsy. The number is tabular, the unit is stated, and the\n * bounds are enforced in the component, not just announced.\n */\nexport interface NumberFieldProps\n  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'value' | 'onChange' | 'min' | 'max' | 'step'> {\n  label: string;\n  value: number;\n  onValueChange: (value: number) => void;\n  hint?: string;\n  /** What went wrong AND how to fix it (B11). */\n  error?: string;\n  required?: boolean;\n  min?: number;\n  max?: number;\n  step?: number;\n  /** Rendered after the input in mono: \"kg\", \"days\", \"%\". Never inside it. */\n  unit?: string;\n}\n\nconst clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));\n\nexport const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(function NumberField(\n  {\n    label,\n    value,\n    onValueChange,\n    hint,\n    error,\n    required,\n    min = 0,\n    max = Number.MAX_SAFE_INTEGER,\n    step = 1,\n    unit,\n    id: explicitId,\n    className,\n    disabled,\n    ...rest\n  },\n  ref,\n) {\n  const auto = useId();\n  const id = explicitId ?? auto;\n  const hintId = `${id}-hint`;\n  const errorId = `${id}-error`;\n  const describedBy = [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(' ') || undefined;\n  const nudge = (by: number) => {\n    setDraft(null);\n    onValueChange(clamp(value + by, min, max));\n  };\n\n  /**\n   * A number prop cannot represent an empty box, but people clear a field\n   * before retyping it. The draft holds exactly what was typed until blur;\n   * only a real number leaves the component, so `Number('')` — which is 0,\n   * not \"empty\" — can never be mistaken for an entry.\n   */\n  const [draft, setDraft] = useState<string | null>(null);\n\n  return (\n    <div className={cx('sv-field sv-numfield', className)}>\n      <label className=\"sv-field__label\" htmlFor={id}>\n        {label}\n        {required && (\n          <span className=\"sv-field__req sv-mono\" aria-hidden=\"true\">\n            *\n          </span>\n        )}\n      </label>\n      {hint && (\n        <p className=\"sv-field__hint\" id={hintId}>\n          {hint}\n        </p>\n      )}\n      <div className=\"sv-numfield__row\">\n        <button\n          type=\"button\"\n          className=\"sv-numfield__step\"\n          onClick={() => nudge(-step)}\n          disabled={disabled || value <= min}\n          aria-label={`Decrease ${label.toLowerCase()}`}\n        >\n          <span aria-hidden=\"true\">−</span>\n        </button>\n        <input\n          {...rest}\n          ref={ref}\n          id={id}\n          type=\"number\"\n          inputMode=\"numeric\"\n          className={cx('sv-field__input sv-numfield__input sv-num', error && 'sv-field__input--error')}\n          value={draft ?? String(value)}\n          min={min}\n          max={max}\n          step={step}\n          required={required}\n          disabled={disabled}\n          onChange={(e) => {\n            const raw = e.target.value;\n            setDraft(raw);\n            if (raw.trim() === '') return;\n            const next = Number(raw);\n            if (Number.isFinite(next)) onValueChange(clamp(next, min, max));\n          }}\n          onBlur={(e) => {\n            setDraft(null);\n            rest.onBlur?.(e);\n          }}\n          aria-invalid={error ? true : undefined}\n          aria-describedby={describedBy}\n        />\n        <button\n          type=\"button\"\n          className=\"sv-numfield__step\"\n          onClick={() => nudge(step)}\n          disabled={disabled || value >= max}\n          aria-label={`Increase ${label.toLowerCase()}`}\n        >\n          <span aria-hidden=\"true\">+</span>\n        </button>\n        {unit && (\n          <span className=\"sv-numfield__unit sv-mono\" aria-hidden=\"true\">\n            {unit}\n          </span>\n        )}\n      </div>\n      {error && (\n        <p className=\"sv-field__error\" id={errorId}>\n          {error}\n        </p>\n      )}\n    </div>\n  );\n});\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/number-field.tsx"
+    },
+    {
+      "path": "registry/seventy-six/number-field.css",
+      "content": "/* B33 · NumberField — B11 chrome plus a − / + pair. */\n\n@layer sv-components {\n  .sv-numfield__row {\n    display: flex;\n    align-items: center;\n    gap: var(--sv-s2);\n  }\n\n  .sv-numfield__input {\n    width: 88px;\n    text-align: right;\n    font-weight: 600;\n    /* The native spinners duplicate the − / + pair and cannot be styled\n       to system; the pair replaces them. */\n    appearance: textfield;\n  }\n\n  .sv-numfield__input::-webkit-outer-spin-button,\n  .sv-numfield__input::-webkit-inner-spin-button {\n    appearance: none;\n    margin: 0;\n  }\n\n  /* B10 ghost anatomy at the field's own height — square, so the pair\n     reads as chrome on the input rather than as two more buttons. */\n  .sv-numfield__step {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    width: 34px;\n    height: 34px;\n    border: 1px solid var(--sv-field-line);\n    border-radius: var(--sv-r);\n    background: var(--sv-paper);\n    font-size: 15px;\n    font-weight: 600;\n    color: var(--sv-ink);\n    cursor: pointer;\n    transition: border-color var(--sv-t-fast), color var(--sv-t-fast);\n  }\n\n  .sv-numfield__step:hover:not(:disabled) {\n    border-color: var(--sv-seed-line);\n  }\n\n  .sv-numfield__step:disabled {\n    background: var(--sv-wall);\n    color: var(--sv-ink-faint);\n    cursor: not-allowed;\n  }\n\n  .sv-numfield__unit {\n    font-size: 11px;\n    letter-spacing: 0.08em;\n    text-transform: uppercase;\n    color: var(--sv-ink-soft);\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/number-field.css"
+    }
+  ],
+  "categories": [
+    "forms"
+  ],
+  "docs": "https://76.zifala.com/llms/number-field.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B33",
+    "job": "Enter a bounded QUANTITY.",
+    "tags": [
+      "number",
+      "stepper",
+      "quantity",
+      "input",
+      "spinner",
+      "form"
+    ],
+    "exports": [
+      "NumberField"
+    ]
+  }
+}

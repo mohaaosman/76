@@ -76,7 +76,7 @@ Same bones at ≥48px. Press feedback is a seed-tint flash on product buttons; t
 | Tab | Moves focus; focus ring is 2px seed, offset 2px, always visible. |
 | Enter / Space | Activates — native button semantics, nothing re-implemented. |
 
-- Rendered as `&lt;button&gt;` or `&lt;a&gt;` only — never a clickable div.
+- Rendered as `<button>` or `<a>` only — never a clickable div.
 - Icon-only buttons are allowed solely in the topbar utility cluster and require an `aria-label`; the icon itself is `aria-hidden`.
 - Loading sets `aria-busy="true"` and disables interaction; the label change is announced because it is real text, not a spinner alone.
 - Minimum hit area 24×24 on desktop, 48×48 in POS contexts.

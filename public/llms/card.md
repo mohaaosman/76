@@ -55,7 +55,7 @@ import { Card, CardHead, ButtonLink } from '@/components/seventy-six';
 
 ## Accessibility
 
-- CardHead renders an `&lt;h3&gt;`; keep the page's heading ladder unskipped (one h1 in the hero, h2s for page sections if needed).
+- CardHead renders an `<h3>`; keep the page's heading ladder unskipped (one h1 in the hero, h2s for page sections if needed).
 - If the whole card links somewhere, the card itself is the anchor with a focus ring per C3 — hover shows nothing beyond the cursor; paper does not lift.
 
 ## Don't

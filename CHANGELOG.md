@@ -6,6 +6,129 @@ project uses [semantic versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.4.0-alpha.1] — 2026-07-25
+
+**Closing the product taxonomy.** The table's missing half, plus the nine
+parts a product had to reach outside 76° to get (B27–B35). Every one of them
+enters through the Book: named, single-jobbed, registered, documented, and
+installable in the same change. Zero runtime dependencies held — the new work
+runs on `<details>`, `<input type="range">`, `<input type="date">` and
+hand-rolled SVG.
+
+### Added
+- **Accordion (B27)** — native `<details>`/`<summary>` sections on hairlines,
+  with a mono meta column right of the title. `exclusive` uses the native
+  `name` group, so one-at-a-time costs no JavaScript. It folds SECONDARY
+  detail only: never the primary job of a screen, and never navigation.
+- **DescriptionList (B28)** — the record readout. A real `<dl>` with mono
+  uppercase terms and informative values on hairlines; `kind="id"` goes mono,
+  `kind="num"` goes tabular and right-aligned. One record, many facts — the
+  mirror of a DataTable's many records, shared columns.
+- **Divider (B29)** — one hairline, optionally naming the group below it in
+  mono. Unlabelled renders `<hr>`; labelled renders `role="separator"` with
+  the label as its accessible name.
+- **Avatar / AvatarGroup (B30)** — initials on wall at 24/32/44px, a photo
+  only where the product genuinely holds one. The group overlaps a capped
+  stack and states the remainder in mono; the names it hides stay reachable in
+  the list it summarises, never in a hover.
+- **Spinner / Busy (B31)** — the wait, stated. `Busy` requires a sentence
+  naming what is loading and keeps existing content legible underneath while
+  it refreshes. The B17 line is drawn explicitly: Skeleton is first paint,
+  Busy is a region that already has content.
+- **Kbd (B32)** — a key, printed. Real `<kbd>` caps in mono; documentation of
+  a shortcut that already works, never a control.
+- **NumberField (B33)** — the quantity input. Native number input in B11
+  chrome with a square − / + pair replacing the unstyleable browser spinners,
+  the unit stated beside the field, and bounds ENFORCED rather than merely
+  announced.
+- **Slider (B34)** — native `<input type="range">` on B4 bar geometry with the
+  value printed in mono beside the label. No filled track: a two-tone fill
+  needs a gradient, and A1 bans gradients — the number carries what the fill
+  would have.
+- **DateRangeField (B35)** — the F4 range with no month grid. A mono preset
+  row (`7D · 30D · QTD · YTD · CUSTOM`) over two native date inputs welded into
+  one Field, under an `aria-live` mono context line. `presetRange` is exported
+  so a Menu, a URL parameter or a saved view computes the same ranges. F4's
+  refusal now has a component, and it still draws no calendar.
+- **SelectionHead** — what a selection DOES (B7 amendment). It replaces the
+  CardHead in place: seed-tint row, mono count, the verbs, "Clear". No
+  floating action bar and no new z-index; the card's own header already owns
+  that row.
+- **FilterLine** — how filter state is shown (B7 amendment). Active filters
+  are ONE mono line of running text with a single "Clear all", and that line
+  doubles as the `aria-live` announcement. No chips, no pills — B23 Badge
+  stays category-only and non-dismissible.
+- **Delta** (B3 amendment) — the arrow-and-figure chip extracted from the S1
+  card so a table cell or a record row states a change in the same voice, from
+  one implementation.
+- **Trend `kind="stacked"` and `Sparkline`** (B5 amendment) — stacked columns
+  scale to the TOTAL and are legal only for parts of one total; the Sparkline
+  is legal only beside a printed figure.
+
+### Changed
+- **StatS1 takes `deltaPolarity`.** The previous guidance for inverse metrics
+  — flip the delta's sign so the colour reads right — is WITHDRAWN. A card
+  printing ▲ for a figure that fell is lying. Pass the real signed change and
+  set `deltaPolarity="down-good"`; the arrow stays honest and the colour still
+  reads correctly. Direction remains non-colour-carried (C5).
+- **The Ship Gate is reconciled.** Part D of the Component Book carried nine
+  points while the README and the agent skill both claimed fourteen; the Book
+  now carries all fourteen, and the two are edited in the same change or
+  neither is.
+- **The skill's condensed specs cover B19–B35.** `component-specs.md` had
+  stopped at B18, so the packaged skill described a system three releases
+  behind the Book.
+- **The site's roadmap page was three releases stale** — it still listed the
+  Combobox and the dark surface as unshipped. It now mirrors `ROADMAP.md`.
+- **The home page derives its spec count** from the doc entries instead of
+  hardcoding "18 of 18".
+
+- **The docs site is code-split.** Every route is a lazy chunk, so the
+  landing page no longer ships the 36-entry doc corpus, the demo registry,
+  and all eleven full-screen templates: the entry bundle drops from **623 kB
+  to 268 kB** (186 kB → 85 kB gzipped) and the Vite 500 kB chunk warning is
+  gone — split, not silenced with `chunkSizeWarningLimit`. The Shell carries
+  a `Suspense` boundary around its outlet, so the band never blinks and the
+  wall shows a B31 `Busy` while a page is in flight — the system answering
+  its own question about what a fetching region looks like.
+- **Corpus counts are inlined at build time.** `vite.config.ts` derives the
+  component count and the Book range from the doc entries and defines them
+  as constants, so the home page states real numbers without importing
+  140 kB of prose to count them. Still derived, still one source of truth.
+- **`SearchCommand` takes `onOpen`.** The ⌘K binding called
+  `showModal()` directly, so the palette opened without `open` ever becoming
+  true and the next `onClose()` had nothing to close — picking a result
+  navigated but left the palette on screen. The shortcut now goes through
+  the same state the trigger button uses.
+
+### Fixed
+- **NumberField cleared to its minimum.** `Number('')` is `0`, not "empty",
+  so emptying the box to retype it clamped straight to `min` and the digits
+  went nowhere. The field now holds what was typed until blur and only lets
+  a real number out — clearing leaves it empty, out-of-range still clamps
+  on the way out, and blur reconciles the box to the value.
+- **React Doctor pass** — three errors and seven warnings, all verified
+  against the code first: `CardTabs` passed `key` through a props spread
+  (React 19 does not read it there); `BandSubTabs` wrote a ref during
+  render, which can carry values from a render that never commits;
+  `ToastProvider` built its context value inline, re-rendering every
+  `useToast()` consumer in the tree on each toast; `DataTable` kept the
+  ⇧-range anchor in state though only handlers read it, costing a re-render
+  per selection; `Menu` gave an `<hr>` a redundant `role="separator"`;
+  `ActivityList` keyed rows by array index, which is wrong for a feed that
+  prepends — it now takes an optional `id`.
+- Stale Book ranges across the documentation set: `README.md` (twice),
+  `docs/README.md`, `docs/76-UI-LIBRARY.md`, the skill's `SKILL.md`,
+  `README.md` and `system-dials.md` all claimed B1–B18 or B1–B23.
+- `ROADMAP.md` claimed `Prose` as **B25** — a number already taken by
+  PinField in v0.3.0. Prose is **B36**.
+- The registered firewall exceptions were listed as three in the project
+  README; there are four, and the skill's list now names B30's avatar ring and
+  B31's spinner alongside B7/B11 and B10.
+- The skill's firewall reference described `SCAN_DIRS` as three fixed
+  directories; the script defaults to `src` and takes directories as
+  arguments.
+
 ## [0.3.0-alpha.1] — 2026-07-25
 
 **The entry layer, and the 320px floor made real.** Three new
@@ -218,7 +341,8 @@ Initial release.
 - Deployment: a Nixpacks build plus a zero-dependency Node static server for
   Coolify.
 
-[Unreleased]: https://github.com/mohaaosman/76/compare/v0.3.0-alpha.1...HEAD
+[Unreleased]: https://github.com/mohaaosman/76/compare/v0.4.0-alpha.1...HEAD
+[0.4.0-alpha.1]: https://github.com/mohaaosman/76/compare/v0.3.0-alpha.1...v0.4.0-alpha.1
 [0.3.0-alpha.1]: https://github.com/mohaaosman/76/compare/v0.2.1...v0.3.0-alpha.1
 [0.2.1]: https://github.com/mohaaosman/76/compare/v0.2.0-alpha.1...v0.2.1
 [0.2.0-alpha.1]: https://github.com/mohaaosman/76/compare/v0.1.0-alpha.1...v0.2.0-alpha.1

@@ -36,7 +36,16 @@
 - [Plate](https://76.zifala.com/llms/plate.md): The band-less page — one card on the bare wall, under the mono 76° wordmark. One job: Carry a single decision on a page that has no navigation.
 - [PinField](https://76.zifala.com/llms/pin-field.md): The verification-code input — N boxes that are one value, with B11 field chrome. One job: Enter a short fixed-length code.
 - [SocialButton](https://76.zifala.com/llms/social-button.md): The federated-identity button — B10 Ghost anatomy, one currentColor mark, no brand hex. One job: Hand authentication to ONE named provider.
+- [Accordion](https://76.zifala.com/llms/accordion.md): Native <details> sections on hairlines — secondary detail, folded away. One job: Fold SECONDARY detail out of the way until it is asked for.
+- [DescriptionList](https://76.zifala.com/llms/description-list.md): The record readout — mono terms, informative values, on hairlines. One job: State a set of labelled facts about ONE record.
+- [Divider](https://76.zifala.com/llms/divider.md): One hairline, optionally naming the group below it in mono. One job: Separate two groups that share a surface.
+- [Avatar](https://76.zifala.com/llms/avatar.md): A person, named — initials on wall, or their photo if the product has one. One job: Identify a PERSON beside their name.
+- [Spinner & Busy](https://76.zifala.com/llms/spinner.md): The wait, stated — the one continuous animation the system allows. One job: State that a region is fetching, and name what.
+- [Kbd](https://76.zifala.com/llms/kbd.md): A key, printed — mono cap on wall, for shortcuts that exist. One job: Print the key that triggers something.
 - [Forms](https://76.zifala.com/llms/field.md): Field, Select, Checkbox, Radio, Toggle — labels above, seed focus without glow, errors that say how to fix. One job: Collect one value per control, honestly labeled.
+- [NumberField](https://76.zifala.com/llms/number-field.md): The quantity input — native number, B11 chrome, a − / + pair, stated unit. One job: Enter a bounded QUANTITY.
+- [Slider](https://76.zifala.com/llms/slider.md): A native range in 76° clothes — position matters, and the number is still printed. One job: Set a value whose POSITION in a range matters more than its digits.
+- [DateRangeField](https://76.zifala.com/llms/date-range-field.md): Two native date inputs, a mono preset row, and a context line — no month grid, ever. One job: Choose a DATE RANGE.
 
 ## Blocks
 

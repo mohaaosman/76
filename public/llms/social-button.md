@@ -75,7 +75,7 @@ B10 loading contract: the label swaps to "Connecting…" at locked width while t
 | Tab / ⇧Tab | Steps through the stack in visual order. |
 
 - The mark is `aria-hidden="true"` beside its text label (A4); the provider name lives in the text and is never carried by the mark alone.
-- It renders a real `&lt;button&gt;` — the focus ring, disabled state and loading behavior are B10's, unchanged.
+- It renders a real `<button>` — the focus ring, disabled state and loading behavior are B10's, unchanged.
 - Every mark is a single path in `currentColor`, so it inherits contrast from the label instead of needing its own check.
 
 ## Don't

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "divider",
+  "type": "registry:ui",
+  "title": "Divider",
+  "description": "One hairline, optionally naming the group below it in mono. One job: Separate two groups that share a surface.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/divider.tsx",
+      "content": "import { cx } from '@/lib/cx';\nimport './divider.css';\n\n/**\n * B29 · Divider — a hairline that separates two groups, optionally\n * naming the group below it in mono uppercase. A labelled divider is a\n * section marker, not a heading: it never replaces an <h2>.\n */\nexport interface DividerProps {\n  /** Mono uppercase text sitting in the rule, e.g. \"OR\" or \"ARCHIVED\". */\n  label?: string;\n  align?: 'start' | 'center';\n  className?: string;\n}\n\nexport function Divider({ label, align = 'center', className }: DividerProps) {\n  if (!label) return <hr className={cx('sv-divider', className)} />;\n  return (\n    <div\n      className={cx('sv-divider__labelled', align === 'start' && 'sv-divider__labelled--start', className)}\n      role=\"separator\"\n      aria-label={label}\n    >\n      <span className=\"sv-divider__rule\" aria-hidden=\"true\" />\n      <span className=\"sv-divider__label sv-mono\" aria-hidden=\"true\">\n        {label}\n      </span>\n      <span className=\"sv-divider__rule\" aria-hidden=\"true\" />\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/divider.tsx"
+    },
+    {
+      "path": "registry/seventy-six/divider.css",
+      "content": "/* B29 · Divider — one hairline, optionally carrying a mono label. */\n\n@layer sv-components {\n  .sv-divider {\n    height: 1px;\n    border: 0;\n    background: var(--sv-line);\n  }\n\n  .sv-divider__labelled {\n    display: flex;\n    align-items: center;\n    gap: var(--sv-s3);\n  }\n\n  .sv-divider__rule {\n    flex: 1;\n    height: 1px;\n    background: var(--sv-line);\n  }\n\n  /* start alignment keeps the label flush left; the rule runs on past it. */\n  .sv-divider__labelled--start .sv-divider__rule:first-child {\n    display: none;\n  }\n\n  .sv-divider__label {\n    font-size: 9.5px;\n    letter-spacing: 0.13em;\n    text-transform: uppercase;\n    color: var(--sv-ink-soft);\n    white-space: nowrap;\n  }\n\n  .sv-band .sv-divider,\n  .sv-band .sv-divider__rule {\n    background: var(--sv-band-line);\n  }\n\n  .sv-band .sv-divider__label {\n    color: var(--sv-band-soft);\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/divider.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/divider.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B29",
+    "job": "Separate two groups that share a surface.",
+    "tags": [
+      "divider",
+      "separator",
+      "rule",
+      "hairline",
+      "hr"
+    ],
+    "exports": [
+      "Divider"
+    ]
+  }
+}

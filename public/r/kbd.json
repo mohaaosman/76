@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kbd",
+  "type": "registry:ui",
+  "title": "Kbd",
+  "description": "A key, printed — mono cap on wall, for shortcuts that exist. One job: Print the key that triggers something.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/kbd.tsx",
+      "content": "import { Fragment } from 'react';\nimport { cx } from '@/lib/cx';\nimport './kbd.css';\n\n/**\n * B32 · Kbd — a key, printed. Documentation of a shortcut that exists;\n * never a button, never the only way to reach an action (C4).\n */\nexport interface KbdProps {\n  /** One key per string: ['⌘', 'K']. Rendered as separate caps. */\n  keys: string[];\n  /** Shown between caps for a sequence (\"then\"); omit for a chord. */\n  separator?: string;\n  className?: string;\n}\n\nexport function Kbd({ keys, separator, className }: KbdProps) {\n  return (\n    <span className={cx('sv-kbd', className)}>\n      {keys.map((key, i) => (\n        <Fragment key={key}>\n          {i > 0 && separator && <span className=\"sv-kbd__sep\">{separator}</span>}\n          <kbd className=\"sv-kbd__cap sv-mono\">{key}</kbd>\n        </Fragment>\n      ))}\n    </span>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/kbd.tsx"
+    },
+    {
+      "path": "registry/seventy-six/kbd.css",
+      "content": "/* B32 · Kbd — a printed key cap. 3px radius is registered (bars/caps). */\n\n@layer sv-components {\n  .sv-kbd {\n    display: inline-flex;\n    align-items: center;\n    gap: var(--sv-s1);\n  }\n\n  .sv-kbd__cap {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    min-width: 18px;\n    padding: 1px 5px;\n    border: 1px solid var(--sv-line);\n    border-bottom-width: 2px;\n    border-radius: 3px;\n    background: var(--sv-wall);\n    font-size: 10.5px;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-kbd__sep {\n    font-size: 10.5px;\n    color: var(--sv-ink-faint);\n  }\n\n  .sv-band .sv-kbd__cap {\n    border-color: var(--sv-band-line);\n    background: transparent;\n    color: var(--sv-band-soft);\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/kbd.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/kbd.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B32",
+    "job": "Print the key that triggers something.",
+    "tags": [
+      "kbd",
+      "keyboard",
+      "shortcut",
+      "hotkey",
+      "command"
+    ],
+    "exports": [
+      "Kbd"
+    ]
+  }
+}

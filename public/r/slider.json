@@ -1,0 +1,44 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slider",
+  "type": "registry:ui",
+  "title": "Slider",
+  "description": "A native range in 76° clothes — position matters, and the number is still printed. One job: Set a value whose POSITION in a range matters more than its digits.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/field.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/slider.tsx",
+      "content": "import { forwardRef, useId } from 'react';\nimport type { InputHTMLAttributes } from 'react';\nimport { cx } from '@/lib/cx';\nimport './slider.css';\n\n/**\n * B34 · Slider — a native <input type=\"range\"> in 76° clothes. It is for\n * a value whose EXACT number matters less than its position in a range\n * (opacity, threshold, weighting). The number is still printed in mono\n * beside the label: the bar illustrates, the figure informs (B4).\n */\nexport interface SliderProps\n  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'value' | 'onChange' | 'min' | 'max' | 'step'> {\n  label: string;\n  value: number;\n  onValueChange: (value: number) => void;\n  min?: number;\n  max?: number;\n  step?: number;\n  hint?: string;\n  /** Formats the readout and aria-valuetext, e.g. (v) => `${v}%`. */\n  format?: (value: number) => string;\n}\n\nexport const Slider = forwardRef<HTMLInputElement, SliderProps>(function Slider(\n  { label, value, onValueChange, min = 0, max = 100, step = 1, hint, format, id: explicitId, className, ...rest },\n  ref,\n) {\n  const auto = useId();\n  const id = explicitId ?? auto;\n  const hintId = `${id}-hint`;\n  const readout = format ? format(value) : String(value);\n\n  return (\n    <div className={cx('sv-field sv-slider', className)}>\n      <div className=\"sv-slider__head\">\n        <label className=\"sv-field__label\" htmlFor={id}>\n          {label}\n        </label>\n        <output className=\"sv-slider__value sv-mono sv-num\" htmlFor={id} aria-hidden=\"true\">\n          {readout}\n        </output>\n      </div>\n      <input\n        {...rest}\n        ref={ref}\n        id={id}\n        type=\"range\"\n        className=\"sv-slider__input\"\n        value={value}\n        min={min}\n        max={max}\n        step={step}\n        onChange={(e) => onValueChange(Number(e.target.value))}\n        aria-describedby={hint ? hintId : undefined}\n        aria-valuetext={format ? readout : undefined}\n      />\n      {hint && (\n        <p className=\"sv-field__hint\" id={hintId}>\n          {hint}\n        </p>\n      )}\n    </div>\n  );\n});\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/slider.tsx"
+    },
+    {
+      "path": "registry/seventy-six/slider.css",
+      "content": "/* B34 · Slider — the B4 bar geometry (3px track, radius 2) with a seed\n   thumb. No gradient fill: a filled track needs one, and gradients are\n   banned (A1), so the printed number carries the value instead.\n\n   The track is --sv-field-line-strong, NOT B4's --sv-wall. B4's track\n   carries a seed fill that identifies the control; this one carries\n   nothing, so the track itself is the affordance and owes the 3:1\n   non-text bar (WCAG 1.4.11). Wall would be 1.06:1 on paper. Same\n   reasoning as the B25 PinField box border. */\n\n@layer sv-components {\n  .sv-slider__head {\n    display: flex;\n    align-items: baseline;\n    justify-content: space-between;\n    gap: var(--sv-s3);\n  }\n\n  .sv-slider__value {\n    font-size: 12px;\n    color: var(--sv-ink);\n  }\n\n  .sv-slider__input {\n    appearance: none;\n    width: 100%;\n    height: 14px;\n    margin: var(--sv-s1) 0;\n    background: transparent;\n    cursor: pointer;\n  }\n\n  .sv-slider__input::-webkit-slider-runnable-track {\n    height: 3px;\n    border-radius: 2px;\n    background: var(--sv-field-line-strong);\n  }\n\n  .sv-slider__input::-moz-range-track {\n    height: 3px;\n    border-radius: 2px;\n    background: var(--sv-field-line-strong);\n  }\n\n  .sv-slider__input::-webkit-slider-thumb {\n    appearance: none;\n    width: 14px;\n    height: 14px;\n    margin-top: -5.5px;\n    border: 0;\n    border-radius: 50%;\n    background: var(--sv-seed);\n  }\n\n  .sv-slider__input::-moz-range-thumb {\n    width: 14px;\n    height: 14px;\n    border: 0;\n    border-radius: 50%;\n    background: var(--sv-seed);\n  }\n\n  .sv-slider__input:focus-visible {\n    outline: 2px solid var(--sv-seed-line);\n    outline-offset: 2px;\n  }\n\n  .sv-slider__input:disabled {\n    cursor: not-allowed;\n  }\n\n  .sv-slider__input:disabled::-webkit-slider-thumb {\n    background: var(--sv-ink-faint);\n  }\n\n  .sv-slider__input:disabled::-moz-range-thumb {\n    background: var(--sv-ink-faint);\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/slider.css"
+    }
+  ],
+  "categories": [
+    "forms"
+  ],
+  "docs": "https://76.zifala.com/llms/slider.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B34",
+    "job": "Set a value whose POSITION in a range matters more than its digits.",
+    "tags": [
+      "slider",
+      "range",
+      "threshold",
+      "input",
+      "form"
+    ],
+    "exports": [
+      "Slider"
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "description-list",
+  "type": "registry:ui",
+  "title": "DescriptionList",
+  "description": "The record readout — mono terms, informative values, on hairlines. One job: State a set of labelled facts about ONE record.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/description-list.tsx",
+      "content": "import type { ReactNode } from 'react';\nimport { cx } from '@/lib/cx';\nimport './description-list.css';\n\n/**\n * B28 · DescriptionList — the record readout: what a Drawer or a detail\n * page shows when the answer is a set of labelled facts, not a table.\n * Terms speak mono uppercase like every other 76° label; values carry\n * the information.\n */\nexport interface DescriptionRow {\n  term: string;\n  children: ReactNode;\n  /** id renders the value in mono · num right-aligns it and goes tabular. */\n  kind?: 'text' | 'id' | 'num';\n}\n\nexport interface DescriptionListProps {\n  rows: DescriptionRow[];\n  /** columns (default) pairs term and value side by side; stacked puts the\n      value under its term — the 320px floor falls back to stacked on its own. */\n  layout?: 'columns' | 'stacked';\n  className?: string;\n}\n\nexport function DescriptionList({ rows, layout = 'columns', className }: DescriptionListProps) {\n  return (\n    <dl className={cx('sv-dl', layout === 'stacked' && 'sv-dl--stacked', className)}>\n      {rows.map((row) => (\n        <div className=\"sv-dl__row\" key={row.term}>\n          <dt className=\"sv-dl__term sv-mono\">{row.term}</dt>\n          <dd\n            className={cx(\n              'sv-dl__value',\n              row.kind === 'id' && 'sv-dl__value--id sv-mono',\n              row.kind === 'num' && 'sv-dl__value--num sv-num',\n            )}\n          >\n            {row.children}\n          </dd>\n        </div>\n      ))}\n    </dl>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/description-list.tsx"
+    },
+    {
+      "path": "registry/seventy-six/description-list.css",
+      "content": "/* B28 · DescriptionList — labelled facts on hairlines. */\n\n@layer sv-components {\n  .sv-dl__row {\n    display: grid;\n    grid-template-columns: minmax(110px, 168px) 1fr;\n    gap: var(--sv-s4);\n    align-items: baseline;\n    padding: 9px 0;\n    border-bottom: 1px solid var(--sv-line);\n  }\n\n  .sv-dl__row:last-child {\n    border-bottom: 0;\n  }\n\n  .sv-dl__term {\n    font-size: 9.5px;\n    letter-spacing: 0.13em;\n    text-transform: uppercase;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-dl__value {\n    font-size: 13px;\n    font-weight: 500;\n    color: var(--sv-ink);\n  }\n\n  .sv-dl__value--id {\n    font-size: 11px;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-dl__value--num {\n    font-weight: 600;\n    text-align: right;\n  }\n\n  .sv-dl--stacked .sv-dl__row {\n    grid-template-columns: 1fr;\n    gap: 2px;\n  }\n\n  .sv-dl--stacked .sv-dl__value--num {\n    text-align: left;\n  }\n\n  /* C7 · the 320px floor: two columns become one rather than crushing the\n     value into a two-character gutter. */\n  @media (max-width: 520px) {\n    .sv-dl__row {\n      grid-template-columns: 1fr;\n      gap: 2px;\n    }\n\n    .sv-dl__value--num {\n      text-align: left;\n    }\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/description-list.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/description-list.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B28",
+    "job": "State a set of labelled facts about ONE record.",
+    "tags": [
+      "description list",
+      "dl",
+      "record",
+      "detail",
+      "key value",
+      "metadata"
+    ],
+    "exports": [
+      "DescriptionList"
+    ]
+  }
+}

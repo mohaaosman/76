@@ -3,7 +3,7 @@
 The signature stat and the only legal KPI card: label + delta, icon tile + value, and a footnote that earns its line.
 
 **One job:** Answer "how much — and so what."
-**Category:** widgets · **Exports:** StatS1 · **Tags:** kpi, stat-card, delta, tabular-numerals, icon-tile, footnote
+**Category:** widgets · **Exports:** StatS1, Delta · **Tags:** kpi, stat-card, delta, tabular-numerals, icon-tile, footnote
 
 ## Installation
 
@@ -22,7 +22,21 @@ The footnote is the discipline: it must contain information **not already in the
 
 "Generic admin KPI card" is a registered defect class (A2). If a stat needs a sparkline, it is a Trend; if it needs two values, it is two stats.
 
+**v0.4.0** extracts the delta chip as **Delta**, so a table cell or a DescriptionList row states a change in exactly the voice this card does — one implementation, not two. `polarity` handles inverse metrics honestly: cost falling is `down-good` and colours ok, without the old trick of flipping the sign.
+
 ## Examples
+
+### Delta beside a figure
+
+The same chip outside the card — a record readout, a table cell, a Trend head.
+
+```tsx
+import { Delta, Sparkline } from '@/components/seventy-six';
+
+<Delta value={12.4} />
+<Delta value={-6.2} polarity="down-good" />   // cost falling is good
+<Sparkline data={ordersPerDay} ariaLabel="Orders per day, trending up over seven days" />
+```
 
 ### The canonical stat row
 
@@ -76,9 +90,18 @@ When no comparison period exists the delta is simply omitted — the label never
 | `unit` | `string` | — | Suffix (%, pt, d) at 14/600 soft. |
 | `delta` | `number` | — | Signed comparison; ▲/▼ + value in ok/bad. Omit when none exists. |
 | `deltaSuffix` | `string` | `'%'` | Appended to the delta figure. |
+| `deltaPolarity` | `'up-good' | 'down-good'` | `'up-good'` | Which direction colours ok. Cost, churn and returns are down-good. |
 | `icon` | `ReactNode` | — | 16px stroke icon; the tile provides the seed tint. |
 | `footnote` | `ReactNode` | — | The "so what" line; put the load-bearing figure in <b>. |
 | `footnoteText` | `string` | — | Plain-text footnote for the aria-label. |
+
+### Delta
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `number` | — | Signed change; +12.4 renders "▲ 12.4%". |
+| `suffix` | `string` | `'%'` | Appended to the figure. |
+| `polarity` | `'up-good' | 'down-good'` | `'up-good'` | Which direction colours ok. |
 
 ## Accessibility
 
@@ -102,7 +125,7 @@ Format upstream and pass a string ($482,190). The component handles type discipl
 
 **What if the metric got worse but down is good (e.g. returns)?**
 
-The delta colors by sign. For inverse metrics, pass the delta whose sign matches sentiment — e.g. returns dropping 8% is delta={+8} labeled "RETURNS · FEWER" — or omit the delta and carry it in the footnote.
+Pass the real signed change and set deltaPolarity="down-good". Returns dropping 8% renders "▼ 8%" in ok — honest arrow, honest colour. The old advice of flipping the sign is withdrawn as of v0.4.0.
 
 **Can the whole card link to a report?**
 
