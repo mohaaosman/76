@@ -78,6 +78,19 @@
     --sv-font-ui:   'Hanken Grotesk Variable', 'Hanken Grotesk', system-ui, sans-serif;
     --sv-font-mono: 'Fragment Mono', ui-monospace, monospace;
 
+    /* display — the PUBLIC surface only (v0.5). The product ramp tops out
+       at 27px (the PageHero h1), so a marketing page had no honest way to
+       speak above the work. These three steps are it, and FIREWALL RULE 17
+       rejects them anywhere but the registered marketing components: no
+       dashboard grows a 64px number.
+       They clamp rather than sit at a fixed step because a 64px line does
+       not survive 320px (C7). The floor of each is the size the same line
+       would take in the product ramp, so the page degrades INTO the system
+       rather than out of it. */
+    --sv-display-1: clamp(34px, 6.4vw, 64px);
+    --sv-display-2: clamp(27px, 4.8vw, 48px);
+    --sv-display-3: clamp(21px, 3.4vw, 34px);
+
     /* motion — opacity/color fades only, never layout (A1).
        Both collapse to 0ms under prefers-reduced-motion. */
     --sv-t-fast: 120ms;

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { PageHero, Sheet, Row, Card, CardHead, StatS1, StatusWord } from '@/components/seventy-six';
 import { HeroBand } from '../shell';
-import { Prose } from '../blocks';
+import { RichText } from '../blocks';
 
 const IconGrid = (
   <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -109,13 +109,13 @@ export function HomePage() {
             <CardHead title="What this is" subtitle="A component library compiled from the Component Book" />
             <div className="site-prose">
               <p>
-                <Prose text="76° is <b>flat, informational, corporate</b> — every component tells you information; none of them perform. This site documents the React implementation of the Component Book: one component per widget type, because <b>the taxonomy is the component API</b>." />
+                <RichText text="76° is <b>flat, informational, corporate</b> — every component tells you information; none of them perform. This site documents the React implementation of the Component Book: one component per widget type, because <b>the taxonomy is the component API</b>." />
               </p>
               <p>
-                <Prose text="Distribution follows the shadcn model: components are <b>source you own</b>, installed into your project via the CLI or copied manually. There is no npm package to fall out of date, and no dependency to audit — the entire library runs on native <code>&lt;dialog&gt;</code>, the <code>popover</code> attribute, native <code>&lt;select&gt;</code>, and hand-rolled SVG charts." />
+                <RichText text="Distribution follows the shadcn model: components are <b>source you own</b>, installed into your project via the CLI or copied manually. There is no npm package to fall out of date, and no dependency to audit — the entire library runs on native <code>&lt;dialog&gt;</code>, the <code>popover</code> attribute, native <code>&lt;select&gt;</code>, and hand-rolled SVG charts." />
               </p>
               <p>
-                <Prose text="Each page follows the same skeleton: overview, installation, live variations with paired <b>Preview / Code</b> tabs, prop-by-prop documentation, the accessibility contract, the Don't list, and an FAQ. The page you read is the page an LLM ingests — one source of truth." />
+                <RichText text="Each page follows the same skeleton: overview, installation, live variations with paired <b>Preview / Code</b> tabs, prop-by-prop documentation, the accessibility contract, the Don't list, and an FAQ. The page you read is the page an LLM ingests — one source of truth." />
               </p>
             </div>
           </Card>

@@ -398,6 +398,25 @@
       ]
     },
     {
+      "name": "prose",
+      "type": "registry:ui",
+      "title": "Prose",
+      "description": "One component that styles a whole subtree — markdown, on-system. One job: Set running copy the system did not author.",
+      "categories": [
+        "primitives"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/prose.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/prose.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "combobox",
       "type": "registry:ui",
       "title": "Combobox",
@@ -892,6 +911,101 @@
       ]
     },
     {
+      "name": "masthead",
+      "type": "registry:ui",
+      "title": "Masthead",
+      "description": "The hero, refused as imagery and rebuilt as type. One job: Open a public page with the claim, set in type.",
+      "categories": [
+        "marketing"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/masthead.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/masthead.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "feature-list",
+      "type": "registry:ui",
+      "title": "FeatureList",
+      "description": "The claim, itemised — type on hairlines, never icon tiles. One job: State what the product does, one item at a time.",
+      "categories": [
+        "marketing"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/feature-list.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/feature-list.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "cta",
+      "type": "registry:ui",
+      "title": "CallToAction",
+      "description": "The last row of a public page — the only one that asks. One job: Name the one act the page wants.",
+      "categories": [
+        "marketing"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/cta.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/cta.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "proof-row",
+      "type": "registry:ui",
+      "title": "ProofRow",
+      "description": "The figures that carry the claim, between vertical hairlines. One job: State the few figures that prove the claim.",
+      "categories": [
+        "marketing"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/proof-row.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/proof-row.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "site-footer",
+      "type": "registry:ui",
+      "title": "SiteFooter",
+      "description": "The one place a page is allowed to be a list of links. One job: Close a public page with everything it owes the reader.",
+      "categories": [
+        "marketing"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/site-footer.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/site-footer.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "block-stats-row",
       "type": "registry:block",
       "title": "Stats row",
@@ -992,6 +1106,36 @@
       "files": [
         {
           "path": "blocks/dashboard-header.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "template-marketing-home",
+      "type": "registry:block",
+      "title": "Public home",
+      "description": "The public surface — a masthead, figures, columns, one ask.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/marketing-home.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "template-pricing-page",
+      "type": "registry:block",
+      "title": "Pricing",
+      "description": "Pricing as a DataTable — no tier cards, no \"Most popular\" pill.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/pricing-page.tsx",
           "type": "registry:block"
         }
       ]

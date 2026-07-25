@@ -1,0 +1,195 @@
+/* B51 · SiteFooter — the page's closing row, on the wall */
+
+@layer sv-components {
+  /* One hairline across the FULL width, and nothing else: the footer is not
+     a card, so it takes no shadow, no radius and no paper (A4 reserves all
+     three for cards). It states the wall it already sits on, because the
+     block above it may have been a paper CTA (B49) and this row has to read
+     as the page bottoming out rather than as one more surface. */
+  .sv-site-footer {
+    border-top: 1px solid var(--sv-line);
+    background: var(--sv-wall);
+  }
+
+  /* The Sheet's measure, restated because the footer spans the viewport and
+     the Sheet does not — the rule above has to run edge to edge while the
+     type stays on the same 1280px column as every other row of the page. */
+  .sv-site-footer__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: var(--sv-s8) var(--sv-s8) var(--sv-s7);
+  }
+
+  @media (max-width: 1000px) {
+    .sv-site-footer__inner {
+      padding: var(--sv-s7) 18px var(--sv-s6);
+    }
+  }
+
+  /* The brand column is an explicit 1.6fr; the groups flow into implicit
+     columns after it, so the row is exactly as wide as the caller's group
+     count with no empty track left behind by a fixed template. Every track
+     is minmax(0, …) — a bare 1fr floors at its content and one long link
+     would push the page into a horizontal scroll (C7, Ship Gate 11). */
+  .sv-site-footer__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr);
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: var(--sv-s7) var(--sv-s6);
+  }
+
+  /* ---- Brand column ---- */
+
+  /* B24's wall-side treatment verbatim: mono, tracking pulled in, the degree
+     tucked against the six so the mark reads as one word. Here the degree
+     recedes a step further than on the Plate — the footer's job is to close,
+     not to sign, so the mark states itself quietly. It is never a bare 76. */
+  .sv-site-footer__wordmark {
+    font-family: var(--sv-font-mono);
+    font-size: 18px;
+    letter-spacing: -0.05em;
+    color: var(--sv-ink);
+  }
+
+  .sv-site-footer__wordmark-six {
+    color: var(--sv-seed-text);
+  }
+
+  .sv-site-footer__wordmark-deg {
+    margin-left: -0.14em;
+    color: var(--sv-ink-faint);
+  }
+
+  /* Capped near 34ch so it breaks like a caption beside the mark, not like a
+     paragraph across the column — running copy is B45 Prose, and this slot
+     holds one sentence. The Masthead's deck states the claim; this restates
+     what the product IS, for a reader who arrived at the bottom first. */
+  .sv-site-footer__statement {
+    max-width: 34ch;
+    margin-top: var(--sv-s3);
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--sv-ink-soft);
+  }
+
+  /* ---- Groups ---- */
+
+  /* `sv-mono` (base.css) already sets the face, size, tracking and case —
+     restating any of it here forks the mono voice. Soft, not faint: this
+     line is the list's only label, and C2 refuses faint as a sole carrier. */
+  .sv-site-footer__grouptitle {
+    margin-bottom: var(--sv-s3);
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-site-footer__links,
+  .sv-site-footer__secondary {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sv-site-footer__links {
+    display: grid;
+    gap: var(--sv-s1);
+  }
+
+  /* B10's text-link rule: no underline until hover, and hover carries the
+     seed. inline-flex plus the vertical padding puts the hit area over 24px
+     without the row growing — the padding is inside the line's own leading,
+     so nothing here moves on hover (only colour transitions, A1). */
+  .sv-site-footer__link {
+    display: inline-flex;
+    padding: var(--sv-s1) 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--sv-ink);
+    text-decoration: none;
+    transition: color var(--sv-t-fast);
+  }
+
+  .sv-site-footer__link:hover {
+    color: var(--sv-seed-text);
+    text-decoration: underline;
+  }
+
+  /* ---- Bottom row ---- */
+
+  /* The second hairline. The legal line is the one thing on the page that is
+     owed rather than offered, so it gets its own rule and the full width of
+     the column above it — it is not a fifth group. */
+  .sv-site-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sv-s3) var(--sv-s6);
+    margin-top: var(--sv-s7);
+    padding-top: var(--sv-s5);
+    border-top: 1px solid var(--sv-line);
+  }
+
+  /* The mono metadata voice at a legible step: 10px is the label size, and
+     this line is read rather than glanced at. Soft ink, because a copyright
+     that competes with the links has misread its own importance. */
+  .sv-site-footer__legal {
+    font-size: 10.5px;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-site-footer__secondary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sv-s2) var(--sv-s5);
+  }
+
+  /* Same link rule, one step down in size and colour: these are the terms a
+     reader goes looking for, never the ones the page is steering them to. */
+  .sv-site-footer__seclink {
+    display: inline-flex;
+    padding: var(--sv-s1) 0;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--sv-ink-soft);
+    text-decoration: none;
+    transition: color var(--sv-t-fast);
+  }
+
+  .sv-site-footer__seclink:hover {
+    color: var(--sv-seed-text);
+    text-decoration: underline;
+  }
+
+  /* ---- Below 860px ----
+     Four link columns plus a brand column cannot hold their measure here:
+     the titles start wrapping before the links do. The row goes 2-up and the
+     brand takes the first cell like any other column. Nothing is dropped and
+     nothing scrolls sideways at any width (C7). */
+
+  @media (max-width: 860px) {
+    .sv-site-footer__grid {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* ---- Below 560px ----
+     One column. The brand goes full width because a 34ch sentence in half a
+     phone is four words a line, and the groups stack in the order they were
+     given — a footer read top to bottom is still the whole footer. The
+     bottom row stacks with it and left-aligns: centred type here would be
+     the only centred line on the page. */
+
+  @media (max-width: 560px) {
+    .sv-site-footer__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--sv-s6);
+    }
+
+    .sv-site-footer__bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+}

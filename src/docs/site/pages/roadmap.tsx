@@ -1,6 +1,6 @@
 import { PageHero, Sheet, Row, Card, CardHead } from '@/components/seventy-six';
 import { HeroBand } from '../shell';
-import { Prose } from '../blocks';
+import { RichText } from '../blocks';
 
 interface Phase {
   title: string;
@@ -10,6 +10,21 @@ interface Phase {
 
 /* Mirrors ROADMAP.md — the two are edited in the same change or neither is. */
 const ROADMAP: Phase[] = [
+  {
+    title: 'Shipped',
+    note: 'v0.5.0 · the public surface',
+    items: [
+      { t: 'Not one refusal repealed', d: 'No photography, no illustration, no 3D, no logo cloud. <b>F11 survived the surface it was written against</b>, which is how a refusal proves it was right. What changed is the type ramp, and nothing else.' },
+      { t: 'Display tokens + firewall rule 17', d: '<code>--sv-display-1/2/3</code> — 64/48/34, clamping to 34/27/21 at 320px, which is the size each line takes in the product ramp. Rule 17 fences them to the three components that set them, so no dashboard grows a 64px number.' },
+      { t: 'Prose (B45)', d: 'The one component that styles a subtree it does not own: 16/1.6 on a ~66ch measure, a heading ramp that stays inside the product ramp, hairline-ruled blockquote, inline mono, markdown straight in. It is also where <b>F1 is answered</b> — the refused WYSIWYG composes to a textarea plus a preview, and this is the preview.' },
+      { t: 'Masthead (B47)', d: 'The hero, refused as imagery and rebuilt as type. No image slot, no video slot, no background slot — adding one is a Book change, not a prop. It speaks <b>PageHero</b>’s vocabulary one surface up.' },
+      { t: 'FeatureList (B48) · CallToAction (B49)', d: 'The claim itemised as a newspaper column — a rule, an ordinal, a title, one sentence, and no icon tiles. Then the only row that asks, asking once; <code>tone="band"</code> closes the page on the same ink it opened under.' },
+      { t: 'ProofRow (B50)', d: 'Figures at display size between vertical hairlines. <b>It is not a StatS1</b>: B3 is a measurement on paper with an icon tile, a delta and a footnote; this is a claim on the wall with none of the three.' },
+      { t: 'SiteFooter (B51)', d: 'One named <code>&lt;nav&gt;</code> over the whole link region, and groups labelled as the lists they are — four h2s at the end of a document re-open an outline the content already closed.' },
+      { t: 'Pricing is a DataTable', d: 'No tier cards, no "Most popular" pill, no three competing primaries. The plan is the column and the capability is the row, so every capability is stated for every plan instead of implied by its absence from a card.' },
+      { t: 'The marketing shell and the section break', d: 'B1 makes <code>app</code> and <code>nav</code> optional — the band keeps the wordmark and the right cluster and drops the sub-tab row. B2 gains <code>space="section"</code>: 14px separates two cards of one dashboard, not two arguments of one page.' },
+    ],
+  },
   {
     title: 'Shipped',
     note: 'v0.4.0 · the taxonomy closed',
@@ -46,16 +61,6 @@ const ROADMAP: Phase[] = [
     ],
   },
   {
-    title: 'Next',
-    note: 'v0.5.0 · the public surface',
-    items: [
-      { t: 'Display tokens', d: '<code>--sv-display-1/2/3</code>, banned outside marketing block CSS by firewall rule 17.' },
-      { t: 'Prose (B45)', d: 'One registered component styling a whole subtree — and the only place Part E permits italic. Renumbered from B36, which the 0.4 remainder claimed first.' },
-      { t: 'Marketing blocks', d: 'Hero (type only), feature list, FAQ, footer, CTA, stat band. No photography, no illustration, no logo clouds (F11).' },
-      { t: 'Pricing is a DataTable', d: 'One row per feature, one column per plan, one primary beneath. No tier cards, no "Most popular" pill.' },
-    ],
-  },
-  {
     title: 'Exploring',
     note: 'later',
     items: [
@@ -84,7 +89,7 @@ export function RoadmapPage() {
               <div className="site-prose">
                 {phase.items.map((item) => (
                   <p key={item.t}>
-                    <b>{item.t}</b> — <Prose text={item.d} />
+                    <b>{item.t}</b> — <RichText text={item.d} />
                   </p>
                 ))}
               </div>

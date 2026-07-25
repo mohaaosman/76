@@ -1,0 +1,118 @@
+/* B49 · CallToAction — the ask. One primary, stated once, at display size. */
+
+@layer sv-components {
+  /* The ask on the left, the act on the right, centred to each other: the
+     eye finishes the sentence exactly where the button is. */
+  .sv-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sv-s7);
+    padding: var(--sv-s8);
+    border-radius: var(--sv-r);
+  }
+
+  /* min-width:0 so a long unbroken word shrinks the column instead of
+     pushing the actions off the row (C7). */
+  .sv-cta__text {
+    min-width: 0;
+  }
+
+  /* The one display step the public surface may speak in at this scale
+     (rule 17). It clamps to 21px at 320px — the size the same line takes in
+     the product ramp — so the page degrades INTO the system, not out of it. */
+  .sv-cta__title {
+    font-size: var(--sv-display-3);
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  /* Capped near 52ch because a measure wider than that stops being one
+     sentence to read and starts being a paragraph to skim. */
+  .sv-cta__statement {
+    margin-top: var(--sv-s3);
+    max-width: 52ch;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-cta__side {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--sv-s3);
+  }
+
+  .sv-cta__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--sv-s2);
+  }
+
+  /* The terms carry real information — what it costs, whether a card is
+     needed — so they take the soft step, never the faint one (C2). */
+  .sv-cta__note {
+    color: var(--sv-ink-soft);
+    text-align: right;
+  }
+
+  /* ---- tone="paper" · an ordinary card on the wall (A4) ---- */
+
+  .sv-cta--paper {
+    background: var(--sv-paper);
+    box-shadow: var(--sv-shadow);
+  }
+
+  /* ---- tone="band" · the ink surface ----
+     No shadow, and the omission is the rule: ink is the wall's opposite,
+     not a card sitting on it. Nothing here floats.
+     The mark on ink is --sv-on-dark, never --sv-paper: paper inverts with
+     the mode and the band does not, so paper-as-text would collapse the
+     pair on dark (rule 16). */
+
+  .sv-cta--band {
+    background: var(--sv-band);
+  }
+
+  .sv-cta--band .sv-cta__title {
+    color: var(--sv-on-dark);
+  }
+
+  .sv-cta--band .sv-cta__statement,
+  .sv-cta--band .sv-cta__note {
+    color: var(--sv-band-soft);
+  }
+
+  /* ---- The floor ----
+     Below 720px the row stacks and the act stops being a right-hand
+     accessory: it takes the full width, at the reading order's end, where
+     a thumb already is. Nothing is dropped and nothing scrolls sideways. */
+
+  @media (max-width: 720px) {
+    .sv-cta {
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--sv-s6);
+      padding: var(--sv-s7);
+    }
+
+    .sv-cta__side {
+      align-items: stretch;
+    }
+
+    /* Column, not a wrapping row: two half-width buttons on a 320px screen
+       are two two-line clickables. Each one gets the whole width. */
+    .sv-cta__actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .sv-cta__note {
+      text-align: left;
+    }
+  }
+}

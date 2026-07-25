@@ -1,6 +1,6 @@
 import { PageHero, Sheet, Row, Card, CardHead } from '@/components/seventy-six';
 import { HeroBand } from '../shell';
-import { Prose } from '../blocks';
+import { RichText } from '../blocks';
 
 const NEUTRALS = [
   { name: '--sv-band', hex: '#1B1F26', note: 'ink band' },
@@ -62,7 +62,7 @@ export function FoundationsPage() {
               ))}
             </div>
             <p className="site-prose site-prose--tight">
-              <Prose text="New seeds are REJECTED unless seed-on-white ≥ 4.5:1 <b>and</b> white-on-seed ≥ 4.5:1. When the two differ (Signal), register <code>--sv-seed</code> and <code>--sv-seed-text</code> separately." />
+              <RichText text="New seeds are REJECTED unless seed-on-white ≥ 4.5:1 <b>and</b> white-on-seed ≥ 4.5:1. When the two differ (Signal), register <code>--sv-seed</code> and <code>--sv-seed-text</code> separately." />
             </p>
           </Card>
         </Row>
@@ -102,19 +102,19 @@ export function FoundationsPage() {
             <CardHead title="Geometry & motion" subtitle="One radius, one shadow, two durations" />
             <div className="site-prose">
               <p>
-                <Prose text="<b>Radius:</b> <code>--sv-r</code> (4px) everywhere; 50% for avatars and dots; 2–3px for bars. Nothing else — no 8, no 12, no pills." />
+                <RichText text="<b>Radius:</b> <code>--sv-r</code> (4px) everywhere; 50% for avatars and dots; 2–3px for bars. Nothing else — no 8, no 12, no pills." />
               </p>
               <p>
-                <Prose text="<b>Elevation:</b> exactly one shadow, <code>0 1px 2px rgba(16,20,28,.05)</code> — one breath of depth. Cards never blend and never float." />
+                <RichText text="<b>Elevation:</b> exactly one shadow, <code>0 1px 2px rgba(16,20,28,.05)</code> — one breath of depth. Cards never blend and never float." />
               </p>
               <p>
-                <Prose text="<b>Spacing:</b> 4px base scale, <code>--sv-s1</code> through <code>--sv-s8</code>. Grid is 12-col with 14px gutters; canonical splits are 4×1fr for stat rows and 1.7fr/1fr for content rows." />
+                <RichText text="<b>Spacing:</b> 4px base scale, <code>--sv-s1</code> through <code>--sv-s8</code>. Grid is 12-col with 14px gutters; canonical splits are 4×1fr for stat rows and 1.7fr/1fr for content rows." />
               </p>
               <p>
-                <Prose text="<b>Motion:</b> <code>--sv-t-fast</code> 120ms and <code>--sv-t</code> 160ms, opacity and color only — nothing moves layout. Both collapse to 0ms under <code>prefers-reduced-motion</code>, and 76° loses nothing, by design." />
+                <RichText text="<b>Motion:</b> <code>--sv-t-fast</code> 120ms and <code>--sv-t</code> 160ms, opacity and color only — nothing moves layout. Both collapse to 0ms under <code>prefers-reduced-motion</code>, and 76° loses nothing, by design." />
               </p>
               <p>
-                <Prose text="<b>Per-product theming:</b> set <code>&lt;html data-seed=&quot;cobalt&quot;&gt;</code> (or verdigris, signal…). Nothing else may change between products." />
+                <RichText text="<b>Per-product theming:</b> set <code>&lt;html data-seed=&quot;cobalt&quot;&gt;</code> (or verdigris, signal…). Nothing else may change between products." />
               </p>
             </div>
           </Card>

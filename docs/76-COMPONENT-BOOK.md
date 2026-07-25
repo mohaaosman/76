@@ -20,6 +20,7 @@ These rules are written to be lintable. Grep the codebase; any hit is a violatio
 - `animation` durations > 200ms; any `transition` on layout properties (width/height/top/left/margin); keyframe bounces/springs.
 - `!important` — a component that needs it is mis-structured.
 - Font families other than Hanken Grotesk / Fragment Mono (system stack fallbacks only).
+- **Rule 17 —** `var(--sv-display-1|2|3)` anywhere but `tokens.css` and the three marketing components that set display type (`masthead.css`, `cta.css`, `proof-row.css`). The product ramp tops out at 27px; a dashboard that grows a 64px number has left the system. B48 `FeatureList` and B51 `SiteFooter` are marketing too and are deliberately NOT on that list — an allowance nobody uses is an allowance somebody will.
 
 **A2 · Banned patterns:**
 
@@ -356,6 +357,71 @@ The band-less page, cut in half, with the card ACROSS THE CUT. Two flat surfaces
 - **No new z-index.** The halves and the Plate share one grid cell, so the card floats over the seam by DOM order rather than by stacking context.
 - Don't: no text on either half (a statement there is a landing page, and F11 refuses the imagery it grows into next); no widget, screenshot or illustration (A2, F11); no gradient between the surfaces (A1 — and a soft blend leaves no edge to straddle); no second card and no second decision (B24); no Split for 404, 500, maintenance or an expired link, where a plain Plate is the whole answer; no wordmark or footer left on the wall for the seam to cut through.
 
+### B45 · `Prose` (v0.5)
+
+The one component in 76° that styles elements it does not own. Running copy — a changelog, a help article, a policy page, a public page — is not what the product ramp was built for: 13/1.5 is an instrument for scanning a table, and two screens of it defeat a reader. `Prose` is a second ramp scoped to one subtree: 16/1.6 on a ~66ch measure, a heading ramp that stays INSIDE the product ramp (27/21/17/15 — the display steps are rule 17's and are refused here), real list markers, a 2px `--sv-line` blockquote rule, inline `<code>` on a wall inset at the registered 3px radius, tables in the table-header voice, and links underlined in `--sv-seed-line`. Markdown rendered to HTML drops straight in. One job: **set running copy the system did not author.**
+
+- **It is also where F1 is answered.** 76° refuses the WYSIWYG toolbar and composes a textarea plus a preview instead. `Prose` is that preview, and the same component sets the published article afterwards.
+- **Part E's one italic.** Italic is legal in running body copy and nowhere else; this is that place, and `prose.css` is the firewall's registered exception. A heading inside it is still upright.
+- A11y: no roles, no ARIA. Heading LEVELS are the AUTHOR'S — the component styles what it is given and never renumbers, because the outline is the author's structure and re-ranking it rewrites what a screen reader announces.
+- Don't: never wraps application UI (a card, a table or a form inside it inherits type it was not designed for); never a real snippet, which is B43 `CodeBlock`; never nested; never used to smuggle a second type scale into a product screen.
+
+### B47 · `Masthead` (v0.5)
+
+**The hero, refused as imagery and rebuilt as type.** F11 bans hero photography, illustration and 3D; A2 bans the stock-photo card; A1 bans the gradient every hero grows next. What is left is what a masthead always was — a claim, set large, with nothing behind it. There is **no image slot, no video slot and no background slot**, and adding one is a Book change rather than a prop. One job: **open a public page with the claim, set in type.**
+
+It is B1 `PageHero`'s public-surface sibling and speaks its vocabulary deliberately: `title` plus a receded `titleSoft` inside the same heading, one line of context, an actions cluster with ONE primary. The difference is the ramp and the surface — `--sv-display-1` on the wall, instead of 27px on the band. It is not a card: no paper, no shadow, no radius, no border.
+
+- **The steps clamp.** `--sv-display-1` is 64px at full width and 34px at 320px — the size the same line takes in the product ramp — so a public page degrades INTO the system rather than out of it (C7). At the floor the tracking and leading relax back toward the product ramp, because −0.03em/1.05 steadies a 64px line and closes the counters on a 34px one.
+- The actions keep B10's registered geometry. A taller marketing button is a third button size the Book does not carry, and "the type above it is large" is not a reason the taxonomy accepts.
+- A11y: the heading is a real `h1` (or `h2` when embedded), with `titleSoft` inside it so the accessible name is the whole claim. The eyebrow is a sibling LINE, never a heading — an h2 above the h1 puts a rung above the claim in the outline.
+- Don't: no image, video or background; no second primary; no paragraph in the statement (that is B45); no figure inside it (that is B50).
+
+### B48 · `FeatureList` (v0.5)
+
+The claim, itemised. Every competing library answers this with a grid of tinted icon tiles; A2 refuses the icon-led card, F11 refuses the illustration that follows it, and Law 2 will not spend six colours on decorative glyphs. What is left is a newspaper column: a 1px `--sv-line` rule over each item, a mono ordinal, a 15/700 title, one sentence at 13.5, and an optional mono meta line. 3 across → 2 below 1000px → 1 below 620px, every track `minmax(0,1fr)`. One job: **state what the product does, one item at a time.**
+
+- **A statement, never a control.** Nothing in an item is clickable. If a feature needs a link, the link lives in its body where a reader can see what it points at — a card-sized hit area with no visible affordance is mystery meat (A2).
+- The ordinal is derived from POSITION, never passed in: a hand-written number drifts the moment an item is inserted, and a claim that miscounts itself is worse than an unnumbered one.
+- A11y: a real `<ul>`, so the count is announced first. The ordinal is **not** `aria-hidden` — copy refers to items by number, and hiding a visible figure from a screen reader is exactly the asymmetry C5 warns about. Ordinals and meta take `--sv-ink-soft`, never faint (C2).
+- Don't: no icons or tiles; no illustration; no card per item; no clickable item; no two-sentence body; no tenth item — at ten this is a page.
+
+### B49 · `CallToAction` (v0.5)
+
+The last row of a public page, and the only one that asks for anything. Everything above it states; this asks. That is why it holds exactly ONE primary: B10's rule is not relaxed on the public surface, it is at its most binding here, because a page that asks for two things has asked for neither. Title at `--sv-display-3`, one sentence capped near 52ch, the actions on the right, a mono note under them — and below 720px it stacks with the actions full width in a column. One job: **name the one act the page wants.**
+
+- **Two surfaces, one prop.** `tone="paper"` is an ordinary card (A4: radius 4, one `--sv-shadow`, zero border). `tone="band"` paints `--sv-band` and takes the band's own tokens, carrying the `.sv-band` class so ghost buttons and focus rings inside it inherit the band treatment already defined in `button.css` and `base.css` — it writes none of its own. **Ink takes no shadow**: it is the wall's opposite, not a card resting on it.
+- Marks on ink paint with `--sv-on-dark`. `color: var(--sv-paper)` is firewall rule 16 and would collapse every white-on-ink pair on dark.
+- There is no `urgency`, `countdown` or `scarcity` prop, and there never will be: A3 is the copy contract, and a clock that pressures the reader is the opposite of a competent colleague.
+- Don't: never two primaries; never "Get started" or "Learn more" (A3 — the button names its object); never a form inside it (that is a page, or a B24 Plate); never a tinted "premium" surface.
+
+### B50 · `ProofRow` (v0.5)
+
+The figures that carry the claim, on the public surface. **It is not a StatS1, and the distinction is written down because it is the only thing stopping the next reader reaching for the card.** B3 is the product's signature KPI: an icon tile, a delta against a comparison period, a footnote that adds information — a measurement on paper, in a dashboard, read by someone who owns the number. B50 is a marketing row: no card, no icon, no delta, no comparison. A figure at `--sv-display-3`, a mono label under it, on the wall, between vertical hairlines, read by someone deciding whether to believe the claim above. A2 names "generic admin widget" as a defect class; "generic marketing widget" is the same defect, and both start by reaching for the component that is already built. One job: **state the few figures that prove the claim.**
+
+- The rules between items are the structure: a 1px `--sv-line` `border-left` on every item but the first. 4 across → 2×2 below 860px (where every item that starts a line drops its rule — a rule between nothing and nothing is worse than none) → 1 below 520px.
+- A11y: a real `<dl>`, so each figure is announced with its label as one pair. The `<dt>` is FIRST in the DOM and a single CSS `order` puts the figure on top, so reading order and visual order are both honest and nothing is announced backwards. Nothing in the row is focusable, so the swap costs nothing.
+- Figures are PRE-FORMATTED by the caller (C9) and tabular (A4).
+- Don't: never a delta or an arrow (a public page has no comparison period); never an icon or a card per figure; never more than four — a fifth is a B7 DataTable; never a figure the product cannot substantiate (Ship Gate 12).
+
+### B51 · `SiteFooter` (v0.5)
+
+The last thing on a public page, and the only place a page is allowed to be a list of links. A `--sv-line` rule across the full width, then a brand column carrying the `76°` wordmark (six in `--sv-seed-text`, the degree mark receded to `--sv-ink-faint` — never omitted) and one sentence at 34ch, then up to four groups of at most six links, then a second hairline over the mono legal line and the secondary row. On the wall: no card, no shadow, no paper. One job: **close a public page with everything it owes the reader.**
+
+- **The accessibility is the design.** ONE `<nav aria-label="Footer">` covers the whole link region: a footer that wraps each column in its own `<nav>` hands a screen reader four identical unlabelled navigations. Each group's `<ul>` is labelled by its own title through `aria-labelledby`, with ids from a single `useId` base.
+- **The group titles are not headings.** Four h2s at the end of a document re-open the outline after the content has closed it, and they skip or duplicate levels depending on what the page above used (A4). A link group is a labelled list, so it is labelled as one.
+- The wordmark carries one accessible name, "Seventy Six Degrees"; its glyph spans are `aria-hidden` so it is never spelled out. Two marks per page — the band opens, the footer closes — and nothing between them carries a third.
+- `renderLink` is BandNav's adapter shape verbatim, so one function wires the band and the footer alike.
+- Don't: no newsletter form (a form is a page, or a Plate); no social icon tiles (A2); no language picker that is the only path to anything (C4); no second wordmark on a page whose band already carries one; no fifth group — that is a sitemap page.
+
+### B1 · `BandTopbar` — v0.5 amendment · the marketing shell
+
+`app` and `nav` are both optional. **The marketing shell is the band with its product navigation removed**: it keeps the wordmark and the right cluster, carries marketing links instead of app sections, and has no `BandSubTabs` row at all, because a public page has no section to sub-divide. A public page is not an app, so the wordmark stands alone and the hairline has nothing to divide. Below 1000px `BandNav` still swaps itself for the left Drawer — the public surface inherits the 320px floor rather than re-solving it.
+
+### B2 · `Row` — v0.5 amendment · the section break
+
+`space="section"` sets the row's top margin to 64px (40px below 1000px) instead of the 14px gutter. **14px separates two cards of one dashboard; it does not separate two arguments of one page.** It exists for the public surface and a product screen has no use for it. The overlap rule still wins on the one row that carries it — `[data-overlap]` is an attribute selector and this is a class — so a break can never cancel the signature move by accident.
+
 ### B19 · `Combobox` — v0.4.0 amendment
 
 **Multi-select is specified, and the refusal it replaces was aimed at the wrong thing.** "Never multi-select" refused the implementation every library ships — a growing wall of dismissible pills that reflows the form on every pick — not the job. Pass `multiple` and `value` becomes a `string[]`: Enter and click TOGGLE the active option and LEAVE THE LIST OPEN, the query survives the toggle so three matches of one search are taken without retyping it, and Backspace on an empty query drops the value taken last. The two modes are a discriminated union, so they cannot be mixed and every single-select call site is untouched.
@@ -455,7 +521,7 @@ Light-first stands: light is the default, dark is opt-in via `<html data-mode="d
 
 1. Grep Part A1 patterns — zero hits.
 2. Count colors on the screen: neutrals + one seed + at most both functional colors as words/dots. Anything else fails.
-3. Every widget is a registered type (S1, Progress, Trend, MeterList, DataTable, CardTabs, ActivityList — from v0.2.0: Combobox, Menu, Drawer, Banner, Badge — from v0.3.0: Plate, PinField, SocialButton — from v0.4.0: Accordion, DescriptionList, Divider, Avatar, Spinner/Busy, Kbd, NumberField, Slider, DateRangeField, SearchField, FileField, Tabs, Stepper, TreeList, Timeline, Popover, CodeBlock, DistributionStrip, Split) — if a new type was needed, it is named, single-jobbed, and added to Part B in the same change. If Part F refuses it, it is a screen, not a component.
+3. Every widget is a registered type (S1, Progress, Trend, MeterList, DataTable, CardTabs, ActivityList — from v0.2.0: Combobox, Menu, Drawer, Banner, Badge — from v0.3.0: Plate, PinField, SocialButton — from v0.4.0: Accordion, DescriptionList, Divider, Avatar, Spinner/Busy, Kbd, NumberField, Slider, DateRangeField, SearchField, FileField, Tabs, Stepper, TreeList, Timeline, Popover, CodeBlock, DistributionStrip, Split — from v0.5: Prose, and on the PUBLIC surface only, Masthead, FeatureList, CallToAction, ProofRow, SiteFooter) — if a new type was needed, it is named, single-jobbed, and added to Part B in the same change. If Part F refuses it, it is a screen, not a component.
 4. Every S1 footnote passes the "so what" test (new information, not paraphrase).
 5. Tab through the screen: visible focus everywhere, order sane, skip-link present (a Plate is the one exception, B24), ⌘K opens.
 6. Squint test: the page reads as ink band + white paper on a platinum wall — a Plate (B24) reads as one card and a wordmark on the wall; nothing glows, nothing floats, nothing performs.
@@ -487,6 +553,8 @@ The test: **if a widget's job needs more than one sentence, or it carries an int
 | F9 | Color picker, star rating | Out of taxonomy |
 | F10 | Drag-drop dashboard layout | The fixed 12-column grid (B2) |
 | F11 | Hero imagery, stock photography, illustration | Type, hairline, and real data |
+
+**F11 SURVIVED THE PUBLIC SURFACE.** v0.5 dressed the pitch without repealing a single refusal: no photography, no illustration, no 3D, no logo cloud. B47 `Masthead` has no image slot, B48 `FeatureList` has no icon, and B50 `ProofRow` has no chart. The one thing that changed is the type ramp — three display steps, fenced to those components by firewall rule 17. A refusal that survives the surface it was written against is a refusal that was right.
 
 **F4 is BINDING ON THE DATE RANGE.** 76° draws no month grid, ever. A date range is two native `<input type="date">` fields welded into one Field (B11), preceded by a mono uppercase preset row — `7D · 30D · QTD · YTD · CUSTOM` — and followed by a mono context line ("24 days · ends today"). The browser draws the calendar. That composition shipped as **B35 `DateRangeField`** in v0.4.0 — the refusal now has a component, and it still contains no grid.
 

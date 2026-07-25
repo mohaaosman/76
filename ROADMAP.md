@@ -4,6 +4,25 @@ What has shipped, what is next, and what we are still weighing. The visual
 system is settled; the work now is reach and rigor — never new chrome for its
 own sake. Live version: <https://76.zifala.com/#/roadmap>.
 
+## Shipped — v0.5.0 · the public surface
+
+76° dresses the pitch on its own terms, and **not one refusal was repealed to
+do it.** No photography, no illustration, no 3D, no logo cloud — F11 survived
+the surface it was written against, which is how you find out a refusal was
+right.
+
+- **Display tokens** — `--sv-display-1/2/3` (64/48/34, clamping to 34/27/21 at 320px), the system's first type steps above the product ramp. **Firewall rule 17** fences them to the three components that set them, so no dashboard grows a 64px number. B48 and B51 are marketing too and are deliberately off that list: an allowance nobody uses is an allowance somebody will.
+- **`Prose` (B45)** — the one component that styles a subtree it does not own: 16/1.6 on a ~66ch measure, a heading ramp that stays *inside* the product ramp, hairline-ruled blockquote, inline mono, seed-underlined links, markdown straight in. It is also where **F1 is answered** — the refused WYSIWYG composes to a textarea plus a preview, and this is the preview.
+- **`Masthead` (B47)** — the hero, refused as imagery and rebuilt as type. No image slot, no video slot, no background slot; adding one is a Book change, not a prop. It speaks `PageHero`'s vocabulary one surface up.
+- **`FeatureList` (B48)** — the claim itemised as a newspaper column: a rule, an ordinal, a title, one sentence. No icon tiles, because A2 refuses the icon-led card and Law 2 will not spend six colours on decoration.
+- **`CallToAction` (B49)** — the only row on a public page that asks, and it asks once. `tone="band"` closes the page on the same ink it opened under; ink takes no shadow, because it is the wall's opposite rather than a card resting on it.
+- **`ProofRow` (B50)** — figures at display size between vertical hairlines. **It is not a StatS1**, and the Book says so by name: "generic marketing widget" is the same defect class A2 already named "generic admin widget".
+- **`SiteFooter` (B51)** — one named `<nav>`, groups labelled as the lists they are rather than as headings that re-open a closed outline.
+- **Pricing is a DataTable** — no tier cards, no "Most popular" pill, no three competing primaries. The plan is the column, the capability is the row, and every capability is stated for every plan instead of implied by its absence from a card.
+- **The marketing shell (B1 amendment)** — `app` and `nav` become optional: the band keeps the wordmark and the right cluster, carries marketing links, and drops the sub-tab row. Below 1000px it still swaps to the left Drawer, so the public surface inherits the 320px floor rather than re-solving it.
+- **The section break (B2 amendment)** — `Row space="section"`. 14px separates two cards of one dashboard; it does not separate two arguments of one page.
+- **Two templates** — `marketing-home` and `pricing-page`, both composed entirely from registered parts, both with the FAQ on the B27 Accordion rather than on a widget invented for it.
+
 ## Shipped — v0.4.0 · the taxonomy, closed
 
 The line-by-line audit against Bootstrap, Tailwind UI, shadcn/ui and Material
@@ -74,7 +93,7 @@ leaks.
 | **0.2.1** | The dark chrome regression — a shipped AA failure | Shipped |
 | **0.3** | The 320px floor + the auth surface | Shipped |
 | **0.4** | Closing the product taxonomy | Shipped |
-| **0.5** | The public surface | Next |
+| **0.5** | The public surface | Shipped |
 
 ---
 
@@ -133,19 +152,6 @@ Material, minus everything Part F refuses. Every line is now shipped.
 **Donuts and gauges stay banned forever.** B44 is not a concession to the
 donut, it is the component that answers the question the donut was asked —
 and it draws a straight line.
-
-## 0.5 — the public surface
-
-76° dresses the pitch as well as the product — on 76°'s terms, not the
-marketing industry's. **The surface is typographic: no photography, no
-illustration, no 3D, no logo clouds.** A2's illustration and stock-photo bans
-stand unamended; F11 states the refusal outright.
-
-- **Display tokens** — `--sv-display-1/2/3` (≈64/48/34), the system's first type tokens, since the product ramp tops out at 27px. **Firewall rule 17** bans them outside marketing block CSS, so no dashboard grows a 64px number.
-- **`Prose` (B45)** — one registered component styling its whole subtree: 16px body, ~66ch measure, heading ramp, lists, hairline-ruled blockquote, inline mono, seed-underlined links. Markdown drops straight in. It is also the only place Part E permits italic. *(Renumbered from B36: the 0.4 remainder shipped first and took B36–B44.)*
-- **Marketing blocks** — hero (type only) · feature list · FAQ (on the B27 Accordion) · footer · CTA · stat band.
-- **Pricing is a DataTable.** No tier cards, no "Most popular" pill, no three competing primaries: one row per feature, one column per plan, and a single primary beneath. C7 governs it on mobile — the table scrolls, it never truncates.
-- **Marketing shell** — the band without product nav.
 
 ## Exploring — later
 

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Card, CardHead, CardTabs, useToast } from '@/components/seventy-six';
 import type { Composition } from '../content/compositions';
 import { compositionRender } from '../compositions';
-import { Prose } from './blocks';
+import { RichText } from './blocks';
 
 const BASE = 'https://76.zifala.com';
 
@@ -32,7 +32,7 @@ export function CompositionCard({ comp }: { comp: Composition }) {
       />
       {comp.description[0] && (
         <p className="site-prose site-prose--tight">
-          <Prose text={comp.description[0]} />
+          <RichText text={comp.description[0]} />
         </p>
       )}
       <CardTabs

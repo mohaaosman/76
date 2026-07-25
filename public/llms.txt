@@ -30,6 +30,7 @@
 - [Skeleton](https://76.zifala.com/llms/skeleton.md): Static wall-colored blocks matching the target anatomy. No shimmer, no pulse, 300ms gate. One job: Hold the exact shape of content that is still loading.
 - [SearchCommand](https://76.zifala.com/llms/search-command.md): The ⌘K palette every 76° app ships — dialog anatomy, mono input, grouped results. One job: Be the keyboard front door to everything.
 - [CodeBlock](https://76.zifala.com/llms/code-block.md): Code as a quotation: monospace, ink, an inset panel on wall — and no syntax highlighting, ever. One job: Print code or a command exactly as it must be typed.
+- [Prose](https://76.zifala.com/llms/prose.md): One component that styles a whole subtree — markdown, on-system. One job: Set running copy the system did not author.
 - [Combobox](https://76.zifala.com/llms/combobox.md): The searchable select — ARIA 1.2 combobox pattern, hand-rolled, zero dependencies. One job: Pick one value — or a set of them — from a list too long to scan.
 - [Menu](https://76.zifala.com/llms/menu.md): An actions dropdown on the native popover top layer — plus the SplitButton that carries one. One job: Hold the secondary VERBS one control cannot.
 - [Drawer](https://76.zifala.com/llms/drawer.md): The slide-over: a paper panel from the screen edge for detail-in-context, on native <dialog>. One job: Inspect or edit ONE record without leaving the sheet.
@@ -56,6 +57,11 @@
 - [DateRangeField](https://76.zifala.com/llms/date-range-field.md): Two native date inputs, a mono preset row, and a context line — no month grid, ever. One job: Choose a DATE RANGE.
 - [SearchField](https://76.zifala.com/llms/search-field.md): The in-place filter — native search, B11 chrome, one named clear, a live count. One job: Filter a set that is ALREADY on screen by typing.
 - [FileField](https://76.zifala.com/llms/file-field.md): The attachment field — a dashed target, a real file input behind a named button, one row per file stating its outcome. One job: Attach files, and state what happened to each one.
+- [Masthead](https://76.zifala.com/llms/masthead.md): The hero, refused as imagery and rebuilt as type. One job: Open a public page with the claim, set in type.
+- [FeatureList](https://76.zifala.com/llms/feature-list.md): The claim, itemised — type on hairlines, never icon tiles. One job: State what the product does, one item at a time.
+- [CallToAction](https://76.zifala.com/llms/cta.md): The last row of a public page — the only one that asks. One job: Name the one act the page wants.
+- [ProofRow](https://76.zifala.com/llms/proof-row.md): The figures that carry the claim, between vertical hairlines. One job: State the few figures that prove the claim.
+- [SiteFooter](https://76.zifala.com/llms/site-footer.md): The one place a page is allowed to be a list of links. One job: Close a public page with everything it owes the reader.
 
 ## Blocks
 
@@ -73,6 +79,8 @@ Composed sections — install with npx shadcn@latest add https://76.zifala.com/r
 
 Full screens built only from the taxonomy — install with npx shadcn@latest add https://76.zifala.com/r/template-<slug>.json
 
+- Public home (`template-marketing-home`, seed cobalt): The public surface — a masthead, figures, columns, one ask.
+- Pricing (`template-pricing-page`, seed cobalt): Pricing as a DataTable — no tier cards, no "Most popular" pill.
 - ERP dashboard (`template-erp-dashboard`, seed cobalt): A warehouse operations overview — the densest 76° screen.
 - CRM pipeline (`template-crm-pipeline`, seed verdigris): A sales pipeline — stages, momentum, and deals.
 - POS terminal (`template-pos-terminal`, seed signal): A point-of-sale register — scaled up, touch-first.

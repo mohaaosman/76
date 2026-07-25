@@ -113,6 +113,34 @@ export const blocks: Composition[] = [
 
 export const templates: Composition[] = [
   {
+    slug: 'marketing-home',
+    kind: 'template',
+    name: 'Public home',
+    seed: 'cobalt',
+    tagline: 'The public surface — a masthead, figures, columns, one ask.',
+    description: [
+      'The marketing SHELL is B1 with its product nav removed: the band keeps the wordmark and the right cluster, carries marketing links instead of app sections, and has no sub-tab row, because a public page has no section to sub-divide. Below 1000px <b>BandNav</b> swaps itself for the left drawer exactly as it does in the product, so the public surface inherits the 320px floor rather than re-solving it.',
+      'Nothing on the page is an image. <b>Masthead</b> (B47) opens it, <b>ProofRow</b> (B50) states the figures, <b>FeatureList</b> (B48) itemises the claim on hairlines, the FAQ is the B27 <b>Accordion</b> rather than a new widget, and <b>CallToAction</b> (B49) closes on the same ink the page opened under. F11 refuses the photography and A2 refuses the stock-photo card, so type, hairline and real figures carry it.',
+    ],
+    tags: ['marketing', 'landing', 'public', 'home', 'hero', 'cobalt'],
+    file: 'templates/marketing-home.tsx',
+    deps: ['band', 'sheet', 'masthead', 'proof-row', 'feature-list', 'accordion', 'cta', 'site-footer', 'prose', 'button'],
+  },
+  {
+    slug: 'pricing-page',
+    kind: 'template',
+    name: 'Pricing',
+    seed: 'cobalt',
+    tagline: 'Pricing as a DataTable — no tier cards, no "Most popular" pill.',
+    description: [
+      'Three tier cards state each plan in isolation, hide what a plan lacks by leaving it out, and put three seed-coloured primaries on one screen — which A2 refuses, because a view region gets one. What a buyer is doing is comparing a set of records on shared columns, and that has been <b>B7 DataTable</b> since v0.1.0.',
+      'The plan is the COLUMN and the capability is the ROW, so the eye compares down a column and reads across a row, and every capability is stated for every plan. <b>CardTabs</b> filter which capabilities are shown — never which plans, because hiding two of three is exactly what the card row does. One primary sits beneath the table, and C7 governs the floor: the table scrolls inside its card and never truncates.',
+    ],
+    tags: ['marketing', 'pricing', 'plans', 'public', 'table', 'cobalt'],
+    file: 'templates/pricing-page.tsx',
+    deps: ['band', 'sheet', 'card', 'data-table', 'card-tabs', 'masthead', 'accordion', 'cta', 'site-footer', 'prose', 'button'],
+  },
+  {
     slug: 'erp-dashboard',
     kind: 'template',
     name: 'ERP dashboard',

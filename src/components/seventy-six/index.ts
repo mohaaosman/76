@@ -81,6 +81,22 @@ export { Spinner, Busy } from './spinner';
 export type { SpinnerProps, BusyProps } from './spinner';
 export { Kbd } from './kbd';
 export type { KbdProps } from './kbd';
+export { Prose } from './prose';
+export type { ProseProps } from './prose';
+
+/* v0.5 · the public surface. These five set the display steps, and firewall
+   rule 17 keeps those steps here — a product screen imports none of them. */
+export { Masthead } from './masthead';
+export type { MastheadProps } from './masthead';
+export { FeatureList } from './feature-list';
+export type { FeatureItem, FeatureListProps } from './feature-list';
+export { CallToAction } from './cta';
+export type { CallToActionProps } from './cta';
+export { ProofRow } from './proof-row';
+export type { ProofItem, ProofRowProps } from './proof-row';
+export { SiteFooter } from './site-footer';
+export type { FooterGroup, FooterLink, SiteFooterProps } from './site-footer';
+
 export { EmptyState } from './empty-state';
 export { SearchCommand, useSearchCommand } from './search-command';
 export type { CommandItem } from './search-command';

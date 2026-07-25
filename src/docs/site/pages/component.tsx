@@ -4,7 +4,7 @@ import { entries } from '../../content';
 import { entryToMarkdown } from '../../content/markdown';
 import { demos } from '../../demos';
 import { HeroBand } from '../shell';
-import { A11yCard, DontsCard, FaqCard, InstallCard, PreviewCode, PropsCard, Prose } from '../blocks';
+import { A11yCard, DontsCard, FaqCard, InstallCard, PreviewCode, PropsCard, RichText } from '../blocks';
 
 export function ComponentPage() {
   const { slug } = useParams();
@@ -50,7 +50,7 @@ export function ComponentPage() {
             <div className="site-prose">
               {entry.intro.map((p) => (
                 <p key={p}>
-                  <Prose text={p} />
+                  <RichText text={p} />
                 </p>
               ))}
             </div>

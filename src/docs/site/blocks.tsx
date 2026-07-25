@@ -6,7 +6,7 @@ import type { DocEntry, DocExample, PropRow, KeyRow } from '../content/types';
 import { decodeEntities } from '../content/markdown';
 
 /** Tiny renderer for <b> / <code> markup inside prose strings. */
-export function Prose({ text }: { text: string }) {
+export function RichText({ text }: { text: string }) {
   const parts = text.split(/(<b>.*?<\/b>|<code>.*?<\/code>)/g);
   return (
     <>
@@ -31,7 +31,7 @@ export function PreviewCode({ example, demo }: { example: DocExample; demo: Reac
       <CardHead title={example.title} />
       {example.description && (
         <p className="site-prose site-prose--tight">
-          <Prose text={example.description} />
+          <RichText text={example.description} />
         </p>
       )}
       <CardTabs
@@ -100,7 +100,7 @@ export function PropsCard({ groups }: { groups: DocEntry['props'] }) {
                   <td className="site-props__type">{row.type}</td>
                   <td className="site-props__type">{row.defaultValue ?? '—'}</td>
                   <td className="site-props__desc">
-                    <Prose text={row.description} />
+                    <RichText text={row.description} />
                   </td>
                 </tr>
               ))}
@@ -137,7 +137,7 @@ export function A11yCard({ a11y }: { a11y: DocEntry['a11y'] }) {
       <div className="site-prose">
         {a11y.notes.map((note) => (
           <p key={note}>
-            <Prose text={note} />
+            <RichText text={note} />
           </p>
         ))}
       </div>
@@ -152,7 +152,7 @@ export function DontsCard({ donts }: { donts: string[] }) {
       <ul className="site-donts">
         {donts.map((d) => (
           <li key={d}>
-            <Prose text={d} />
+            <RichText text={d} />
           </li>
         ))}
       </ul>
@@ -169,7 +169,7 @@ export function FaqCard({ faq }: { faq: DocEntry['faq'] }) {
           <details key={f.q}>
             <summary>{f.q}</summary>
             <p>
-              <Prose text={f.a} />
+              <RichText text={f.a} />
             </p>
           </details>
         ))}
