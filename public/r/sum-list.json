@@ -1,0 +1,46 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "sum-list",
+  "type": "registry:ui",
+  "title": "SumList",
+  "description": "The amount block — a set of charges and the figure they add up to. One job: State a set of amounts and the figure they add up to.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/sum-list.tsx",
+      "content": "import { cx } from '@/lib/cx';\nimport './sum-list.css';\n\n/**\n * B55 · SumList — one job: state a set of amounts and the figure they add\n * up to.\n *\n * **It is B44 `DistributionStrip`'s ARITHMETIC SIBLING, and the pairing is\n * the point: B44 divides ONE total into its shares; SumList builds ONE\n * total FROM its lines.** B44 starts with 128,953 sessions and asks how\n * they split; B55 starts with a line total, a discount, a tax and a\n * carriage charge and asks what the reader owes. They share a voice\n * deliberately — a mono uppercase label left, a pre-formatted figure right,\n * the closing figure at B4's 19/700 step — because they are the same\n * arithmetic read in opposite directions, and a reader who has learned one\n * has learned the other.\n *\n * **The boundary against B7, stated here because someone will otherwise use\n * the wrong one.** INSIDE a table the closing figures are B7's `totals`: a\n * real `<tfoot>` keyed to the table's own columns, outside the row, focus,\n * selection and pagination models, repeated by the browser at the foot of\n * every printed page. SumList is that block WHEREVER IT SITS OUTSIDE A\n * TABLE — the amount-due card beside an invoice, the order summary beside a\n * payment form, the fee breakdown under a quote. The test is not where the\n * block LOOKS right, it is whether the amounts belong to the table's\n * columns: a line total does, and is a `<tfoot>` row; shipping, a discount\n * and tax belong to the DOCUMENT and have no column to sit in, so pushing\n * them into the table would key them to a column they are not part of.\n *\n * **It never computes.** Every amount is a PRE-FORMATTED string the caller\n * supplies (C9, A4) — the currency symbol, the grouping, and the minus sign\n * on a discount all included. A component that adds up the numbers it was\n * handed is a component that can disagree with the invoice, and the invoice\n * is the document of record; a component that invents a minus sign is one\n * that will one day print `−$0.00`.\n *\n * It carries NO inset of its own — like B6 `MeterList` and B41 `Timeline`,\n * inside a `<Card>` it takes `<div className=\"sv-card__body\">` (firewall\n * rule 18).\n *\n * Don't: never computes a sum; never more rows than a reader can check by\n * eye (a dozen charges is a B7 DataTable of charges); never a currency\n * symbol the caller did not supply; never a minus the component invented;\n * never inside a table — that is B7 `totals`.\n */\nexport interface SumRow {\n  /** Mono uppercase, in the table-header voice: \"SUBTOTAL\", \"VAT 20%\". */\n  label: string;\n  /**\n   * PRE-FORMATTED and complete: \"$18,240.00\", \"−$1,280.00\", \"$0.00\".\n   * A negative amount is stated by this string — the component never\n   * derives one, because it never sees a number.\n   */\n  amount: string;\n  /** The rate or the basis this amount came from: \"20% of $18,240.00\". */\n  note?: string;\n  /**\n   * The closing figure of the set — the one line the reader came for.\n   * Stronger rule above it, 700 figures, a larger step. One per list:\n   * a set with two closing figures has not closed.\n   */\n  strong?: boolean;\n}\n\nexport interface SumListProps {\n  rows: SumRow[];\n  className?: string;\n}\n\nexport function SumList({ rows, className }: SumListProps) {\n  return (\n    /* A real <dl>, exactly as B28: each label is announced with its own\n       amount as one pair, and the note is read with the label it qualifies\n       rather than floating between two rows. */\n    <dl className={cx('sv-sum', className)}>\n      {rows.map((row) => (\n        <div\n          key={row.label}\n          className={cx('sv-sum__row', row.strong && 'sv-sum__row--strong')}\n        >\n          <dt className=\"sv-sum__term\">\n            <span className=\"sv-sum__label sv-mono\">{row.label}</span>\n            {/* The basis, where the figure came from: a rate, a base, a\n                carrier. Soft, never faint — a reader who must read it is\n                owed --sv-ink-soft (C2). */}\n            {row.note && <span className=\"sv-sum__note sv-num\">{row.note}</span>}\n          </dt>\n          <dd className=\"sv-sum__amount sv-num\">{row.amount}</dd>\n        </div>\n      ))}\n    </dl>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/sum-list.tsx"
+    },
+    {
+      "path": "registry/seventy-six/sum-list.css",
+      "content": "/* B55 · SumList — a set of amounts and the figure they add up to.\n   B44's arithmetic sibling, so it speaks B44's voice: mono uppercase\n   label, tabular figure right, the closing figure at B4's 19/700 step.\n   It carries NO inset of its own — inside a Card it takes\n   `.sv-card__body` (rule 18), the same as a MeterList or a Timeline. */\n\n@layer sv-components {\n  .sv-sum {\n    display: flex;\n    flex-direction: column;\n  }\n\n  /* Label left, amount right, on one hairline each. `auto` on the figure\n     rather than a fixed column: the amounts are already tabular, so they\n     align to each other, and the label keeps everything the figure does\n     not need. min-width:0 on the term is what lets a long label wrap\n     instead of pushing the figure off the card at 320px (C7). */\n  .sv-sum__row {\n    display: grid;\n    grid-template-columns: minmax(0, 1fr) auto;\n    gap: var(--sv-s4);\n    align-items: baseline;\n    padding: 9px 0;\n    border-bottom: 1px solid var(--sv-line);\n  }\n\n  .sv-sum__row:first-child {\n    padding-top: 0;\n  }\n\n  /* The last row never rules into the card's own edge — B7's body and B28's\n     pairs both end unruled, and a list that closes with a line is a list\n     that looks like it continues. */\n  .sv-sum__row:last-child {\n    padding-bottom: 0;\n    border-bottom: 0;\n  }\n\n  .sv-sum__term {\n    display: flex;\n    min-width: 0;\n    flex-direction: column;\n    gap: 2px;\n  }\n\n  /* The table-header voice, because it does the table-header job: it names\n     what the figure beside it measures. 9.5px matches B7's column header\n     and B28's term exactly. */\n  .sv-sum__label {\n    font-size: 9.5px;\n    letter-spacing: 0.13em;\n    text-transform: uppercase;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-sum__note {\n    font-size: 11.5px;\n    line-height: 1.35;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-sum__amount {\n    font-size: 13px;\n    font-weight: 600;\n    text-align: right;\n    color: var(--sv-ink);\n  }\n\n  /* The closing figure. The rule above it is B7's `totals` rule verbatim —\n     1px --sv-field-line-strong, the step that is still a visible line on\n     paper and after a photocopy — and the label goes ink beside it, because\n     Fragment Mono ships one weight and a synthetic bold is not a weight.\n     F14: the figure is INK. The seed on this card belongs to the button. */\n  .sv-sum__row--strong {\n    margin-top: 2px;\n    padding-top: var(--sv-s3);\n    border-top: 1px solid var(--sv-field-line-strong);\n    border-bottom: 0;\n  }\n\n  .sv-sum__row--strong .sv-sum__label {\n    color: var(--sv-ink);\n  }\n\n  .sv-sum__row--strong .sv-sum__amount {\n    font-size: 19px;\n    font-weight: 700;\n    letter-spacing: -0.025em;\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/sum-list.css"
+    }
+  ],
+  "categories": [
+    "widgets"
+  ],
+  "docs": "https://76.zifala.com/llms/sum-list.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B55",
+    "job": "State a set of amounts and the figure they add up to.",
+    "tags": [
+      "sum",
+      "total",
+      "invoice",
+      "checkout",
+      "billing",
+      "amounts",
+      "subtotal",
+      "tax"
+    ],
+    "exports": [
+      "SumList"
+    ]
+  }
+}

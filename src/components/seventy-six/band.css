@@ -37,6 +37,20 @@
     gap: var(--sv-s3);
   }
 
+  /* The centred marketing band. The nav takes the middle of the row and the
+     brand and the right cluster are pushed to the edges by two auto margins,
+     so the links centre against the CONTAINER rather than against whatever
+     the brand happens to be called. Below 1000px the nav leaves the band for
+     the drawer (A2) and the rule has nothing left to centre — which is why it
+     needs no breakpoint of its own. */
+  .sv-band__topbar-inner--centred .sv-band__nav {
+    margin-left: auto;
+  }
+
+  .sv-band__topbar-inner--centred .sv-band__utilities {
+    margin-left: auto;
+  }
+
   .sv-band__wordmark {
     font-size: 17px;
     font-weight: 800;

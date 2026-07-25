@@ -13,7 +13,7 @@ import { categories } from '../content/categories';
  * as one continuous ink zone.
  */
 export function Shell({ onSearch }: { onSearch: () => void }) {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
 
   /* v0.2.0 — the dark surface. Light-first: light is the default,
      dark is opt-in and persisted. Only tokens change. */
@@ -36,13 +36,21 @@ export function Shell({ onSearch }: { onSearch: () => void }) {
     { label: 'Roadmap', href: '/roadmap', active: pathname === '/roadmap' },
   ];
 
+  /* The category row is REAL navigation, and it reads the URL rather than
+     local state: B1 says sub-tabs are links that navigate, `aria-current`
+     comes from the route, and a reader who bookmarks or reloads
+     /components?cat=marketing lands back on the same filtered index. It used
+     to render `active: false` unconditionally, so the row never told anyone
+     where they were — a nav that cannot say where you are is not a nav. */
+  const cat = new URLSearchParams(search).get('cat');
+  const onIndex = pathname === '/components';
   const subtabs: BandNavItem[] = pathname.startsWith('/components')
     ? [
-        { label: 'ALL', href: '/components', active: pathname === '/components' },
+        { label: 'ALL', href: '/components', active: onIndex && !cat },
         ...categories.map((c) => ({
           label: c.label.toUpperCase(),
           href: `/components?cat=${c.id}`,
-          active: pathname === '/components' ? false : false,
+          active: onIndex && cat === c.id,
         })),
       ]
     : [];

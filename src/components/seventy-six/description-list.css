@@ -6,7 +6,12 @@
     grid-template-columns: minmax(110px, 168px) 1fr;
     gap: var(--sv-s4);
     align-items: baseline;
-    padding: 9px 0;
+    /* 18px horizontal, exactly B7's cell inset. B28 says the value `kind`
+       inherits the table's type discipline; it inherits the table's INSET for
+       the same reason. The hairline still runs edge to edge — a `<tr>` border
+       does too — but the type never touches the paper's corner, which is what
+       rule 18 exists to prevent and what this row was quietly doing. */
+    padding: 9px 18px;
     border-bottom: 1px solid var(--sv-line);
   }
 

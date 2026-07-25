@@ -25,9 +25,37 @@ import {
   CallToAction,
   SiteFooter,
   Prose,
+  Card,
+  CardHead,
+  StatS1,
+  DataTable,
+  StatusWord,
+  MeterList,
   Button,
   ButtonLink,
 } from '@/components/seventy-six';
+
+/* 16px stroke marks, seed colour supplied by the S1 tile (B3). */
+const svg = (d: string) => (
+  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+    {d.split('|').map((p, i) => (
+      <path key={i} d={p} />
+    ))}
+  </svg>
+);
+const ICON_TREND = svg('M2 11l4-4 3 3 5-6|M14 4v4h-4');
+const ICON_BOX = svg('M2 4h9l1 8H3z|M11 4l2 2');
+const ICON_CHECK = svg('M13 4L6 12 3 9');
+const ICON_STACK = svg('M2 5l6-3 6 3-6 3z|M2 5v6l6 3 6-3V5');
+
+/* The specimen's figures reconcile with the totals row beneath them:
+   18,240 + 12,960 + 9,850 + 6,362 = 47,412 (Ship Gate 12). */
+const SPECIMEN_ORDERS: { id: string; customer: string; state: string; tone: 'ok' | 'neutral' | 'bad'; total: string }[] = [
+  { id: 'ORD-10482', customer: 'Halcyon Freight', state: 'Fulfilled', tone: 'ok', total: '$18,240.00' },
+  { id: 'ORD-10479', customer: 'Northwind Trading', state: 'Pending', tone: 'neutral', total: '$12,960.00' },
+  { id: 'ORD-10471', customer: 'Kestrel Logistics', state: 'Fulfilled', tone: 'ok', total: '$9,850.00' },
+  { id: 'ORD-10468', customer: 'Bluepeak Retail', state: 'On hold', tone: 'bad', total: '$6,362.00' },
+];
 
 const nav = [
   { label: 'System', href: '#system', active: true },
@@ -134,6 +162,7 @@ export function MarketingHome() {
     <div data-seed="cobalt">
       <Band>
         <BandTopbar
+          navAlign="center"
           nav={<BandNav items={nav} />}
           /* The band's button is a GHOST, not a second primary: A2 allows one
              seed fill per view region and the Masthead below owns the ask. Two
@@ -147,6 +176,7 @@ export function MarketingHome() {
             a public page has no stat row to pin over the band edge. */}
         <Row>
           <Masthead
+            align="center"
             title="Flat, informational, corporate."
             titleSoft="Paper on a wall."
             statement="Fifty-one component specifications with one job each, zero runtime dependencies, and WCAG 2.2 AA verified on both surfaces."
@@ -157,6 +187,91 @@ export function MarketingHome() {
               </>
             }
           />
+        </Row>
+
+        {/* THE SPECIMEN. Every library this page is measured against puts
+            product photography here. F11 refuses it and A2 refuses the
+            stock-photo card — but F11's replacement column reads "type,
+            hairline, and REAL DATA", and a component library has the one asset
+            that qualifies: the components themselves, running, at rest, with
+            figures that reconcile. Nothing here is a picture of the product.
+            It IS the product, rendered by the same code the installer ships.
+            aria-hidden would be wrong — these are real, focusable components —
+            so the row is a labelled region and the reader can tab into it. */}
+        <Row split="stats" role="group" aria-label="The components, running">
+          <StatS1
+            label="REVENUE · MTD"
+            value="$482,190"
+            delta={12.4}
+            icon={ICON_TREND}
+            footnote={<><b>$610K</b> target · 79% with 7 days left</>}
+            footnoteText="610 thousand dollar target, 79 percent reached with 7 days left"
+          />
+          <StatS1
+            label="OPEN ORDERS"
+            value="1,284"
+            delta={-3.1}
+            icon={ICON_BOX}
+            footnote={<>Oldest is <b>4d 6h</b> against a 3-day SLA</>}
+            footnoteText="Oldest open order is 4 days 6 hours against a 3-day SLA"
+          />
+          <StatS1
+            label="FILL RATE · MTD"
+            value="96.3"
+            unit="%"
+            delta={1.8}
+            icon={ICON_CHECK}
+            footnote={<><b>412</b> lines short-shipped from 11,140</>}
+            footnoteText="412 lines short-shipped out of 11,140"
+          />
+          <StatS1
+            label="ON-HAND VALUE"
+            value="$3.94M"
+            icon={ICON_STACK}
+            footnote={<><b>62 days</b> of cover across 4 warehouses</>}
+            footnoteText="62 days of cover across 4 warehouses"
+          />
+        </Row>
+
+        <Row split="main">
+          <Card>
+            <CardHead
+              title="Open orders"
+              subtitle="July · warehouse A"
+              action={<ButtonLink href="#components">View the DataTable</ButtonLink>}
+            />
+            <DataTable
+              caption="Open orders — a live DataTable, not a screenshot"
+              rows={SPECIMEN_ORDERS}
+              rowKey={(o) => o.id}
+              announcement="4 orders"
+              columns={[
+                { key: 'id', header: 'ORDER', kind: 'id', render: (o) => o.id },
+                { key: 'customer', header: 'CUSTOMER', render: (o) => o.customer },
+                {
+                  key: 'state',
+                  header: 'STATUS',
+                  kind: 'status',
+                  render: (o) => <StatusWord tone={o.tone}>{o.state}</StatusWord>,
+                },
+                { key: 'total', header: 'TOTAL', kind: 'num', render: (o) => o.total },
+              ]}
+              totals={[{ label: 'TOTAL', cells: { total: '$47,412.00' }, strong: true }]}
+            />
+          </Card>
+
+          <Card>
+            <CardHead title="Zone utilization" subtitle="Pallet positions · live" />
+            <div className="sv-card__body">
+              <MeterList
+                items={[
+                  { label: 'Zone A · Ambient', current: 4320, max: 4700, value: '92%', subtitle: '4,320 of 4,700 pallet positions' },
+                  { label: 'Zone B · Chilled', current: 1680, max: 2000, value: '84%', subtitle: '1,680 of 2,000 pallet positions' },
+                  { label: 'Zone C · Frozen', current: 610, max: 1200, value: '51%', subtitle: '610 of 1,200 pallet positions' },
+                ]}
+              />
+            </div>
+          </Card>
         </Row>
 
         <Row>

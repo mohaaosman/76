@@ -1,0 +1,90 @@
+/* B55 · SumList — a set of amounts and the figure they add up to.
+   B44's arithmetic sibling, so it speaks B44's voice: mono uppercase
+   label, tabular figure right, the closing figure at B4's 19/700 step.
+   It carries NO inset of its own — inside a Card it takes
+   `.sv-card__body` (rule 18), the same as a MeterList or a Timeline. */
+
+@layer sv-components {
+  .sv-sum {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Label left, amount right, on one hairline each. `auto` on the figure
+     rather than a fixed column: the amounts are already tabular, so they
+     align to each other, and the label keeps everything the figure does
+     not need. min-width:0 on the term is what lets a long label wrap
+     instead of pushing the figure off the card at 320px (C7). */
+  .sv-sum__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--sv-s4);
+    align-items: baseline;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--sv-line);
+  }
+
+  .sv-sum__row:first-child {
+    padding-top: 0;
+  }
+
+  /* The last row never rules into the card's own edge — B7's body and B28's
+     pairs both end unruled, and a list that closes with a line is a list
+     that looks like it continues. */
+  .sv-sum__row:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .sv-sum__term {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  /* The table-header voice, because it does the table-header job: it names
+     what the figure beside it measures. 9.5px matches B7's column header
+     and B28's term exactly. */
+  .sv-sum__label {
+    font-size: 9.5px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-sum__note {
+    font-size: 11.5px;
+    line-height: 1.35;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-sum__amount {
+    font-size: 13px;
+    font-weight: 600;
+    text-align: right;
+    color: var(--sv-ink);
+  }
+
+  /* The closing figure. The rule above it is B7's `totals` rule verbatim —
+     1px --sv-field-line-strong, the step that is still a visible line on
+     paper and after a photocopy — and the label goes ink beside it, because
+     Fragment Mono ships one weight and a synthetic bold is not a weight.
+     F14: the figure is INK. The seed on this card belongs to the button. */
+  .sv-sum__row--strong {
+    margin-top: 2px;
+    padding-top: var(--sv-s3);
+    border-top: 1px solid var(--sv-field-line-strong);
+    border-bottom: 0;
+  }
+
+  .sv-sum__row--strong .sv-sum__label {
+    color: var(--sv-ink);
+  }
+
+  .sv-sum__row--strong .sv-sum__amount {
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+}

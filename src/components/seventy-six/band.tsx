@@ -70,12 +70,24 @@ export interface BandTopbarProps {
   nav?: ReactNode;
   /** Right cluster: search trigger, notifications, avatar. */
   utilities?: ReactNode;
+  /**
+   * v0.6.1 · the public surface. A product band reads left to right — brand,
+   * then the sections of the app, in the order the work happens. A public
+   * page has no work and no order: its four links are peers, and centring
+   * them says so. Product screens keep `start`, and that is the default.
+   */
+  navAlign?: 'start' | 'center';
 }
 
-export function BandTopbar({ app, nav, utilities }: BandTopbarProps) {
+export function BandTopbar({ app, nav, utilities, navAlign = 'start' }: BandTopbarProps) {
   return (
     <div className="sv-band__topbar">
-      <div className="sv-band__container sv-band__topbar-inner">
+      <div
+        className={cx(
+          'sv-band__container sv-band__topbar-inner',
+          navAlign === 'center' && 'sv-band__topbar-inner--centred',
+        )}
+      >
         <span className="sv-band__brand">
           {/* The degree mark is NEVER omitted. Six in seed, ° in band-soft. */}
           <span className="sv-band__wordmark" aria-label="Seventy Six Degrees">

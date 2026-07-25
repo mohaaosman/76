@@ -29,8 +29,12 @@
     background: var(--sv-wall);
   }
 
+  /* minmax(0, 1fr) even though these halves are EMPTY by specification and a
+     bare 1fr would behave identically — rule 19 is written to be unarguable,
+     and an exemption granted once is an exemption someone copies onto a track
+     that does hold content. The cheaper move is to satisfy the rule. */
   .sv-split--side .sv-split__halves {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 
   .sv-split--stacked .sv-split__halves {
@@ -42,7 +46,18 @@
      bleeding across the seam. Here the halves are the surface and only the
      card is paper. */
   .sv-split__plate {
-    place-self: center;
+    /* STRETCHED horizontally, centred vertically — and the difference is the
+       whole bug it fixes. `place-self: center` shrink-wraps the plate to its
+       widest LINE, so the same 400px card came out 400px on Create account
+       (whose password hint runs two lines) and 286px on Sign in (whose longest
+       line is a button label). A card's measure is a constant of the system,
+       never a function of the copy inside it — two auth screens side by side
+       have to be the same object.
+       Stretching is safe because the plate paints nothing: the halves are the
+       surface, `background: none` is set below, and the Plate's own
+       `justify-items: center` puts its 400px inner exactly on the seam. */
+    align-self: center;
+    justify-self: stretch;
     min-height: 0;
     background: none;
   }
@@ -55,10 +70,18 @@
 
   /* ---- The mark and the footer, now the card's first and last rows ---- */
 
+  /* CENTRED, and it is the one line in the card that is. Everything else —
+     the title, the fields, the footer — is left-aligned, because that is how
+     the system sets type. The wordmark is not type in that sense: it is the
+     mark the page belongs to, it is the same object on all seven auth
+     screens, and centred is where a reader looks for it. B24 already centres
+     it on a plain Plate, above the card; when B46 moves it INTO the card it
+     keeps the position it had. */
   .sv-split__mark {
     padding-bottom: var(--sv-s4);
     margin-bottom: var(--sv-s5);
     border-bottom: 1px solid var(--sv-line);
+    text-align: center;
   }
 
   /* Mono voice, sentence case, left like every other line in the card —

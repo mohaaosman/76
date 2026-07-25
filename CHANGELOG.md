@@ -6,6 +6,96 @@ project uses [semantic versioning](https://semver.org).
 
 ## [Unreleased]
 
+**Motion, money, and the review.** Three things the owner asked for, each of
+which collided with binding text, and none of which was let through by
+quietly deleting the rule it collided with.
+
+### Added
+- **The motion posture.** `data-motion` on a wrapper, resolved at the nearest
+  declaration, **off by default** — exactly how `data-mode` and `data-seed`
+  work. `prefers-reduced-motion` and print both collapse it to zero no matter
+  what anyone declared. The governing rule: **motion never carries
+  information.** Delete every animation in the system and no screen states one
+  thing less — the same test B44 passes.
+- **A1's 200ms ceiling is amended once, by name.** `--sv-t-enter` is 200ms —
+  at the ceiling, not over it. `--sv-t-count` is **640ms and that IS an
+  amendment**, stated in the Book rather than smuggled past a grep that would
+  never have seen it (it is not a CSS `animation`). The ceiling protects a
+  reader who is *waiting*, and nobody waits on a count-up whose figure is
+  already in the accessible name at first paint.
+- **`useCountUp`,** wired to `StatS1` and `ProofRow` through a `countTo` +
+  `format` pair made inseparable by a union type (B42's precedent). The
+  component still never formats a number (C9), the pre-formatted string stays
+  the source of truth, and **a screen reader never hears a number counting** —
+  the animated mark is `aria-hidden` and the final figure is in words from
+  first paint.
+- **`SumList` (B55)** — B44's arithmetic sibling, and the pairing is the
+  point: **B44 divides ONE total into its shares; SumList builds ONE total
+  from its lines.** The boundary against B7 `totals` is written down: a figure
+  that belongs to one of the table's columns is a `<tfoot>` row; shipping,
+  tax and a discount belong to the *document* and have no column to sit in.
+  It never computes, never invents a minus sign, never formats.
+- **`invoice-checkout` and `payment-checkout` templates.** The invoice states
+  its parent purchase order as a *fact* rather than a breadcrumb (F13) and is
+  built to print. The checkout keeps its step in the URL, so back, reload and
+  a pasted link all behave. **What it refuses is the point:** no card-brand
+  logos, no padlock, no trust badge, no "secure" copy, no countdown, no masked
+  input fighting the browser's autofill.
+- **The landing carries a SPECIMEN row.** F11's replacement column reads
+  "type, hairline, and **real data**", and a component library has the one
+  asset that qualifies: the components themselves, running, with figures that
+  reconcile.
+
+### Changed
+- **`Trend` fits its card, states a readout, and may draw itself in.** The fit
+  was a bug: a chart card in a `main` split rendered a ~90px plot at the top
+  of a ~490px card. A chart card is the one card whose content should GROW
+  into the space it is given. **`readouts` is enhancement and that is the
+  whole of its licence under C8** — the row is printed from the first frame
+  and always states some column; pointing changes *which*, never *whether*.
+  It is keyboard-reachable, because a pointer-only affordance fails C4 too.
+  **The animated draw-in stays refused by default**; under the posture, a line
+  animates `stroke-dashoffset` precisely because the un-animated state is the
+  finished line.
+- **Firewall rule 19 — a content track is `minmax(0, 1fr)`, never a bare
+  `1fr`.** A `1fr` track floors at its min-content width, so one long field
+  hint pushed the checkout 76px past a 320px viewport. C7 forbids it, Ship
+  Gate point 11 checks for it, Part E states it — and nothing enforced it, so
+  it kept coming back. Now it is a gate. The `1fr auto 1fr` spacer is
+  deliberately not flagged: those tracks hold nothing.
+
+### Fixed — the 0.6 review
+- **An auth card's measure is now a constant.** `.sv-split__plate` was centred
+  on both axes, which shrink-wrapped the Plate to its widest LINE: the same
+  400px card came out 400px on *Create account* — whose password hint runs to
+  two lines — and **286px on *Sign in***, whose longest line is a button
+  label. A card's measure is a constant of the system, never a function of the
+  copy inside it. The plate now stretches horizontally and centres vertically;
+  it paints nothing, so stretching is free.
+- **The wordmark is centred in every auth screen** (B46 amendment). It is the
+  one line in the card that is — B24 already centres it above the card on a
+  plain Plate, and when B46 moves it INTO the card it keeps the position it
+  had.
+- **The provider stack moved under the credential form** (B26 amendment). A
+  federated button above the fields makes the page's first offer someone
+  else's, and puts three ghost buttons between the reader and the two inputs
+  they came to fill.
+- **`DescriptionList` rows take B7's 18px cell inset** (B28 amendment). B28
+  already said the value `kind` inherits the table's type discipline; it
+  inherits the table's inset for the same reason. The hairline still runs edge
+  to edge, but the type no longer touches the paper's corner — the exact
+  defect rule 18 exists to catch, committed everywhere the list was a direct
+  child of a card.
+- **`BandTopbar navAlign`** (B1 amendment) — the public band centres its nav.
+  A product band reads left to right in the order the work happens; a public
+  page has no work and no order, and its links are peers.
+- **The landing page carries a SPECIMEN row.** F11's replacement column reads
+  "type, hairline, and **real data**", and a component library has the one
+  asset that qualifies: the components themselves, running, with figures that
+  reconcile. A live `StatS1` row, a live `DataTable` with its `<tfoot>`, a
+  live `MeterList` — rendered by the same code the installer ships. Nothing on
+  it is a picture of the product; it IS the product.
+
 **The promises already made.** Six independent inventories — ERP, CRM,
 finance, admin console, BI, cross-cutting platform — asked one question: what
 stops a team building a complete management product on 76° without reaching

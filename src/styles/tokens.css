@@ -96,6 +96,14 @@
     --sv-t-fast: 120ms;
     --sv-t:      160ms;
 
+    /* The two POSTURE durations, declared here at the value an
+       UN-DECLARED 76° page has: off. A 0ms entrance is not a broken
+       entrance, it is the element already being there, and a 0ms count
+       is the figure already printed. The whole argument is at the foot
+       of this file, under "The moving surface". */
+    --sv-t-enter: 0ms;
+    --sv-t-count: 0ms;
+
     /* layering — the only z-index ladder (Firewall E). Non-visual.
        Native <dialog> and [popover] use the browser top layer and
        need no z-index at all — prefer them. */
@@ -439,6 +447,137 @@
       --sv-seed-text: #C24413;    /* the seed-as-text variant — the raw
                                      #D9531E is 4.0:1 on white and fails */
       --sv-seed-line: var(--sv-seed);
+    }
+  }
+}
+
+/* ============================================================
+   The moving surface (v0.6.1) — motion is the fourth surface.
+
+   It is declared here, in the tokens, for exactly the reason
+   dark and print are: it changes ONLY tokens, and no component
+   may branch on it. A `motion.css` would be an invitation for a
+   component to reach into it and start performing.
+
+   THE GOVERNING PRINCIPLE, and the test every addition to this
+   surface has to pass: MOTION NEVER CARRIES INFORMATION. Every
+   figure a count-up animates to is already printed — in the
+   accessible name, in the visually-hidden line beside it, in the
+   DOM at first paint. Delete the animation and the screen still
+   states everything it stated. That is B44's own test arriving
+   one surface later ("delete the strip and the card still
+   answers the question"), and it is why C7 can send this entire
+   surface to 0ms and lose nothing, by design.
+
+   OFF IS THE DEFAULT. A 76° page that says nothing moves
+   nothing: `--sv-t-enter` and `--sv-t-count` are 0ms at :root,
+   and only a wrapper that DECLARES `data-motion='on'` turns them
+   into durations. This is the dark surface's posture verbatim —
+   registered, opt-in, resolved at the nearest declaration — and
+   it is the opposite of the usual arrangement, where motion is
+   what a library does until somebody asks it to stop.
+
+   A2 bans the skeleton shimmer and, in spirit, anything that
+   performs; nothing here performs. There are exactly two moves:
+   an element ARRIVES (opacity and a 6px transform, base.css),
+   and a figure COUNTS to a number it is already printing. The
+   system still has exactly one continuous animation, `sv-rotate`,
+   and this surface does not add a second.
+   ============================================================ */
+
+@layer sv-tokens {
+  /* ---- A1 · the 200ms ceiling, argued rather than dodged ----
+
+     A1 bans "`animation` durations > 200ms". Two tokens land on
+     that rule and they land on different sides of it, so both
+     decisions are written down.
+
+     `--sv-t-enter` is 200ms: AT the ceiling, not over it, and no
+     amendment is claimed. The ceiling is not a budget, it is a
+     definition — past 200ms a reader stops perceiving an
+     interface that has arrived and starts perceiving one that is
+     arriving. 200ms is enough here because the entrance has
+     almost no distance to cover: one opacity step and six pixels.
+     A longer entrance would not be a better entrance, it would be
+     a slower page, and the page has nothing to say while it runs.
+     It is the longest duration in the system and the only one
+     that is not feedback on an act the reader performed.
+
+     `--sv-t-count` is 640ms and IS AN AMENDMENT TO A1's 200ms
+     ceiling, registered here, fenced to this one token, and
+     stated rather than smuggled. Two things could have hidden it
+     and neither is honest: it is not a CSS `animation` (no
+     keyframe runs, so the firewall's grep never sees it), and it
+     is a JS constant's default (so it need never have appeared in
+     a stylesheet at all). Both are true and neither is a reason.
+
+     The reason the ceiling does not bind is the principle above.
+     A1's ceiling protects a reader who is WAITING — on a panel, a
+     state change, a control's answer. A count-up is not something
+     anyone waits on: the figure is in the accessible name and in
+     a visually-hidden line at first paint, so the information has
+     already landed and the count is the only thing still moving.
+     And a six-digit figure counted in 200ms is not a count, it is
+     a flicker — it spends the same attention and returns none of
+     the legibility, which makes "a count-up short enough for A1"
+     the one option that is both slow and useless. So the choice
+     was a count long enough to read as one, or no count at all.
+     640ms is four times the system step (--sv-t, 160ms), which is
+     where the number comes from: it is not a new tempo, it is the
+     existing one, four beats long.
+
+     The amendment is fenced three ways and it is the fencing that
+     makes it survivable: it is 0ms unless a wrapper declares the
+     posture, 0ms under prefers-reduced-motion whatever anyone
+     declared, and 0ms on paper. */
+
+  [data-motion='on'] {
+    --sv-t-enter: 200ms;
+    --sv-t-count: 640ms;
+  }
+
+  /* ---- C7 · reduced motion wins, at every depth ------------
+     "All transitions → 0ms; 76° loses nothing, by design." The
+     collapse names the ATTRIBUTE and not only `:root`, and that
+     is the v0.4.0 seed amendment's finding arriving in the motion
+     layer. A custom property resolves at the NEAREST declaration,
+     and `[data-motion='on']` is declared on a WRAPPER inside the
+     document rather than on <html> — so a `:root`-only collapse
+     would be shadowed by that wrapper's own 640ms for its whole
+     subtree, and the one region a user asked to hold still would
+     be the region that moved. The bare attribute selector reaches
+     the same-element position (<html data-motion='on'>) and the
+     descendant one (any wrapper below it) in a single form,
+     because — unlike the seed's compound
+     `[data-mode='dark'][data-seed]`, which had to be restated as
+     a descendant — there is nothing to compound it with. It also
+     matches `data-motion='off'`, which is the point: a nested
+     posture that turns motion OFF must be able to beat the `on`
+     above it, and it resolves at its own nearest declaration too.
+
+     Source order carries this: `[data-motion]` and
+     `[data-motion='on']` are the same specificity, so the
+     collapse must sit after the declaration it corrects. That is
+     why this whole surface is one block at the foot of the file
+     rather than a pair of lines added to the two blocks above. */
+  @media (prefers-reduced-motion: reduce) {
+    :root,
+    [data-motion] {
+      --sv-t-enter: 0ms;
+      --sv-t-count: 0ms;
+    }
+  }
+
+  /* Motion cannot print — the printed surface takes the same 0ms
+     for the same reason it takes it for --sv-t-fast and --sv-t.
+     Stated here rather than in the print block above because that
+     block matches `:root, [data-mode='dark']`, and a posture
+     wrapper is neither. */
+  @media print {
+    :root,
+    [data-motion] {
+      --sv-t-enter: 0ms;
+      --sv-t-count: 0ms;
     }
   }
 }
