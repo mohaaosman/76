@@ -1,6 +1,23 @@
 import type { DocEntry } from './types';
 
-const strip = (s: string) => s.replace(/<b>|<\/b>/g, '**').replace(/<code>|<\/code>/g, '`');
+/**
+ * Entries escape angle brackets so `<code>&lt;select&gt;</code>` cannot be
+ * mistaken for markup by the tiny renderers. Both consumers — the site and
+ * this exporter — decode at the last step; skipping it prints the entity
+ * itself, which is what the docs did until v0.4.0. `&amp;` goes last so a
+ * literal `&lt;` in an entry survives.
+ */
+export function decodeEntities(s: string): string {
+  return s
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, '&');
+}
+
+const strip = (s: string) =>
+  decodeEntities(s.replace(/<b>|<\/b>/g, '**').replace(/<code>|<\/code>/g, '`'));
 
 /**
  * Renders a doc entry as markdown — used by the "Copy page" button and

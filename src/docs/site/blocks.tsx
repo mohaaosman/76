@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { Card, CardHead, CardTabs, useToast } from '@/components/seventy-six';
 import { cx } from '@/lib/cx';
 import type { DocEntry, DocExample, PropRow, KeyRow } from '../content/types';
+import { decodeEntities } from '../content/markdown';
 
 /** Tiny renderer for <b> / <code> markup inside prose strings. */
 export function Prose({ text }: { text: string }) {
@@ -10,9 +11,11 @@ export function Prose({ text }: { text: string }) {
   return (
     <>
       {parts.map((part, i) => {
-        if (part.startsWith('<b>')) return <b key={i}>{part.slice(3, -4)}</b>;
-        if (part.startsWith('<code>')) return <code key={i}>{part.slice(6, -7)}</code>;
-        return part;
+        /* React escapes its children, so entities must be decoded here or
+           the page prints "&lt;select&gt;" verbatim. */
+        if (part.startsWith('<b>')) return <b key={i}>{decodeEntities(part.slice(3, -4))}</b>;
+        if (part.startsWith('<code>')) return <code key={i}>{decodeEntities(part.slice(6, -7))}</code>;
+        return decodeEntities(part);
       })}
     </>
   );
@@ -132,8 +135,8 @@ export function A11yCard({ a11y }: { a11y: DocEntry['a11y'] }) {
         </table>
       )}
       <div className="site-prose">
-        {a11y.notes.map((note, i) => (
-          <p key={i}>
+        {a11y.notes.map((note) => (
+          <p key={note}>
             <Prose text={note} />
           </p>
         ))}
@@ -147,8 +150,8 @@ export function DontsCard({ donts }: { donts: string[] }) {
     <Card>
       <CardHead title="Don't" subtitle="Slop Firewall — each of these is a defect, not a preference" />
       <ul className="site-donts">
-        {donts.map((d, i) => (
-          <li key={i}>
+        {donts.map((d) => (
+          <li key={d}>
             <Prose text={d} />
           </li>
         ))}

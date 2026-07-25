@@ -48,8 +48,8 @@ export function ComponentPage() {
           <Card>
             <CardHead title="Overview" subtitle={`One job: ${entry.job}`} />
             <div className="site-prose">
-              {entry.intro.map((p, i) => (
-                <p key={i}>
+              {entry.intro.map((p) => (
+                <p key={p}>
                   <Prose text={p} />
                 </p>
               ))}
