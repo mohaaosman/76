@@ -77,6 +77,14 @@
     /* type */
     --sv-font-ui:   'Hanken Grotesk Variable', 'Hanken Grotesk', system-ui, sans-serif;
     --sv-font-mono: 'Fragment Mono', ui-monospace, monospace;
+    /* The PUBLIC surface's display face, and the third family A1 names.
+       Archivo carries a WIDTH axis as well as a weight one, which is the
+       whole reason it is this face and not a second static file: the same
+       font sets a condensed, heavy poster title at 1440px and relaxes to a
+       readable one at 320px, so the title degrades INTO the system exactly
+       as --sv-display-1 does. FIREWALL RULE 20 rejects it outside the
+       marketing components — a product screen never changes face. */
+    --sv-font-display: 'Archivo Variable', 'Archivo', var(--sv-font-ui);
 
     /* display — the PUBLIC surface only (v0.5). The product ramp tops out
        at 27px (the PageHero h1), so a marketing page had no honest way to

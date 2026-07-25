@@ -2,7 +2,8 @@
 # Vite builds the docs site + shadcn registry into dist/; a zero-dependency
 # Node static server (server.mjs) serves it. No extra Nix packages — adding
 # caddy via nixPkgs collides with the base image's caddy (2.8.4 vs 2.9.0).
-# HashRouter means every request is either / or a real file, so no SPA rewrite.
+# BrowserRouter: server.mjs already rewrites extensionless misses to the app
+# shell, so no separate SPA rewrite rule is needed here either.
 providers = ['node']
 
 [variables]

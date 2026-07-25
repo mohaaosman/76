@@ -25,6 +25,8 @@ import {
   CallToAction,
   SiteFooter,
   Prose,
+  IndexRow,
+  CaptionRow,
   Card,
   CardHead,
   StatS1,
@@ -68,8 +70,8 @@ const FEATURES = [
   {
     id: 'taxonomy',
     title: 'A closed taxonomy',
-    body: 'Fifty-one specifications, each with one job, a fixed anatomy and a Don\'t list. A screen that needs a type the Book does not carry either gets the type named, or gets composed from the ones that exist.',
-    meta: 'B1 — B51',
+    body: 'Fifty-six specifications, each with one job, a fixed anatomy and a Don\'t list. A screen that needs a type the Book does not carry either gets the type named, or gets composed from the ones that exist.',
+    meta: 'B1 — B57',
   },
   {
     id: 'deps',
@@ -86,8 +88,8 @@ const FEATURES = [
   {
     id: 'firewall',
     title: 'A firewall that runs in CI',
-    body: 'Seventeen machine-checkable rules. A gradient, an unregistered radius, a colour literal outside the token file or a 64px number on a dashboard fails the build.',
-    meta: '17 RULES',
+    body: 'Twenty machine-checkable rules. A gradient, an unregistered radius, a colour literal outside the token file or a 64px number on a dashboard fails the build.',
+    meta: '20 RULES',
   },
   {
     id: 'registry',
@@ -176,10 +178,10 @@ export function MarketingHome() {
             a public page has no stat row to pin over the band edge. */}
         <Row>
           <Masthead
-            align="center"
+            scale="issue"
             title="Flat, informational, corporate."
             titleSoft="Paper on a wall."
-            statement="Fifty-one component specifications with one job each, zero runtime dependencies, and WCAG 2.2 AA verified on both surfaces."
+            statement="Fifty-six component specifications with one job each, zero runtime dependencies, and WCAG 2.2 AA verified on both surfaces."
             actions={
               <>
                 <Button variant="primary">Install the registry</Button>
@@ -198,6 +200,20 @@ export function MarketingHome() {
             It IS the product, rendered by the same code the installer ships.
             aria-hidden would be wrong — these are real, focusable components —
             so the row is a labelled region and the reader can tab into it. */}
+        {/* The contents strip, under the masthead exactly as a magazine sets
+            it: the cover indexes the pages behind it. */}
+        <Row>
+          <IndexRow
+            ariaLabel="Contents"
+            items={[
+              { id: 'system', label: 'The system', href: '#components', meta: '57 SPECS' },
+              { id: 'registry', label: 'Registry', href: '#install', meta: 'SHADCN' },
+              { id: 'pricing', label: 'Pricing', href: '#pricing', meta: 'ONE TABLE' },
+              { id: 'docs', label: 'Docs', href: '#docs', meta: 'LLMS.TXT' },
+            ]}
+          />
+        </Row>
+
         <Row split="stats" role="group" aria-label="The components, running">
           <StatS1
             label="REVENUE · MTD"
@@ -230,6 +246,13 @@ export function MarketingHome() {
             icon={ICON_STACK}
             footnote={<><b>62 days</b> of cover across 4 warehouses</>}
             footnoteText="62 days of cover across 4 warehouses"
+          />
+        </Row>
+
+        {/* The caption line under the plate, in the poster's structure. */}
+        <Row>
+          <CaptionRow
+            captions={['never a screenshot', 'always the shipped code', 'figures that reconcile']}
           />
         </Row>
 
@@ -278,7 +301,7 @@ export function MarketingHome() {
           <ProofRow
             ariaLabel="The system in figures"
             items={[
-              { id: 'specs', figure: '51', label: 'BOOK SPECS', note: 'B1 to B51, each with one job' },
+              { id: 'specs', figure: '56', label: 'BOOK SPECS', note: 'B1 to B57, each with one job' },
               { id: 'deps', figure: '0', label: 'RUNTIME DEPS', note: 'React and the platform, nothing else' },
               { id: 'contrast', figure: '4.5:1', label: 'MINIMUM CONTRAST', note: 'Verified on light and dark paper' },
               { id: 'floor', figure: '320px', label: 'LAYOUT FLOOR', note: 'Nothing hidden, nothing scrolled sideways' },

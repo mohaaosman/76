@@ -31,7 +31,9 @@ async function resolve(urlPath) {
     await stat(file);
     return file;
   } catch {
-    // HashRouter: real files only; extensionless misses fall back to the app shell.
+    // BrowserRouter: a real path like /components/data-table is not a file,
+    // so every extensionless miss falls back to the app shell. Anything WITH
+    // an extension that is missing is a genuine 404 and stays one.
     return extname(rel) ? null : join(ROOT, 'index.html');
   }
 }

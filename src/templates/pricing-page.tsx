@@ -83,10 +83,10 @@ type Line = {
    audit row (Ship Gate 12 — mockup data that does not add up is a defect,
    not a placeholder). */
 const LINES: Line[] = [
-  { id: 'components', capability: 'All 51 components', team: YES, business: YES, enterprise: YES, group: 'system' },
+  { id: 'components', capability: 'All 56 components', team: YES, business: YES, enterprise: YES, group: 'system' },
   { id: 'registry', capability: 'Registry install', team: YES, business: YES, enterprise: YES, group: 'system' },
   { id: 'seeds', capability: 'Registered seeds', team: '3', business: '3', enterprise: 'Unlimited', group: 'system' },
-  { id: 'templates', capability: 'Full-screen templates', team: '15', business: '15', enterprise: '15 + commissioned', group: 'system' },
+  { id: 'templates', capability: 'Full-screen templates', team: '19', business: '19', enterprise: '19 + commissioned', group: 'system' },
   { id: 'seats', capability: 'Seats', team: '10', business: '50', enterprise: 'Unlimited', group: 'system' },
   { id: 'firewall', capability: 'Slop firewall in CI', team: YES, business: YES, enterprise: YES, group: 'governance' },
   { id: 'gate', capability: 'Ship Gate review', team: NO, business: '2 per quarter', enterprise: 'Unlimited', group: 'governance' },
@@ -177,6 +177,7 @@ export function PricingPage() {
       <Sheet aria-label="Pricing">
         <Row>
           <Masthead
+            scale="issue"
             title="One table."
             titleSoft="Every plan, every line."
             statement="Every capability is stated for every plan, including the ones a plan does not carry. Nothing is implied by leaving it out."

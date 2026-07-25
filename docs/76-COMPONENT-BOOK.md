@@ -19,7 +19,7 @@ These rules are written to be lintable. Grep the codebase; any hit is a violatio
 - `color: var(--sv-paper)` — paper is the card surface, not a mark. Use `--sv-on-dark`.
 - `animation` durations > 200ms; any `transition` on layout properties (width/height/top/left/margin); keyframe bounces/springs. **One registered amendment: `--sv-t-count` is 640ms** — see "The motion posture" in Part B. It is the only duration in the system over the ceiling, it is off by default, and the ceiling stands for everything else.
 - `!important` — a component that needs it is mis-structured.
-- Font families other than Hanken Grotesk / Fragment Mono (system stack fallbacks only).
+- Font families other than Hanken Grotesk / Fragment Mono / **Archivo Variable** (system stack fallbacks only). The third name is an amendment, and it is fenced: **rule 20** rejects `var(--sv-font-display)` outside `tokens.css`, `masthead.css` and `index-row.css`. It exists so a landing page can set a poster title, not so a dashboard can pick a different voice for its table headers. Archivo carries a WIDTH axis as well as a weight one, which is why it is a variable face and not a second static file: the same font sets a condensed, heavy title at 1440px and relaxes to a readable one at 320px.
 - **Rule 18 — nothing touches the paper's edge by accident.** `.sv-card` carries no padding *by design*: a DataTable's rows are hairline-ruled edge to edge and a CardHead owns its own row, so a card that padded everything would have to un-pad them again. The cost is that a widget with no inset of its own — a `MeterList`, a `Trend`, a `Field`, a `Prose`, a `Timeline` — dropped straight into a `<Card>` renders flush against the corners. It has happened more than once, it is invisible in a diff, and until now the only thing standing between the system and it was a comment. A capitalised component that is a **direct child of `<Card>`** must either be full-bleed by specification or self-padded (both lists are registered in `slop-firewall.mjs`), or sit inside `<div className="sv-card__body">`. This is the one firewall rule that reads structure rather than lines, because the defect is a parent/child relationship. Adding a name to the allowlist is a Book change — it is a claim that the component draws to the card's edge on purpose.
 - **Rule 17 —** `var(--sv-display-1|2|3)` anywhere but `tokens.css` and the three marketing components that set display type (`masthead.css`, `cta.css`, `proof-row.css`). The product ramp tops out at 27px; a dashboard that grows a 64px number has left the system. B48 `FeatureList` and B51 `SiteFooter` are marketing too and are deliberately NOT on that list — an allowance nobody uses is an allowance somebody will.
 
@@ -461,6 +461,28 @@ The provider stack sits **below** the credential form, under the hairline `OR`, 
 
 Rows take **18px horizontal padding — exactly B7's cell inset.** B28 already says the value `kind` inherits the table's type discipline; it inherits the table's INSET for the same reason. The hairline still runs edge to edge, as a `<tr>` border does, but the type no longer touches the paper's corner — which is the defect firewall rule 18 exists to catch, and which this row was quietly committing everywhere it was a direct child of a card.
 
+### B56 · `IndexRow` (v0.8)
+
+The publication's contents strip: a horizontal row of cells divided by vertical hairlines, each carrying a mono ordinal, a label and an optional mono count, and each a LINK. One job: **state a publication's sections as a numbered strip, and link to them.**
+
+It is a real `<nav>` around an `<ol>` — ordered, because the ordinals are the point, and an `<ol>` makes them meaning rather than decoration. The ordinal is derived from POSITION and never passed in (B48's rule and its reasoning: a hand-written number drifts the moment an item is inserted). Vertical hairlines between cells exactly as B50 draws them, including B50's answer to the wrap case. It wraps at 860px and stacks at 560px; **it never scrolls sideways**, because A2's ban is written for the band and reads on every nav-like row. Cap eight — a ninth section is a sitemap page.
+
+- The boundary: **B1 `BandNav` is the app's navigation**, always present, `aria-current` on the active item. `IndexRow` is a COVER's contents — it appears once, on the page that indexes the others, and it is a statement of what exists rather than a persistent way to move.
+- Don't: never a substitute for the band; never more than eight; never a horizontal scroller.
+
+### B57 · `CaptionRow` (v0.8)
+
+Up to four short fragments spread across one rule, under the thing they caption. It is the travel poster's `never too · far away · always there` line, and in 76° the thing above it is a **live component specimen**, so the captions describe what the reader is actually looking at. One job: **state up to four short captions across one rule.**
+
+- Each caption is a PHRASE, not a sentence. Four is the cap; five is a B48 `FeatureList`.
+- Don't: never a link, never a sentence, never used as navigation.
+
+### B47 · `Masthead` — v0.8 amendment · `scale="issue"`
+
+The cover treatment. The title takes `--sv-font-display` at `--sv-display-1`, **set flush to the container's edge** so it reads as a masthead rather than a centred hero, with the width axis condensed and heavy at full measure and relaxing back toward normal width at 320px — which is the whole reason a variable face was registered instead of a static one. **The deck under it stays in the UI face at the ordinary step: the contrast between a display title and a plain deck IS the magazine device**, and setting both in the display face destroys it.
+
+`scale="default"` is unchanged and every existing call site renders exactly as before. F12 is unamended — there is still no `eyebrow` and no `note`.
+
 ### B55 · `SumList` (v0.7)
 
 **B44 `DistributionStrip`'s arithmetic sibling, and the pairing is the point: B44 divides ONE total into its shares; B55 builds ONE total FROM its lines.** B44 starts with 128,953 sessions and asks how they split; B55 starts with a line total, a discount, a tax and a carriage charge and asks what the reader owes. They share a voice deliberately — mono uppercase label left, pre-formatted figure right, the closing figure at B4's 19/700 step — because they are the same arithmetic read in opposite directions. One job: **state a set of amounts and the figure they add up to.**
@@ -482,6 +504,8 @@ Rows take **18px horizontal padding — exactly B7's cell inset.** B28 already s
 ### The motion posture — v0.6.1
 
 **Motion is a registered, opt-in posture, declared on a wrapper and resolved at the nearest declaration — exactly as `data-mode` and `data-seed` are.** `<div data-motion="on">` turns `--sv-t-enter` and `--sv-t-count` from `0ms` into durations; absent, they are zero and every animated path renders its finished state on first paint. `prefers-reduced-motion: reduce` collapses it to zero no matter what anyone declared, and so does print. The reduce block matches the bare `[data-motion]` attribute rather than `:root`, for the same reason the v0.4.0 seed amendment matches the descendant position: a nested wrapper's literal would otherwise shadow it.
+
+**v0.8: the posture is declared.** It shipped in v0.7 with no declaration anywhere, which meant every duration resolved to `0ms` and nothing in the system moved — plumbing with no tap. `index.html` now carries `data-motion="on"` at the document root, so the docs site and every template rendered inside it animate. It stays a POSTURE rather than a default baked into the tokens, so a product installing 76° gets a still system until it says otherwise. **The cost is stated rather than hidden: an operator who loads the same dashboard forty times a shift now sees the same entrance forty times.** `prefers-reduced-motion` overrides the attribute completely, so the accessibility floor is unmoved; this is a taste decision, and it was taken deliberately.
 
 **The governing rule, and the test: motion never carries information.** Every figure a count-up animates to is already printed and already in the accessible name at first paint. Delete every animation in the system and no screen states one thing less — which is the same test B44 `DistributionStrip` passes ("delete the strip and the card still answers the question"). A motion that fails that test is a defect, not a setting.
 
@@ -600,7 +624,7 @@ Light-first stands: light is the default, dark is opt-in via `<html data-mode="d
 
 1. Grep Part A1 patterns — zero hits.
 2. Count colors on the screen: neutrals + one seed + at most both functional colors as words/dots. Anything else fails. **Then check WHERE the seed landed (F14): the one seed fill is on the action, and every figure on the screen is ink.**
-3. Every widget is a registered type (S1, Progress, Trend, MeterList, DataTable, CardTabs, ActivityList — from v0.2.0: Combobox, Menu, Drawer, Banner, Badge — from v0.3.0: Plate, PinField, SocialButton — from v0.4.0: Accordion, DescriptionList, Divider, Avatar, Spinner/Busy, Kbd, NumberField, Slider, DateRangeField, SearchField, FileField, Tabs, Stepper, TreeList, Timeline, Popover, CodeBlock, DistributionStrip, Split — from v0.5: Prose, and on the PUBLIC surface only, Masthead, FeatureList, CallToAction, ProofRow, SiteFooter — from v0.6: ErrorSummary — from v0.7: SumList) — if a new type was needed, it is named, single-jobbed, and added to Part B in the same change. If Part F refuses it, it is a screen, not a component.
+3. Every widget is a registered type (S1, Progress, Trend, MeterList, DataTable, CardTabs, ActivityList — from v0.2.0: Combobox, Menu, Drawer, Banner, Badge — from v0.3.0: Plate, PinField, SocialButton — from v0.4.0: Accordion, DescriptionList, Divider, Avatar, Spinner/Busy, Kbd, NumberField, Slider, DateRangeField, SearchField, FileField, Tabs, Stepper, TreeList, Timeline, Popover, CodeBlock, DistributionStrip, Split — from v0.5: Prose, and on the PUBLIC surface only, Masthead, FeatureList, CallToAction, ProofRow, SiteFooter — from v0.6: ErrorSummary — from v0.7: SumList — from v0.8, public surface only: IndexRow, CaptionRow) — if a new type was needed, it is named, single-jobbed, and added to Part B in the same change. If Part F refuses it, it is a screen, not a component.
 4. Every S1 footnote passes the "so what" test (new information, not paraphrase).
 5. Tab through the screen: visible focus everywhere, order sane, skip-link present (a Plate is the one exception, B24), ⌘K opens.
 6. Squint test: the page reads as ink band + white paper on a platinum wall — a Plate (B24) reads as one card and a wordmark on the wall; nothing glows, nothing floats, nothing performs.

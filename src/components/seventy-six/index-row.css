@@ -1,0 +1,203 @@
+/* B56 · IndexRow — the cover's contents row: vertical hairlines and nothing
+   else. No card, no tile, no fill, no rule around the strip. The lines
+   BETWEEN the cells are what make eight sections read as one contents page
+   rather than as eight buttons — the same physics as B50 ProofRow, turned
+   from figures to destinations. */
+
+@layer sv-components {
+  /* grid-auto-flow: column gives the strip its own column count — two to
+     eight items land as two to eight equal tracks with no prop, no literal
+     and no inline style to keep in step with the array (B50). Rule 19 ·
+     minmax(0, …) on every track, never a bare 1fr: a grid item's default
+     min-width is auto, so one long section name would widen its track and
+     push the page sideways (C7, Part E). */
+  .sv-index__list {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    column-gap: var(--sv-s5);
+    row-gap: var(--sv-s5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Cells stretch to the tallest in the strip, so the hairlines are one
+     length whatever the meta lines do. */
+  .sv-index__cell {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow-wrap: anywhere;
+  }
+
+  /* The rule sits BETWEEN cells, so it belongs to the second of each pair
+     and never to the first: a hairline before the first cell would fence
+     the strip off from the masthead it belongs to, and the first ordinal
+     must sit on the page's own left edge — the strip is edge-set, like the
+     display title above it. The gap opens the space left of the rule, the
+     padding opens it right, so the line stays off the type on both sides. */
+  .sv-index__cell + .sv-index__cell {
+    padding-left: var(--sv-s5);
+    border-left: 1px solid var(--sv-line);
+  }
+
+  /* RULE 20 · THE ONE DISPLAY-FACE MARK IN THIS COMPONENT, and the case for
+     it, since the rule asks for one either way.
+
+     The ordinal is the only element here that is not language: the label is
+     read, the meta is metadata, and the numeral is the COVER'S DEVICE — the
+     mark the reference actually sets large. Set in mono at 10px it would be
+     B48's ordinal, and B56 would differ from a FeatureList by layout alone,
+     which is not a difference the taxonomy accepts (A2's "generic marketing
+     widget" is the same defect as its admin twin). So the ordinal takes
+     --sv-font-display: the public surface's own voice, spent on the public
+     surface's own mark, in the file the firewall registers for it.
+
+     What it does NOT take is the width axis. That axis is the Masthead's
+     instrument — it exists so a 64px claim can survive 320px — and a
+     two-digit numeral at a fixed 20px has no width problem to solve. An
+     axis turned because it is there is a slot filled because it exists
+     (F12's failure, in a stylesheet).
+
+     Nor does it take a display STEP: rule 17 fences --sv-display-1/2/3 to
+     masthead.css, cta.css and proof-row.css, and this file is deliberately
+     absent from that list. 20px sits INSIDE the product ramp, below the
+     27px h1, so the contents strip can never speak above the claim it sits
+     under. Tabular via .sv-num (A4), reused rather than restated, so 01 and
+     11 are one width down the strip and the labels start on one line. */
+  .sv-index__ordinal {
+    font-family: var(--sv-font-display);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--sv-ink-soft);
+  }
+
+  /* B10's text-link rule: no underline until hover, and hover carries the
+     seed. inline-flex plus the vertical padding puts the hit area over 24px
+     without the line growing — the padding sits inside the line's own
+     leading, so nothing moves on hover and only colour transitions (A1). */
+  .sv-index__link {
+    display: inline-flex;
+    margin-top: var(--sv-s2);
+    padding: var(--sv-s1) 0;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--sv-ink);
+    text-decoration: none;
+    transition: color var(--sv-t-fast);
+  }
+
+  .sv-index__link:hover {
+    color: var(--sv-seed-text);
+    text-decoration: underline;
+  }
+
+  /* Focus takes the same colour and NOTHING else: the C3 ring is already
+     drawn on every :focus-visible in base.css, and a component that
+     restates it is a component that will drift from it. */
+  .sv-index__link:focus-visible {
+    color: var(--sv-seed-text);
+  }
+
+  /* Soft, not faint — a count is read (C2). */
+  .sv-index__meta {
+    margin-top: var(--sv-s1);
+    color: var(--sv-ink-soft);
+  }
+
+  /* ---- The wrap ---- */
+
+  /* C7 · eight cells cannot hold eight columns on a tablet, so the strip
+     WRAPS. It never scrolls sideways: A2's ban is written for the band and
+     it reads on every nav-like row.
+
+     The column count is fixed per band rather than derived from the item
+     count, because a rule can only be dropped where a line is KNOWN to
+     start. Two columns is the floor every count degrades into — including
+     an out-of-spec ninth cell, which wraps correctly rather than breaking
+     — and the counts that would otherwise leave four rows of two take
+     three or four columns instead, so the strip lands in two rows. */
+  @media (max-width: 860px) {
+    .sv-index__list {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* B50's rule verbatim: every cell that STARTS a line drops its own. A
+       rule at the start of the second row divides nothing from nothing,
+       and a rule between nothing and nothing is worse than no rule at all
+       — it also pushes column one out of line with the column above it. */
+    .sv-index__cell:nth-child(2n + 1) {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    /* Five and six cells: three columns, two rows. The rule is restored on
+       every cell first, because the two-column selector above has already
+       cleared cells that are no longer line starts. */
+    .sv-index__list[data-count='5'],
+    .sv-index__list[data-count='6'] {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .sv-index__list[data-count='5'] .sv-index__cell,
+    .sv-index__list[data-count='6'] .sv-index__cell {
+      padding-left: var(--sv-s5);
+      border-left: 1px solid var(--sv-line);
+    }
+
+    .sv-index__list[data-count='5'] .sv-index__cell:nth-child(3n + 1),
+    .sv-index__list[data-count='6'] .sv-index__cell:nth-child(3n + 1) {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    /* Seven and eight cells: four columns, two rows. */
+    .sv-index__list[data-count='7'],
+    .sv-index__list[data-count='8'] {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .sv-index__list[data-count='7'] .sv-index__cell,
+    .sv-index__list[data-count='8'] .sv-index__cell {
+      padding-left: var(--sv-s5);
+      border-left: 1px solid var(--sv-line);
+    }
+
+    .sv-index__list[data-count='7'] .sv-index__cell:nth-child(4n + 1),
+    .sv-index__list[data-count='8'] .sv-index__cell:nth-child(4n + 1) {
+      padding-left: 0;
+      border-left: 0;
+    }
+  }
+
+  /* ---- The floor ---- */
+
+  /* One column: the strip stands up, and the hairline turns 90° with it.
+     Every cell starts a line, so no cell can carry a vertical rule — and a
+     stack held apart by gaps alone stops reading as a contents page. What
+     replaces it is B48's column rule: one 1px line OVER each cell, with the
+     ordinal, the label and the count hanging below it. Nothing hides,
+     nothing scrolls, and the structure is the same structure rotated.
+
+     The attribute selector is repeated so these rules outrank the
+     [data-count='5'] declarations above — a four-across strip must be able
+     to become one-across. */
+  @media (max-width: 560px) {
+    .sv-index__list[data-count] {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: var(--sv-s4);
+    }
+
+    .sv-index__list[data-count] .sv-index__cell {
+      padding-top: var(--sv-s3);
+      padding-left: 0;
+      border-top: 1px solid var(--sv-line);
+      border-left: 0;
+    }
+  }
+}
