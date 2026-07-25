@@ -1,0 +1,87 @@
+/* B52 · ErrorSummary — the top-of-form index of a failed submit.
+   B22 Banner's `bad` anatomy with a list for a body. */
+
+@layer sv-components {
+  .sv-errsum {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--sv-s3);
+    padding: var(--sv-s3) var(--sv-s4);
+    background: var(--sv-paper);
+    /* The same mechanism the Banner draws its rule with — a left border, not a
+       second invention in a pseudo-element. What differs is the rest of the
+       box: a Banner sits inside other chrome and takes a hairline, while this
+       is the card at the top of the form, so A4 applies in full — one shadow,
+       radius --sv-r, paper, and no border anywhere but the rule. */
+    border: 0;
+    border-left: 2px solid var(--sv-bad);
+    border-radius: var(--sv-r);
+    box-shadow: var(--sv-shadow);
+  }
+
+  /* :focus, not :focus-visible. Focus arrives here programmatically after a
+     submit the reader may have made with a mouse, and in that path the browser
+     withholds :focus-visible — the ring would never draw, and focus would move
+     invisibly for the sighted reader while it moved audibly for everyone else.
+     C3 asks for a visible focus state; this is the one place it has to be
+     unconditional. */
+  .sv-errsum:focus {
+    outline: 2px solid var(--sv-seed-line);
+    outline-offset: 2px;
+  }
+
+  .sv-errsum__icon {
+    display: inline-flex;
+    flex: none;
+    margin-top: 1px;
+    color: var(--sv-bad);
+  }
+
+  .sv-errsum__text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .sv-errsum__title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--sv-ink);
+  }
+
+  .sv-errsum__list {
+    margin: var(--sv-s2) 0 0;
+    padding-left: var(--sv-s5);
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+
+  .sv-errsum__item + .sv-errsum__item {
+    margin-top: var(--sv-s1);
+  }
+
+  /* The ordinal is faint on purpose and stays inside C2: it is not information
+     the reader has to read — the position of an item in a list is announced by
+     the screen reader from the markup, and the count is already stated in the
+     title. */
+  .sv-errsum__item::marker {
+    color: var(--sv-ink-faint);
+  }
+
+  .sv-errsum__link {
+    font-weight: 600;
+    color: var(--sv-seed-text);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+    transition: text-decoration-thickness var(--sv-t-fast);
+  }
+
+  .sv-errsum__link:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  .sv-errsum__message {
+    margin-left: var(--sv-s1);
+    color: var(--sv-ink-soft);
+  }
+}

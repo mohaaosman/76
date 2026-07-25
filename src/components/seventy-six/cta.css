@@ -53,12 +53,6 @@
     gap: var(--sv-s2);
   }
 
-  /* The terms carry real information — what it costs, whether a card is
-     needed — so they take the soft step, never the faint one (C2). */
-  .sv-cta__note {
-    color: var(--sv-ink-soft);
-    text-align: right;
-  }
 
   /* ---- tone="paper" · an ordinary card on the wall (A4) ---- */
 
@@ -82,8 +76,7 @@
     color: var(--sv-on-dark);
   }
 
-  .sv-cta--band .sv-cta__statement,
-  .sv-cta--band .sv-cta__note {
+  .sv-cta--band .sv-cta__statement {
     color: var(--sv-band-soft);
   }
 
@@ -111,8 +104,5 @@
       align-items: stretch;
     }
 
-    .sv-cta__note {
-      text-align: left;
-    }
   }
 }

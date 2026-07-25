@@ -6,6 +6,116 @@ project uses [semantic versioning](https://semver.org).
 
 ## [Unreleased]
 
+**The promises already made.** Six independent inventories — ERP, CRM,
+finance, admin console, BI, cross-cutting platform — asked one question: what
+stops a team building a complete management product on 76° without reaching
+outside it. 47 candidates, 25 survived an adversarial vet. The finding they
+converged on is that **the gaps that stop a build hardest are not new ideas,
+they are the Book's own binding text with nothing behind it.**
+
+### Added
+- **ErrorSummary (B52)** — B11's validation contract has ended on the same
+  sentence since v0.1.0: *"Submit reveals a top-of-form error summary linking
+  to each field (focus moves to summary)."* Every 76° form that shipped
+  skipped it, because the barrel had nothing to satisfy it with. B22's `bad`
+  anatomy with an `<ol>` body: one fragment link per failed field, carrying
+  the field's own label, then the message in B11's voice.
+  It carries **no `role="alert"`, and the omission is the specification** —
+  focus moves here, focusing an element already announces its content, and an
+  alert would announce the same event twice. That is the defect `FilterBar`
+  refuses when it declines a second live region. It never replaces the inline
+  field error: the summary is the index, the field error is the statement.
+- **`DataTable totals` (B7 amendment)** — a real `<tfoot>`, keyed to the same
+  `Column` array. Before this the only way to draw the row every ledger,
+  invoice, goods receipt and stock transfer ends with was to push a fake
+  record into `rows`, where ↑/↓ focuses it, Space selects it, `onRowOpen`
+  opens it and `page.of` counts it. **Four lies for one row.** Foot cells
+  inherit each column's own `kind`, so a `num` column's total is right-aligned
+  and tabular from the same source its body cells are.
+- **`DataTable leadHold` (B7 amendment)** — holds the identity column while
+  the rest of a wide table scrolls under it. **It is self-limiting, and that
+  is what keeps F3 refused:** not caller-configurable per column, not
+  draggable, and applied to the first column ONLY when that column is already
+  `kind: 'id'`. Passed on anything else it is ignored. F3 protects against a
+  table whose shape the reader rearranges; this lets the reader rearrange
+  nothing.
+- **The printed surface** — C7 promises tables scroll and never truncate
+  silently, and until now there was not one `@media print` rule in the
+  repository, which made the promise structurally unkeepable on the one
+  output surface every ERP, finance and admin product actually ships.
+  Specified exactly as the dark surface was, and inheriting its governing rule
+  verbatim: **no component may branch on the medium.** It lives in
+  `tokens.css` and `base.css` and nowhere else — a `print.css` was proposed
+  during the audit and refused, because a separate stylesheet is an invitation
+  for a component to reach into it.
+- **`erp-purchase-order` template** — the record page. Thirteen templates
+  shipped before it and none drew a record: every screen was a list, an
+  overview or a decision. It composes three things the Book mandated and no
+  screen had ever put together — B28's "a Drawer with a form" for editing,
+  B11's error summary at the head of that form, and B7's new `totals` and
+  `leadHold` on the line table.
+- **`crm-deal-board` template** — F2 refuses the Kanban board *widget* and
+  answers it with "a template (the CRM already has one)". It did not:
+  `crm-pipeline` is a dashboard. **F2 has been citing a screen that was never
+  drawn.** This is that screen, and F2 stands completely unamended — no board
+  component, just four stage cards each holding a B7 DataTable. A deal moves
+  by a **named verb, never by drag**: F10's reasoning reaches this screen
+  intact, because a drag target has no keyboard equivalent, no accessible
+  name, and no state a screen reader can report mid-gesture.
+
+### Removed
+- **`Masthead` (B47) loses `eyebrow` and `note`; `CallToAction` (B49) loses
+  `note`.** Refused as **F12 · the closed header**: a header is a title, ONE
+  line under it, and ONE or TWO buttons — nothing above the title, nothing
+  below the buttons. The kicker states the page's category to a reader already
+  on the page and adds a rung above the h1 the outline does not have; the mono
+  note is a footnote in the metadata voice doing the job the statement already
+  had. **The refusal is enforced by the props not existing**, because a slot
+  that exists is a slot that gets filled.
+- **`PathLine` (B60) withdrawn from the 0.8 plan before it was built** — it is
+  a breadcrumb, and breadcrumbs are now refused as **F13**. Where you are is
+  the Band's job: the nav item is `aria-current`, the sub-tab row names the
+  section, the h1 names the page. A record's parent is a *fact* in its own
+  DescriptionList — a link the reader can follow, not a trail of chevrons.
+
+### Fixed
+- **Firewall rule 18 — nothing touches the paper's edge by accident.**
+  `.sv-card` carries no padding by design (a DataTable's rows are hairline-ruled
+  edge to edge), so a widget with no inset of its own dropped straight into a
+  `<Card>` renders flush against the corners. It has happened more than once,
+  it is invisible in a diff, and the only thing standing between the system and
+  it was a comment in `card.css`. Rule 18 is now a gate: a direct child of
+  `<Card>` must be full-bleed by specification, self-padded, or wrapped in
+  `sv-card__body`. **It is the one firewall rule that reads structure rather
+  than lines**, because the defect is a parent/child relationship. It found a
+  live case on first run — the Timeline in the new purchase-order template.
+- **A PinField no longer drags the viewport to itself on mount.** `autoFocus`
+  is honoured through `focus({ preventScroll: true })` instead of the DOM
+  attribute, so a live OTP screen anywhere on a long page — the template
+  gallery mounts seventeen of them at once — places focus without scrolling
+  the reader away from the top. B24 asks for focus on the first meaningful
+  control; nothing in it asks for the page to move.
+- **The docs site scrolls to the top on a route change.** A multi-page app
+  gets that from the browser; a hash-routed SPA has to say it, and until now
+  a reader arrived at whatever offset the previous page left behind.
+
+### Changed
+- **Part F gains F12, F13 and F14** — the closed header, breadcrumbs, and the
+  stat that must never wear the colour the button wears. **F14:** the seed
+  fill belongs to the ACTION. Every figure on a screen is ink; the seed
+  appears in a stat only as a tint behind an icon tile or as the bar B4 and B6
+  call illustration. If the number is as loud as the button, the reader has
+  two primaries, and a screen with two primaries has none.
+- **Part F gains a second refusal table** — 22 proposals killed by name during
+  the audit, each with its reason, so they are not re-litigated. F2, F3 and
+  F10 all survive unamended, and each survival is argued rather than assumed.
+- **The roadmap is sequenced through 0.9** — posting the work (0.7), the
+  number in relation (0.8), the record and the console (0.9).
+
+---
+
+## [0.5.0-alpha.1] — 2026-07-25
+
 **The public surface.** 76° now dresses the pitch as well as the product, and
 **not one refusal was repealed to do it** — no photography, no illustration,
 no 3D, no logo cloud. F11 survived the surface it was written against, which

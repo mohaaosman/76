@@ -14,13 +14,6 @@
     padding-bottom: calc(var(--sv-s8) + var(--sv-s4));
   }
 
-  /* C2 forbids faint as a sole carrier and this line carries the category, so
-     it takes the soft step. `sv-mono` (base.css) already sets the face, size,
-     tracking and case — restating any of it here forks the mono voice. */
-  .sv-masthead__eyebrow {
-    margin-bottom: var(--sv-s4);
-    color: var(--sv-ink-soft);
-  }
 
   /* Display-1 is the one step above the product's 27px h1 (rule 17). At 64px
      the UI defaults read loose and airy, so tracking and leading both close
@@ -65,13 +58,6 @@
     margin-top: var(--sv-s7);
   }
 
-  /* The terms, the licence, the count — below the actions, and with no rule
-     above it. A hairline there would close the Masthead like a card footer,
-     and the Masthead has no edges to close. */
-  .sv-masthead__note {
-    margin-top: var(--sv-s4);
-    color: var(--sv-ink-soft);
-  }
 
   /* Centring has to move the measure caps with the text, or the statement
      stays pinned to the left of a centred column and reads as a mistake. */
@@ -91,20 +77,13 @@
      --sv-display-1 clamps to 34px here, and at 34px the -0.03em that steadied
      a 64px line starts closing the counters while 1.05 leading starts crowding
      descenders on a title that now wraps to three lines — so both relax back
-     toward the product ramp, and the page degrades INTO the system. The
-     eyebrow closes up on the title because 16px of air under a 10px mono line
-     reads as a gap rather than a label once the title is no longer three times
-     its size. Actions become a full-width column: at 320px two buttons side by
-     side are two half-buttons, and no target may land under 44px. Nothing is
-     hidden and nothing scrolls (C7). */
+     toward the product ramp, and the page degrades INTO the system. Actions
+     become a full-width column: at 320px two buttons side by side are two
+     half-buttons. Nothing is hidden and nothing scrolls (C7). */
   @media (max-width: 560px) {
     .sv-masthead {
       padding-top: calc(var(--sv-s8) + var(--sv-s5));
       padding-bottom: var(--sv-s8);
-    }
-
-    .sv-masthead__eyebrow {
-      margin-bottom: var(--sv-s2);
     }
 
     .sv-masthead__title {

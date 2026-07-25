@@ -23,18 +23,18 @@ export const marketing: DocEntry[] = [
     files: ['components/seventy-six/masthead.tsx', 'components/seventy-six/masthead.css'],
     intro: [
       'F11 refuses hero imagery, stock photography and illustration; A2 refuses the stock-photo card. What is left is the thing a masthead always was — a claim, set large, with nothing behind it. There is <b>no image slot, no video slot and no background slot</b>, and adding one is a Book change rather than a prop.',
-      'It is <code>PageHero</code>&rsquo;s (B1) public-surface sibling and speaks the same vocabulary on purpose: <code>title</code> plus a receded <code>titleSoft</code>, one line of context, an actions cluster with exactly one primary. The difference is the ramp and the surface — display type on the wall, instead of 27px on the band.',
+      'It is <code>PageHero</code>&rsquo;s (B1) public-surface sibling and speaks the same vocabulary on purpose: <code>title</code> plus a receded <code>titleSoft</code>, one line under it, one or two buttons. The difference is the ramp and the surface — display type on the wall, instead of 27px on the band.',
+      '<b>The header anatomy is closed, and F12 is what closes it: a title, ONE line under it, and ONE or TWO buttons.</b> There is no <code>eyebrow</code> prop and no <code>note</code> prop, because a slot that exists is a slot that gets filled. The mono kicker above a title states the page&rsquo;s category to a reader who is already on the page; the mono line of terms under the buttons is a footnote nobody reads, in the voice reserved for metadata. Both are the most reliable tells of a header nobody wrote, and the refusal is enforced by the props not existing.',
       'The display steps clamp rather than sit at a fixed size: <code>--sv-display-1</code> is 64px at full width and 34px at 320px, which is the size the same line takes in the product ramp. The page degrades <i>into</i> the system, never out of it (C7).',
     ],
     examples: [
       {
         title: 'The opening claim',
-        description: 'Eyebrow, claim, one sentence, one primary, and a mono line of terms.',
+        description: 'The whole anatomy: a claim, one sentence, two buttons. Nothing above it and nothing below it.',
         demoKey: 'masthead-basic',
         code: `import { Masthead, Button } from '@/components/seventy-six';
 
 <Masthead
-  eyebrow="COMPONENT LIBRARY · v0.5"
   title="Flat, informational, corporate."
   titleSoft="Paper on a wall."
   statement="Fifty-one component specifications with one job each, zero runtime dependencies, and WCAG 2.2 AA verified on both surfaces."
@@ -42,7 +42,6 @@ export const marketing: DocEntry[] = [
     <Button variant="primary">Install the registry</Button>
     <Button variant="ghost">Read the Book</Button>
   </>}
-  note="MIT · ZERO DEPENDENCIES · REACT 19"
 />`,
       },
       {
@@ -61,12 +60,10 @@ export const marketing: DocEntry[] = [
       {
         component: 'Masthead',
         rows: [
-          { name: 'eyebrow', type: 'string', description: 'Mono uppercase line above the title: the category, the release, the audience.' },
           { name: 'title', type: 'string', description: 'The claim. Becomes the page h1.' },
           { name: 'titleSoft', type: 'string', description: 'The claim\'s second half, receded to --sv-ink-soft inside the same heading.' },
           { name: 'statement', type: 'string', description: 'ONE sentence, capped near 58ch. A paragraph is B45 Prose.' },
-          { name: 'actions', type: 'ReactNode', description: 'At most one primary and one ghost (B10).' },
-          { name: 'note', type: 'string', description: 'A mono line under the actions: terms, licence, count.' },
+          { name: 'actions', type: 'ReactNode', description: 'ONE or TWO buttons, one of them primary. A third is a menu or a page (F12).' },
           { name: 'align', type: "'start' | 'center'", defaultValue: "'start'", description: 'Left-aligned by default, because that is how the rest of the system sets type.' },
           { name: 'headingLevel', type: '1 | 2', defaultValue: '1', description: '2 only when the page already owns its h1.' },
         ],
@@ -75,12 +72,14 @@ export const marketing: DocEntry[] = [
     a11y: {
       notes: [
         'The heading is a real h1 (or h2), and titleSoft sits inside it so the accessible name is the whole claim.',
-        'The eyebrow is a sibling line, never a heading — a page whose h1 is preceded by an h2 has a broken outline (A4).',
+        'Nothing precedes the h1, so the outline opens on the claim (A4) — there is no kicker line to mistake for a heading, because F12 refuses it.',
         'Nothing in it is decorative-only, so nothing is aria-hidden.',
         'At 320px the title clamps to 34px and the actions go full width — no two-line clickables, no horizontal scroll (C7).',
       ],
     },
     donts: [
+      'No kicker, eyebrow or category line above the title, and no mono note under the actions — F12 refuses both, and the props do not exist.',
+      'No third button. A title, one line, one or two buttons: that is the whole header.',
       'No image, video, or background — F11 refuses them, and the component has no slot to put one in.',
       'No second primary; B10 is at its most binding on a page whose whole job is one ask.',
       'No paragraph in the statement — one sentence, or reach for B45 Prose.',
@@ -90,6 +89,7 @@ export const marketing: DocEntry[] = [
     faq: [
       { q: 'Where is the hero image?', a: 'There is no slot for one. F11 refuses hero imagery, stock photography and illustration by name, and A1 refuses the gradient every hero grows next. The claim carries the page.' },
       { q: 'Masthead or PageHero?', a: 'PageHero (B1) is the band\'s product page header, at 27px on ink. Masthead is the public page, at display size on the wall. A product screen never uses a Masthead.' },
+      { q: 'Where did the eyebrow go?', a: 'It was refused as F12, with the mono note under the actions. A kicker states the page category to somebody already on the page and pushes the claim down the sheet; a note is a footnote in the metadata voice restating what the statement said. Neither has a prop, because a slot that exists is a slot that gets filled.' },
       { q: 'Can I use the display tokens elsewhere?', a: 'No — firewall rule 17 rejects --sv-display-* outside the five marketing components. The product ramp tops out at 27px, and a dashboard with a 64px number has left the system.' },
     ],
   },
@@ -172,12 +172,12 @@ export const marketing: DocEntry[] = [
     intro: [
       'Everything above it states; this asks. That is why it holds exactly <b>one primary</b> — B10\'s rule is not relaxed on the public surface, it is at its most binding here, because a page that asks for two things has asked for neither.',
       'Two surfaces, one prop. <code>tone="paper"</code> is an ordinary 76° card on the wall: radius 4, one shadow, zero border. <code>tone="band"</code> paints the ink surface and takes the band\'s own tokens, so the page closes on the same ink it opened under. Ink takes no shadow — it is the wall\'s opposite, not a card resting on it.',
-      'The copy contract is A3\'s: the button names its object. &ldquo;Start the 30-day trial&rdquo; is a call to action; &ldquo;Get started&rdquo; is a shrug.',
+      'The copy contract is A3\'s: the button names its object. &ldquo;Start the 30-day trial&rdquo; is a call to action; &ldquo;Get started&rdquo; is a shrug. And there is <b>no <code>note</code> slot under the buttons</b> — F12 refuses it here for the same reason it refuses it on the Masthead: a mono line of terms beneath the thing being clicked is a footnote in the metadata voice, doing the job the statement above it already had.',
     ],
     examples: [
       {
         title: 'On paper',
-        description: 'A card on the wall, one primary, one ghost, a mono line of terms.',
+        description: 'A card on the wall: the ask, one sentence, one primary and one ghost.',
         demoKey: 'cta-paper',
         surface: 'wall',
         code: `import { CallToAction, Button } from '@/components/seventy-six';
@@ -189,7 +189,6 @@ export const marketing: DocEntry[] = [
     <Button variant="primary">Copy the install command</Button>
     <Button variant="ghost">Browse the components</Button>
   </>}
-  note="NPX SHADCN@LATEST ADD 76.ZIFALA.COM/R/TOKENS.JSON"
 />`,
       },
       {
@@ -212,7 +211,6 @@ export const marketing: DocEntry[] = [
           { name: 'title', type: 'string', description: 'The ask, at --sv-display-3. Names the act\'s object (A3).' },
           { name: 'statement', type: 'string', description: 'One sentence: what happens after the click, or what it costs.' },
           { name: 'actions', type: 'ReactNode', description: 'ONE primary. A ghost beside it is permitted; a second primary is not.' },
-          { name: 'note', type: 'string', description: 'A mono line under the actions: terms, trial length, card requirement.' },
           { name: 'tone', type: "'paper' | 'band'", defaultValue: "'paper'", description: 'A card on the wall, or the ink surface edge to edge.' },
           { name: 'headingLevel', type: '2 | 3', defaultValue: '2', description: 'A public page\'s h1 belongs to its Masthead (B47).' },
         ],
@@ -228,6 +226,7 @@ export const marketing: DocEntry[] = [
     },
     donts: [
       'Never two primaries.',
+      'Never a mono line of terms under the actions (F12) — a load-bearing term goes in the statement, or on the page the button opens.',
       'Never "Get started", "Learn more", or an exclamation mark (A3) — the button names its object.',
       'Never a countdown or a scarcity line; 76° speaks like a competent colleague.',
       'Never a form inside it — a form that collects something is a page, or a Plate (B24).',

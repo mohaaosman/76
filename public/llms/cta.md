@@ -19,13 +19,13 @@ Everything above it states; this asks. That is why it holds exactly **one primar
 
 Two surfaces, one prop. `tone="paper"` is an ordinary 76° card on the wall: radius 4, one shadow, zero border. `tone="band"` paints the ink surface and takes the band's own tokens, so the page closes on the same ink it opened under. Ink takes no shadow — it is the wall's opposite, not a card resting on it.
 
-The copy contract is A3's: the button names its object. &ldquo;Start the 30-day trial&rdquo; is a call to action; &ldquo;Get started&rdquo; is a shrug.
+The copy contract is A3's: the button names its object. &ldquo;Start the 30-day trial&rdquo; is a call to action; &ldquo;Get started&rdquo; is a shrug. And there is **no `note` slot under the buttons** — F12 refuses it here for the same reason it refuses it on the Masthead: a mono line of terms beneath the thing being clicked is a footnote in the metadata voice, doing the job the statement above it already had.
 
 ## Examples
 
 ### On paper
 
-A card on the wall, one primary, one ghost, a mono line of terms.
+A card on the wall: the ask, one sentence, one primary and one ghost.
 
 ```tsx
 import { CallToAction, Button } from '@/components/seventy-six';
@@ -37,7 +37,6 @@ import { CallToAction, Button } from '@/components/seventy-six';
     <Button variant="primary">Copy the install command</Button>
     <Button variant="ghost">Browse the components</Button>
   </>}
-  note="NPX SHADCN@LATEST ADD 76.ZIFALA.COM/R/TOKENS.JSON"
 />
 ```
 
@@ -63,7 +62,6 @@ The page closes on the same ink it opened under.
 | `title` | `string` | — | The ask, at --sv-display-3. Names the act's object (A3). |
 | `statement` | `string` | — | One sentence: what happens after the click, or what it costs. |
 | `actions` | `ReactNode` | — | ONE primary. A ghost beside it is permitted; a second primary is not. |
-| `note` | `string` | — | A mono line under the actions: terms, trial length, card requirement. |
 | `tone` | `'paper' | 'band'` | `'paper'` | A card on the wall, or the ink surface edge to edge. |
 | `headingLevel` | `2 | 3` | `2` | A public page's h1 belongs to its Masthead (B47). |
 
@@ -77,6 +75,7 @@ The page closes on the same ink it opened under.
 ## Don't
 
 - Never two primaries.
+- Never a mono line of terms under the actions (F12) — a load-bearing term goes in the statement, or on the page the button opens.
 - Never "Get started", "Learn more", or an exclamation mark (A3) — the button names its object.
 - Never a countdown or a scarcity line; 76° speaks like a competent colleague.
 - Never a form inside it — a form that collects something is a page, or a Plate (B24).

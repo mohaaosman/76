@@ -135,7 +135,10 @@ export function MarketingHome() {
       <Band>
         <BandTopbar
           nav={<BandNav items={nav} />}
-          utilities={<Button variant="primary">Install the registry</Button>}
+          /* The band's button is a GHOST, not a second primary: A2 allows one
+             seed fill per view region and the Masthead below owns the ask. Two
+             blue rectangles visible at once is two primaries, which is none. */
+          utilities={<ButtonLink href="#install">Install the registry</ButtonLink>}
         />
       </Band>
 
@@ -144,7 +147,6 @@ export function MarketingHome() {
             a public page has no stat row to pin over the band edge. */}
         <Row>
           <Masthead
-            eyebrow="COMPONENT LIBRARY · v0.5"
             title="Flat, informational, corporate."
             titleSoft="Paper on a wall."
             statement="Fifty-one component specifications with one job each, zero runtime dependencies, and WCAG 2.2 AA verified on both surfaces."
@@ -154,7 +156,6 @@ export function MarketingHome() {
                 <ButtonLink href="#components">Browse the components</ButtonLink>
               </>
             }
-            note="MIT · ZERO DEPENDENCIES · REACT 19"
           />
         </Row>
 
@@ -198,7 +199,6 @@ export function MarketingHome() {
             title="Read the Component Book"
             statement="Every specification, every refusal by name, and the fourteen-point gate each screen passes before it ships."
             actions={<Button variant="primary">Open the Book</Button>}
-            note="MIT · NO ACCOUNT REQUIRED"
           />
         </Row>
       </Sheet>

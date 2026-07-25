@@ -8,6 +8,7 @@ import {
   Badge,
   Busy,
   CallToAction,
+  ErrorSummary,
   Band,
   BandNav,
   BandSubTabs,
@@ -74,7 +75,7 @@ import {
   useSearchCommand,
   useToast,
 } from '@/components/seventy-six';
-import type { FileRow } from '@/components/seventy-six';
+import type { FileRow, FieldError } from '@/components/seventy-six';
 
 /* Shared demo icons — 16px stroke, seed color comes from the tile. */
 const IconCoins = (
@@ -2108,6 +2109,113 @@ function SplitStacked() {
   return <SplitFrame src="auth-stacked" label="Sign in, ink band above the form" />;
 }
 
+/* ------------------------------------------------ v0.6 · the promises kept */
+
+const ERRORS: FieldError[] = [
+  { fieldId: 'po-supplier', label: 'Supplier', message: 'Choose a supplier before submitting.' },
+  { fieldId: 'po-qty', label: 'Quantity', message: 'Quantity must be a whole number above 0.' },
+  { fieldId: 'po-date', label: 'Delivery date', message: 'The delivery date is before the order date.' },
+];
+
+function ErrSumBasic() {
+  /* autoFocus is off in the demo only: a doc page carries eight previews, and
+     a component that grabs focus on mount would fight the reader for the page.
+     In a form it defaults on, because B11 requires the move. */
+  return (
+    <div style={{ maxWidth: 520 }}>
+      <ErrorSummary errors={ERRORS} autoFocus={false} />
+    </div>
+  );
+}
+
+function ErrSumForm() {
+  const [errors, setErrors] = useState<FieldError[]>([]);
+  const [qty, setQty] = useState('');
+  const [reason, setReason] = useState('');
+  const qtyError = errors.find((e) => e.fieldId === 'demo-qty')?.message;
+  const reasonError = errors.find((e) => e.fieldId === 'demo-reason')?.message;
+
+  function submit(e: FormEvent) {
+    e.preventDefault();
+    const found: FieldError[] = [];
+    if (!/^\d+$/.test(qty) || Number(qty) < 1) {
+      found.push({ fieldId: 'demo-qty', label: 'Quantity', message: 'Quantity must be a whole number above 0.' });
+    }
+    if (reason.trim().length < 4) {
+      found.push({ fieldId: 'demo-reason', label: 'Reason', message: 'State why the quantity changed — the supplier sees this.' });
+    }
+    setErrors(found);
+  }
+
+  return (
+    <form onSubmit={submit} style={{ maxWidth: 520, display: 'grid', gap: 14 }} noValidate>
+      {/* The index at the head, the statement at each field. Both, always. */}
+      <ErrorSummary errors={errors} />
+      <Field
+        id="demo-qty"
+        label="Quantity"
+        hint="Whole units, above zero"
+        value={qty}
+        onChange={(e) => setQty(e.target.value)}
+        error={qtyError}
+      />
+      <Field
+        id="demo-reason"
+        label="Reason"
+        value={reason}
+        onChange={(e) => setReason(e.target.value)}
+        error={reasonError}
+      />
+      <div>
+        <Button variant="primary" type="submit">
+          Save amendment
+        </Button>
+      </div>
+    </form>
+  );
+}
+
+interface TotalLine {
+  sku: string;
+  description: string;
+  qty: number;
+  cost: string;
+  extended: string;
+}
+
+const TOTAL_LINES: TotalLine[] = [
+  { sku: 'PLT-4400', description: 'Euro pallet · heat-treated', qty: 480, cost: '$14.50', extended: '$6,960.00' },
+  { sku: 'STR-0912', description: 'Stretch film 500mm', qty: 240, cost: '$18.20', extended: '$4,368.00' },
+  { sku: 'LBL-2201', description: 'Thermal label 100×150', qty: 96, cost: '$31.00', extended: '$2,976.00' },
+  { sku: 'CRN-7730', description: 'Corner board 60mm', qty: 600, cost: '$2.90', extended: '$1,740.00' },
+];
+
+function TableTotals() {
+  return (
+    <Card>
+      <CardHead title="Purchase order lines" subtitle="PO-2291 · Halcyon Supply" />
+      <DataTable
+        caption="Purchase order lines with closing figures"
+        rows={TOTAL_LINES}
+        rowKey={(l) => l.sku}
+        leadHold
+        columns={[
+          { key: 'sku', header: 'SKU', kind: 'id', render: (l) => l.sku },
+          { key: 'description', header: 'DESCRIPTION', render: (l) => l.description },
+          { key: 'qty', header: 'QTY', kind: 'num', render: (l) => l.qty.toLocaleString() },
+          { key: 'cost', header: 'UNIT COST', kind: 'num', render: (l) => l.cost },
+          { key: 'extended', header: 'EXTENDED', kind: 'num', render: (l) => l.extended },
+        ]}
+        totals={[
+          { label: 'SUBTOTAL', cells: { extended: '$16,044.00' } },
+          { label: 'VAT 20%', cells: { extended: '$3,208.80' } },
+          { label: 'TOTAL DUE', cells: { extended: '$19,252.80' }, strong: true },
+        ]}
+      />
+    </Card>
+  );
+}
+
 /* ------------------------------------------------ v0.5 · the public surface */
 
 /* Every heading in these demos is level 2: the docs page already owns its
@@ -2117,7 +2225,6 @@ function MastheadBasic() {
   return (
     <Masthead
       headingLevel={2}
-      eyebrow="COMPONENT LIBRARY · v0.5"
       title="Flat, informational, corporate."
       titleSoft="Paper on a wall."
       statement="Fifty-one component specifications with one job each, zero runtime dependencies, and WCAG 2.2 AA verified on both surfaces."
@@ -2127,7 +2234,6 @@ function MastheadBasic() {
           <ButtonLink href="#/components">Browse the components</ButtonLink>
         </>
       }
-      note="MIT · ZERO DEPENDENCIES · REACT 19"
     />
   );
 }
@@ -2185,7 +2291,6 @@ function CtaPaper() {
             <ButtonLink href="#/components">Browse the components</ButtonLink>
           </>
         }
-        note="NPX SHADCN@LATEST ADD 76.ZIFALA.COM/R/TOKENS.JSON"
       />
     </CallViewFrame>
   );
@@ -2440,4 +2545,7 @@ export const demos: Record<string, ComponentType> = {
   'footer-basic': FooterBasic,
   'prose-basic': ProseBasic,
   'prose-markdown': ProseMarkdown,
+  'errsum-basic': ErrSumBasic,
+  'errsum-form': ErrSumForm,
+  'table-totals': TableTotals,
 };

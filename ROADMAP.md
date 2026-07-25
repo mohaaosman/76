@@ -241,9 +241,14 @@ point 12 is not checkable against a denominator nobody printed.
 | **B57** | `TreeTable` | State a hierarchy of rows in which every parent is the sum of its children, across the same numeric columns at every depth. |
 | **B58** | `CrossTable` | State ONE measure at every intersection of two dimensions. |
 | **B59** | `FunnelList` | State how one total narrows through an ordered sequence of steps. |
-| **B60** | `PathLine` | State the ordered path a reader has drilled into, every level above the current one a link back. |
 | **B35 amd** | The stated baseline | Print what a comparison is against, so no delta on any 76° screen is an unsourced assertion. |
 | **surface** | `saved-view-line` | State that the view on screen has drifted from the view that was saved. |
+
+**`PathLine` was withdrawn before it was built.** The 0.6 review named it for
+what it was — a breadcrumb — and breadcrumbs are now refused outright as
+**F13**: where you are is the Band's job, and a record's parent is a *fact* in
+its own `DescriptionList`, a link the reader can follow rather than a trail of
+chevrons above the title.
 
 `TreeTable` takes the same F3 reading: a trial balance is not grouped at
 runtime — its depth **is** the chart of accounts, which B40 already accepted as
@@ -312,6 +317,9 @@ sub-taxonomy, it is a screen composed of 76° parts — not a component.**
 | @mentions · merge/dedupe UI | Declined. Screens or fields composed of shipped parts, not widgets. |
 | `print.css` as its own stylesheet | Refused. Print goes in `tokens.css` + `base.css`, for the same reason dark did: no component branches on the medium. |
 | Density as a per-component prop | Refused. It is a token-layer posture on a wrapper, resolved at the nearest declaration. |
+| `PathLine` (the drill path) | **Refused as F13** after the 0.6 review: it is a breadcrumb. The Band carries `aria-current`, the sub-tab row names the section and the h1 names the page — a fourth voice restating all three grows the nesting F6 already refuses. |
+| The kicker above a title · the mono note under an actions cluster | **Refused as F12.** A header is a title, ONE line, and ONE or TWO buttons. Both slots were removed from B47 and B49 rather than documented, because a slot that exists is a slot that gets filled. |
+| A stat in the same colour as a call to action | **Refused as F14.** The seed fill is the action's; every figure is ink. If the number is as loud as the button, the reader has two primaries and the screen has none. |
 
 ## Exploring — later
 

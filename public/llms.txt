@@ -52,6 +52,7 @@
 - [TreeList](https://76.zifala.com/llms/tree-list.md): The full ARIA tree, hand-rolled — depth drawn, one tab stop, no dependency. One job: Move through a HIERARCHY whose depth is itself the information.
 - [Timeline](https://76.zifala.com/llms/timeline.md): One record's history on a clipped rail — including what has not happened. One job: State the ordered HISTORY of ONE record, with the gaps visible.
 - [Forms](https://76.zifala.com/llms/field.md): Field, Select, Checkbox, Radio, Toggle — labels above, seed focus without glow, errors that say how to fix. One job: Collect one value per control, honestly labeled.
+- [ErrorSummary](https://76.zifala.com/llms/error-summary.md): The top-of-form index B11 has always required and the barrel never had. One job: Index a failed submit's field errors as one list of links to the fields that caused them.
 - [NumberField](https://76.zifala.com/llms/number-field.md): The quantity input — native number, B11 chrome, a − / + pair, stated unit. One job: Enter a bounded QUANTITY.
 - [Slider](https://76.zifala.com/llms/slider.md): A native range in 76° clothes — position matters, and the number is still printed. One job: Set a value whose POSITION in a range matters more than its digits.
 - [DateRangeField](https://76.zifala.com/llms/date-range-field.md): Two native date inputs, a mono preset row, and a context line — no month grid, ever. One job: Choose a DATE RANGE.
@@ -81,6 +82,8 @@ Full screens built only from the taxonomy — install with npx shadcn@latest add
 
 - Public home (`template-marketing-home`, seed cobalt): The public surface — a masthead, figures, columns, one ask.
 - Pricing (`template-pricing-page`, seed cobalt): Pricing as a DataTable — no tier cards, no "Most popular" pill.
+- Purchase order (`template-erp-purchase-order`, seed cobalt): One operational document — its facts, its lines, its history, its verbs.
+- Deal board (`template-crm-deal-board`, seed verdigris): The pipeline as a board — four stage cards, and a deal that moves by a named verb.
 - ERP dashboard (`template-erp-dashboard`, seed cobalt): A warehouse operations overview — the densest 76° screen.
 - CRM pipeline (`template-crm-pipeline`, seed verdigris): A sales pipeline — stages, momentum, and deals.
 - POS terminal (`template-pos-terminal`, seed signal): A point-of-sale register — scaled up, touch-first.

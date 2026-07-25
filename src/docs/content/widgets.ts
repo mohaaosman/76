@@ -494,8 +494,26 @@ export const widgets: DocEntry[] = [
       'On narrow screens the table scrolls horizontally inside its card. It never reflows into stacked blobs, and the header row never disappears.',
       '<b>v0.4.0 closes the table\'s missing half</b> — what a selection DOES, and how filter state is shown. <b>SelectionHead</b> replaces the CardHead in place while rows are selected: mono count, the verbs, "Clear". No floating action bar and no new z-index, because the card\'s own header already owns that row. <b>FilterLine</b> states the active filters as one mono line of running text with a single "Clear all", and that line doubles as the <code>aria-live</code> announcement — no chips, no pills, because B23 Badge stays category-only and non-dismissible.',
       '<b>FilterBar</b> closes the third side of that row, and the division of labour is exact: <b><code>CardTabs</code> switches between mutually exclusive presets · <code>FilterBar</code> sets the filters · <code>FilterLine</code> states what is set.</b> A card may carry all three, in that order, and each does one of the three jobs — a control that does two of them is the defect. FilterBar itself is a layout with slots, not a filter engine: it takes a SearchField and at most three Selects or Comboboxes in <code>controls</code>, anything that is not a filter in <code>actions</code>, and your code owns every value. It is <code>role="group"</code> with an <code>aria-label</code>, deliberately NOT <code>role="search"</code>, because this filters a set in place and does not search a site. It holds no live region either, because the announcement is FilterLine\'s job and two live regions for one change is a defect. It wraps when it runs out of room and never scrolls — a horizontally scrolling filter row hides the filters it is offering — and "Clear all" appears only when <code>active</code> says something is actually set.',
+      '<b>v0.6 adds the closing row and the held column.</b> <code>totals</code> renders a real <code>&lt;tfoot&gt;</code> keyed to the same columns — which matters because the only way to draw a totals row before this was to push a fake record into <code>rows</code>, where ↑/↓ focuses it, Space selects it, <code>onRowOpen</code> opens it and <code>page.of</code> counts it. Four lies for one row. Foot cells inherit each column\'s own <code>kind</code>, so a <code>num</code> column\'s total is right-aligned and tabular exactly as its body cells are.',
+      '<code>leadHold</code> holds the identity column in place while the rest of a wide table scrolls under it — at column seven of a fourteen-column line table, the reader has otherwise lost which line they are on. <b>It is self-limiting, and that is what keeps F3 refused:</b> it is not caller-configurable per column, not draggable, and it applies to the first column ONLY when that column is already declared <code>kind: "id"</code>, which is the row identity B7 already names. Pass it on a table whose first column is anything else and it is ignored. F3 protects against a table whose shape the reader rearranges; this lets the reader rearrange nothing.',
     ],
     examples: [
+      {
+        title: 'A document\'s closing figures',
+        description: 'Subtotal, tax and total in a real <tfoot> — outside the row, focus, selection and pagination models.',
+        demoKey: 'table-totals',
+        code: `<DataTable
+  caption="Purchase order lines"
+  rows={lines}
+  rowKey={(l) => l.sku}
+  columns={columns}
+  totals={[
+    { label: 'SUBTOTAL', cells: { total: '$18,240.00' } },
+    { label: 'VAT 20%', cells: { total: '$3,648.00' } },
+    { label: 'TOTAL DUE', cells: { total: '$21,888.00' }, strong: true },
+  ]}
+/>`,
+      },
       {
         title: 'Orders table with selection and keyboard nav',
         description: 'Click a row, then drive it entirely from the keyboard: ↑/↓ to move, Space to select, ⇧↓ to range-select, Enter to open.',
@@ -637,6 +655,8 @@ const active = query !== '' || status !== 'all';
           { name: 'selectable / selected / onSelect', type: 'boolean / Set<string> / (keys) => void', description: 'Controlled selection; Space toggles, ⇧ extends.' },
           { name: 'announcement', type: 'string', description: 'aria-live polite text on data/filter changes ("12 orders · Pending").' },
           { name: 'page', type: '{ from, to, of, onPrev?, onNext? }', description: 'Mono "1–50 OF 248" + ghost prev/next. No numbered pill walk.' },
+          { name: 'totals', type: 'TotalsRow[]', description: 'v0.6 · a real <code>&lt;tfoot&gt;</code>: { label, cells (keyed by column key), strong? }. Outside the row, focus, selection and pagination models.' },
+          { name: 'leadHold', type: 'boolean', description: 'v0.6 · holds the first column while the rest scrolls. IGNORED unless that column is <code>kind: "id"</code>.' },
         ],
       },
       {

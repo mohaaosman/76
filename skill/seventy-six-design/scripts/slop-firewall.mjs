@@ -27,6 +27,92 @@ import path from 'node:path';
    SiteFooter are marketing too and are deliberately absent, because an
    allowance nobody uses is an allowance somebody will. Adding a file here
    is a Book change, not a convenience. */
+/* RULE 18 · NOTHING TOUCHES THE PAPER'S EDGE BY ACCIDENT.
+   `.sv-card` carries no padding of its own, by design: a DataTable's rows
+   are hairline-ruled edge to edge and a CardHead owns its own row, so a
+   card that padded everything would have to un-pad them again. The cost is
+   that a widget with no inset of its own — a MeterList, a Trend, a Field, a
+   Prose — dropped straight into a <Card> renders flush against the corners.
+   It has happened more than once, it is invisible in a diff, and the only
+   thing standing between the system and it was a comment in card.css.
+   Now it is a gate: a capitalised component that is a DIRECT child of
+   <Card> must either be full-bleed BY SPECIFICATION (the list below) or sit
+   inside <div className="sv-card__body">. Adding a name to this list is a
+   Book change — it is a claim that the component draws to the card's edge
+   on purpose. */
+const CARD_DIRECT_CHILD_OK = new Set([
+  /* Full-bleed BY SPECIFICATION — hairline rows that draw to the paper's
+     edge, which is why .sv-card carries no padding in the first place. */
+  'CardHead',        /* the card's own head row */
+  'SelectionHead',   /* B7 · replaces the head row in place */
+  'CardTabs',        /* B8 · sits ON the card's hairline */
+  'FilterBar',       /* B7 · the control row under the head */
+  'FilterLine',      /* B7 · the stated-filters row */
+  'DataTable',       /* B7 · hairline rows, edge to edge */
+  'ActivityList',    /* B9 · hairline rows, edge to edge */
+  'DescriptionList', /* B28 · hairline pairs, edge to edge */
+  'Accordion',       /* B27 · hairline sections, edge to edge */
+  /* SELF-PADDED — they carry their own inset and would double up inside a
+     body. Verified against each one's own stylesheet, not assumed. */
+  'StatS1',          /* B3 · the three zones pad themselves (14/18/0 …) */
+  'EmptyState',      /* B15 */
+  'Banner',          /* B22 */
+  'ErrorSummary',    /* B52 */
+  'Stepper',         /* B39 */
+  'FeatureList',     /* B48 */
+  'DateRangeField',  /* B35 */
+]);
+
+/**
+ * Rule 18 reads STRUCTURE, so it cannot be a grep. It is deliberately
+ * conservative: it only looks at DIRECT children of a <Card>, and it goes
+ * quiet inside a `sv-card__body` for as long as that body is open, however
+ * the file happens to be indented.
+ */
+function checkCardPadding(file, source, flag) {
+  if (!file.endsWith('.tsx')) return;
+  const lines = source.split('\n');
+  let cardIndent = null;
+  let bodyIndent = null;
+
+  lines.forEach((line, i) => {
+    /* A self-closing <Card /> has no children and no closing tag — without
+       this, its indent would stay armed for the rest of the file and every
+       later component would be measured against a card that ended. */
+    const open = line.match(/^(\s*)<Card\b(?![A-Za-z])/);
+    if (open && !/\/>\s*$/.test(line)) {
+      cardIndent = open[1].length;
+      bodyIndent = null;
+      return;
+    }
+    if (cardIndent === null) return;
+
+    if (/^\s*<\/Card>/.test(line)) {
+      cardIndent = null;
+      bodyIndent = null;
+      return;
+    }
+
+    /* The padded body: everything inside it is already inset, so the check
+       sleeps until the div closes at or above the indent it opened on. */
+    const body = line.match(/^(\s*)<div[^>]*className="sv-card__body"/);
+    if (body) {
+      bodyIndent = body[1].length;
+      return;
+    }
+    if (bodyIndent !== null) {
+      const closeDiv = line.match(/^(\s*)<\/div>/);
+      if (closeDiv && closeDiv[1].length <= bodyIndent) bodyIndent = null;
+      return;
+    }
+
+    const child = line.match(/^(\s*)<([A-Z][A-Za-z0-9]*)/);
+    if (child && child[1].length === cardIndent + 2 && !CARD_DIRECT_CHILD_OK.has(child[2])) {
+      flag(i + 1, line, `<${child[2]}> flush against the card edge (rule 18: wrap it in sv-card__body)`);
+    }
+  });
+}
+
 const DISPLAY_TYPE_FILES = new Set([
   'masthead.css',   /* B47 · display-1, the claim */
   'cta.css',        /* B49 · display-3, the ask */
@@ -41,6 +127,13 @@ const violations = [];
 function check(file, source) {
   const base = path.basename(file);
   const lines = source.split('\n');
+
+  /* Rule 18 reads STRUCTURE, not lines — it is the one check that cannot be
+     a grep, because the defect is a parent/child relationship. */
+  checkCardPadding(file, source, (lineNo, line, rule) =>
+    violations.push(`${file}:${lineNo} · ${rule} · ${line.trim().slice(0, 90)}`),
+  );
+
   lines.forEach((line, i) => {
     const loc = `${file}:${i + 1}`;
     const flag = (rule) => violations.push(`${loc} · ${rule} · ${line.trim().slice(0, 90)}`);

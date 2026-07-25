@@ -232,3 +232,213 @@
     --sv-seed-tint: color-mix(in srgb, var(--sv-seed) 16%, var(--sv-paper));
   }
 }
+
+/* ============================================================
+   The printed surface (v0.6) — paper is the third surface.
+
+   It is declared here, in the tokens, for exactly the reason
+   dark is: it changes ONLY tokens. A `print.css` was proposed
+   during the 0.6 audit and REFUSED, because the dark surface's
+   governing rule reads one word wider than it was written —
+   "no component may branch on the mode" is "no component may
+   branch on the MEDIUM". What a component knows about paper it
+   learns from a token, or it does not learn it.
+
+   Print is the LIGHT surface restated IN FULL, plus the
+   amendments below — not a patch on whatever happened to be on
+   screen. In full, because <html data-mode="dark"> prints too,
+   and a printer emits no ink for #1B1F26: a dark document left
+   un-restated prints #E6E9EE type onto a white sheet, which is
+   a blank page that took ninety seconds. That is precisely the
+   silent loss C7 exists to forbid, arriving through the token
+   layer instead of through a scroll container.
+
+   The second half of this surface — what the PAGE does with
+   these values — is the `@media print` block in base.css.
+   ============================================================ */
+
+@layer sv-tokens {
+  @media print {
+    :root,
+    [data-mode='dark'] {
+      color-scheme: light;
+
+      /* ---- The wall and the band ------------------------------
+         A 1280px ink band prints as a solid dark rectangle across
+         the head of every sheet: a page of toner, and a header
+         nobody can write a note on. The band is CHROME — it states
+         where you are inside an application — and a sheet of paper
+         is not inside anything. It becomes paper, and states its
+         own end with a rule instead of with a colour (that rule is
+         base.css's, because a token cannot draw a border).
+         The wall goes with it: the wall is the surface a card
+         RESTS on, and the sheet is already that surface. Paper on
+         paper needs an edge, not a backdrop.
+         B46 `Split` falls out of this for free — its two halves
+         are --sv-band and --sv-wall, so on paper the seam closes
+         and the page prints as exactly the B24 Plate it composes.
+         The halves carry nothing, so nothing is lost with them. */
+      --sv-band:       #FFFFFF;
+      --sv-wall:       #FFFFFF;
+      --sv-paper:      #FFFFFF;
+
+      /* The mark inverts here, and ONLY here. --sv-on-dark exists
+         because the band and the seed do not invert per mode, so
+         the mark on them must not either (v0.2.1). Both premises
+         fail on paper at once: the band is no longer dark, and a
+         seed fill is a BACKGROUND, which a printer drops by
+         default. A white mark would print white-on-white in both
+         positions — the PageHero's h1 and the primary button's
+         label, gone, with nothing on the page to say so. It goes
+         ink. One token, one job, restated for one medium: "the
+         mark on chrome or on a seed fill", and on paper neither
+         of those surfaces is there to be marked.
+         The residual is named rather than hidden: a reader who
+         ticks "background graphics" gets the seed fill back under
+         an ink label at 2.87:1. 76° takes that over a label that
+         is invisible by default — a contrast miss the reader
+         opted into beats a word that is not on the page. */
+      --sv-on-dark:    #1C2026;
+
+      /* Band secondary text was verified at 5.32:1 ON INK (C1).
+         On paper it is 3.10:1 and fails, so it takes --sv-ink-
+         soft's step, which is verified at 4.99:1. This is the
+         context line, the wordmark's degree mark and every
+         inactive nav item. */
+      --sv-band-soft:  #667080;
+
+      /* ---- Hairlines, sized for toner rather than for a panel --
+         #E9EBEE is ~9% ink. A 1px rule at 9% renders as a sparse
+         dither on a 300dpi laser and is gone after one photocopy.
+         On paper the hairline is doing MORE work than on screen,
+         not less: there is no hover, no focus and no elevation
+         left, so the rule is the only thing separating two table
+         rows, ruling a `<dl>` pair, or closing a card. ~21% is the
+         conventional print hairline and it is what these become. */
+      --sv-line:       #C9CED5;
+      --sv-band-line:  #C9CED5;
+
+      /* On paper a field's border is its sole affordance BY
+         DEFINITION — nothing focuses it, nothing types into it, no
+         caret identifies it, and a printed form is a form somebody
+         fills in by hand. So the ordinary field line takes the
+         strong step (3.63:1), which is B25's reasoning for an
+         empty PinField box arriving one surface later. */
+      --sv-field-line: #7E8794;
+      --sv-field-line-strong: #7E8794;
+
+      /* The light ink ladder, restated: the dark ladder is a
+         screen ladder and prints as almost nothing. */
+      --sv-ink:        #1C2026;   /* 15.7:1 on paper */
+      --sv-ink-soft:   #667080;   /* 4.99:1 — AA */
+      --sv-ink-faint:  #99A1AD;   /* unchanged. C2 already forbids it
+                                     carrying anything alone, so a step
+                                     that photocopies away costs the
+                                     reader nothing it was ever
+                                     permitted to hold. */
+      --sv-ok:         #14804A;   /* 4.98:1 on paper — AA */
+      --sv-bad:        #C43D2E;   /* 5.18:1 on paper — AA */
+
+      /* --sv-on-bad flips for the same reason --sv-on-dark does,
+         and it is the token that always said it would: its one
+         legal position is a mark on a red FILL, and a fill on
+         paper is no fill at all. */
+      --sv-on-bad:     #1C2026;
+
+      /* A 2px comparison line at 1.28:1 is not a faint line on
+         paper, it is an absent one — and B5 draws the comparison
+         series as a STROKE, which is ink rather than background,
+         so it prints whatever the reader chose. It takes the faint
+         step: still visibly the second series beside a seed line,
+         now actually on the page. */
+      --sv-compare:    #99A1AD;
+
+      /* ---- The seed -------------------------------------------
+         The seed is UNCHANGED and needs no printed variant. It
+         survives a colour printer and flattens to a mid grey on a
+         mono one — and C5 has already paid for that in advance:
+         no 76° meaning is carried by colour. A status is a word
+         beside a dot, a delta is an arrow glyph, an active tab is
+         weight plus aria-current, a chart series is labelled in
+         its legend. Greyscale strips decoration off a 76° page and
+         takes no information with it. That is the entire argument
+         for the printed surface being a token change.
+
+         --sv-seed-tint is the one place that stops being true, and
+         it is worth naming as the exception rather than trusting
+         the rule. It is not a mark, it is a FILL — the fill B7 and
+         B40 put under a SELECTED row. A printer either drops it or
+         renders it as a pale grey band that reads as a smudge, and
+         a photocopier amplifies it into one. Its other cue is the
+         2px seed LEFT RULE that B7 registered as the only left
+         rule in the system: a shape, not a shade, and a shape
+         prints in every mode on every printer. The rule states
+         the selection; the tint goes to paper, and the toner it
+         would have spent on 200 hover-coloured rows stays in the
+         cartridge. */
+      --sv-seed-tint:  #FFFFFF;
+
+      /* ---- Layers that cannot print ---------------------------
+         A scrim dims what is BEHIND a dialog. Paper has no
+         behind, so the token has no job and takes no ink. */
+      --sv-scrim:      transparent;
+
+      /* Elevation is a claim about light that a lit screen can
+         make and a sheet cannot; a printer renders --sv-shadow as
+         a grey smear along two edges of every card. A4's "every
+         card: zero border" is a SCREEN rule, and its reason is
+         that the shadow already draws the edge — with the shadow
+         gone the card has no edge at all. So on paper it takes a
+         hairline. A token cannot add a border, so that ONE rule
+         lives in base.css with the rest of the printed page, and
+         never in card.css, which must not know what medium it is
+         being read on. */
+      --sv-shadow:     none;
+
+      /* Motion cannot print. The printed surface takes the same
+         0ms the reduced-motion surface takes, for the same
+         reason: 76° loses nothing, by design. */
+      --sv-t-fast:     0ms;
+      --sv-t:          0ms;
+    }
+
+    /* The tint is matched in the DESCENDANT position too, for the
+       reason the v0.4.0 dark amendment states in full: a product
+       declares its seed on its own wrapper, a custom property
+       resolves at the NEAREST declaration, and that wrapper's own
+       literal would otherwise shadow the step above it — printing
+       a pale blue band under every selected row of a document that
+       had asked for none. A seeded region on a printed page is
+       exactly as considered as a printed document. */
+    [data-seed],
+    [data-mode='dark'] [data-seed] {
+      --sv-seed-tint: #FFFFFF;
+    }
+
+    /* A dark document restores the LIGHT seed-as-text and
+       seed-as-line steps: #7C9BF2 is AA on dark paper and 2.4:1 on
+       a white sheet, so every link, active tab and focus ring in a
+       printed dark document would be a pale smudge. Three seeds,
+       both positions, mirroring the dark block above line for
+       line — for the same reason it needs both. */
+    [data-mode='dark'][data-seed='cobalt'],
+    [data-mode='dark'] [data-seed='cobalt'],
+    [data-mode='dark']:not([data-seed]) {
+      --sv-seed-text: #2C5BE0;    /* 5.70:1 on paper */
+      --sv-seed-line: var(--sv-seed);
+    }
+
+    [data-mode='dark'][data-seed='verdigris'],
+    [data-mode='dark'] [data-seed='verdigris'] {
+      --sv-seed-text: #12836F;    /* 5.0:1 on paper */
+      --sv-seed-line: var(--sv-seed);
+    }
+
+    [data-mode='dark'][data-seed='signal'],
+    [data-mode='dark'] [data-seed='signal'] {
+      --sv-seed-text: #C24413;    /* the seed-as-text variant — the raw
+                                     #D9531E is 4.0:1 on white and fails */
+      --sv-seed-line: var(--sv-seed);
+    }
+  }
+}
