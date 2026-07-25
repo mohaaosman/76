@@ -88,7 +88,8 @@ function MenuPanel({ id, items, labelledBy, onClose, panelRef, align }: MenuPane
     >
       {items.map((item) =>
         item === 'separator' ? (
-          <hr key={`sep-${sep++}`} className="sv-menu__sep" role="separator" />
+          /* <hr> is already a separator to assistive tech — no role needed. */
+          <hr key={`sep-${sep++}`} className="sv-menu__sep" />
         ) : (
           <button
             key={item.label}

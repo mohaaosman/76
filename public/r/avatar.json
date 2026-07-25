@@ -1,0 +1,45 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "avatar",
+  "type": "registry:ui",
+  "title": "Avatar",
+  "description": "A person, named — initials on wall, or their photo if the product has one. One job: Identify a PERSON beside their name.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/avatar.tsx",
+      "content": "import { cx } from '@/lib/cx';\nimport './avatar.css';\n\n/**\n * B30 · Avatar — a person, named. Initials on wall by default; a photo\n * only when the product genuinely has one. Never decorative, never a\n * generic silhouette, never the sole carrier of the name (A4).\n */\nexport interface AvatarProps {\n  /** The full name. Initials and the accessible name both come from it. */\n  name: string;\n  src?: string;\n  size?: 'sm' | 'md' | 'lg';\n  /** Marks the current user / active member — one per group, like all seed. */\n  tone?: 'neutral' | 'seed';\n  className?: string;\n}\n\nfunction initials(name: string) {\n  const parts = name.trim().split(/\\s+/).filter(Boolean);\n  if (parts.length === 0) return '';\n  const first = parts[0][0] ?? '';\n  const last = parts.length > 1 ? (parts[parts.length - 1][0] ?? '') : '';\n  return (first + last).toUpperCase();\n}\n\nexport function Avatar({ name, src, size = 'md', tone = 'neutral', className }: AvatarProps) {\n  const cls = cx('sv-avatar', `sv-avatar--${size}`, tone === 'seed' && 'sv-avatar--seed', className);\n  if (src) return <img className={cls} src={src} alt={name} width={32} height={32} />;\n  return (\n    <span className={cls} role=\"img\" aria-label={name}>\n      <span aria-hidden=\"true\">{initials(name)}</span>\n    </span>\n  );\n}\n\nexport interface AvatarGroupProps {\n  people: { name: string; src?: string }[];\n  /** Faces shown before the overflow count. Default 4. */\n  max?: number;\n  size?: 'sm' | 'md';\n  className?: string;\n}\n\n/**\n * The overlapped stack, capped. The overflow chip is mono and states the\n * count; the full list belongs in a Drawer or a table, never in a hover.\n */\nexport function AvatarGroup({ people, max = 4, size = 'sm', className }: AvatarGroupProps) {\n  const shown = people.slice(0, max);\n  const rest = people.length - shown.length;\n  return (\n    <span className={cx('sv-avatars', className)}>\n      {shown.map((person) => (\n        <Avatar key={person.name} name={person.name} src={person.src} size={size} />\n      ))}\n      {rest > 0 && (\n        <span className={cx('sv-avatar', `sv-avatar--${size}`, 'sv-avatar--rest', 'sv-mono')} role=\"img\" aria-label={`${rest} more`}>\n          <span aria-hidden=\"true\">+{rest}</span>\n        </span>\n      )}\n    </span>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/avatar.tsx"
+    },
+    {
+      "path": "registry/seventy-six/avatar.css",
+      "content": "/* B30 · Avatar — initials on wall, 50% radius (a registered exception to\n   the one-radius rule, alongside status dots). Images never move (Part E). */\n\n@layer sv-components {\n  .sv-avatar {\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    flex-shrink: 0;\n    border-radius: 50%;\n    background: var(--sv-wall);\n    color: var(--sv-ink-soft);\n    font-weight: 700;\n    letter-spacing: 0.01em;\n    object-fit: cover;\n    overflow: hidden;\n  }\n\n  .sv-avatar--sm {\n    width: 24px;\n    height: 24px;\n    font-size: 9.5px;\n  }\n\n  .sv-avatar--md {\n    width: 32px;\n    height: 32px;\n    font-size: 11.5px;\n  }\n\n  .sv-avatar--lg {\n    width: 44px;\n    height: 44px;\n    font-size: 15px;\n  }\n\n  .sv-avatar--seed {\n    background: var(--sv-seed-tint);\n    color: var(--sv-seed-text);\n  }\n\n  .sv-avatars {\n    display: inline-flex;\n    align-items: center;\n  }\n\n  /* The overlap is a ring of the surface behind, not a shadow. */\n  .sv-avatars .sv-avatar + .sv-avatar {\n    margin-left: -6px;\n  }\n\n  .sv-avatars .sv-avatar {\n    box-shadow: inset 0 0 0 1.5px var(--sv-paper);\n  }\n\n  .sv-avatars .sv-avatar--rest {\n    background: var(--sv-paper);\n    color: var(--sv-ink-soft);\n    font-size: 9px;\n    letter-spacing: 0;\n    box-shadow: inset 0 0 0 1px var(--sv-line);\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/avatar.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/avatar.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B30",
+    "job": "Identify a PERSON beside their name.",
+    "tags": [
+      "avatar",
+      "initials",
+      "people",
+      "assignee",
+      "group",
+      "stack"
+    ],
+    "exports": [
+      "Avatar",
+      "AvatarGroup"
+    ]
+  }
+}

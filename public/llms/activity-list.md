@@ -69,7 +69,7 @@ Same widget, a different domain: deals, contacts, and amounts are the bold entit
 ## Accessibility
 
 - Rendered as an ordered list — the sequence is the semantics.
-- Timestamps use `&lt;time dateTime&gt;` with the full ISO value on title.
+- Timestamps use `<time dateTime>` with the full ISO value on title.
 
 ## Don't
 

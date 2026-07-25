@@ -22,6 +22,12 @@ export interface SearchCommandProps {
   placeholder?: string;
   /** Bind ⌘K/Ctrl-K globally (default true). */
   bindShortcut?: boolean;
+  /**
+   * Called when the shortcut opens the palette. Pass the same setter that
+   * drives `open` — without it the shortcut opens the dialog imperatively
+   * and `open` stays false, so the next onClose() has nothing to close.
+   */
+  onOpen?: () => void;
 }
 
 export function useSearchCommand() {
@@ -36,6 +42,7 @@ export function SearchCommand({
   onPick,
   placeholder = 'Search…',
   bindShortcut = true,
+  onOpen,
 }: SearchCommandProps & { open: boolean; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -48,12 +55,13 @@ export function SearchCommand({
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         if (ref.current?.open) onClose();
+        else if (onOpen) onOpen();
         else ref.current?.showModal();
       }
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [bindShortcut, onClose]);
+  }, [bindShortcut, onClose, onOpen]);
 
   useEffect(() => {
     const el = ref.current;

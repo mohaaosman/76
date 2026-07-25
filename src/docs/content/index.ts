@@ -4,14 +4,20 @@ import { widgets } from './widgets';
 import { primitives } from './primitives';
 import { interaction } from './interaction';
 import { auth } from './auth';
+import { structure } from './structure';
+import { inputs } from './inputs';
 
-export const categories: { id: Category; label: string; note: string }[] = [
-  { id: 'chrome', label: 'Chrome', note: 'THE BAND & THE WALL' },
-  { id: 'widgets', label: 'Widgets', note: 'ONE TYPE · ONE JOB' },
-  { id: 'primitives', label: 'Primitives', note: 'NATIVE-FIRST · ZERO DEPS' },
-  { id: 'forms', label: 'Forms', note: 'B11 · HONEST INPUTS' },
+export { categories } from './categories';
+
+export const entries: DocEntry[] = [
+  ...chrome,
+  ...widgets,
+  ...primitives,
+  ...interaction,
+  ...auth,
+  ...structure,
+  ...forms,
+  ...inputs,
 ];
-
-export const entries: DocEntry[] = [...chrome, ...widgets, ...primitives, ...interaction, ...auth, ...forms];
 
 export type { DocEntry } from './types';

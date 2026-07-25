@@ -1,0 +1,46 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-range-field",
+  "type": "registry:ui",
+  "title": "DateRangeField",
+  "description": "Two native date inputs, a mono preset row, and a context line — no month grid, ever. One job: Choose a DATE RANGE.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/field.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/date-range-field.tsx",
+      "content": "import { useId } from 'react';\nimport { cx } from '@/lib/cx';\nimport './date-range-field.css';\n\n/**\n * B35 · DateRangeField — the range, without a calendar. Part F (F4) is\n * binding: 76° draws no month grid, ever. Two native\n * <input type=\"date\"> fields welded into one B11 Field, preceded by a\n * mono preset row and followed by a mono context line. The browser draws\n * the picker — free, native, localized, accessible.\n */\nexport interface DateRange {\n  /** ISO YYYY-MM-DD. */\n  from: string;\n  to: string;\n}\n\nexport type DateRangePreset = '7D' | '30D' | 'QTD' | 'YTD' | 'CUSTOM';\n\nexport interface DateRangeFieldProps {\n  label: string;\n  value: DateRange;\n  onValueChange: (value: DateRange) => void;\n  /** Preset order is fixed; pass a subset to drop any. CUSTOM always last. */\n  presets?: DateRangePreset[];\n  /** ISO date the presets count back from. Defaults to the current day. */\n  today?: string;\n  hint?: string;\n  /** What went wrong AND how to fix it (B11). Overrides the built-in order check. */\n  error?: string;\n  min?: string;\n  max?: string;\n  /** Replaces the derived \"24 days · ends today\" line. */\n  context?: string;\n  className?: string;\n}\n\nconst DAY = 86_400_000;\nconst MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];\nconst DEFAULT_PRESETS: DateRangePreset[] = ['7D', '30D', 'QTD', 'YTD', 'CUSTOM'];\n\nconst toMs = (iso: string) => {\n  const [y, m, d] = iso.split('-').map(Number);\n  return Date.UTC(y, (m ?? 1) - 1, d ?? 1);\n};\nconst toIso = (ms: number) => new Date(ms).toISOString().slice(0, 10);\n\n/** C9 · dates read absolute and mono: 24 JUL, never 7/24. */\nfunction monoDate(iso: string) {\n  const date = new Date(toMs(iso));\n  return `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]}`;\n}\n\n/** Exported so callers can drive the same ranges from a Menu or a URL. */\nexport function presetRange(preset: Exclude<DateRangePreset, 'CUSTOM'>, todayIso: string): DateRange {\n  const end = toMs(todayIso);\n  const today = new Date(end);\n  switch (preset) {\n    case '7D':\n      return { from: toIso(end - 6 * DAY), to: todayIso };\n    case '30D':\n      return { from: toIso(end - 29 * DAY), to: todayIso };\n    case 'QTD':\n      return {\n        from: toIso(Date.UTC(today.getUTCFullYear(), Math.floor(today.getUTCMonth() / 3) * 3, 1)),\n        to: todayIso,\n      };\n    case 'YTD':\n      return { from: toIso(Date.UTC(today.getUTCFullYear(), 0, 1)), to: todayIso };\n  }\n}\n\nexport function DateRangeField({\n  label,\n  value,\n  onValueChange,\n  presets = DEFAULT_PRESETS,\n  today = new Date().toISOString().slice(0, 10),\n  hint,\n  error,\n  min,\n  max,\n  context,\n  className,\n}: DateRangeFieldProps) {\n  const id = useId();\n  const hintId = `${id}-hint`;\n  const errorId = `${id}-error`;\n\n  const inverted = value.from !== '' && value.to !== '' && toMs(value.from) > toMs(value.to);\n  const shownError =\n    error ?? (inverted ? 'The start date is after the end date. Move the start date back.' : undefined);\n  const describedBy = [hint ? hintId : null, shownError ? errorId : null].filter(Boolean).join(' ') || undefined;\n\n  const active = presets.find(\n    (preset) => preset !== 'CUSTOM' && matches(presetRange(preset as Exclude<DateRangePreset, 'CUSTOM'>, today), value),\n  );\n\n  const days = inverted || !value.from || !value.to ? 0 : Math.round((toMs(value.to) - toMs(value.from)) / DAY) + 1;\n  const derived =\n    days > 0 ? `${days} ${days === 1 ? 'day' : 'days'} · ends ${value.to === today ? 'today' : monoDate(value.to)}` : '';\n  const contextLine = context ?? derived;\n\n  return (\n    <fieldset className={cx('sv-field sv-daterange', className)}>\n      <legend className=\"sv-field__label\">{label}</legend>\n      {hint && (\n        <p className=\"sv-field__hint\" id={hintId}>\n          {hint}\n        </p>\n      )}\n      <div className=\"sv-daterange__presets\" role=\"group\" aria-label={`${label} presets`}>\n        {presets.map((preset) => (\n          <button\n            key={preset}\n            type=\"button\"\n            className=\"sv-daterange__preset sv-mono\"\n            aria-pressed={preset === 'CUSTOM' ? active === undefined : active === preset}\n            onClick={() => {\n              if (preset !== 'CUSTOM') onValueChange(presetRange(preset as Exclude<DateRangePreset, 'CUSTOM'>, today));\n            }}\n          >\n            {preset}\n          </button>\n        ))}\n      </div>\n      <div className=\"sv-daterange__inputs\">\n        <input\n          type=\"date\"\n          className={cx('sv-field__input sv-daterange__input', shownError && 'sv-field__input--error')}\n          value={value.from}\n          min={min}\n          max={max}\n          aria-label={`${label}, start date`}\n          aria-invalid={shownError ? true : undefined}\n          aria-describedby={describedBy}\n          onChange={(e) => onValueChange({ ...value, from: e.target.value })}\n        />\n        <span className=\"sv-daterange__weld sv-mono\" aria-hidden=\"true\">\n          →\n        </span>\n        <input\n          type=\"date\"\n          className={cx('sv-field__input sv-daterange__input', shownError && 'sv-field__input--error')}\n          value={value.to}\n          min={value.from || min}\n          max={max}\n          aria-label={`${label}, end date`}\n          aria-invalid={shownError ? true : undefined}\n          aria-describedby={describedBy}\n          onChange={(e) => onValueChange({ ...value, to: e.target.value })}\n        />\n      </div>\n      {contextLine && (\n        <p className=\"sv-daterange__context sv-mono\" aria-live=\"polite\">\n          {contextLine}\n        </p>\n      )}\n      {shownError && (\n        <p className=\"sv-field__error\" id={errorId}>\n          {shownError}\n        </p>\n      )}\n    </fieldset>\n  );\n}\n\nconst matches = (a: DateRange, b: DateRange) => a.from === b.from && a.to === b.to;\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/date-range-field.tsx"
+    },
+    {
+      "path": "registry/seventy-six/date-range-field.css",
+      "content": "/* B35 · DateRangeField — two native date inputs welded into one field,\n   a mono preset row above, a mono context line below. No month grid (F4). */\n\n@layer sv-components {\n  .sv-daterange {\n    border: 0;\n    padding: 0;\n    min-inline-size: 0;\n  }\n\n  .sv-daterange__presets {\n    display: flex;\n    flex-wrap: wrap;\n    gap: var(--sv-s1);\n    margin-top: var(--sv-s1);\n  }\n\n  /* CardTabs (B8) voice: mono, soft, seed when it is the state you are in. */\n  .sv-daterange__preset {\n    padding: 3px 7px;\n    border: 1px solid transparent;\n    border-radius: var(--sv-r);\n    background: transparent;\n    font-size: 9.5px;\n    letter-spacing: 0.13em;\n    text-transform: uppercase;\n    color: var(--sv-ink-soft);\n    cursor: pointer;\n    transition: color var(--sv-t-fast), background-color var(--sv-t-fast), border-color var(--sv-t-fast);\n  }\n\n  .sv-daterange__preset:hover {\n    color: var(--sv-ink);\n  }\n\n  .sv-daterange__preset[aria-pressed='true'] {\n    background: var(--sv-seed-tint);\n    border-color: var(--sv-seed-tint);\n    color: var(--sv-seed-text);\n  }\n\n  .sv-daterange__inputs {\n    display: flex;\n    align-items: center;\n    gap: var(--sv-s2);\n    margin-top: var(--sv-s1);\n  }\n\n  .sv-daterange__input {\n    flex: 1;\n    min-width: 0;\n    font-variant-numeric: tabular-nums;\n  }\n\n  .sv-daterange__weld {\n    flex-shrink: 0;\n    font-size: 11px;\n    color: var(--sv-ink-faint);\n  }\n\n  .sv-daterange__context {\n    margin-top: var(--sv-s1);\n    font-size: 10.5px;\n    letter-spacing: 0.06em;\n    color: var(--sv-ink-soft);\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/date-range-field.css"
+    }
+  ],
+  "categories": [
+    "forms"
+  ],
+  "docs": "https://76.zifala.com/llms/date-range-field.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B35",
+    "job": "Choose a DATE RANGE.",
+    "tags": [
+      "date range",
+      "date",
+      "calendar",
+      "presets",
+      "filter",
+      "form"
+    ],
+    "exports": [
+      "DateRangeField",
+      "presetRange"
+    ]
+  }
+}

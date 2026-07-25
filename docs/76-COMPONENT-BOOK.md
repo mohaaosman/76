@@ -209,6 +209,84 @@ The federated-identity button. B10 Ghost anatomy verbatim — transparent, hairl
 - Don't: no row of icon-only provider tiles (A2); no provider brand colors in the component layer; no mixing "Sign in with…" and "Continue with…" in one stack.
 - Registered override: a product bound by a provider's strict brand guidelines may restore that provider's mark and colors LOCALLY, declared in the product's own overrides. The 76° component layer stays currentColor.
 
+### B27 · `Accordion` (v0.4.0)
+
+Native `<details>`/`<summary>` sections, hairline-ruled, with a mono uppercase meta column right of the title (count, date, status) so the reader knows whether opening it is worth the click. Summary 13/600 ink; panel 13/1.55 `--sv-ink-soft`, indented 14px to the chevron. The chevron is drawn from borders and rotates on `[open]` — transform only, `--sv-t-fast`. `exclusive` sets the native `name` group; independent is the default, because closing a section the reader opened is a surprise. One job: fold SECONDARY detail out of the way until it is asked for.
+- States: closed · open · summary hover · summary focus (C3 ring) — no disabled state; a section with nothing in it is not rendered.
+- A11y: the platform owns the expanded state — no `aria-expanded` to keep in sync. Summary is a native tab stop; Enter/Space toggles. The chevron is supplementary (C5): the panel itself carries the state.
+- Don't: never holds the primary job of a screen; never navigation (that is B1, and deeper than one level is a page — F6); never animates height (A1); never nests.
+
+### B28 · `DescriptionList` (v0.4.0)
+
+The record readout: a real `<dl>` where terms speak Fragment Mono 9.5 uppercase `--sv-ink-soft` (the table-header voice) and values carry the information at 13/500 ink, each pair on a `--sv-line` hairline, last row unruled. Value `kind` inherits the table's type discipline — `id` goes mono 11 soft, `num` goes tabular 600 and right-aligned. Grid is `minmax(110px,168px) 1fr`, collapsing to one column below 520px (C7). One job: state a set of labelled facts about ONE record.
+- States: none interactive. A fact with no value is omitted or stated ("None recorded") — never an empty row.
+- A11y: real `<dl>/<dt>/<dd>`, so each term is announced with its value as one pair. Numeric values carry `tabular-nums` (A4).
+- Don't: never compares two records side by side (that is B7); never holds editing controls (that is a Drawer with a form); never sentence-case terms.
+
+### B29 · `Divider` (v0.4.0)
+
+A hairline at `--sv-line`, or — with a label — a rule carrying mono uppercase 9.5 text in `--sv-ink-soft`: the "OR" between a social stack and a credential form (B26), an "ARCHIVED" break in a list, a "DANGER ZONE" step in settings. `align="start"` drops the leading rule and runs the trailing one past the label. On the band it switches to `--sv-band-line` / `--sv-band-soft` automatically. One job: separate two groups that share a surface.
+- A11y: unlabelled renders a real `<hr>`; labelled renders `role="separator"` with the label as its accessible name, the visible text `aria-hidden` so it is not read twice.
+- Don't: never stands in for a heading; never two in a row; never the first or last child of a card; never inside a table (rows carry their own hairlines).
+
+### B30 · `Avatar` / `AvatarGroup` (v0.4.0)
+
+Initials derived from the name, 700 weight on `--sv-wall`, at 24/32/44px, radius `50%` (registered alongside status dots). A photo only where the product genuinely holds one — never a silhouette, never stock (A2, F11). `tone="seed"` marks the current user, one per group. **AvatarGroup** overlaps a capped stack at −6px with a 1.5px paper ring drawn as an `inset` shadow, and states the remainder in mono ("+7"). One job: identify a PERSON beside their name.
+- States: static. Images never move on hover (Part E) — the row tints, the face does not.
+- A11y: an initials avatar is `role="img"` labelled with the full name, initials `aria-hidden`; a photo avatar takes the name as `alt` — never empty, never "avatar". The overflow chip reads "N more", and the names it hides are reachable in the list it summarises (A4).
+- Don't: never the sole carrier of a name (A4); never a generic placeholder face; never welds a presence dot onto the face (that is a B12 StatusWord beside the name); never reveals the full list on hover (C8).
+
+### B31 · `Spinner` / `Busy` (v0.4.0)
+
+**`Spinner`** — the 12/16/20px mark, `sv-rotate` at 800ms linear: the ONE continuous animation in the system, allowlisted in A1 and shared verbatim with the B10 loading button. **`Busy`** — a whole region at `aria-busy`, one centred 16px spinner and a REQUIRED sentence naming what is loading ("Loading July orders…"), `minHeight` matched to the component it replaces so nothing jumps. Passing children keeps existing content legible underneath at 0.4 opacity — it is still true until it changes; no scrim, no blur (A1). One job: state that a region is fetching, and name what.
+- States: idle (not rendered) · inline · regional · refreshing-over-content.
+- The B17 boundary: Skeleton is FIRST PAINT, where the anatomy is known and the data is not. Busy is a region that already has content and is fetching the next of it. Neither appears under 300ms of waiting.
+- A11y: Busy sets `aria-busy="true"` + `aria-live="polite"` so the label announces once; a labelled Spinner is `role="status"`; an unlabelled one is decorative and must sit inside a region that announces. Copy obeys A3 — no "Please wait", no exclamation marks.
+- Don't: never a bare spinner without a sentence; never a full-page blocking spinner (regions load, pages do not freeze); never a shimmer (A2).
+
+### B32 · `Kbd` (v0.4.0)
+
+A key, printed: real `<kbd>` elements in Fragment Mono 10.5 on a `--sv-wall` cap with a hairline border, a 2px bottom border, and the registered 3px radius — the one skeuomorphic gesture in 76°, earned because a key cap is a physical object. On the band the cap goes transparent and takes band tokens. A `separator` ("then") turns a chord into a sequence. One job: print the key that triggers something.
+- A11y: real `<kbd>` semantics; glyph keys are characters, not images, so they scale and translate. A printed shortcut never replaces a visible control (C4) — it labels one that already exists.
+- Don't: never prints a shortcut the app does not bind; never clickable; never a pill; never longer than three caps.
+
+### B33 · `NumberField` (v0.4.0)
+
+The quantity input: native `<input type="number">` in B11 chrome, right-aligned tabular 600, with a square 34px − / + pair in B10 ghost anatomy replacing the browser spinners, which duplicate the job, cannot be styled to system, and are unusable on touch (C8). The unit is stated in mono BESIDE the field, never inside it as a placeholder (B11). Bounds are ENFORCED, not merely announced: typing past `max` clamps, − disables at `min`, + at `max`. One job: enter a bounded QUANTITY.
+- States: per B11 — default · focus (1.5px seed border) · **empty mid-edit** (the box holds what was typed, including nothing, until blur — a number prop cannot express "empty", and `Number('')` is `0`, which is an entry, not an absence) · error (`--sv-bad` border + 11.5 bad text stating what and how) · disabled (wall bg on field and both buttons).
+- A11y: each step button carries an `aria-label` naming the object ("Decrease pallet positions") — never a bare glyph (A4). `inputmode="numeric"`. Errors wire `aria-describedby` + `aria-invalid`. Validation timing per B11: on blur, then on change after the first error.
+- Don't: never a stepper for a value people type in full (a price, a year — that is a Field); never unbounded where real bounds exist; never a unit inside the input.
+
+### B34 · `Slider` (v0.4.0)
+
+Native `<input type="range">` on the B4 bar geometry: 3px track at radius 2, 14px seed thumb at `50%`, the C3 focus ring at 2px offset. The track is `--sv-field-line-strong`, NOT B4's `--sv-wall`: a Progress track carries a seed fill that identifies the control, this one carries nothing, so the track itself is the affordance and owes the 3:1 non-text bar (WCAG 1.4.11 — wall would be 1.06:1 on paper). Same reasoning as the B25 PinField border. The mono readout sits beside the label and updates with the thumb — B4's rule holds, the bar illustrates and the printed figure informs. **There is no filled track**: a two-tone fill requires a gradient, gradients are banned (A1), and the number carries what the fill would have. One job: set a value whose POSITION in a range matters more than its digits.
+- States: default · focus · disabled (thumb goes `--sv-ink-faint`, cursor not-allowed).
+- A11y: native slider semantics supply valuemin/max/now; `format` also becomes `aria-valuetext` so "40%" is announced rather than "40". The visible readout is `aria-hidden` — the input already announces it. Arrow keys step, Home/End jump.
+- Don't: never for a value people know exactly (that is B33); never dual-thumb (two bounds are two fields — see B35); never without the printed number; never a gradient track.
+
+### B35 · `DateRangeField` (v0.4.0)
+
+The range, without a calendar — **F4 is binding, 76° draws no month grid, ever.** A mono uppercase preset row (`7D · 30D · QTD · YTD · CUSTOM`, CardTabs voice, `aria-pressed`, seed-tint when active) over two native `<input type="date">` fields welded into one B11 Field by a mono `→`, under a mono context line stating what the range means ("24 days · ends today"). The browser draws the picker: localized, keyboard-complete, screen-reader-tested, free. `presetRange` is exported so a Menu, a URL parameter or a saved view computes the same ranges. One job: choose a DATE RANGE.
+- States: default · a preset active · custom (no preset pressed) · error — a start after the end is caught by the field itself and stated in B11 voice ("The start date is after the end date. Move the start date back."); a caller-supplied `error` overrides it.
+- A11y: a real `<fieldset>`/`<legend>`; each input adds its own `aria-label` ("Reporting period, start date"); presets are buttons with `aria-pressed` so the active range is a state, not a colour (C5); the context line is `aria-live="polite"`. The end field takes the start date as its `min`, so the invalid half is unreachable rather than merely rejected.
+- Don't: never a month grid, a scheduler, or a compare-to-previous overlay (F4); never relative-only ranges without the absolute dates (C9); never more than five presets; never silently clamps an inverted range.
+
+### B3 · `StatS1` — v0.4.0 amendment
+
+The delta chip is extracted as **`Delta`** — `▲`/`▼` + tabular figure, 12/700, `--sv-ok`/`--sv-bad` — so a table cell, a DescriptionList row or a Trend head states a change in exactly the S1 voice, from one implementation. `polarity` handles inverse metrics honestly: `down-good` colours a fall as ok, and the previous guidance to flip the sign is WITHDRAWN — a card that prints ▲ for a figure that fell is lying. Direction stays non-colour-carried: the arrow glyph plus a visually-hidden "up"/"down" is the cue (C5). `StatS1` takes `deltaPolarity` and passes it through. The A2 ban stands: a stat that needs a sparkline is a Trend.
+
+### B5 · `Trend` — v0.4.0 amendment
+
+**`kind="stacked"`** sums the series per column and scales the plot to the TOTAL, segments running bottom-up seed → compare → faint. Legal only where the segments are parts of one real total; unrelated measures sharing an axis are two charts. **`Sparkline`** is the series at cell size — no axes, no grid, no labels, no interaction, scaled to its own min/max — and is legal ONLY beside a printed figure, because a line with no scale states nothing on its own (B4). Both keep B5's contract: `role="img"` with a required takeaway label, max three series, no fills, no draw-in.
+
+### B7 · `DataTable` — v0.4.0 amendment
+
+The table's missing half: what a selection DOES, and how filter state is shown.
+
+**`SelectionHead`** replaces the CardHead IN PLACE while rows are selected — same row, same padding, `--sv-seed-tint` background, mono uppercase count in `--sv-seed-text`, the verbs, and "Clear". No floating action bar and no new z-index: the card's own header already owns that row. Keep to three verbs; the fourth belongs in a B20 Menu. Destructive verbs still route through the typed-object Dialog confirm (B10).
+
+**`FilterLine`** states active filters as ONE mono line of running text — an optional tabular count, then `Label: Value · Label: Value` — with a single "Clear all", and that line doubles as the `aria-live="polite"` announcement. No chips and no pills: B23 Badge stays category-only and non-dismissible, and a filter you can dismiss individually is a control row, not a statement of state.
+
 ### B14 · `Toast` — v0.2.0 amendment
 
 The toast grows into the full notification: 16px tone icon + 13/700 title + optional one-sentence description, tones `ok · info · warn · bad`, sizes 360/440, dismiss control. `warn` renders in ink (no amber, Law 2). ok/info auto-dismiss at 5s, polite; warn/bad persist until dismissed, assertive. The A2 discipline is unchanged: an error ALWAYS renders inline at its source first — a `bad` toast may ECHO a failure whose surface is elsewhere (a background job, another tab), never replace it. Max 3 stacked.
@@ -265,15 +343,22 @@ Light-first stands: light is the default, dark is opt-in via `<html data-mode="d
 
 ## PART D — THE SHIP GATE (run before showing Max anything)
 
+**Fourteen points.** All must pass. Points 1–9 are the original visual gate; 10–14 arrived with the fundamentals layer (v0.1.0) and are stated here so the Book and `skill/seventy-six-design` carry the same gate — they are edited in the same change or neither is.
+
 1. Grep Part A1 patterns — zero hits.
 2. Count colors on the screen: neutrals + one seed + at most both functional colors as words/dots. Anything else fails.
-3. Every widget is a registered type (S1, Progress, Trend, MeterList, DataTable, CardTabs, ActivityList — from v0.2.0: Combobox, Menu, Drawer, Banner, Badge — from v0.3.0: Plate, PinField, SocialButton) — if a new type was needed, it is named, single-jobbed, and added to Part B in the same change. If Part F refuses it, it is a screen, not a component.
+3. Every widget is a registered type (S1, Progress, Trend, MeterList, DataTable, CardTabs, ActivityList — from v0.2.0: Combobox, Menu, Drawer, Banner, Badge — from v0.3.0: Plate, PinField, SocialButton — from v0.4.0: Accordion, DescriptionList, Divider, Avatar, Spinner/Busy, Kbd, NumberField, Slider, DateRangeField) — if a new type was needed, it is named, single-jobbed, and added to Part B in the same change. If Part F refuses it, it is a screen, not a component.
 4. Every S1 footnote passes the "so what" test (new information, not paraphrase).
 5. Tab through the screen: visible focus everywhere, order sane, skip-link present (a Plate is the one exception, B24), ⌘K opens.
 6. Squint test: the page reads as ink band + white paper on a platinum wall — a Plate (B24) reads as one card and a wordmark on the wall; nothing glows, nothing floats, nothing performs.
 7. Copy audit vs A3: no exclamation marks, buttons name objects, errors say what and how to fix.
 8. Contrast spot-check anything new against C1; new seeds through the C1 seed rule.
 9. The degree mark: every wordmark reads `76°` — never bare `76`.
+10. State contract: 8 interaction states on every interactive element, 4 lifecycle states on every data region; disabled is never bare opacity (Part E).
+11. Responsive floor: reasoned through at 320/375/414/768/1000/1280 — no horizontal scroll, no two-line clickables, `minmax(0,1fr)` content tracks (C7, Part E).
+12. Honest numbers: mockup data reconciles — deltas, sums and dates agree; zero invented claims, testimonials, or fake chrome (Part E).
+13. Physics: no italic headings, no image hover motion, no bounce easing, no arbitrary z-index, no paper-on-paper (firewall rules 11–15 + Part E).
+14. Stamped: the entry file opens with the `/* 76° · screen: … · gate: pass */` stamp — and the stamp tells the truth.
 
 ---
 
@@ -295,6 +380,6 @@ The test: **if a widget's job needs more than one sentence, or it carries an int
 | F10 | Drag-drop dashboard layout | The fixed 12-column grid (B2) |
 | F11 | Hero imagery, stock photography, illustration | Type, hairline, and real data |
 
-**F4 is BINDING ON THE DATE RANGE.** 76° draws no month grid, ever. A date range is two native `<input type="date">` fields welded into one Field (B11), preceded by a mono uppercase preset row — `7D · 30D · QTD · YTD · CUSTOM` — and followed by a mono context line ("24 days · ends today"). The browser draws the calendar.
+**F4 is BINDING ON THE DATE RANGE.** 76° draws no month grid, ever. A date range is two native `<input type="date">` fields welded into one Field (B11), preceded by a mono uppercase preset row — `7D · 30D · QTD · YTD · CUSTOM` — and followed by a mono context line ("24 days · ends today"). The browser draws the calendar. That composition shipped as **B35 `DateRangeField`** in v0.4.0 — the refusal now has a component, and it still contains no grid.
 
 *Seventy Six Degrees — the product is the design.*

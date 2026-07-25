@@ -1,0 +1,79 @@
+/* B34 · Slider — the B4 bar geometry (3px track, radius 2) with a seed
+   thumb. No gradient fill: a filled track needs one, and gradients are
+   banned (A1), so the printed number carries the value instead.
+
+   The track is --sv-field-line-strong, NOT B4's --sv-wall. B4's track
+   carries a seed fill that identifies the control; this one carries
+   nothing, so the track itself is the affordance and owes the 3:1
+   non-text bar (WCAG 1.4.11). Wall would be 1.06:1 on paper. Same
+   reasoning as the B25 PinField box border. */
+
+@layer sv-components {
+  .sv-slider__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sv-s3);
+  }
+
+  .sv-slider__value {
+    font-size: 12px;
+    color: var(--sv-ink);
+  }
+
+  .sv-slider__input {
+    appearance: none;
+    width: 100%;
+    height: 14px;
+    margin: var(--sv-s1) 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .sv-slider__input::-webkit-slider-runnable-track {
+    height: 3px;
+    border-radius: 2px;
+    background: var(--sv-field-line-strong);
+  }
+
+  .sv-slider__input::-moz-range-track {
+    height: 3px;
+    border-radius: 2px;
+    background: var(--sv-field-line-strong);
+  }
+
+  .sv-slider__input::-webkit-slider-thumb {
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    margin-top: -5.5px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--sv-seed);
+  }
+
+  .sv-slider__input::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--sv-seed);
+  }
+
+  .sv-slider__input:focus-visible {
+    outline: 2px solid var(--sv-seed-line);
+    outline-offset: 2px;
+  }
+
+  .sv-slider__input:disabled {
+    cursor: not-allowed;
+  }
+
+  .sv-slider__input:disabled::-webkit-slider-thumb {
+    background: var(--sv-ink-faint);
+  }
+
+  .sv-slider__input:disabled::-moz-range-thumb {
+    background: var(--sv-ink-faint);
+  }
+}

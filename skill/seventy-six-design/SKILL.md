@@ -174,7 +174,7 @@ Honor `prefers-reduced-motion` (all durations → 0; the design loses nothing).
   lifecycle contracts, responsive floor, motion/layering physics, and the
   stamp. Read when starting work in an existing project, running audit or
   redesign, or unsure what "done" means for a component.
-- `references/component-specs.md` — condensed B1–B18: anatomy, states, a11y,
+- `references/component-specs.md` — condensed B1–B35: anatomy, states, a11y,
   and Don't list per component. Read the relevant section BEFORE implementing
   or reviewing any specific component.
 - `references/firewall-and-copy.md` — the machine-checkable banned-CSS/pattern

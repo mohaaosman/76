@@ -1,0 +1,43 @@
+/* B29 · Divider — one hairline, optionally carrying a mono label. */
+
+@layer sv-components {
+  .sv-divider {
+    height: 1px;
+    border: 0;
+    background: var(--sv-line);
+  }
+
+  .sv-divider__labelled {
+    display: flex;
+    align-items: center;
+    gap: var(--sv-s3);
+  }
+
+  .sv-divider__rule {
+    flex: 1;
+    height: 1px;
+    background: var(--sv-line);
+  }
+
+  /* start alignment keeps the label flush left; the rule runs on past it. */
+  .sv-divider__labelled--start .sv-divider__rule:first-child {
+    display: none;
+  }
+
+  .sv-divider__label {
+    font-size: 9.5px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--sv-ink-soft);
+    white-space: nowrap;
+  }
+
+  .sv-band .sv-divider,
+  .sv-band .sv-divider__rule {
+    background: var(--sv-band-line);
+  }
+
+  .sv-band .sv-divider__label {
+    color: var(--sv-band-soft);
+  }
+}

@@ -1,4 +1,4 @@
-# 76° Component Specs (B1–B18)
+# 76° Component Specs (B1–B35)
 
 Read the relevant section BEFORE implementing or reviewing any specific component — every prop, class, role, and keybinding below is taken verbatim from the shipped `src/components/seventy-six/*.tsx`.
 
@@ -259,3 +259,86 @@ Read the relevant section BEFORE implementing or reviewing any specific componen
 - No interactive content inside (no links, no buttons).
 - No tooltip as the only label for an icon button.
 - No arrow/beak decoration; no instant-on hover (the 300ms delay prevents flicker sweeps).
+
+---
+
+# B19–B35 · the later taxonomy (condensed)
+
+Added after v0.1.0. Same contract as above — one job, fixed anatomy, enumerated states, a Don't list — condensed to the load-bearing rules. The full text lives in `docs/76-COMPONENT-BOOK.md`.
+
+## B19 · Combobox (v0.2.0)
+
+The searchable select. Native `<select>` (B11) stays the default for short, known lists; the Combobox exists past ~10 options or when the user knows the value's NAME faster than its position. ARIA 1.2 pattern, `aria-activedescendant`, focus never leaves the input. B11 field chrome verbatim. **One job:** pick ONE value from a list too long to scan. **Don't** — never inside an `overflow` container, never multi-select, never free-text.
+
+## B20 · Menu / MenuButton / SplitButton (v0.2.0)
+
+An actions dropdown on the native `popover` top layer — light dismiss, Esc, focus return, zero z-index. Items are VERBS naming their object; a danger item turns `--sv-bad` and still confirms in a Dialog. **One job:** hold the secondary verbs one control cannot. **Don't** — never navigation (that is the Band), never selection (that is a Select/Combobox), never nested (F6).
+
+## B21 · Drawer (v0.2.0)
+
+Full-height paper panel from the screen edge on native `<dialog>.showModal()`. Head = 15/700 title + optional mono context + named close; scrolling body; sticky footer = ghost cancel + ONE primary. Sizes sm 360 · md 480 · lg 640 · full. Entry slides 24px, transform-only, 160ms, 0 under reduced motion; exit instant. **One job:** inspect or edit ONE record without leaving the sheet. Dialog interrupts for one decision; `Dialog size="full"` replaces the page.
+
+## B22 · Banner (v0.2.0)
+
+The inline notice — where B14 sends every error: in the flow, adjacent to its cause. Paper card, 2px left tone rule, 16px tone icon, 13/700 title, full-sentence body (what happened AND how to fix), at most one text-link action, optional dismiss. Tones info (seed) · ok · bad · warn IN INK — no amber (Law 2). `bad` is `role="alert"`. **Don't** — never auto-dismisses, never stacks past the worst condition, never replaces a field error.
+
+## B23 · Badge (v0.2.0)
+
+Mono uppercase tag for CATEGORY metadata: environment, plan, type, version. Wall-toned, hairline border, rectilinear — never a pill. Seed marks the current category, one per group. **Don't** — live state is a StatusWord (B12); quantities are stats or cells. If it can change while you watch, it is not a Badge.
+
+## B24 · Plate (v0.3.0)
+
+The band-less page type: wall edge to edge, one centred card ≤400px, mono `76°` wordmark 20px above, nothing else. Carries auth, 404, 500, maintenance, expired link. Card title is the page `<h1>`; the skip-link is omitted (the one registered C4 exception — a Plate has nothing to skip). **Don't** — never nav, never a PageHero, never a second card. Two decisions = two pages.
+
+## B25 · PinField (v0.3.0)
+
+The OTP input: 4–8 fixed single-character boxes (default 6), 40×46, 8px gaps, Fragment Mono 18 centred, bordered `--sv-field-line-strong` (an empty box has no label, value or fill, so its border owes the 3:1 non-text bar, C1). Typing advances, Backspace retreats, one paste fills every box. Semantically ONE input: `inputmode="numeric"`, `autocomplete="one-time-code"`, error announced once for the whole code. **Don't** — no masking, no auto-submit without a visible primary, no keyboard trap.
+
+## B26 · SocialButton (v0.3.0)
+
+B10 Ghost anatomy verbatim, full card width on a Plate. The provider mark is ONE path in `currentColor` at 16px — never brand hexes, never multi-color, never a raster (Law 2, A1). Label names provider and act: "Continue with Google". At most three, separated from the credential form by a hairline rule with a mono "OR". **Registered override:** a product bound by a provider's brand guidelines may restore that mark locally; the 76° layer stays currentColor.
+
+## B27 · Accordion (v0.4.0)
+
+Native `<details>`/`<summary>` on hairlines, mono meta right of the title, chevron drawn from borders rotating on `[open]`. `exclusive` uses the native `name` group; independent is the default. **One job:** fold SECONDARY detail away until asked for. **Don't** — never the primary job of a screen, never navigation, never animates height (A1), never nests.
+
+## B28 · DescriptionList (v0.4.0)
+
+A real `<dl>`: mono uppercase terms (table-header voice), 13/500 values, one hairline per pair, `kind="id"` mono and `kind="num"` tabular right. Collapses to one column below 520px (C7). **One job:** state labelled facts about ONE record. **Don't** — never compares two records (that is B7), never holds editing controls.
+
+## B29 · Divider (v0.4.0)
+
+A hairline, or a rule carrying mono uppercase text ("OR", "ARCHIVED"). Unlabelled renders `<hr>`; labelled renders `role="separator"` with the label as its accessible name. Band tokens on the band. **Don't** — never stands in for a heading, never two in a row, never first or last child of a card.
+
+## B30 · Avatar / AvatarGroup (v0.4.0)
+
+Initials from the name on `--sv-wall` at 24/32/44px, radius 50%; a photo only where the product holds one — never a silhouette, never stock (A2, F11). `tone="seed"` marks the current user. AvatarGroup overlaps at −6px with a paper ring drawn as an inset shadow and states the remainder in mono. **Don't** — never the sole carrier of a name (A4), never a presence dot welded on, never the full list on hover (C8), never image motion (Part E).
+
+## B31 · Spinner / Busy (v0.4.0)
+
+`sv-rotate` at 800ms — the ONE continuous animation in the system, shared with B10's loading button. `Busy` sets `aria-busy` + `aria-live="polite"` on a region with a REQUIRED sentence naming what is loading; children stay legible underneath at 0.4 opacity (no scrim, no blur). The B17 line: Skeleton is first paint, Busy is a region already holding content. Neither under 300ms. **Don't** — never a bare spinner without a sentence, never a full-page blocker, never a shimmer.
+
+## B32 · Kbd (v0.4.0)
+
+Real `<kbd>` in Fragment Mono 10.5 on a wall cap, hairline border with a 2px bottom, 3px radius; transparent with band tokens on the band. A `separator` turns a chord into a sequence. **Don't** — never prints an unbound shortcut, never clickable, never replaces a visible control (C4), never more than three caps.
+
+## B33 · NumberField (v0.4.0)
+
+Native `<input type="number">` in B11 chrome, right-aligned tabular 600, with a square 34px − / + pair replacing the browser spinners. The unit is stated in mono BESIDE the field, never as a placeholder. Bounds are ENFORCED: typing past `max` clamps, − disables at `min`, + at `max`. Step buttons carry aria-labels naming the object. **Don't** — never for a value people type in full, never unbounded where bounds exist.
+
+## B34 · Slider (v0.4.0)
+
+Native `<input type="range">` on B4 bar geometry: 3px wall track (radius 2), 14px seed thumb (50%), C3 focus ring. The mono readout beside the label is REQUIRED — the bar illustrates, the figure informs. **There is no filled track**: a two-tone fill needs a gradient, and A1 bans gradients. `format` also becomes `aria-valuetext`. **Don't** — never for an exact value (B33), never dual-thumb, never without the number.
+
+## B35 · DateRangeField (v0.4.0)
+
+**F4 is binding: 76° draws no month grid, ever.** A mono preset row (`7D · 30D · QTD · YTD · CUSTOM`, `aria-pressed`) over two native `<input type="date">` fields welded into one B11 Field, under a mono `aria-live` context line ("24 days · ends today"). The end field takes the start date as its `min`. A start after the end is caught by the field in B11 voice. **Don't** — never a month grid, a scheduler, or a compare overlay; never relative-only ranges (C9); never more than five presets.
+
+## Amendments to earlier specs
+
+- **B3 · StatS1 (v0.4.0)** — the delta chip is extracted as `Delta` (`▲`/`▼` + tabular figure, ok/bad); `polarity="down-good"` colours a fall as good for cost and churn. The old advice to flip the sign is WITHDRAWN — a card printing ▲ for a figure that fell is lying. `StatS1` takes `deltaPolarity`.
+- **B5 · Trend (v0.4.0)** — `kind="stacked"` sums series per column and scales to the total (parts of ONE total only). `Sparkline` is the series at cell size, legal ONLY beside a printed figure.
+- **B7 · DataTable (v0.4.0)** — `SelectionHead` replaces the CardHead in place while rows are selected (seed-tint, mono count, verbs, "Clear") — no floating bar, no new z-index. `FilterLine` states active filters as ONE mono line with a single "Clear all", doubling as the `aria-live` announcement — no chips, no pills.
+- **B13 · Dialog (v0.2.0)** — `size` replaces `wide` (deprecated alias): `default` 480 · `wide` 640 · `full` (a takeover; no scrim, visible named close).
+- **B14 · Toast (v0.2.0)** — grows into the full notification: 16px tone icon + 13/700 title + optional description, tones ok/info/warn/bad, sizes 360/440. warn renders in INK. ok/info auto-dismiss 5s polite; warn/bad persist, assertive. Max 3 stacked. An error still renders inline at its source FIRST — a `bad` toast may echo, never replace.
+- **The dark surface (v0.2.0 + v0.2.1)** — opt-in `data-mode="dark"`, tokens only, no component branches on the mode. Surfaces invert; marks do not: band text, the on-band focus ring, the primary button label and the checkbox/radio mark all paint `--sv-on-dark`. `--sv-bad` is the exception — it brightens on dark, so its mark uses `--sv-on-bad`. `color: var(--sv-paper)` outside tokens.css is firewall rule 16.

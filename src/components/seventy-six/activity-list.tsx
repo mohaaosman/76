@@ -9,6 +9,12 @@ import './activity-list.css';
  * value always on title. Answers "what needs me."
  */
 export interface ActivityItem {
+  /**
+   * Stable identity for the row. Pass it whenever the feed can gain, lose
+   * or reorder entries — an activity list usually prepends, and position
+   * keys hand the new row the previous one's DOM.
+   */
+  id?: string;
   /** Absolute display time, e.g. "14:28" or "24 JUL 14:28". */
   time: string;
   /** Full machine timestamp for title/dateTime, e.g. "2026-07-24T14:28:00+03:00". */
@@ -26,7 +32,7 @@ export function ActivityList({ items, className }: ActivityListProps) {
   return (
     <ol className={cx('sv-activity', className)}>
       {items.map((item, i) => (
-        <li key={i} className="sv-activity__row">
+        <li key={item.id ?? item.dateTime ?? i} className="sv-activity__row">
           <time className="sv-activity__time sv-mono" dateTime={item.dateTime} title={item.dateTime}>
             {item.time}
           </time>

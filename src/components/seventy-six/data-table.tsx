@@ -40,6 +40,77 @@ export interface DataTableProps<Row> {
   className?: string;
 }
 
+/**
+ * B7 amendment (v0.4.0) · SelectionHead — what a selection DOES. It
+ * replaces the CardHead in place: mono count, the verbs, "Clear". No
+ * floating action bar, no new z-index — the card's own header already
+ * owns that row. Destructive verbs still route through a typed-object
+ * Dialog confirm (B10).
+ */
+export interface SelectionHeadProps {
+  count: number;
+  /** The object, singular: "order", "invoice". Pluralised for the count. */
+  noun: string;
+  onClear: () => void;
+  /** The verbs, as Buttons. Keep to three; the fourth belongs in a Menu. */
+  actions?: ReactNode;
+  className?: string;
+}
+
+export function SelectionHead({ count, noun, onClear, actions, className }: SelectionHeadProps) {
+  return (
+    <header className={cx('sv-card__head sv-selhead', className)}>
+      <p className="sv-selhead__count sv-mono sv-num" aria-live="polite">
+        {count} {count === 1 ? noun : `${noun}s`} selected
+      </p>
+      <div className="sv-selhead__verbs">
+        {actions}
+        <button type="button" className="sv-btn sv-btn--link" onClick={onClear}>
+          Clear
+        </button>
+      </div>
+    </header>
+  );
+}
+
+/**
+ * B7 amendment (v0.4.0) · FilterLine — the stated filter. Active filters
+ * are ONE mono line of running text plus a single "Clear all", and that
+ * line doubles as the aria-live announcement. No chips and no pills:
+ * B23 Badge stays category-only and non-dismissible.
+ */
+export interface ActiveFilter {
+  /** The dimension, e.g. "Status". */
+  label: string;
+  /** The chosen value, e.g. "Pending". */
+  value: string;
+}
+
+export interface FilterLineProps {
+  filters: ActiveFilter[];
+  onClearAll: () => void;
+  /** Optional lead, e.g. "12 of 248". Rendered first, tabular. */
+  count?: string;
+  className?: string;
+}
+
+export function FilterLine({ filters, onClearAll, count, className }: FilterLineProps) {
+  if (filters.length === 0 && !count) return null;
+  const stated = filters.map((filter) => `${filter.label}: ${filter.value}`).join(' · ');
+  return (
+    <div className={cx('sv-filterline', className)}>
+      <p className="sv-filterline__text sv-mono sv-num" aria-live="polite">
+        {[count, stated].filter(Boolean).join(' · ')}
+      </p>
+      {filters.length > 0 && (
+        <button type="button" className="sv-btn sv-btn--link" onClick={onClearAll}>
+          Clear all
+        </button>
+      )}
+    </div>
+  );
+}
+
 export function DataTable<Row>({
   caption,
   columns,
@@ -54,7 +125,9 @@ export function DataTable<Row>({
   className,
 }: DataTableProps<Row>) {
   const [focusIdx, setFocusIdx] = useState(0);
-  const [anchorIdx, setAnchorIdx] = useState(0);
+  /* The ⇧-range anchor is only ever read inside a handler, never rendered —
+     as state it would cost a re-render of the whole table per selection. */
+  const anchorIdx = useRef(0);
   const bodyRef = useRef<HTMLTableSectionElement>(null);
 
   useEffect(() => {
@@ -70,13 +143,13 @@ export function DataTable<Row>({
     if (!selectable || !onSelect) return;
     const next = new Set(selected ?? []);
     if (range) {
-      const [a, b] = [Math.min(anchorIdx, idx), Math.max(anchorIdx, idx)];
+      const [a, b] = [Math.min(anchorIdx.current, idx), Math.max(anchorIdx.current, idx)];
       for (let i = a; i <= b; i++) next.add(rowKey(rows[i]));
     } else {
       const key = rowKey(rows[idx]);
       if (next.has(key)) next.delete(key);
       else next.add(key);
-      setAnchorIdx(idx);
+      anchorIdx.current = idx;
     }
     onSelect(next);
   }

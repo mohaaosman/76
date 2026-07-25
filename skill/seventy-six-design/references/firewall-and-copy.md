@@ -6,7 +6,7 @@ The machine-checkable banned-CSS/pattern list (A1–A4), the registered exceptio
 
 ## A1 · Banned CSS (the Slop Firewall)
 
-`scripts/slop-firewall.mjs` scans every `.css`, `.ts`, `.tsx` under `SCAN_DIRS` (`src/components`, `src/styles`, `src/docs/site`) line by line. Any hit is a defect; the script exits non-zero so CI gates on it. These are the exact rules it enforces, in source order.
+`scripts/slop-firewall.mjs` scans every `.css`, `.ts`, `.tsx` under `SCAN_DIRS` (default `src`, overridable by passing directories as arguments) line by line. Any hit is a defect; the script exits non-zero so CI gates on it. These are the exact rules it enforces, in source order.
 
 | # | Rule (flag name) | What triggers it | Why it's banned | Legal alternative |
 |---|---|---|---|---|
@@ -33,8 +33,8 @@ The machine-checkable banned-CSS/pattern list (A1–A4), the registered exceptio
 
 Four, each allowlisted in the lint and traceable to a Component Book spec:
 
-1. **`sv-rotate` spinner — B10.** The loading spinner is the one continuous animation in the system, so the `animation > 200ms` check skips any line containing `sv-rotate`. Nothing else may run a long/looping animation.
-2. **`inset` box-shadows as structural rules — B7 / B11.** Inset shadows are allowed by the `box-shadow` check because they draw *structure*, not *elevation*: B7 the selected-row left rule, B11 the focus border. A non-inset custom shadow is still a defect.
+1. **`sv-rotate` spinner — B10 / B31.** The spinner is the one continuous animation in the system — B10's loading button and B31's `Spinner`/`Busy` share the same 800ms keyframes — so the `animation > 200ms` check skips any line containing `sv-rotate`. Nothing else may run a long/looping animation.
+2. **`inset` box-shadows as structural rules — B7 / B11 / B30.** Inset shadows are allowed by the `box-shadow` check because they draw *structure*, not *elevation*: B7 the selected-row left rule, B11 the focus border, B30 the ring separating overlapped avatars. A non-inset custom shadow is still a defect.
 3. **The single width-fill transition — B4 (bar fill).** Only `progress.css` and `meter-list.css` may transition `width`; that's B4's single 160ms (`var(--sv-t)`) fill animation on progress bars and meters. Any other layout-property transition, and any width transition in any other file, is a defect.
 4. **`foundations.tsx` color literals — the palette specimen.** The Foundations page prints the token table and paints its swatches, so it necessarily holds the literals it documents. It is the only `.tsx` exempt from rule 5; every other component paints from a token var.
 

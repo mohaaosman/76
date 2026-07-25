@@ -1,0 +1,61 @@
+/* B28 · DescriptionList — labelled facts on hairlines. */
+
+@layer sv-components {
+  .sv-dl__row {
+    display: grid;
+    grid-template-columns: minmax(110px, 168px) 1fr;
+    gap: var(--sv-s4);
+    align-items: baseline;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--sv-line);
+  }
+
+  .sv-dl__row:last-child {
+    border-bottom: 0;
+  }
+
+  .sv-dl__term {
+    font-size: 9.5px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-dl__value {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--sv-ink);
+  }
+
+  .sv-dl__value--id {
+    font-size: 11px;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-dl__value--num {
+    font-weight: 600;
+    text-align: right;
+  }
+
+  .sv-dl--stacked .sv-dl__row {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .sv-dl--stacked .sv-dl__value--num {
+    text-align: left;
+  }
+
+  /* C7 · the 320px floor: two columns become one rather than crushing the
+     value into a two-character gutter. */
+  @media (max-width: 520px) {
+    .sv-dl__row {
+      grid-template-columns: 1fr;
+      gap: 2px;
+    }
+
+    .sv-dl__value--num {
+      text-align: left;
+    }
+  }
+}

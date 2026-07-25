@@ -1,0 +1,59 @@
+/* B31 · Spinner & Busy — the ONE continuous animation in the system
+   (`sv-rotate`, allowlisted by the Slop Firewall). The keyframes are
+   redeclared here rather than imported so the registry item installs
+   standalone; they are identical to button.css by contract. */
+
+@layer sv-components {
+  .sv-spin {
+    display: inline-flex;
+    align-items: center;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-spin__mark {
+    animation: sv-rotate 800ms linear infinite;
+  }
+
+  @keyframes sv-rotate {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .sv-busy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sv-s3);
+  }
+
+  /* Refreshing in place: the stale content stays legible underneath — it
+     is still true, it is only about to change. No blur, no scrim. */
+  .sv-busy--over {
+    position: relative;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  .sv-busy--over > :not(.sv-busy__line) {
+    opacity: 0.4;
+  }
+
+  .sv-busy--over .sv-busy__line {
+    position: absolute;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sv-busy__line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sv-s2);
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--sv-ink-soft);
+  }
+}

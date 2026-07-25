@@ -89,7 +89,7 @@ import { Band, BandTopbar, BandNav, BandSubTabs, PageHero, Button } from '@/comp
 
 ## Accessibility
 
-- Primary nav is `&lt;nav aria-label="Primary"&gt;`; sub-tabs are `&lt;nav aria-label="Section"&gt;` — they are links that navigate, never ARIA tabs.
+- Primary nav is `<nav aria-label="Primary">`; sub-tabs are `<nav aria-label="Section">` — they are links that navigate, never ARIA tabs.
 - Active state carries three cues: `aria-current="page"`, weight 700, and the underline — never color alone (C5).
 - PageHero renders the page's ONE h1. The skip-link lands on the Sheet, the first content after the band.
 - Below 1000px the Menu trigger carries `aria-expanded` and `aria-controls` pointing at the drawer's nav, and focus returns to it on every close path — Esc, scrim, close control, or following a link.

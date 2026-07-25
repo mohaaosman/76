@@ -15,7 +15,7 @@ Manual: copy components/seventy-six/sheet.tsx, components/seventy-six/sheet.css 
 
 ## Overview
 
-Sheet is the `&lt;main&gt;` — the wall the paper hangs on, sharing the band's 1280px container and side padding. Row is the grid: 14px gutters with three canonical splits — **stats** (4×1fr, folding to 2×2 below 1000px), **main** (1.7fr/1fr), and **full**.
+Sheet is the `<main>` — the wall the paper hangs on, sharing the band's 1280px container and side padding. Row is the grid: 14px gutters with three canonical splits — **stats** (4×1fr, folding to 2×2 below 1000px), **main** (1.7fr/1fr), and **full**.
 
 The signature move: the first row of every top-level page carries `overlap`, pulling the paper -44px up over the band edge. Exactly one overlap row per page — it is a signature, not a repeating trick.
 
@@ -50,7 +50,7 @@ import { Sheet, Row } from '@/components/seventy-six';
 
 ## Accessibility
 
-- Sheet renders `&lt;main id="sv-content"&gt;` — the skip-link target and the screen-reader main landmark.
+- Sheet renders `<main id="sv-content">` — the skip-link target and the screen-reader main landmark.
 - Focus order: the overlap row is the first content stop after the band (C3).
 
 ## Don't

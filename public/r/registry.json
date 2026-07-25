@@ -512,6 +512,120 @@
       ]
     },
     {
+      "name": "accordion",
+      "type": "registry:ui",
+      "title": "Accordion",
+      "description": "Native <details> sections on hairlines — secondary detail, folded away. One job: Fold SECONDARY detail out of the way until it is asked for.",
+      "categories": [
+        "primitives"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/accordion.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/accordion.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "description-list",
+      "type": "registry:ui",
+      "title": "DescriptionList",
+      "description": "The record readout — mono terms, informative values, on hairlines. One job: State a set of labelled facts about ONE record.",
+      "categories": [
+        "primitives"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/description-list.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/description-list.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "divider",
+      "type": "registry:ui",
+      "title": "Divider",
+      "description": "One hairline, optionally naming the group below it in mono. One job: Separate two groups that share a surface.",
+      "categories": [
+        "primitives"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/divider.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/divider.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "avatar",
+      "type": "registry:ui",
+      "title": "Avatar",
+      "description": "A person, named — initials on wall, or their photo if the product has one. One job: Identify a PERSON beside their name.",
+      "categories": [
+        "primitives"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/avatar.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/avatar.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "spinner",
+      "type": "registry:ui",
+      "title": "Spinner & Busy",
+      "description": "The wait, stated — the one continuous animation the system allows. One job: State that a region is fetching, and name what.",
+      "categories": [
+        "primitives"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/spinner.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/spinner.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "kbd",
+      "type": "registry:ui",
+      "title": "Kbd",
+      "description": "A key, printed — mono cap on wall, for shortcuts that exist. One job: Print the key that triggers something.",
+      "categories": [
+        "primitives"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/kbd.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/kbd.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "field",
       "type": "registry:ui",
       "title": "Forms",
@@ -526,6 +640,63 @@
         },
         {
           "path": "components/seventy-six/field.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "number-field",
+      "type": "registry:ui",
+      "title": "NumberField",
+      "description": "The quantity input — native number, B11 chrome, a − / + pair, stated unit. One job: Enter a bounded QUANTITY.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/number-field.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/number-field.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "slider",
+      "type": "registry:ui",
+      "title": "Slider",
+      "description": "A native range in 76° clothes — position matters, and the number is still printed. One job: Set a value whose POSITION in a range matters more than its digits.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/slider.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/slider.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "date-range-field",
+      "type": "registry:ui",
+      "title": "DateRangeField",
+      "description": "Two native date inputs, a mono preset row, and a context line — no month grid, ever. One job: Choose a DATE RANGE.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/date-range-field.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/date-range-field.css",
           "type": "registry:ui"
         }
       ]

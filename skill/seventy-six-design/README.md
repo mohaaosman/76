@@ -25,13 +25,13 @@ unchanged — the fundamentals govern process and craft, not pixels.
 SKILL.md                      the Six Laws, tokens, taxonomy, Craft Floor, Ship Gate
 references/
   fundamentals.md             the discipline layer: verbs · pre-flight · states · floor · physics · stamp
-  component-specs.md          B1–B18: anatomy · states · a11y · Don't, per component
+  component-specs.md          B1–B35: anatomy · states · a11y · Don't, per component
   firewall-and-copy.md        A1–A4 + Part E fundamentals gates + the 14-point Ship Gate
   library.md                  the seventy-six-ui React library: exports + shadcn install
   system-dials.md             three-layer ecosystem model + per-system seeds (ERP/CRM/POS/health)
   tokens.css                  the canonical token file (copy verbatim into new projects)
 scripts/
-  slop-firewall.mjs           machine-checkable lint (15 rules) — exits non-zero on any violation
+  slop-firewall.mjs           machine-checkable lint (16 rules) — exits non-zero on any violation
 ```
 
 ## Install

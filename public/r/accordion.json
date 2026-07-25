@@ -1,0 +1,44 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "accordion",
+  "type": "registry:ui",
+  "title": "Accordion",
+  "description": "Native <details> sections on hairlines — secondary detail, folded away. One job: Fold SECONDARY detail out of the way until it is asked for.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/accordion.tsx",
+      "content": "import type { ReactNode } from 'react';\nimport { cx } from '@/lib/cx';\nimport './accordion.css';\n\n/**\n * B27 · Accordion — native <details>/<summary>. One list of sections that\n * open in place. It hides SECONDARY detail; it never hides the primary\n * job of a screen, and it is never navigation (that is the Band).\n */\nexport interface AccordionSection {\n  id: string;\n  title: string;\n  /** Mono metadata rendered right of the title — a count, a date, a status. */\n  meta?: ReactNode;\n  children: ReactNode;\n  defaultOpen?: boolean;\n}\n\nexport interface AccordionProps {\n  sections: AccordionSection[];\n  /**\n   * One open at a time (native `name` grouping). Omit for independent\n   * sections — the default, because closing a section the reader opened\n   * is a surprise.\n   */\n  exclusive?: boolean;\n  /** Required when exclusive: the shared native group name. */\n  name?: string;\n  className?: string;\n}\n\nexport function Accordion({ sections, exclusive = false, name, className }: AccordionProps) {\n  return (\n    <div className={cx('sv-accordion', className)}>\n      {sections.map((section) => (\n        <details\n          key={section.id}\n          className=\"sv-accordion__item\"\n          name={exclusive ? (name ?? 'sv-accordion') : undefined}\n          open={section.defaultOpen}\n        >\n          <summary className=\"sv-accordion__summary\">\n            <span className=\"sv-accordion__chevron\" aria-hidden=\"true\" />\n            <span className=\"sv-accordion__title\">{section.title}</span>\n            {section.meta != null && <span className=\"sv-accordion__meta sv-mono\">{section.meta}</span>}\n          </summary>\n          <div className=\"sv-accordion__panel\">{section.children}</div>\n        </details>\n      ))}\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/accordion.tsx"
+    },
+    {
+      "path": "registry/seventy-six/accordion.css",
+      "content": "/* B27 · Accordion — native <details>. Hairline rows, no card of its own. */\n\n@layer sv-components {\n  .sv-accordion__item {\n    border-top: 1px solid var(--sv-line);\n  }\n\n  .sv-accordion__item:last-child {\n    border-bottom: 1px solid var(--sv-line);\n  }\n\n  .sv-accordion__summary {\n    display: flex;\n    align-items: center;\n    gap: var(--sv-s2);\n    padding: var(--sv-s3) 0;\n    cursor: pointer;\n    list-style: none;\n  }\n\n  .sv-accordion__summary::-webkit-details-marker {\n    display: none;\n  }\n\n  .sv-accordion__summary:focus-visible {\n    outline: 2px solid var(--sv-seed-line);\n    outline-offset: 2px;\n  }\n\n  .sv-accordion__title {\n    font-size: 13px;\n    font-weight: 600;\n    color: var(--sv-ink);\n  }\n\n  .sv-accordion__meta {\n    margin-left: auto;\n    font-size: 10.5px;\n    letter-spacing: 0.1em;\n    text-transform: uppercase;\n    color: var(--sv-ink-soft);\n  }\n\n  /* Drawn from borders, not an icon font — the open state is also carried\n     by the panel itself, so the chevron is supplementary (C5). */\n  .sv-accordion__chevron {\n    flex-shrink: 0;\n    width: 6px;\n    height: 6px;\n    border-right: 1.5px solid var(--sv-ink-soft);\n    border-bottom: 1.5px solid var(--sv-ink-soft);\n    transform: rotate(-45deg);\n    transition: transform var(--sv-t-fast);\n  }\n\n  .sv-accordion__item[open] .sv-accordion__chevron {\n    transform: rotate(45deg);\n  }\n\n  .sv-accordion__panel {\n    padding: 0 0 var(--sv-s4) 14px;\n    font-size: 13px;\n    line-height: 1.55;\n    color: var(--sv-ink-soft);\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/accordion.css"
+    }
+  ],
+  "categories": [
+    "primitives"
+  ],
+  "docs": "https://76.zifala.com/llms/accordion.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B27",
+    "job": "Fold SECONDARY detail out of the way until it is asked for.",
+    "tags": [
+      "accordion",
+      "details",
+      "disclosure",
+      "collapse",
+      "faq",
+      "sections"
+    ],
+    "exports": [
+      "Accordion"
+    ]
+  }
+}

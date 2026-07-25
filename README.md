@@ -2,7 +2,7 @@
 
 The component library and documentation site for the **76° design system**.
 Flat, informational, corporate — paper on a wall. Compiled 1:1 from the
-Component Book (`76-COMPONENT-BOOK.md`): all twenty-three specs, B1–B23.
+Component Book (`76-COMPONENT-BOOK.md`): all thirty-five specs, B1–B35.
 
 ## What's inside
 
@@ -12,6 +12,8 @@ src/
   styles/base.css              reset · focus contract (C3) · mono/tabular voices
   lib/cx.ts                    class combiner (the only "utility")
   components/seventy-six/      the library — one component per widget type
+  blocks/                      composed panels (stats row, table view, …)
+  templates/                   full-screen products (ERP, CRM, POS, settings, auth)
   docs/                        the documentation site (itself a 76° product)
     content/                   pure-data doc entries → site + markdown + registry
     demos.tsx                  live preview components
@@ -21,7 +23,8 @@ skill/seventy-six-design/      the agent skill — SKILL.md + references + firew
 scripts/
   build-registry.mjs           emits public/r/*.json (shadcn-compatible items)
   build-llms.mjs               emits public/llms.txt + public/llms/*.md
-  slop-firewall.mjs            Parts A1 + E as a lint (15 rules) — CI-gateable, exits non-zero
+  slop-firewall.mjs            Parts A1 + E as a lint (16 rules) — CI-gateable, exits non-zero
+  check-sync.mjs               fails if the skill's mirrored copies drift from source
   shipgate-screens.mjs         Playwright screenshot pass for Part D review
 ```
 
@@ -43,7 +46,7 @@ fundamentals.md`; the machine-checkable half lives in the firewall (rules
 
 The canonical 76° documentation set, versioned with the code — see
 `docs/README.md` for the reading order: `76-DESIGN-SYSTEM.md` (the
-constitution), `76-COMPONENT-BOOK.md` (B1–B18 specs), `76-FUNDAMENTALS.md`
+constitution), `76-COMPONENT-BOOK.md` (B1–B35 specs), `76-FUNDAMENTALS.md`
 (the discipline layer), `76-UI-LIBRARY.md` (this library),
 `ECOSYSTEM-DESIGN-DNA.md` (the three-layer model), and
 `DESIGN-STYLE-VOCABULARY.md` (the shared design language).
@@ -59,14 +62,38 @@ the inline **Banner** (B22 — where errors actually render), **Badge** (B23),
 and the **dark surface**: opt-in `data-mode="dark"`, tokens-only, AA
 re-verified, per-seed dark text variants, toggle live in the docs band.
 
+## The entry layer and the 320px floor (v0.3.0)
+
+Primary navigation becomes a left Drawer below 1000px, opened by a labelled
+"Menu" button, with sub-tabs nested inside it — C7 verified at 320px and at
+200% zoom. The **Plate** (B24) is the first band-less page type, carrying
+the six auth templates plus 404, 500, maintenance and expired-link pages,
+with **PinField** (B25) and **SocialButton** (B26) — one `currentColor`
+path per provider, no brand hexes. Part F of the Book documents the eleven
+refusals by name, each with the composition that replaces it.
+
+## Closing the product taxonomy (v0.4.0)
+
+The table's missing half plus the parts a product reached outside 76° for:
+**SelectionHead** swaps the card head in place while rows are selected and
+**FilterLine** states active filters as one mono line with a single "Clear
+all"; **Accordion** (B27), **DescriptionList** (B28), **Divider** (B29),
+**Avatar/AvatarGroup** (B30), **Spinner/Busy** (B31), **Kbd** (B32),
+**NumberField** (B33), **Slider** (B34) and **DateRangeField** (B35 — the
+F4 range, still with no month grid). Charts gain stacked bars and a
+**Sparkline**, and the S1 delta chip is extracted as **Delta** with an
+honest `polarity` for inverse metrics.
+
 ## Zero runtime dependencies
 
 Every component runs on the platform: native `<dialog>` (Dialog, Drawer,
 SearchCommand), the `popover` attribute (Tooltip, Menu, SplitButton), native
 `<select>` for short lists with a hand-rolled ARIA 1.2 Combobox for long
-ones, real inputs behind styled proxies (Checkbox/Radio/Toggle), and
-hand-rolled SVG (Trend). React is the only peer — the searchable combobox
-entered the Book and Radix stayed on the bench.
+ones, real inputs behind styled proxies (Checkbox/Radio/Toggle), native
+`<details>` (Accordion), native `<input type="range">` and
+`<input type="date">` (Slider, DateRangeField), and hand-rolled SVG (Trend,
+Sparkline). React is the only peer — the searchable combobox entered the
+Book and Radix stayed on the bench.
 
 ## Commands
 
@@ -77,6 +104,7 @@ npm run build        # registry + llms + typecheck + site → dist/
 npm run firewall     # Slop Firewall (Part A1) — zero hits or non-zero exit
 npm run registry     # rebuild public/r/*.json only
 npm run llms         # rebuild public/llms.txt + public/llms/*.md only
+npm run check:sync   # fails if the skill's mirrored copies drift from source
 REGISTRY_BASE=https://76.zifala.com npm run build   # default host, already baked; override to change it
 ```
 
@@ -109,10 +137,13 @@ then any component pair from `components/seventy-six/`.
 
 ## Registered firewall exceptions
 
-Three, each traceable to a Book spec and allowlisted in
-`scripts/slop-firewall.mjs`: the B10 loading spinner (`sv-rotate`), inset
+Four, each traceable to a Book spec and allowlisted in
+`scripts/slop-firewall.mjs`: the `sv-rotate` spinner (B10's loading button
+and B31's Spinner — the one continuous animation in the system), inset
 box-shadows used as structural rules (B7 selected-row rule, B11 focus
-border), and the single B4/B6 bar-fill width transition.
+border, B30 avatar ring), the single B4/B6 bar-fill width transition, and
+`foundations.tsx`, the palette specimen page that paints the very tokens it
+documents.
 
 ---
 

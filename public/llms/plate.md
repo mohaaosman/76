@@ -20,7 +20,7 @@ Every other 76° screen opens with a Band (B1). A Plate has no nav, no sub-tabs 
 
 The card is ordinary paper from B12 — radius 4, one `--sv-shadow`, zero border — self-padded at 24px, so its children are the page and never need `sv-card__body`. Width is 400px, or 520px with `width="md"` for a two-column form.
 
-`PlateHead` supplies the screen's one `&lt;h1&gt;` plus at most one sentence of context, because here the card IS the page. The wordmark is a `role="img"` label, not a heading, and the skip-link is omitted — a registered exception to C4, since a Plate has nothing to skip.
+`PlateHead` supplies the screen's one `<h1>` plus at most one sentence of context, because here the card IS the page. The wordmark is a `role="img"` label, not a heading, and the skip-link is omitted — a registered exception to C4, since a Plate has nothing to skip.
 
 ## Examples
 
@@ -94,7 +94,7 @@ width="md" takes the card to 520px. Nothing else changes.
 
 ## Accessibility
 
-- The Plate renders `&lt;main&gt;`; `PlateHead` renders the screen's single `&lt;h1&gt;` inside the card.
+- The Plate renders `<main>`; `PlateHead` renders the screen's single `<h1>` inside the card.
 - The wordmark is `role="img"` with `aria-label="Seventy Six Degrees"` — one word to a screen reader, not three orphaned characters, and not a heading.
 - The skip-link is omitted: a registered exception to C4, because a Plate carries nothing to skip past.
 - Centering is `align-content` on a grid, so tall content grows the page instead of clipping — 200% zoom and 320px scroll.

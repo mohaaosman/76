@@ -1,0 +1,66 @@
+/* B27 · Accordion — native <details>. Hairline rows, no card of its own. */
+
+@layer sv-components {
+  .sv-accordion__item {
+    border-top: 1px solid var(--sv-line);
+  }
+
+  .sv-accordion__item:last-child {
+    border-bottom: 1px solid var(--sv-line);
+  }
+
+  .sv-accordion__summary {
+    display: flex;
+    align-items: center;
+    gap: var(--sv-s2);
+    padding: var(--sv-s3) 0;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .sv-accordion__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .sv-accordion__summary:focus-visible {
+    outline: 2px solid var(--sv-seed-line);
+    outline-offset: 2px;
+  }
+
+  .sv-accordion__title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--sv-ink);
+  }
+
+  .sv-accordion__meta {
+    margin-left: auto;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--sv-ink-soft);
+  }
+
+  /* Drawn from borders, not an icon font — the open state is also carried
+     by the panel itself, so the chevron is supplementary (C5). */
+  .sv-accordion__chevron {
+    flex-shrink: 0;
+    width: 6px;
+    height: 6px;
+    border-right: 1.5px solid var(--sv-ink-soft);
+    border-bottom: 1.5px solid var(--sv-ink-soft);
+    transform: rotate(-45deg);
+    transition: transform var(--sv-t-fast);
+  }
+
+  .sv-accordion__item[open] .sv-accordion__chevron {
+    transform: rotate(45deg);
+  }
+
+  .sv-accordion__panel {
+    padding: 0 0 var(--sv-s4) 14px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--sv-ink-soft);
+  }
+}

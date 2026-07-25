@@ -690,6 +690,7 @@ const search = useSearchCommand(); // ⌘K binds automatically
           { name: 'items', type: 'CommandItem[]', description: '{ id, group, label, hint?, keywords? } — groups render as mono labels.' },
           { name: 'onPick', type: '(item) => void', description: 'Called on Enter or click; the palette closes itself.' },
           { name: 'placeholder', type: 'string', defaultValue: "'Search…'", description: 'Mono placeholder; also the input\'s aria-label.' },
+          { name: 'onOpen', type: '() => void', description: 'Called when ⌘K opens the palette — pass the same setter that drives <code>open</code>, or the shortcut and the state desync.' },
           { name: 'bindShortcut', type: 'boolean', defaultValue: 'true', description: 'Binds ⌘K / Ctrl-K globally while mounted.' },
         ],
       },

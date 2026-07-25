@@ -10,15 +10,27 @@ export const widgets: DocEntry[] = [
     tagline: 'The signature stat and the only legal KPI card: label + delta, icon tile + value, and a footnote that earns its line.',
     job: 'Answer "how much — and so what."',
     tags: ['kpi', 'stat-card', 'delta', 'tabular-numerals', 'icon-tile', 'footnote'],
-    exports: ['StatS1'],
+    exports: ['StatS1', 'Delta'],
     files: ['components/seventy-six/stat-s1.tsx', 'components/seventy-six/stat-s1.css', 'components/seventy-six/card.tsx', 'components/seventy-six/card.css'],
     registryDeps: ['card'],
     intro: [
       'Three zones, all required. <b>Top:</b> mono label left, colored delta right (▲/▼ + tabular value — the arrow glyph is the non-color cue). <b>Middle:</b> a 34px seed-tint icon tile beside the 24/800 tabular value. <b>Foot:</b> a hairline-separated 11.5px sentence whose load-bearing figure sits in bold ink.',
       'The footnote is the discipline: it must contain information <b>not already in the card</b> — the target, the exposure, the oldest item\'s age. "Revenue is up" under a revenue number is a defect; "$610K target · 79% with 7 days left" is the point of the component.',
       '"Generic admin KPI card" is a registered defect class (A2). If a stat needs a sparkline, it is a Trend; if it needs two values, it is two stats.',
+      '<b>v0.4.0</b> extracts the delta chip as <b>Delta</b>, so a table cell or a DescriptionList row states a change in exactly the voice this card does — one implementation, not two. <code>polarity</code> handles inverse metrics honestly: cost falling is <code>down-good</code> and colours ok, without the old trick of flipping the sign.',
     ],
     examples: [
+      {
+        title: 'Delta beside a figure',
+        description: 'The same chip outside the card — a record readout, a table cell, a Trend head.',
+        demoKey: 'delta-inline',
+        surface: 'paper',
+        code: `import { Delta, Sparkline } from '@/components/seventy-six';
+
+<Delta value={12.4} />
+<Delta value={-6.2} polarity="down-good" />   // cost falling is good
+<Sparkline data={ordersPerDay} ariaLabel="Orders per day, trending up over seven days" />`,
+      },
       {
         title: 'The canonical stat row',
         description: 'Four S1s in the stats split — the row that overlaps the band on every 76° overview.',
@@ -66,9 +78,18 @@ export const widgets: DocEntry[] = [
           { name: 'unit', type: 'string', description: 'Suffix (%, pt, d) at 14/600 soft.' },
           { name: 'delta', type: 'number', description: 'Signed comparison; ▲/▼ + value in ok/bad. Omit when none exists.' },
           { name: 'deltaSuffix', type: 'string', defaultValue: "'%'", description: 'Appended to the delta figure.' },
+          { name: 'deltaPolarity', type: "'up-good' | 'down-good'", defaultValue: "'up-good'", description: 'Which direction colours ok. Cost, churn and returns are down-good.' },
           { name: 'icon', type: 'ReactNode', description: '16px stroke icon; the tile provides the seed tint.' },
           { name: 'footnote', type: 'ReactNode', description: 'The "so what" line; put the load-bearing figure in <b>.' },
           { name: 'footnoteText', type: 'string', description: 'Plain-text footnote for the aria-label.' },
+        ],
+      },
+      {
+        component: 'Delta',
+        rows: [
+          { name: 'value', type: 'number', description: 'Signed change; +12.4 renders "▲ 12.4%".' },
+          { name: 'suffix', type: 'string', defaultValue: "'%'", description: 'Appended to the figure.' },
+          { name: 'polarity', type: "'up-good' | 'down-good'", defaultValue: "'up-good'", description: 'Which direction colours ok.' },
         ],
       },
     ],
@@ -88,7 +109,7 @@ export const widgets: DocEntry[] = [
     ],
     faq: [
       { q: 'How do I format the value?', a: 'Format upstream and pass a string ($482,190). The component handles type discipline (tabular, tracking) but not locale math.' },
-      { q: 'What if the metric got worse but down is good (e.g. returns)?', a: 'The delta colors by sign. For inverse metrics, pass the delta whose sign matches sentiment — e.g. returns dropping 8% is delta={+8} labeled "RETURNS · FEWER" — or omit the delta and carry it in the footnote.' },
+      { q: 'What if the metric got worse but down is good (e.g. returns)?', a: 'Pass the real signed change and set deltaPolarity="down-good". Returns dropping 8% renders "▼ 8%" in ok — honest arrow, honest colour. The old advice of flipping the sign is withdrawn as of v0.4.0.' },
       { q: 'Can the whole card link to a report?', a: 'Yes — wrap it in the anchor; the whole card is the target, focus ring per C3, and hover shows nothing beyond the cursor.' },
     ],
   },
@@ -173,12 +194,13 @@ export const widgets: DocEntry[] = [
     category: 'widgets',
     tagline: 'Flat single-weight SVG lines on a hairline grid — seed for now, line-gray for before. No fills, no draw-in.',
     job: 'Answer "which direction."',
-    tags: ['chart', 'line-chart', 'bar-chart', 'comparison', 'svg', 'no-area-fill'],
-    exports: ['Trend'],
+    tags: ['chart', 'line-chart', 'bar-chart', 'stacked-bar', 'sparkline', 'comparison', 'svg', 'no-area-fill'],
+    exports: ['Trend', 'Sparkline'],
     files: ['components/seventy-six/trend.tsx', 'components/seventy-six/trend.css'],
     intro: [
       'Hand-rolled SVG, no chart library: 2.25px round-joined lines, horizontal hairlines only, a 4px terminal dot on the live series, and the color convention that removes most legends — <b>seed is this period, line-gray is last period</b>. Bars are flat seed with faint-ink secondaries and 2px top radius.',
       'Trend cards live on report pages, not overviews (overviews use S1 stats). Maximum three series; a chart needing more is a table wearing a costume.',
+      '<b>v0.4.0</b> adds two things. <code>kind="stacked"</code> sums the series per column and scales the plot to the total — legal only when the segments are parts of ONE total, never unrelated measures sharing an axis. <b>Sparkline</b> is the same shape at cell size: no axes, no grid, no labels, and legal only BESIDE a printed figure, because a line with no scale states nothing on its own.',
       'The <code>ariaLabel</code> prop is required and must state the takeaway, because a chart\'s role="img" summary is the accessible content. For decision-critical data, pair the chart with a "View data" affordance or a visually-hidden table.',
     ],
     examples: [
@@ -212,6 +234,23 @@ export const widgets: DocEntry[] = [
   height={120}
 />`,
       },
+      {
+        title: 'Stacked — parts of one total',
+        description: 'Only when the segments sum to something real. Two unrelated measures are two charts.',
+        demoKey: 'trend-stacked',
+        code: `<Trend
+  kind="stacked"
+  legend
+  ariaLabel="Weekly volume by channel, total peaking Thursday at 412 orders"
+  series={[
+    { label: 'Direct', data: direct },
+    { label: 'Partner', data: partner },
+    { label: 'Marketplace', data: marketplace },
+  ]}
+  xLabels={['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']}
+  height={140}
+/>`,
+      },
     ],
     props: [
       {
@@ -219,10 +258,19 @@ export const widgets: DocEntry[] = [
         rows: [
           { name: 'ariaLabel', type: 'string', description: 'REQUIRED. The takeaway, stated in words.' },
           { name: 'series', type: 'TrendSeries[]', description: '{ label, data, tone? } — max 3; first defaults to seed, others to compare.' },
-          { name: 'kind', type: "'line' | 'bar'", defaultValue: "'line'", description: 'Bars are flat seed / faint-ink.' },
+          { name: 'kind', type: "'line' | 'bar' | 'stacked'", defaultValue: "'line'", description: 'Bars are flat seed / faint-ink; stacked sums the series per column.' },
           { name: 'xLabels', type: 'string[]', description: 'Mono labels spread under the plot.' },
           { name: 'height', type: 'number', defaultValue: '160', description: 'Plot height in viewBox units.' },
           { name: 'legend', type: 'boolean', defaultValue: 'false', description: 'Show 14×2px swatch legend when the seed/gray convention is not enough.' },
+        ],
+      },
+      {
+        component: 'Sparkline',
+        rows: [
+          { name: 'data', type: 'number[]', description: 'The series. Scaled to its own min/max — it shows shape, not level.' },
+          { name: 'ariaLabel', type: 'string', description: 'REQUIRED takeaway, as on Trend.' },
+          { name: 'width / height', type: 'number', defaultValue: '72 / 20', description: 'Cell-sized by default.' },
+          { name: 'tone', type: "'seed' | 'faint'", defaultValue: "'seed'", description: 'faint for a secondary row in a dense table.' },
         ],
       },
     ],
@@ -238,6 +286,8 @@ export const widgets: DocEntry[] = [
       'No animated draw-in; the chart is simply there.',
       'No donuts, pies, radials, or gauges anywhere in product (A2) — MeterList replaces them.',
       'No more than three series.',
+      'No stacked bars for measures that do not sum to a real total.',
+      'No Sparkline standing alone — it sits beside the figure that carries the value.',
     ],
     faq: [
       { q: 'Which colors do series use?', a: 'tone: "seed" (current), "compare" (line-gray #D6DAE0, the one aliased non-token color), or "faint" for secondary bars. There is no palette to pick from — the convention is the palette.' },
@@ -328,13 +378,14 @@ export const widgets: DocEntry[] = [
     category: 'widgets',
     tagline: 'The ERP workhorse: mono headers, mono IDs, dot+word statuses, right-aligned tabular numbers, full keyboard contract.',
     job: 'Answer "what exactly happened."',
-    tags: ['table', 'data-grid', 'keyboard-navigation', 'sorting', 'selection', 'pagination', 'erp'],
-    exports: ['DataTable'],
+    tags: ['table', 'data-grid', 'keyboard-navigation', 'sorting', 'selection', 'bulk-actions', 'filters', 'pagination', 'erp'],
+    exports: ['DataTable', 'SelectionHead', 'FilterLine'],
     files: ['components/seventy-six/data-table.tsx', 'components/seventy-six/data-table.css'],
     intro: [
       'Column headers are Fragment Mono 9.5 uppercase; cells are 13/500 with 10.5px vertical padding; IDs render in mono soft; numeric columns are right-aligned, tabular, 600. Rows hover in seed-tint; a selected row adds the system\'s only 2px left rule. The last row is unruled.',
       'Column <code>kind</code> does the type discipline for you: <code>id</code> gets mono, <code>num</code> gets right/tabular, <code>status</code> expects a StatusWord. Sorting is the caller\'s job — the table renders <code>aria-sort</code> and header buttons, your code reorders the rows.',
       'On narrow screens the table scrolls horizontally inside its card. It never reflows into stacked blobs, and the header row never disappears.',
+      '<b>v0.4.0 closes the table\'s missing half</b> — what a selection DOES, and how filter state is shown. <b>SelectionHead</b> replaces the CardHead in place while rows are selected: mono count, the verbs, "Clear". No floating action bar and no new z-index, because the card\'s own header already owns that row. <b>FilterLine</b> states the active filters as one mono line of running text with a single "Clear all", and that line doubles as the <code>aria-live</code> announcement — no chips, no pills, because B23 Badge stays category-only and non-dismissible.',
     ],
     examples: [
       {
@@ -395,6 +446,32 @@ const count = selected.size;
   />
 </Card>`,
       },
+      {
+        title: 'The selection head and the stated filter line',
+        description: 'Selecting rows swaps the head in place. Filters state themselves in one mono line — never as chips.',
+        demoKey: 'table-selection',
+        code: `{count > 0 ? (
+  <SelectionHead
+    count={count}
+    noun="invoice"
+    onClear={() => setSelected(new Set())}
+    actions={
+      <>
+        <Button variant="ghost" onClick={() => send(selected)}>Send {count}</Button>
+        <Button variant="danger" onClick={confirmDelete}>Delete</Button>
+      </>
+    }
+  />
+) : (
+  <CardHead title="Draft invoices" subtitle="July · unsent" />
+)}
+
+<FilterLine
+  count="12 of 248"
+  filters={[{ label: 'Status', value: 'Draft' }, { label: 'Period', value: 'July' }]}
+  onClearAll={clearFilters}
+/>`,
+      },
     ],
     props: [
       {
@@ -407,6 +484,23 @@ const count = selected.size;
           { name: 'selectable / selected / onSelect', type: 'boolean / Set<string> / (keys) => void', description: 'Controlled selection; Space toggles, ⇧ extends.' },
           { name: 'announcement', type: 'string', description: 'aria-live polite text on data/filter changes ("12 orders · Pending").' },
           { name: 'page', type: '{ from, to, of, onPrev?, onNext? }', description: 'Mono "1–50 OF 248" + ghost prev/next. No numbered pill walk.' },
+        ],
+      },
+      {
+        component: 'SelectionHead',
+        rows: [
+          { name: 'count', type: 'number', description: 'Selected rows. Rendered mono and tabular.' },
+          { name: 'noun', type: 'string', description: 'The object, singular ("invoice") — pluralised for the count.' },
+          { name: 'onClear', type: '() => void', description: 'Backs the always-present "Clear" action.' },
+          { name: 'actions', type: 'ReactNode', description: 'The verbs, as Buttons. Keep to three; the fourth belongs in a Menu (B20).' },
+        ],
+      },
+      {
+        component: 'FilterLine',
+        rows: [
+          { name: 'filters', type: 'ActiveFilter[]', description: '{ label, value } pairs, rendered as running mono text.' },
+          { name: 'onClearAll', type: '() => void', description: 'The single clear affordance — filters are not individually dismissible.' },
+          { name: 'count', type: 'string', description: 'Optional lead, e.g. "12 of 248". Rendered first, tabular.' },
         ],
       },
     ],
@@ -430,6 +524,8 @@ const count = selected.size;
       'No numbered pagination pill walks; range + prev/next only.',
       'No left rules except the 2px seed rule on selected rows.',
       'No relative timestamps in ERP contexts — absolute, in mono.',
+      'No floating bulk-action bar — the selection head swaps the card head in place.',
+      'No dismissible filter chips; filters state themselves in one line with one "Clear all".',
     ],
     faq: [
       { q: 'How do I make a column sortable?', a: 'Set sortable, render your current order into sorted ("ascending" | "descending"), and reorder rows in onSort. The table is deliberately headless about sort logic.' },

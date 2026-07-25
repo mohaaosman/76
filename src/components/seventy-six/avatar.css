@@ -1,0 +1,63 @@
+/* B30 · Avatar — initials on wall, 50% radius (a registered exception to
+   the one-radius rule, alongside status dots). Images never move (Part E). */
+
+@layer sv-components {
+  .sv-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--sv-wall);
+    color: var(--sv-ink-soft);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    object-fit: cover;
+    overflow: hidden;
+  }
+
+  .sv-avatar--sm {
+    width: 24px;
+    height: 24px;
+    font-size: 9.5px;
+  }
+
+  .sv-avatar--md {
+    width: 32px;
+    height: 32px;
+    font-size: 11.5px;
+  }
+
+  .sv-avatar--lg {
+    width: 44px;
+    height: 44px;
+    font-size: 15px;
+  }
+
+  .sv-avatar--seed {
+    background: var(--sv-seed-tint);
+    color: var(--sv-seed-text);
+  }
+
+  .sv-avatars {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* The overlap is a ring of the surface behind, not a shadow. */
+  .sv-avatars .sv-avatar + .sv-avatar {
+    margin-left: -6px;
+  }
+
+  .sv-avatars .sv-avatar {
+    box-shadow: inset 0 0 0 1.5px var(--sv-paper);
+  }
+
+  .sv-avatars .sv-avatar--rest {
+    background: var(--sv-paper);
+    color: var(--sv-ink-soft);
+    font-size: 9px;
+    letter-spacing: 0;
+    box-shadow: inset 0 0 0 1px var(--sv-line);
+  }
+}

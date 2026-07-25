@@ -3,7 +3,7 @@
 The ERP workhorse: mono headers, mono IDs, dot+word statuses, right-aligned tabular numbers, full keyboard contract.
 
 **One job:** Answer "what exactly happened."
-**Category:** widgets · **Exports:** DataTable · **Tags:** table, data-grid, keyboard-navigation, sorting, selection, pagination, erp
+**Category:** widgets · **Exports:** DataTable, SelectionHead, FilterLine · **Tags:** table, data-grid, keyboard-navigation, sorting, selection, bulk-actions, filters, pagination, erp
 
 ## Installation
 
@@ -20,6 +20,8 @@ Column headers are Fragment Mono 9.5 uppercase; cells are 13/500 with 10.5px ver
 Column `kind` does the type discipline for you: `id` gets mono, `num` gets right/tabular, `status` expects a StatusWord. Sorting is the caller's job — the table renders `aria-sort` and header buttons, your code reorders the rows.
 
 On narrow screens the table scrolls horizontally inside its card. It never reflows into stacked blobs, and the header row never disappears.
+
+**v0.4.0 closes the table's missing half** — what a selection DOES, and how filter state is shown. **SelectionHead** replaces the CardHead in place while rows are selected: mono count, the verbs, "Clear". No floating action bar and no new z-index, because the card's own header already owns that row. **FilterLine** states the active filters as one mono line of running text with a single "Clear all", and that line doubles as the `aria-live` announcement — no chips, no pills, because B23 Badge stays category-only and non-dismissible.
 
 ## Examples
 
@@ -85,6 +87,34 @@ const count = selected.size;
 </Card>
 ```
 
+### The selection head and the stated filter line
+
+Selecting rows swaps the head in place. Filters state themselves in one mono line — never as chips.
+
+```tsx
+{count > 0 ? (
+  <SelectionHead
+    count={count}
+    noun="invoice"
+    onClear={() => setSelected(new Set())}
+    actions={
+      <>
+        <Button variant="ghost" onClick={() => send(selected)}>Send {count}</Button>
+        <Button variant="danger" onClick={confirmDelete}>Delete</Button>
+      </>
+    }
+  />
+) : (
+  <CardHead title="Draft invoices" subtitle="July · unsent" />
+)}
+
+<FilterLine
+  count="12 of 248"
+  filters={[{ label: 'Status', value: 'Draft' }, { label: 'Period', value: 'July' }]}
+  onClearAll={clearFilters}
+/>
+```
+
 ## Props
 
 ### DataTable
@@ -99,6 +129,23 @@ const count = selected.size;
 | `announcement` | `string` | — | aria-live polite text on data/filter changes ("12 orders · Pending"). |
 | `page` | `{ from, to, of, onPrev?, onNext? }` | — | Mono "1–50 OF 248" + ghost prev/next. No numbered pill walk. |
 
+### SelectionHead
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `count` | `number` | — | Selected rows. Rendered mono and tabular. |
+| `noun` | `string` | — | The object, singular ("invoice") — pluralised for the count. |
+| `onClear` | `() => void` | — | Backs the always-present "Clear" action. |
+| `actions` | `ReactNode` | — | The verbs, as Buttons. Keep to three; the fourth belongs in a Menu (B20). |
+
+### FilterLine
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `filters` | `ActiveFilter[]` | — | { label, value } pairs, rendered as running mono text. |
+| `onClearAll` | `() => void` | — | The single clear affordance — filters are not individually dismissible. |
+| `count` | `string` | — | Optional lead, e.g. "12 of 248". Rendered first, tabular. |
+
 ## Accessibility
 
 | Keys | Action |
@@ -109,7 +156,7 @@ const count = selected.size;
 | ⇧ + ↑/↓ · ⇧Space | Range-select from the anchor row. |
 | Home / End | Jump to first / last row. |
 
-- Headers are `&lt;th scope="col"&gt;`; sortable headers are real buttons inside the th carrying `aria-sort`.
+- Headers are `<th scope="col">`; sortable headers are real buttons inside the th carrying `aria-sort`.
 - Row count and filter state announce via a polite live region on change.
 - The focused row shows the hover visual plus the focus ring — same information, keyboard or mouse.
 
@@ -120,6 +167,8 @@ const count = selected.size;
 - No numbered pagination pill walks; range + prev/next only.
 - No left rules except the 2px seed rule on selected rows.
 - No relative timestamps in ERP contexts — absolute, in mono.
+- No floating bulk-action bar — the selection head swaps the card head in place.
+- No dismissible filter chips; filters state themselves in one line with one "Clear all".
 
 ## FAQ
 

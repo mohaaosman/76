@@ -47,8 +47,36 @@
   .sv-trend__stroke--compare { stroke: var(--sv-compare); color: var(--sv-compare); }
   .sv-trend__stroke--faint   { stroke: var(--sv-ink-faint); color: var(--sv-ink-faint); }
 
-  .sv-trend__fill--seed  { fill: var(--sv-seed); }
-  .sv-trend__fill--faint { fill: var(--sv-ink-faint); }
+  .sv-trend__fill--seed    { fill: var(--sv-seed); }
+  .sv-trend__fill--compare { fill: var(--sv-compare); }
+  .sv-trend__fill--faint   { fill: var(--sv-ink-faint); }
+
+  /* Sparkline — the inline shape of a series, no axes, no grid, no
+     numbers of its own. It sits BESIDE a figure that carries the value. */
+  .sv-spark {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .sv-spark__line {
+    fill: none;
+    stroke: var(--sv-seed);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .sv-spark--faint .sv-spark__line {
+    stroke: var(--sv-ink-faint);
+  }
+
+  .sv-spark__dot {
+    fill: var(--sv-seed);
+  }
+
+  .sv-spark--faint .sv-spark__dot {
+    fill: var(--sv-ink-faint);
+  }
 
   .sv-trend__dot {
     fill: var(--sv-seed);

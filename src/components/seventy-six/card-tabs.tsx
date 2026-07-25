@@ -57,8 +57,9 @@ export function CardTabs({ tabs, active, onChange, mode = 'tabs', idBase, classN
     >
       {tabs.map((tab) => {
         const isActive = tab.id === active;
+        /* `key` is passed explicitly below, never through this spread —
+           React 19 does not read a key out of spread props. */
         const shared = {
-          key: tab.id,
           className: cx('sv-cardtabs__tab', isActive && 'sv-cardtabs__tab--active'),
           onClick: () => onChange(tab.id),
           children: (
@@ -72,6 +73,7 @@ export function CardTabs({ tabs, active, onChange, mode = 'tabs', idBase, classN
         };
         return mode === 'tabs' ? (
           <button
+            key={tab.id}
             type="button"
             {...shared}
             role="tab"
@@ -81,7 +83,7 @@ export function CardTabs({ tabs, active, onChange, mode = 'tabs', idBase, classN
             tabIndex={isActive ? 0 : -1}
           />
         ) : (
-          <button type="button" {...shared} aria-pressed={isActive} />
+          <button key={tab.id} type="button" {...shared} aria-pressed={isActive} />
         );
       })}
     </div>

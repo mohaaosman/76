@@ -1,0 +1,67 @@
+/* B35 · DateRangeField — two native date inputs welded into one field,
+   a mono preset row above, a mono context line below. No month grid (F4). */
+
+@layer sv-components {
+  .sv-daterange {
+    border: 0;
+    padding: 0;
+    min-inline-size: 0;
+  }
+
+  .sv-daterange__presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sv-s1);
+    margin-top: var(--sv-s1);
+  }
+
+  /* CardTabs (B8) voice: mono, soft, seed when it is the state you are in. */
+  .sv-daterange__preset {
+    padding: 3px 7px;
+    border: 1px solid transparent;
+    border-radius: var(--sv-r);
+    background: transparent;
+    font-size: 9.5px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--sv-ink-soft);
+    cursor: pointer;
+    transition: color var(--sv-t-fast), background-color var(--sv-t-fast), border-color var(--sv-t-fast);
+  }
+
+  .sv-daterange__preset:hover {
+    color: var(--sv-ink);
+  }
+
+  .sv-daterange__preset[aria-pressed='true'] {
+    background: var(--sv-seed-tint);
+    border-color: var(--sv-seed-tint);
+    color: var(--sv-seed-text);
+  }
+
+  .sv-daterange__inputs {
+    display: flex;
+    align-items: center;
+    gap: var(--sv-s2);
+    margin-top: var(--sv-s1);
+  }
+
+  .sv-daterange__input {
+    flex: 1;
+    min-width: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .sv-daterange__weld {
+    flex-shrink: 0;
+    font-size: 11px;
+    color: var(--sv-ink-faint);
+  }
+
+  .sv-daterange__context {
+    margin-top: var(--sv-s1);
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    color: var(--sv-ink-soft);
+  }
+}

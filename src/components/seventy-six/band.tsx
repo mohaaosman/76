@@ -218,11 +218,18 @@ export function BandNav({ items, renderLink }: { items: BandNavItem[]; renderLin
 export function BandSubTabs({ items, renderLink }: { items: BandNavItem[]; renderLink?: RenderLink }) {
   const register = useContext(BandContext)?.register;
   const latest = useRef<SubTabsSlot>({ items, renderLink });
-  latest.current = { items, renderLink };
 
   /* An inline items array is a new identity every render; key on the
      content so the drawer re-registers only when the row really changes. */
   const key = items.map((i) => `${i.label}|${i.href}|${i.active ? 1 : 0}`).join('~');
+
+  /* Written after commit, never during render: React may replay or discard
+     a render, and a ref written there can carry values from UI that never
+     committed. This effect runs before the register effect below, so that
+     one always reads the values this commit actually painted. */
+  useEffect(() => {
+    latest.current = { items, renderLink };
+  });
 
   useEffect(() => {
     if (!register) return;

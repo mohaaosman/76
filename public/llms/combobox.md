@@ -16,7 +16,7 @@ Registry dependencies: field.
 
 ## Overview
 
-Native `&lt;select&gt;` (B11) stays the default for short, known lists. The Combobox exists for the moment the list grows past roughly ten options, or the user knows the value's **name** faster than its position: customers, SKUs, warehouses, assignees. Typing filters; arrows walk the matches; Enter commits; Escape closes, then clears.
+Native `<select>` (B11) stays the default for short, known lists. The Combobox exists for the moment the list grows past roughly ten options, or the user knows the value's **name** faster than its position: customers, SKUs, warehouses, assignees. Typing filters; arrows walk the matches; Enter commits; Escape closes, then clears.
 
 It follows the ARIA 1.2 combobox pattern with `aria-activedescendant` — focus never leaves the input, so the screen-reader experience matches the visual one. Options can carry mono `meta` (an ID, a count) that is searched along with the label.
 

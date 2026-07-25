@@ -16,7 +16,7 @@ Registry dependencies: button.
 
 ## Overview
 
-The Drawer answers the moment a table row needs its full story: inspect the record, edit a field, review before commit — while the sheet stays visible behind the scrim as context. It is a full-height paper panel entering from the right (or left), on native `&lt;dialog&gt;.showModal()`: focus trap, Esc, backdrop, top layer, zero dependencies.
+The Drawer answers the moment a table row needs its full story: inspect the record, edit a field, review before commit — while the sheet stays visible behind the scrim as context. It is a full-height paper panel entering from the right (or left), on native `<dialog>.showModal()`: focus trap, Esc, backdrop, top layer, zero dependencies.
 
 Anatomy: a hairline-separated head (15/700 title + optional mono context line + close), a scrolling body, and a sticky footer with a ghost cancel and **one** primary. Sizes: sm 360 · md 480 · lg 640 · full. Entry slides 24px on transform only, 160ms ease-out, collapsing to 0 under reduced motion.
 
