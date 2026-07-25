@@ -4,6 +4,27 @@ What has shipped, what is next, and what we are still weighing. The visual
 system is settled; the work now is reach and rigor — never new chrome for its
 own sake. Live version: <https://76.zifala.com/#/roadmap>.
 
+## Shipped — v0.4.0 · closing the product taxonomy
+
+- **The table's missing half** — `SelectionHead` swaps the CardHead in place while rows are selected (mono count, the verbs, "Clear"); `FilterLine` states active filters as one mono line of running text with a single "Clear all" that doubles as the `aria-live` announcement. No floating bar, no chips.
+- **Structure & display** — `Accordion` (B27, native `<details>`), `DescriptionList` (B28), `Divider` (B29), `Avatar` + `AvatarGroup` (B30), `Spinner` + `Busy` (B31), `Kbd` (B32).
+- **The three missing inputs** — `NumberField` (B33), `Slider` (B34, native range, no gradient fill), and `DateRangeField` (B35): the F4 range as presets plus two native date fields, still with no month grid.
+- **Charts** — stacked-bar `Trend`, the cell-sized `Sparkline`, and the `Delta` chip extracted from B3 so one implementation serves the card, the cell and the record row. `polarity` states inverse metrics honestly instead of flipping the sign.
+- **The Ship Gate reconciled** — Part D of the Book now carries all fourteen points, matching the skill.
+
+## Shipped — v0.3.0 · the floor and the auth surface
+
+- **The 320px floor** — below 1000px the band's nav moves into a left Drawer opened by a labelled "Menu" button, with sub-tabs nested inside it. A2 is amended to be desktop-scoped; C7 verified at 320px and 200% zoom.
+- **The Plate (B24)** — the first band-less page type, carrying auth, 404, 500, maintenance and expired-link pages.
+- **The auth set** — six templates (T6–T11) on one anatomy, plus `PinField` (B25) and `SocialButton` (B26): one `currentColor` path per provider, no brand hexes.
+- **Part F · The Refused** — eleven refusals documented by name, each with the composition that replaces it.
+
+## Shipped — v0.2.1 · the dark chrome hotfix
+
+- **`--sv-on-dark`** — a new token for every mark on the band or on a seed fill; `--sv-paper` returns to meaning only "card surface".
+- **Firewall rules 16 + reach** — `color: var(--sv-paper)` outside `tokens.css` is a defect, and the color-literal rule now tests `.tsx` as well as `.css`.
+- **A2 resolved** — the dark-mode ban is restated as "light-first stands; dark is opt-in and token-only", so the Book no longer contradicts its own amendment.
+
 ## Shipped — v0.2.0 · the interaction layer
 
 - **Combobox (B19)** — the searchable select: ARIA 1.2 pattern, hand-rolled, zero dependencies. Radix stays on the bench after all.
@@ -25,74 +46,24 @@ own sake. Live version: <https://76.zifala.com/#/roadmap>.
 
 ---
 
-## The four bodies of work
+## The bodies of work
 
-Phase 4 was scoped against one question: what stops a team building *any*
-product on 76° without reaching outside it? The audit found four answers, and
-they ship in this order — **what is broken, then what was asked for, then
-breadth, then new surface.** Nothing new is built on a floor that leaks.
+The programme was scoped against one question: what stops a team building
+*any* product on 76° without reaching outside it? The audit found four
+answers, and they ship in this order — **what is broken, then what was asked
+for, then breadth, then new surface.** Nothing new is built on a floor that
+leaks.
 
-| Release | Body of work |
-|---|---|
-| **0.2.1** | The dark chrome regression — a shipped AA failure |
-| **0.3** | The 320px floor + the auth surface |
-| **0.4** | Closing the product taxonomy |
-| **0.5** | The public surface |
+| Release | Body of work | State |
+|---|---|---|
+| **0.2.1** | The dark chrome regression — a shipped AA failure | Shipped |
+| **0.3** | The 320px floor + the auth surface | Shipped |
+| **0.4** | Closing the product taxonomy | Shipped in part — remainder below |
+| **0.5** | The public surface | Next |
 
 ---
 
-## 0.2.1 — the dark chrome hotfix
-
-`--sv-paper` carried two meanings: *the card surface* and *the white that sits
-on dark chrome*. They were the same value in light and diverge in dark, so
-thirteen declarations collapsed to **1.15:1** — including the focus ring on the
-band, which voids C3 silently.
-
-- **`--sv-on-dark`** — a new token, near-white in both modes, for every mark that sits on the band or on a seed fill. `--sv-paper` returns to meaning only "card surface".
-- **Firewall rule 16** — `color: var(--sv-paper)` outside `tokens.css` is a defect.
-- **Firewall reach** — the color-literal rule tests `.css` only; extend it to `.tsx` so an inline `fill="#4285F4"` cannot pass.
-- **Book** — A2 still bans dark mode ("light-first only until Max repeals this line") while the v0.2.0 amendment specifies it. The Ship Gate reads A2 as binding; resolve it.
-- **Gate** — every chrome pair re-verified AA on both surfaces.
-
-## 0.3 — the floor and the auth surface
-
-### The floor
-
-`band.css` has no `overflow`, no `flex-wrap`, no `scroll`, and one media query
-that changes padding. Below ~1000px the navigation is unreachable, while C7
-requires 320px without content loss.
-
-- **A2 amended** — "Sidebars as primary navigation" is now **desktop-scoped**. Below 1000px, primary nav *is* a sidebar. The band's nav never scrolls, at any width.
-- **The mobile sidebar** — a composition of B21 Drawer (`side="left"`, `size="sm"`), not a new component. Trigger is a labelled **"Menu"** ghost button with a glyph beside it, satisfying A2's icon-only ban.
-- **Sub-tabs nest** — BandSubTabs leaves the band on mobile and nests, indented, under its parent nav item inside the drawer. One surface holds the whole nav tree.
-- **Gate** — C7 verified at 320px and at 200% zoom, on both surfaces.
-
-### The Plate — the first band-less page type
-
-Auth pages have no nav, no hero, no sub-tabs, so they have no band. Every
-template until now opened with one.
-
-- **`Plate` (B24)** — wall background, one centered card (≤400px), mono `76°` wordmark above. Nothing else.
-- It also carries **404, 500, maintenance, and expired-link** pages for free.
-
-### The auth set
-
-Six screens on one anatomy, so each after the first is nearly free.
-
-| | Template | Notes |
-|---|---|---|
-| T6 | `auth-sign-in` | Social · rule · email + password · recovery link |
-| T7 | `auth-sign-up` | Adds name and the terms line |
-| T8 | `auth-forgot` | One field, one verb |
-| T9 | `auth-reset` | Two fields, match rule stated up front |
-| T10 | `auth-verify` | Pin/OTP |
-| T11 | `auth-invite` | Mono context line naming who invited you |
-
-- **`PinField`** — the OTP input, pulled forward from the Phase 3 inventory by T10.
-- **`SocialButton`** — Google, Apple, GitHub, Microsoft as ghost buttons with the provider mark drawn in `currentColor`. **One path, no brand hexes** — Law 2 holds and the firewall stays honest. Products bound by strict provider brand guidelines override locally.
-- **No password strength meter.** The rule is stated before the field; failure is an inline error naming what and how to fix (see F7).
-
-### Part F · The Refused
+## Part F · The Refused
 
 The Book documents what is in. It has never documented what is *out*, so every
 refusal gets re-litigated. Part F makes each "no" as binding as every "yes".
@@ -120,36 +91,33 @@ calendar where ranges demand it" — is closed. 76° draws no month grid, ever.
 A range is two native `<input type="date">` fields welded into one Field,
 preceded by a mono preset row (`7D · 30D · QTD · YTD · CUSTOM`) and followed by
 a mono context line. The browser draws the calendar; it is free, native,
-localized, and accessible.
+localized, and accessible. That composition shipped in v0.4.0 as **B35
+`DateRangeField`** — the refusal now has a component, and it still contains no
+grid.
 
-### Stated scope boundary
+## Stated scope boundary
 
 **76° is LTR only.** The component layer uses physical direction properties and
 does not support RTL. Arabic, Hebrew, Persian, and Urdu products are out of
 scope until this line is repealed. *(Weighed and deliberately declined: the
 conversion is ~29 declarations today and grows with every component shipped.)*
 
-## 0.4 — closing the product taxonomy
+## 0.4 — closing the product taxonomy · the remainder
 
 The line-by-line inventory against Bootstrap, Tailwind UI, shadcn/ui, and
 Material, minus everything Part F refuses. Each enters through the Book: named,
-single-jobbed, registered.
+single-jobbed, registered. The first pass shipped in v0.4.0 (see Shipped,
+above); these are what it did not reach.
 
-**The table's missing half.** `DataTable` already ships row selection and the
-paginated range readout — what is missing is what a selection *does*, and how
-filter state is shown.
+**Inputs.** Multi-select Combobox · File upload (drop zone + rows + progress) · Search field.
 
-- **The selection head** — selecting rows swaps CardHead in place for a mono count, the verbs, and "Clear". No floating bar, no new z-index; the card's own header does the job it already owns. Destructive verbs still route through the typed-object Dialog confirm.
-- **The stated filter line** — active filters render as one mono line of running text with a single "Clear all", which doubles as the `aria-live` announcement. No chips, no pills: B23 Badge stays category-only and non-dismissible.
-- **`FilterBar`** — the control row above it.
+**Structure.** Page-level Tabs · Stepper/wizard header · Tree list · Timeline.
 
-**Inputs.** Date-range field (two natives + presets, per F4) · Multi-select Combobox · Number/stepper input · Slider (native `<input type="range">`, tokenized) · File upload (drop zone + rows + progress) · Search field.
+**Feedback & display.** Popover primitive · Code block.
 
-**Structure.** Accordion (native `<details>`) · Page-level Tabs · Stepper/wizard header · Description list · Divider with mono label · Tree list · Timeline.
+**Charts.** Distribution strip — donuts and gauges stay banned forever.
 
-**Feedback & display.** Inline Spinner + full-region Busy state · Avatar + AvatarGroup · Popover primitive · KBD · Code block · Stat delta chip.
-
-**Charts.** Bar and stacked-bar Trend variants · Sparkline · Distribution strip — donuts and gauges stay banned forever.
+**Table.** `FilterBar` — the control row above the shipped filter line.
 
 ## 0.5 — the public surface
 
@@ -159,8 +127,8 @@ illustration, no 3D, no logo clouds.** A2's illustration and stock-photo bans
 stand unamended; F11 states the refusal outright.
 
 - **Display tokens** — `--sv-display-1/2/3` (≈64/48/34), the system's first type tokens, since the product ramp tops out at 27px. **Firewall rule 17** bans them outside marketing block CSS, so no dashboard grows a 64px number.
-- **`Prose` (B25)** — one registered component styling its whole subtree: 16px body, ~66ch measure, heading ramp, lists, hairline-ruled blockquote, inline mono, seed-underlined links. Markdown drops straight in. It is also the only place Part E permits italic.
-- **Marketing blocks** — hero (type only) · feature list · FAQ (on the 0.4 Accordion) · footer · CTA · stat band.
+- **`Prose` (B36)** — one registered component styling its whole subtree: 16px body, ~66ch measure, heading ramp, lists, hairline-ruled blockquote, inline mono, seed-underlined links. Markdown drops straight in. It is also the only place Part E permits italic. *(Numbered B36: B25 and B26 went to PinField and SocialButton in v0.3.0, B27–B35 in v0.4.0.)*
+- **Marketing blocks** — hero (type only) · feature list · FAQ (on the B27 Accordion) · footer · CTA · stat band.
 - **Pricing is a DataTable.** No tier cards, no "Most popular" pill, no three competing primaries: one row per feature, one column per plan, and a single primary beneath. C7 governs it on mobile — the table scrolls, it never truncates.
 - **Marketing shell** — the band without product nav.
 
@@ -169,7 +137,7 @@ stand unamended; F11 states the refusal outright.
 - **Registry MCP server** — search components, blocks, and templates by metadata from any assistant.
 - **Health seed** — a contrast-verified clinical seed, added through the seed rule (both directions ≥ 4.5:1), including its dark `--sv-seed-text` variant.
 - **8-state preview files** — the fundamentals state contract shipped as a preview per component.
-- **Full type tokenization** — a complete `--sv-text-*` scale replacing the literals in all 25 components. Correct, and large enough to need its own release.
+- **Full type tokenization** — a complete `--sv-text-*` scale replacing the literals across every component. Correct, and large enough to need its own release.
 - **More templates** — analytics, billing, inbox, and onboarding screens.
 - **Theming playground** — swap the seed and the mode live and watch a real screen re-theme.
 - **Token sync** — a Figma ⇄ `tokens.css` bridge so design and code share one source.
