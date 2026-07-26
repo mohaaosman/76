@@ -245,19 +245,27 @@ const SCAN_DIRS = process.argv.slice(2).length ? process.argv.slice(2) : ['src']
 
 const violations = [];
 
-function check(file, source) {
+/**
+ * Pure per-file scan: given a path and its source text, returns the
+ * violations it contains. Takes no dependency on the filesystem or on
+ * module-level state, so it is safe to import and call directly (e.g. from
+ * tests) without triggering the CLI walk below. `sink` defaults to the
+ * CLI's shared `violations` array so the walk loop's call sites are
+ * unchanged.
+ */
+export function check(file, source, sink = violations) {
   const base = path.basename(file);
   const lines = source.split('\n');
 
   /* Rule 18 reads STRUCTURE, not lines — it is the one check that cannot be
      a grep, because the defect is a parent/child relationship. */
   checkCardPadding(file, source, (lineNo, line, rule) =>
-    violations.push(`${file}:${lineNo} · ${rule} · ${line.trim().slice(0, 90)}`),
+    sink.push(`${file}:${lineNo} · ${rule} · ${line.trim().slice(0, 90)}`),
   );
 
   lines.forEach((line, i) => {
     const loc = `${file}:${i + 1}`;
-    const flag = (rule) => violations.push(`${loc} · ${rule} · ${line.trim().slice(0, 90)}`);
+    const flag = (rule) => sink.push(`${loc} · ${rule} · ${line.trim().slice(0, 90)}`);
 
     if (/linear-gradient|radial-gradient|conic-gradient/.test(line)) flag('gradient');
     /* blur( only counts as glassmorphism in a filter context — a bare blur()
@@ -383,6 +391,8 @@ function check(file, source) {
       }
     }
   });
+
+  return sink;
 }
 
 async function walk(dir) {
@@ -395,14 +405,18 @@ async function walk(dir) {
   }
 }
 
-await verifySelfPadded((v) => violations.push(v));
+/* CLI entry point only — guarded so importing this module (e.g. from a
+   test) runs zero filesystem I/O and never calls process.exit. */
+if (import.meta.url === `file://${process.argv[1]}`) {
+  await verifySelfPadded((v) => violations.push(v));
 
-for (const dir of SCAN_DIRS) await walk(dir);
+  for (const dir of SCAN_DIRS) await walk(dir);
 
-if (violations.length) {
-  console.error(`SLOP FIREWALL · ${violations.length} violation(s):\n`);
-  for (const v of violations) console.error('  ' + v);
-  process.exit(1);
-} else {
-  console.log('SLOP FIREWALL · clean. Zero hits across', SCAN_DIRS.join(', '));
+  if (violations.length) {
+    console.error(`SLOP FIREWALL · ${violations.length} violation(s):\n`);
+    for (const v of violations) console.error('  ' + v);
+    process.exit(1);
+  } else {
+    console.log('SLOP FIREWALL · clean. Zero hits across', SCAN_DIRS.join(', '));
+  }
 }

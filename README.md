@@ -105,6 +105,7 @@ npm run firewall     # Slop Firewall (Part A1) — zero hits or non-zero exit
 npm run registry     # rebuild public/r/*.json only
 npm run llms         # rebuild public/llms.txt + public/llms/*.md only
 npm run check:sync   # fails if the skill's mirrored copies drift from source
+npm test             # unit tests (vitest)
 REGISTRY_BASE=https://76.zifala.com npm run build   # default host, already baked; override to change it
 ```
 
