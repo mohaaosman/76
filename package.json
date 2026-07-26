@@ -54,6 +54,7 @@
     "registry": "node scripts/build-registry.mjs",
     "llms": "node scripts/build-llms.mjs",
     "firewall": "node scripts/slop-firewall.mjs",
+    "test": "vitest run",
     "screens": "node scripts/shipgate-screens.mjs",
     "check:sync": "node scripts/check-sync.mjs",
     "prepublishOnly": "npm run check:sync && npm run registry && npm run llms",
@@ -73,6 +74,7 @@
     "@vitejs/plugin-react": "^4.5.0",
     "playwright": "^1.61.1",
     "typescript": "^5.8.0",
-    "vite": "^6.3.0"
+    "vite": "^6.3.0",
+    "vitest": "^4.1.10"
   }
 }

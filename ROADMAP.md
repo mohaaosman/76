@@ -339,7 +339,7 @@ cheaper half of that change, not a separate release.*
 
 Native element first · zero runtime dependencies · the 8-state + 4-lifecycle
 contract · AA on **both** surfaces · registry item + llms doc + demo in the
-same change · `firewall`, `tsc -b`, `build`, and `check-sync` green.
+same change · `firewall`, `tsc -b`, `build`, `check-sync`, and `test` green.
 
 ---
 
