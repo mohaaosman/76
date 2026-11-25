@@ -294,8 +294,15 @@ for (const slug of ['crm-deal', 'settings-team']) {
 }
 
 /* ------------------------------------------------- The 320px floor, swept */
-{
+for (const locale of ['en', 'ar']) {
   const page = await browser.newPage({ viewport: { width: 320, height: 800 } });
+  await page.addInitScript((l) => {
+    try {
+      localStorage.setItem('sv-locale', l);
+    } catch {
+      /* ignore */
+    }
+  }, locale);
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
   const slugs = await (async () => {
@@ -312,11 +319,12 @@ for (const slug of ['crm-deal', 'settings-team']) {
     /* Let fonts and the code-split route settle before measuring. */
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(250);
+    /* In RTL an overflow runs off the LEFT edge, which scrollWidth also counts. */
     const w = await page.evaluate(() => document.documentElement.scrollWidth);
     if (w > 320) wide.push(`${url} (${w}px)`);
     if (errors.length) wide.push(`${url} threw: ${errors[0]}`);
   }
-  check(`320px floor: ${slugs.length} component pages + templates, no horizontal scroll or runtime error`, wide.length === 0, wide.join(', '));
+  check(`320px floor (${locale}): ${slugs.length} component pages + templates, no horizontal scroll or runtime error`, wide.length === 0, wide.join(', '));
   await page.close();
 }
 
