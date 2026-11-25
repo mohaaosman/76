@@ -47,7 +47,7 @@ ${entries.map((e) => `- [${e.name}](/llms/${e.slug}.md): ${e.tagline}`).join('\n
                 <RichText text="<b>2 · Markdown routes.</b> Each doc page is generated from pure data, so the same source renders this site and emits <code>/llms/&lt;slug&gt;.md</code>. The 'Copy page for AI' button on every component page yields the identical markdown. <code>/llms.txt</code> is the index." />
               </p>
               <p>
-                <RichText text="<b>3 · MCP (later).</b> Once the registry has volume, an MCP server wraps it with search_components / get_component tools, the Untitled UI pattern. The metadata needed for semantic search — descriptions, tags, categories — already exists in every registry item, so nothing needs re-authoring." />
+                <RichText text="<b>3 · MCP (shipped in v0.10).</b> <code>seventy-six-mcp</code> is a zero-dependency stdio server over the same registry and markdown the build emits, so it works offline and never disagrees with this site. Four tools: <code>search_components</code>, <code>get_component</code>, <code>list_templates</code> and <code>get_foundations</code>. Add it with <code>claude mcp add seventy-six -- npx seventy-six-mcp</code>." />
               </p>
             </div>
           </Card>
