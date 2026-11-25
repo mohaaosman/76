@@ -98,6 +98,8 @@ export interface SvMessages {
   more: (n: number) => string;
   /** "3 invoices selected". `noun` is already in the right number form. */
   nSelected: (n: number, noun?: string) => string;
+  selectAll: string;
+  selectRow: (label: string) => string;
   notifications: string;
   chartColumns: string;
   codeLabel: (label?: string) => string;
@@ -186,6 +188,8 @@ const en: SvMessages = {
   characterOf: (i, n) => `Character ${i} of ${n}`,
   more: (n) => `${n} more`,
   nSelected: (n, noun) => (noun ? `${n} ${noun} selected` : `${n} selected`),
+  selectAll: 'Select all rows',
+  selectRow: (label) => `Select ${label}`,
   notifications: 'Notifications',
   chartColumns: 'Chart columns',
   codeLabel: (label) => (label ? `Code, ${label}` : 'Code'),
@@ -274,6 +278,8 @@ const fr: SvMessages = {
   characterOf: (i, n) => `Caractère ${i} sur ${n}`,
   more: (n) => `${n} de plus`,
   nSelected: (n, noun) => (noun ? `${n} ${noun} sélectionné(e)s` : `${n} sélectionné(e)s`),
+  selectAll: 'Sélectionner toutes les lignes',
+  selectRow: (label) => `Sélectionner ${label}`,
   notifications: 'Notifications',
   chartColumns: 'Colonnes du graphique',
   codeLabel: (label) => (label ? `Code, ${label}` : 'Code'),
@@ -376,6 +382,8 @@ const ar: SvMessages = {
   characterOf: (i, n) => `الحرف ${i} من ${n}`,
   more: (n) => `${n} آخرون`,
   nSelected: (n, noun) => (noun ? `تم تحديد ${n} ${noun}` : `تم تحديد ${n}`),
+  selectAll: 'تحديد كل الصفوف',
+  selectRow: (label) => `تحديد ${label}`,
   notifications: 'الإشعارات',
   chartColumns: 'أعمدة الرسم البياني',
   codeLabel: (label) => (label ? `شيفرة، ${label}` : 'شيفرة'),
@@ -472,6 +480,8 @@ const so: SvMessages = {
   characterOf: (i, n) => `Xarafka ${i} ee ${n}`,
   more: (n) => `${n} kale`,
   nSelected: (n, noun) => (noun ? `${n} ${noun} ayaa la doortay` : `${n} ayaa la doortay`),
+  selectAll: 'Dooro dhammaan safafka',
+  selectRow: (label) => `Dooro ${label}`,
   notifications: 'Ogeysiisyada',
   chartColumns: 'Tiirarka jaantuska',
   codeLabel: (label) => (label ? `Kood, ${label}` : 'Kood'),

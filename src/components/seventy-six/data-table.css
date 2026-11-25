@@ -257,6 +257,41 @@
     box-shadow: inset 2px 0 0 var(--sv-seed);
   }
 
+  .sv-table__row--selected > .sv-table__cell--held:dir(rtl) {
+    box-shadow: inset -2px 0 0 var(--sv-seed);
+  }
+
+  /* v0.10 · the pointer's selection column. A fixed narrow track, the box
+     centred in it; its label is visually hidden because the column header
+     and the row already say what the box does, and the accessible name
+     carries the rest ("Select INV-2291"). */
+  .sv-table__cell--check {
+    width: 44px;
+    padding-inline: 18px 0;
+  }
+
+  .sv-table__check .sv-check__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* With leadHold the checkbox column holds too, and the identity column
+     holds just past it, so both stay put while the rest scrolls under. */
+  .sv-table__cell--heldcheck {
+    position: sticky;
+    inset-inline-start: 0;
+    z-index: var(--sv-z-sticky);
+    background-color: var(--sv-paper);
+  }
+
+  .sv-table--checks .sv-table__cell--held {
+    inset-inline-start: 44px;
+  }
+
   /* RTL · the selection rule sits on the row's START edge, which is the
      right in a right-to-left table. box-shadow has no logical form. */
   .sv-table__row--selected:dir(rtl) {

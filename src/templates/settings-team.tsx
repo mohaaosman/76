@@ -21,7 +21,7 @@
 // ConfirmDialog was refused for exactly this composition. Access policies
 // are B62 SettingList: instant effect, and each row states its consequence.
 import { useState } from 'react';
-import type { KeyboardEvent, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import {
   Band,
   BandTopbar,
@@ -40,7 +40,6 @@ import {
   SettingList,
   CrossTable,
   JobList,
-  Checkbox,
   Select,
   Field,
   Drawer,
@@ -145,10 +144,6 @@ const nameCell = { display: 'flex', alignItems: 'center', gap: 'var(--sv-s3)' } 
 const stack = { display: 'grid', gap: 'var(--sv-s3)', alignContent: 'start' } as const;
 const column = { display: 'grid', gap: '14px', alignContent: 'start' } as const;
 
-/* B7 owns ↑/↓, Space and Enter on the row. A control inside a cell keeps its
-   own keys, so its keydown never reaches the row handler. */
-const keepKeys = (e: KeyboardEvent) => e.stopPropagation();
-
 const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
 
 type Confirm = { kind: 'members'; ids: string[] } | { kind: 'invite'; id: string } | null;
@@ -206,6 +201,10 @@ export function SettingsTeam() {
 
   /* ---- role changes: saving, then saved or failed, stated on the row ---- */
   function changeRole(id: string, role: Role) {
+    /* One change in flight per row. The select is NOT disabled while it
+       saves — disabling a focused control drops keyboard focus to <body> —
+       so a second change is simply ignored until the first lands. */
+    if (sync[id] === 'saving') return;
     setPendingRole((p) => ({ ...p, [id]: role }));
     setSync((s) => ({ ...s, [id]: 'saving' }));
     window.setTimeout(() => {
@@ -224,13 +223,6 @@ export function SettingsTeam() {
     const next = new Set(keys);
     if (owner) next.delete(owner.id);
     setSelected(next);
-  }
-
-  function toggleOne(id: string, on: boolean) {
-    const next = new Set(selected);
-    if (on) next.add(id);
-    else next.delete(id);
-    select(next);
   }
 
   function confirmRemoval() {
@@ -303,17 +295,6 @@ export function SettingsTeam() {
       header: 'MEMBER',
       render: (m) => (
         <span style={nameCell}>
-          {m.role === 'owner' ? (
-            <Checkbox label="" aria-label={`${m.name} is the owner and cannot be removed`} disabled checked={false} readOnly />
-          ) : (
-            <Checkbox
-              label=""
-              aria-label={`Select ${m.name}`}
-              checked={selected.has(m.id)}
-              onChange={(e) => toggleOne(m.id, e.target.checked)}
-              onKeyDown={keepKeys}
-            />
-          )}
           <Avatar name={m.name} size="sm" tone={m.role === 'owner' ? 'seed' : 'neutral'} />
           <b>{m.name}</b>
         </span>
@@ -332,9 +313,8 @@ export function SettingsTeam() {
               className="sv-field__input sv-field__select"
               aria-label={`Role for ${m.name}`}
               value={m.role}
-              disabled={sync[m.id] === 'saving'}
+              aria-busy={sync[m.id] === 'saving' || undefined}
               onChange={(e) => changeRole(m.id, e.target.value as Role)}
-              onKeyDown={keepKeys}
             >
               {ASSIGNABLE.map((r) => (
                 <option key={r} value={r}>
@@ -369,7 +349,7 @@ export function SettingsTeam() {
       key: 'verbs',
       header: 'ACTIONS',
       render: (i) => (
-        <span onKeyDown={keepKeys}>
+        <span>
           <MenuButton
             label="Manage invitation"
             variant="ghost"
@@ -589,6 +569,8 @@ export function SettingsTeam() {
                 selectable
                 selected={selected}
                 onSelect={select}
+                rowLabel={(m) => m.name}
+                isRowSelectable={(m) => m.role !== 'owner'}
                 rowSync={(m) => sync[m.id]}
                 announcement={`${plural(visible.length, 'member')}${filtered ? ` of ${members.length}` : ''}`}
                 page={{ from: 1, to: visible.length, of: visible.length }}

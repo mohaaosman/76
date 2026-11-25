@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { KeyboardEvent, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import { useLocale, useNounFor, useStrings } from '@/lib/i18n';
+import { Checkbox } from './field';
 import './data-table.css';
 
 /**
@@ -77,6 +78,17 @@ export interface DataTableProps<Row> {
    * is in sync — return undefined and the row says nothing.
    */
   rowSync?: (row: Row) => RowSync | undefined;
+  /**
+   * v0.10 · pointer selection. With `selectable`, the table draws a leading
+   * column of B11 Checkboxes and a select-all box in the head — indeterminate
+   * while part of the set is selected. They sit OUTSIDE the tab order: the
+   * keyboard model is unchanged (one tab stop, Space selects, ⇧ ranges), and
+   * the boxes exist for the pointer, which had no way to select at all.
+   * `rowLabel` names each box ("Select INV-2291"); defaults to the row key.
+   */
+  rowLabel?: (row: Row) => string;
+  /** Rows that may not be selected (the workspace owner). Their box is disabled. */
+  isRowSelectable?: (row: Row) => boolean;
   /** Closing figures, rendered as a real `<tfoot>`. Never records. */
   totals?: TotalsRow[];
   /** Holds the first column in place while the rest scrolls. Ignored unless
@@ -281,6 +293,8 @@ export function DataTable<Row>({
   totals,
   leadHold = false,
   rowSync,
+  rowLabel,
+  isRowSelectable,
   className,
 }: DataTableProps<Row>) {
   const tr = useStrings();
@@ -293,6 +307,7 @@ export function DataTable<Row>({
   /* The ⇧-range anchor is only ever read inside a handler, never rendered —
      as state it would cost a re-render of the whole table per selection. */
   const anchorIdx = useRef(0);
+  const shiftHeld = useRef(false);
   const bodyRef = useRef<HTMLTableSectionElement>(null);
 
   useEffect(() => {
@@ -304,13 +319,27 @@ export function DataTable<Row>({
     bodyRef.current?.querySelectorAll('tr')[idx]?.focus();
   }
 
+  const canSelect = (row: Row) => (isRowSelectable ? isRowSelectable(row) : true);
+  const boxes = selectable && !!onSelect;
+  const selectableKeys = boxes ? rows.filter(canSelect).map(rowKey) : [];
+  const selectedHere = selectableKeys.filter((k) => selected?.has(k)).length;
+
+  function toggleAll() {
+    if (!onSelect) return;
+    const next = new Set(selected ?? []);
+    if (selectedHere === selectableKeys.length) for (const k of selectableKeys) next.delete(k);
+    else for (const k of selectableKeys) next.add(k);
+    onSelect(next);
+  }
+
   function toggleSelect(idx: number, range: boolean) {
     if (!selectable || !onSelect) return;
     const next = new Set(selected ?? []);
     if (range) {
       const [a, b] = [Math.min(anchorIdx.current, idx), Math.max(anchorIdx.current, idx)];
-      for (let i = a; i <= b; i++) next.add(rowKey(rows[i]));
+      for (let i = a; i <= b; i++) if (canSelect(rows[i])) next.add(rowKey(rows[i]));
     } else {
+      if (!canSelect(rows[idx])) return;
       const key = rowKey(rows[idx]);
       if (next.has(key)) next.delete(key);
       else next.add(key);
@@ -320,6 +349,11 @@ export function DataTable<Row>({
   }
 
   function onKeyDown(e: KeyboardEvent<HTMLTableRowElement>, idx: number) {
+    /* The row's keys belong to the ROW. A keystroke from a control inside a
+       cell — a role Select, a checkbox the pointer just clicked, a Menu —
+       is that control's, and handling it here as well moved focus out from
+       under the control or toggled a selection twice. */
+    if (e.target !== e.currentTarget) return;
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
@@ -355,12 +389,25 @@ export function DataTable<Row>({
   }
 
   return (
-    <div className={cx('sv-table', className)}>
+    <div className={cx('sv-table', boxes && 'sv-table--checks', className)}>
       <div className="sv-table__scroll">
         <table className="sv-table__table">
           <caption className="sv-visually-hidden">{caption}</caption>
           <thead>
             <tr>
+              {boxes && (
+                <th scope="col" className={cx('sv-table__th sv-table__cell--check', held && 'sv-table__cell--heldcheck')}>
+                  <Checkbox
+                    label={tr.selectAll}
+                    className="sv-table__check"
+                    tabIndex={-1}
+                    checked={selectableKeys.length > 0 && selectedHere === selectableKeys.length}
+                    indeterminate={selectedHere > 0 && selectedHere < selectableKeys.length}
+                    disabled={selectableKeys.length === 0}
+                    onChange={toggleAll}
+                  />
+                </th>
+              )}
               {columns.map((col, colIdx) => (
                 <th
                   key={col.key}
@@ -407,6 +454,40 @@ export function DataTable<Row>({
                   onClick={() => setFocusIdx(idx)}
                   onDoubleClick={() => onRowOpen?.(row)}
                 >
+                  {boxes && (
+                    <td
+                      className={cx('sv-table__td sv-table__cell--check', held && 'sv-table__cell--heldcheck')}
+                      /* ⇧-click ranges, exactly as ⇧-Space does. Read at pointer-down:
+                         the click a <label> forwards to its input drops the modifier. */
+                      onPointerDown={(e) => {
+                        shiftHeld.current = e.shiftKey;
+                        /* ⇧ + pointer would otherwise start a text selection. */
+                        if (e.shiftKey) e.preventDefault();
+                      }}
+                      /* Chromium does not forward a ⇧-click on a <label> to its
+                         input at all, so the cell takes the range itself. Adding
+                         a range is idempotent, so a browser that DOES forward it
+                         lands on the same set. */
+                      onClick={(e) => {
+                        if (!e.shiftKey) return;
+                        e.preventDefault();
+                        toggleSelect(idx, true);
+                        setFocusIdx(idx);
+                      }}
+                    >
+                      <Checkbox
+                        label={tr.selectRow(rowLabel ? rowLabel(row) : key)}
+                        className="sv-table__check"
+                        tabIndex={-1}
+                        checked={isSelected}
+                        disabled={!canSelect(row)}
+                        onChange={() => {
+                          toggleSelect(idx, shiftHeld.current);
+                          setFocusIdx(idx);
+                        }}
+                      />
+                    </td>
+                  )}
                   {columns.map((col, colIdx) => (
                     <td
                       key={col.key}
@@ -451,6 +532,7 @@ export function DataTable<Row>({
                     total.strong && 'sv-table__footrow--strong',
                   )}
                 >
+                  {boxes && <td className="sv-table__td sv-table__cell--check" />}
                   {columns.map((col, colIdx) =>
                     colIdx === 0 ? (
                       /* scope="row": the label names its row, exactly as a

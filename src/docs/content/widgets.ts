@@ -658,13 +658,17 @@ const active = query !== '' || status !== 'all';
           { name: 'page', type: '{ from, to, of, onPrev?, onNext? }', description: 'Mono "1–50 OF 248" + ghost prev/next. No numbered pill walk.' },
           { name: 'totals', type: 'TotalsRow[]', description: 'v0.6 · a real <code>&lt;tfoot&gt;</code>: { label, cells (keyed by column key), strong? }. Outside the row, focus, selection and pagination models.' },
           { name: 'leadHold', type: 'boolean', description: 'v0.6 · holds the first column while the rest scrolls. IGNORED unless that column is <code>kind: "id"</code>.' },
+          { name: 'rowSync', type: "(row) => 'unsaved' | 'saving' | 'failed' | undefined", description: 'v0.10 · states that a row\'s change has not landed, as a mono word + 6px dot under its identity. Undefined says nothing.' },
+          { name: 'rowLabel', type: '(row) => string', defaultValue: 'rowKey', description: 'v0.10 · names each row\'s selection box: "Select INV-2291".' },
+          { name: 'isRowSelectable', type: '(row) => boolean', description: 'v0.10 · rows that may not be selected (the workspace owner); their box is disabled and ⇧-ranges skip them.' },
         ],
       },
       {
         component: 'SelectionHead',
         rows: [
           { name: 'count', type: 'number', description: 'Selected rows. Rendered mono and tabular.' },
-          { name: 'noun', type: 'string', description: 'The object, singular ("invoice") — pluralised for the count.' },
+          { name: 'noun', type: 'string', description: 'The object, singular ("invoice").' },
+          { name: 'nounPlural', type: 'string', defaultValue: 'noun + "s" (English only)', description: 'v0.10 · the plural form ("invoices", "statuses"). The form is chosen by the locale\'s plural rules, never by appending "s".' },
           { name: 'onClear', type: '() => void', description: 'Backs the always-present "Clear" action.' },
           { name: 'actions', type: 'ReactNode', description: 'The verbs, as Buttons. Keep to three; the fourth belongs in a Menu (B20).' },
         ],
@@ -675,6 +679,7 @@ const active = query !== '' || status !== 'all';
           { name: 'filters', type: 'ActiveFilter[]', description: '{ label, value } pairs, rendered as running mono text.' },
           { name: 'onClearAll', type: '() => void', description: 'The single clear affordance — filters are not individually dismissible.' },
           { name: 'count', type: 'string', description: 'Optional lead, e.g. "12 of 248". Rendered first, tabular.' },
+          { name: 'savedView', type: 'SavedView', description: 'v0.10 · { name, drifted, onSave?, onReset? } — states drift from a saved view in the same live line, with Reset and Save view.' },
         ],
       },
       {

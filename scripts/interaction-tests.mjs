@@ -237,6 +237,50 @@ for (const locale of ['en', 'ar']) {
   await page.close();
 }
 
+/* ---------------------------------------------- DataTable pointer selection */
+{
+  const page = await open('/components/data-table');
+  const table = page.locator('.sv-table--checks').first();
+  check('DataTable: selectable tables draw a checkbox column', (await table.count()) === 1);
+  const all = table.locator('thead input[type=checkbox]');
+  const allBox = table.locator('thead .sv-check');
+  const rows = table.locator('tbody tr');
+  const box = (i) => rows.nth(i).locator('input[type=checkbox]');
+  /* A reader clicks the drawn box (the label), not the hidden input. */
+  const hit = (i) => rows.nth(i).locator('.sv-check');
+  await hit(0).click();
+  check('DataTable: clicking a row box selects the row', (await rows.nth(0).getAttribute('aria-selected')) === 'true');
+  check('DataTable: select-all is indeterminate with part of the set selected', await all.evaluate((el) => el.indeterminate));
+  await hit(2).click({ modifiers: ['Shift'] });
+  check('DataTable: ⇧-click selects the range', (await rows.nth(1).getAttribute('aria-selected')) === 'true');
+  await allBox.click();
+  const n = await rows.count();
+  let allSel = true;
+  for (let i = 0; i < n; i++) if ((await rows.nth(i).getAttribute('aria-selected')) !== 'true') allSel = false;
+  check('DataTable: select-all selects every row', allSel);
+  await allBox.click();
+  check('DataTable: select-all again clears the set', (await rows.nth(0).getAttribute('aria-selected')) === 'false');
+  check('DataTable: row boxes stay out of the tab order', (await box(0).getAttribute('tabindex')) === '-1');
+  /* The keyboard model is unchanged: Space on the focused ROW selects it once. */
+  await rows.nth(0).focus();
+  await page.keyboard.press('Space');
+  check('DataTable: Space on the row still selects (once)', (await rows.nth(0).getAttribute('aria-selected')) === 'true');
+  check('DataTable page: no runtime errors', page.errors.length === 0, page.errors.join(' | '));
+  await page.close();
+}
+{
+  const page = await open('/templates/settings-team');
+  const owner = page.locator('.sv-table--checks tbody tr').first().locator('input[type=checkbox]');
+  check('settings-team: the owner row cannot be selected', await owner.isDisabled());
+  const select = page.locator('select[aria-label^="Role for"]').first();
+  await select.focus();
+  const before = await page.evaluate(() => document.activeElement?.tagName);
+  await page.keyboard.press('ArrowDown');
+  const after = await page.evaluate(() => document.activeElement?.tagName);
+  check('settings-team: arrow keys in a cell control stay with the control', before === 'SELECT' && after === 'SELECT', `${before} → ${after}`);
+  await page.close();
+}
+
 /* ------------------------------------------------------- Templates register */
 for (const slug of ['crm-deal', 'settings-team']) {
   const page = await open(`/templates/${slug}`, { locale: 'ar' });
