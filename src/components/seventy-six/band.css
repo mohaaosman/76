@@ -44,11 +44,11 @@
      the drawer (A2) and the rule has nothing left to centre — which is why it
      needs no breakpoint of its own. */
   .sv-band__topbar-inner--centred .sv-band__nav {
-    margin-left: auto;
+    margin-inline-start: auto;
   }
 
   .sv-band__topbar-inner--centred .sv-band__utilities {
-    margin-left: auto;
+    margin-inline-start: auto;
   }
 
   .sv-band__wordmark {
@@ -66,8 +66,8 @@
   }
 
   .sv-band__appname {
-    padding-left: var(--sv-s3);
-    border-left: 1px solid var(--sv-band-line);
+    padding-inline-start: var(--sv-s3);
+    border-inline-start: 1px solid var(--sv-band-line);
     font-size: 13px;
     font-weight: 600;
     color: var(--sv-band-soft);
@@ -116,8 +116,8 @@
   .sv-band__navlink--active::after {
     content: '';
     position: absolute;
-    left: 0;
-    right: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
     bottom: -1px;
     height: 2px;
     background: var(--sv-seed);
@@ -135,7 +135,7 @@
     display: flex;
     align-items: center;
     gap: var(--sv-s3);
-    margin-left: auto;
+    margin-inline-start: auto;
   }
 
   /* ---- SubTabs ---- */
@@ -174,8 +174,8 @@
   .sv-band__subtab--active::after {
     content: '';
     position: absolute;
-    left: 0;
-    right: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
     bottom: -1px;
     height: 2px;
     background: var(--sv-seed);
@@ -233,7 +233,7 @@
   .sv-band__drawerlink {
     display: block;
     padding: var(--sv-s3);
-    border-left: 2px solid transparent;
+    border-inline-start: 2px solid transparent;
     font-size: 14px;
     font-weight: 500;
     color: var(--sv-ink);
@@ -248,13 +248,13 @@
   /* Same non-colour cue as the horizontal row: weight 700 plus a 2px
      seed rule, here on the leading edge. aria-current does the rest (C5). */
   .sv-band__drawerlink--active {
-    border-left-color: var(--sv-seed-line);
+    border-inline-start-color: var(--sv-seed-line);
     font-weight: 700;
   }
 
   /* The active section's children, indented under their parent. */
   .sv-band__drawersublist {
-    padding-left: var(--sv-s6);
+    padding-inline-start: var(--sv-s6);
     padding-bottom: var(--sv-s2);
   }
 

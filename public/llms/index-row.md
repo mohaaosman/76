@@ -19,7 +19,7 @@ A row of cells divided by vertical hairlines, each carrying a display-face ordin
 
 A real `<nav>` around an `<ol>`. Ordered, because the ordinals are the point — an `<ol>` makes them meaning rather than decoration — and the ordinal is derived from POSITION, never passed in. A hand-written number drifts the moment a section is inserted, and a contents page that miscounts itself is worse than an unnumbered one.
 
-**The boundary against B1.** `BandNav` is the app's navigation: always present, `aria-current` on the active item, the thing you move with. IndexRow appears <i>once</i>, on the page that indexes the others, and it states what exists. A product screen never carries one.
+**The boundary against B1.** `BandNav` is the app's navigation: always present, `aria-current` on the active item, the thing you move with. IndexRow appears _once_, on the page that indexes the others, and it states what exists. A product screen never carries one.
 
 ## Examples
 

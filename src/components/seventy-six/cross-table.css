@@ -1,0 +1,124 @@
+/* B60 · CrossTable — one measure, two dimensions, every figure stated.
+   B7's voice; no colour scale; the row-header column holds while the
+   intersections scroll under it. Full-bleed like B7: no inset of its own. */
+
+@layer sv-components {
+  /* The scroll region. Never reflows — at 320px the reader scrolls, and the
+     row header stays put so they never lose which row they are on. */
+  .sv-cross {
+    overflow-x: auto;
+  }
+
+  .sv-cross:focus-visible {
+    outline: 2px solid var(--sv-seed);
+    outline-offset: 2px;
+  }
+
+  .sv-cross__table {
+    inline-size: 100%;
+    border-collapse: collapse;
+  }
+
+  .sv-cross__corner,
+  .sv-cross__colhead {
+    padding-block: var(--sv-s2);
+    padding-inline: 18px;
+    border-block-end: 1px solid var(--sv-line);
+    font-size: 9.5px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: var(--sv-ink-soft);
+    white-space: nowrap;
+  }
+
+  .sv-cross__corner {
+    text-align: start;
+  }
+
+  .sv-cross__colhead {
+    text-align: end;
+  }
+
+  .sv-cross__rowhead,
+  .sv-cross__cell {
+    padding-block: var(--sv-row-y);
+    padding-inline: 18px;
+    border-block-end: 1px solid var(--sv-line);
+    font-size: var(--sv-body-size);
+    color: var(--sv-ink);
+  }
+
+  .sv-cross__row:last-child > .sv-cross__rowhead,
+  .sv-cross__row:last-child > .sv-cross__cell {
+    border-block-end: 0;
+  }
+
+  .sv-cross__rowhead {
+    font-weight: 500;
+    text-align: start;
+    white-space: nowrap;
+  }
+
+  .sv-cross__code {
+    margin-inline-end: var(--sv-s2);
+    font-size: 11px;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-cross__cell {
+    font-weight: 600;
+    text-align: end;
+    white-space: nowrap;
+  }
+
+  /* An absent intersection, not a zero. Soft, because the dash only says
+     "nothing here" and its accessible label carries that in words. */
+  .sv-cross__empty {
+    color: var(--sv-ink-soft);
+    font-weight: 400;
+  }
+
+  /* The ONE marked cell: bold ink on the seed tint. Weight is the non-colour
+     cue (C5); the figure stays ink (F14). */
+  .sv-cross__cell--marked {
+    background: var(--sv-seed-tint);
+    font-weight: 700;
+  }
+
+  /* The held column. Paper, because the intersections scroll UNDER it and a
+     transparent held cell prints two columns on top of each other; the seam
+     is the one vertical rule in the table. */
+  .sv-cross__hold {
+    position: sticky;
+    inset-inline-start: 0;
+    z-index: var(--sv-z-sticky);
+    background-color: var(--sv-paper);
+    border-inline-end: 1px solid var(--sv-line);
+  }
+
+  /* Totals: the column and the row each sit behind a stronger rule — B7's
+     totals rule — and their figures carry the 700. */
+  .sv-cross__totalcol {
+    border-inline-start: 1px solid var(--sv-field-line-strong);
+  }
+
+  .sv-cross__total {
+    font-weight: 700;
+  }
+
+  .sv-cross__footrow > .sv-cross__cell,
+  .sv-cross__footlabel {
+    border-block-start: 1px solid var(--sv-field-line-strong);
+    border-block-end: 0;
+  }
+
+  .sv-cross__footlabel {
+    padding-block: var(--sv-row-y);
+    padding-inline: 18px;
+    text-align: start;
+    font-size: 9.5px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: var(--sv-ink);
+  }
+}

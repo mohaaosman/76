@@ -58,6 +58,9 @@ const CARD_DIRECT_CHILD_FULL_BLEED = new Set([
   'ActivityList',    /* B9 · hairline rows, edge to edge */
   'DescriptionList', /* B28 · hairline pairs, edge to edge */
   'Accordion',       /* B27 · hairline sections, edge to edge */
+  'EntryTable',      /* B53 · B7's cells, its 18px inline inset included */
+  'TreeTable',       /* B59 · treegrid rows, edge to edge */
+  'CrossTable',      /* B60 · a matrix with B7's cell inset */
 ]);
 
 /* SELF-PADDED is a claim about a DECLARATION — "this component carries its own

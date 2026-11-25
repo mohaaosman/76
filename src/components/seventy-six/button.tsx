@@ -1,6 +1,7 @@
 import { forwardRef, useLayoutEffect, useRef, useState } from 'react';
 import type { ButtonHTMLAttributes, AnchorHTMLAttributes, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import './button.css';
 
 /**
@@ -29,7 +30,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     variant = 'primary',
     pos = false,
     isLoading = false,
-    loadingLabel = 'Working…',
+    loadingLabel: loadingLabelProp,
     iconLeading,
     className,
     children,
@@ -38,6 +39,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   },
   ref,
 ) {
+  const tr = useStrings();
+  const loadingLabel = loadingLabelProp ?? tr.working;
   const innerRef = useRef<HTMLButtonElement | null>(null);
   const [lockedWidth, setLockedWidth] = useState<number>();
 

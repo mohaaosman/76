@@ -16,11 +16,14 @@ import '@/styles/tokens.css';
 import '@/styles/base.css';
 import './site/site.css';
 import { App } from './App';
+import { SiteLocaleProvider } from './site/site-i18n';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <SiteLocaleProvider>
+        <App />
+      </SiteLocaleProvider>
     </BrowserRouter>
   </React.StrictMode>,
 );

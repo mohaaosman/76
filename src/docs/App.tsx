@@ -22,6 +22,7 @@ const TemplatesPage = page('TemplatesPage', () => import('./site/pages/templates
 const TemplateViewPage = page('TemplateViewPage', () => import('./site/pages/template-view'));
 const RoadmapPage = page('RoadmapPage', () => import('./site/pages/roadmap'));
 const AiPage = page('AiPage', () => import('./site/pages/ai'));
+const PlaygroundPage = page('PlaygroundPage', () => import('./site/pages/playground'));
 
 const pageRoutes: Record<string, string> = {
   home: '/',
@@ -30,6 +31,7 @@ const pageRoutes: Record<string, string> = {
   templates: '/templates',
   roadmap: '/roadmap',
   ai: '/ai',
+  playground: '/playground',
 };
 
 const pageItems: CommandItem[] = [
@@ -39,6 +41,7 @@ const pageItems: CommandItem[] = [
   { id: 'templates', group: 'PAGES', label: 'Templates', hint: 'SCREENS' },
   { id: 'roadmap', group: 'PAGES', label: 'Roadmap', hint: 'PLAN' },
   { id: 'ai', group: 'PAGES', label: 'AI-ready layer', hint: 'LLMS.TXT' },
+  { id: 'playground', group: 'PAGES', label: 'Playground', hint: 'THEME · LANGUAGE' },
 ];
 
 /**
@@ -120,6 +123,7 @@ export function App() {
             <Route path="/templates" element={<TemplatesPage />} />
             <Route path="/roadmap" element={<RoadmapPage />} />
             <Route path="/ai" element={<AiPage />} />
+            <Route path="/playground" element={<PlaygroundPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
           <Route path="/templates/:slug" element={<TemplateViewPage />} />

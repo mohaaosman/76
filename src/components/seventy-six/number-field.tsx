@@ -1,6 +1,7 @@
 import { forwardRef, useId, useState } from 'react';
 import type { InputHTMLAttributes } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import './number-field.css';
 
 /**
@@ -46,6 +47,7 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
   },
   ref,
 ) {
+  const tr = useStrings();
   const auto = useId();
   const id = explicitId ?? auto;
   const hintId = `${id}-hint`;
@@ -85,7 +87,7 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
           className="sv-numfield__step"
           onClick={() => nudge(-step)}
           disabled={disabled || value <= min}
-          aria-label={`Decrease ${label.toLowerCase()}`}
+          aria-label={tr.decrease(label)}
         >
           <span aria-hidden="true">−</span>
         </button>
@@ -121,7 +123,7 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
           className="sv-numfield__step"
           onClick={() => nudge(step)}
           disabled={disabled || value >= max}
-          aria-label={`Increase ${label.toLowerCase()}`}
+          aria-label={tr.increase(label)}
         >
           <span aria-hidden="true">+</span>
         </button>

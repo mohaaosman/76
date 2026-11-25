@@ -35,11 +35,12 @@ const tokensItem = {
   type: 'registry:theme',
   title: '76° tokens',
   description:
-    'The 76° foundation: tokens.css (the only file allowed to contain color literals), base.css (reset, focus contract, mono/tabular utilities), and the cx class combiner.',
+    'The 76° foundation: tokens.css (the only file allowed to contain color literals), base.css (reset, focus contract, mono/tabular utilities, the script layer), the cx class combiner, and i18n (LocaleProvider, the built-in string catalogs en/fr/ar/so, direction helpers, caller-layer formatters).',
   files: [
     await fileEntry('styles/tokens.css'),
     await fileEntry('styles/base.css'),
     await fileEntry('lib/cx.ts'),
+    await fileEntry('lib/i18n.tsx'),
   ],
   meta: {
     system: '76° — Seventy Six Degrees',

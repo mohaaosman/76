@@ -1,6 +1,7 @@
 import { useId, useRef } from 'react';
 import type { KeyboardEvent } from 'react';
 import { cx } from '@/lib/cx';
+import { inlineStep, useDirection } from '@/lib/i18n';
 import './card-tabs.css';
 
 /**
@@ -28,6 +29,7 @@ export interface CardTabsProps {
 }
 
 export function CardTabs({ tabs, active, onChange, mode = 'tabs', idBase, className }: CardTabsProps) {
+  const dir = useDirection();
   const autoId = useId();
   const base = idBase ?? autoId;
   const listRef = useRef<HTMLDivElement>(null);
@@ -36,8 +38,9 @@ export function CardTabs({ tabs, active, onChange, mode = 'tabs', idBase, classN
     if (mode !== 'tabs') return;
     const idx = tabs.findIndex((t) => t.id === active);
     let next = -1;
-    if (e.key === 'ArrowRight') next = (idx + 1) % tabs.length;
-    if (e.key === 'ArrowLeft') next = (idx - 1 + tabs.length) % tabs.length;
+    /* ← and → follow the reading direction: in RTL the next tab is to the left. */
+    const step = inlineStep(e.key, dir);
+    if (step !== 0) next = (idx + step + tabs.length) % tabs.length;
     if (e.key === 'Home') next = 0;
     if (e.key === 'End') next = tabs.length - 1;
     if (next >= 0) {

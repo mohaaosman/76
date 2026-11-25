@@ -386,4 +386,12 @@
       transition: none;
     }
   }
+
+  /* The plot keeps a left-to-right time axis on every page — the convention
+     financial and analytics screens in RTL languages already follow — so a
+     series reads the same in a translated report as in its source. The
+     readouts and legend around it are copy, and those still mirror. */
+  .sv-trend__plotwrap {
+    direction: ltr;
+  }
 }

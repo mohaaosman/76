@@ -2,6 +2,7 @@ import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { Button } from './button';
 import './popover.css';
+import { useStrings } from '@/lib/i18n';
 
 /**
  * B42 · Popover — a small non-modal panel holding SECONDARY content beside
@@ -107,6 +108,7 @@ export function Popover({
   children,
   className,
 }: PopoverProps) {
+  const tr = useStrings();
   const id = useId();
   const panelId = `${id}-panel`;
   const btnId = `${id}-btn`;
@@ -163,7 +165,7 @@ export function Popover({
             <button
               type="button"
               className="sv-btn sv-btn--link"
-              aria-label={`Close ${title ?? label}`}
+              aria-label={tr.close(title ?? label)}
               onClick={() => panelRef.current?.hidePopover()}
             >
               Close

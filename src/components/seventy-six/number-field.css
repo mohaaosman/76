@@ -9,7 +9,7 @@
 
   .sv-numfield__input {
     width: 88px;
-    text-align: right;
+    text-align: end;
     font-weight: 600;
     /* The native spinners duplicate the − / + pair and cannot be styled
        to system; the pair replaces them. */

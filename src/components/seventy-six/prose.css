@@ -181,12 +181,12 @@
   /* Real markers, indented enough that a two-digit ordinal still sits inside
      the measure rather than hanging into the page gutter. */
   .sv-prose ul {
-    padding-left: var(--sv-s6);
+    padding-inline-start: var(--sv-s6);
     list-style: disc;
   }
 
   .sv-prose ol {
-    padding-left: var(--sv-s6);
+    padding-inline-start: var(--sv-s6);
     list-style: decimal;
   }
 
@@ -217,7 +217,7 @@
   .sv-prose li > ul,
   .sv-prose li > ol {
     margin: var(--sv-s1) 0 0;
-    padding-left: var(--sv-s5);
+    padding-inline-start: var(--sv-s5);
   }
 
   .sv-prose li li {
@@ -231,8 +231,8 @@
      in the hairline. Italic is legal here for the same reason it is legal on
      <em> — this is body copy. */
   .sv-prose blockquote {
-    padding-left: var(--sv-s4);
-    border-left: 2px solid var(--sv-line);
+    padding-inline-start: var(--sv-s4);
+    border-inline-start: 2px solid var(--sv-line);
     color: var(--sv-ink-soft);
     font-style: italic;
   }
@@ -319,7 +319,7 @@
     font-weight: 400;
     letter-spacing: 0.13em;
     text-transform: uppercase;
-    text-align: left;
+    text-align: start;
     color: var(--sv-ink-soft);
   }
 
@@ -343,12 +343,12 @@
      the paragraphs above it instead of sitting in a shallow inset. */
   .sv-prose th:first-child,
   .sv-prose td:first-child {
-    padding-left: 0;
+    padding-inline-start: 0;
   }
 
   .sv-prose th:last-child,
   .sv-prose td:last-child {
-    padding-right: 0;
+    padding-inline-end: 0;
   }
 
   /* The last rule would fence the table off from the copy below it. */
@@ -396,7 +396,8 @@
   }
 
   .sv-prose dd {
-    margin: var(--sv-s1) 0 0 var(--sv-s5);
+    margin-block: var(--sv-s1) 0;
+    margin-inline: var(--sv-s5) 0;
     color: var(--sv-ink-soft);
   }
 

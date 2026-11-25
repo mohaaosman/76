@@ -66,6 +66,14 @@
 - [SiteFooter](https://76.zifala.com/llms/site-footer.md): The one place a page is allowed to be a list of links. One job: Close a public page with everything it owes the reader.
 - [IndexRow](https://76.zifala.com/llms/index-row.md): The cover's contents strip — numbered sections on vertical hairlines. One job: State a publication's sections as a numbered strip, and link to them.
 - [CaptionRow](https://76.zifala.com/llms/caption-row.md): Up to four short fragments spread across one rule. One job: State up to four short captions across one rule.
+- [EntryTable](https://76.zifala.com/llms/entry-table.md): The typist table — one bounded number per line, posted once. One job: Type one bounded number into every row of a fixed list of lines, and post the lot once.
+- [ScanField](https://76.zifala.com/llms/scan-field.md): The scanner input — one identifier at a time, and what it resolved to. One job: Take one identifier at a time, scanned or typed, and state what the last one resolved to.
+- [JobList](https://76.zifala.com/llms/job-list.md): Your background operations — what became of each, and where it landed. One job: State what became of each background operation this reader started, and where its result landed.
+- [TreeTable](https://76.zifala.com/llms/tree-table.md): The rolled-up table — a hierarchy whose every parent is the sum of its children, on B7's columns. One job: State a hierarchy of rows in which every parent is the sum of its children, across the same numeric columns at every depth.
+- [CrossTable](https://76.zifala.com/llms/cross-table.md): The matrix in figures — one measure at every intersection of two dimensions. One job: State ONE measure at every intersection of two dimensions.
+- [FunnelList](https://76.zifala.com/llms/funnel-list.md): The narrowing — one total through an ordered sequence of steps, on B6's straight bars. One job: State how one total narrows through an ordered sequence of steps.
+- [MessageThread](https://76.zifala.com/llms/message-thread.md): One conversation — every message attributed to a person and marked with its direction, in words. One job: State one conversation as an ordered list of messages, each attributed to a person and marked with its direction.
+- [SettingList](https://76.zifala.com/llms/setting-list.md): Settings that say what they do — a consequence sentence beside the instant-effect control that changes it. One job: State one setting’s consequence beside the instant-effect control that changes it.
 
 ## Blocks
 
@@ -89,6 +97,8 @@ Full screens built only from the taxonomy — install with npx shadcn@latest add
 - Checkout (`template-payment-checkout`, seed signal): A card payment in the shape people expect, refusing what 76° refuses.
 - Purchase order (`template-erp-purchase-order`, seed cobalt): One operational document — its facts, its lines, its history, its verbs.
 - Deal board (`template-crm-deal-board`, seed verdigris): The pipeline as a board — four stage cards, and a deal that moves by a named verb.
+- Deal record (`template-crm-deal`, seed verdigris): One deal opened from its list — its conversation, its facts, its history and its verbs on one page.
+- Team settings (`template-settings-team`, seed cobalt): Administer one workspace’s people — members, roles and pending invitations.
 - ERP dashboard (`template-erp-dashboard`, seed cobalt): A warehouse operations overview — the densest 76° screen.
 - CRM pipeline (`template-crm-pipeline`, seed verdigris): A sales pipeline — stages, momentum, and deals.
 - POS terminal (`template-pos-terminal`, seed signal): A point-of-sale register — scaled up, touch-first.

@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { KeyboardEvent, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import './combobox.css';
 
 /**
@@ -71,18 +72,21 @@ function normalize(s: string) {
 }
 
 export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Combobox(props, ref) {
+  const tr = useStrings();
   const {
     label,
     options,
     hint,
     error,
     required,
-    placeholder = 'Type to search',
-    emptyText = 'No matching options.',
+    placeholder: placeholderProp,
+    emptyText: emptyTextProp,
     disabled,
     id: explicitId,
     className,
   } = props;
+  const placeholder = placeholderProp ?? tr.typeToSearch;
+  const emptyText = emptyTextProp ?? tr.noMatches;
 
   /* Narrow once, here: past this line the two modes never share a shape. */
   const multi = props.multiple === true ? props : null;
@@ -377,7 +381,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
           <button
             type="button"
             className="sv-btn sv-btn--link"
-            aria-label={`Clear ${label}`}
+            aria-label={tr.clearField(label)}
             onClick={() => {
               emit([]);
               inputRef.current?.focus();

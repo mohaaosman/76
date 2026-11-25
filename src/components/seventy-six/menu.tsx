@@ -1,6 +1,7 @@
 import { useId } from 'react';
 import type { KeyboardEvent, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import { Button } from './button';
 import type { ButtonVariant } from './button';
 import { usePopoverAnchor } from './popover';
@@ -36,6 +37,7 @@ interface MenuPanelProps {
 }
 
 function MenuPanel({ id, items, labelledBy, onClose, panelRef, align }: MenuPanelProps) {
+  const tr = useStrings();
   const actionable = items.filter((i): i is MenuItemSpec => i !== 'separator' && !i.disabled);
 
   function focusItem(delta: number) {
@@ -113,7 +115,7 @@ function MenuPanel({ id, items, labelledBy, onClose, panelRef, align }: MenuPane
           </button>
         ),
       )}
-      {actionable.length === 0 && <p className="sv-menu__empty">No actions available.</p>}
+      {actionable.length === 0 && <p className="sv-menu__empty">{tr.noActions}</p>}
     </div>
   );
 }
@@ -203,12 +205,14 @@ export function SplitButton({
   onClick,
   items,
   variant = 'primary',
-  menuLabel = 'More ways to ' + label.toLowerCase(),
+  menuLabel: menuLabelProp,
   isLoading,
   loadingLabel,
   disabled,
   className,
 }: SplitButtonProps) {
+  const tr = useStrings();
+  const menuLabel = menuLabelProp ?? tr.moreWaysTo(label);
   const id = useId();
   const menuId = `${id}-menu`;
   const btnId = `${id}-btn`;

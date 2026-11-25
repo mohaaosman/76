@@ -20,7 +20,7 @@ export type { MeterItem } from './meter-list';
 export { DistributionStrip } from './distribution-strip';
 export type { DistributionPart, DistributionStripProps } from './distribution-strip';
 export { DataTable, SelectionHead, FilterLine, FilterBar } from './data-table';
-export type { Column, SelectionHeadProps, FilterLineProps, FilterBarProps, ActiveFilter } from './data-table';
+export type { Column, SelectionHeadProps, FilterLineProps, FilterBarProps, ActiveFilter, SavedView, RowSync } from './data-table';
 export { CardTabs } from './card-tabs';
 export type { CardTab } from './card-tabs';
 export { Tabs, TabPanel } from './tabs';
@@ -119,3 +119,43 @@ export { Tooltip } from './tooltip';
    SumList builds ONE total from its lines. */
 export { SumList } from './sum-list';
 export type { SumListProps, SumRow } from './sum-list';
+
+/* v0.10 · the 0.7 surface — posting the work. A reader becomes a writer:
+   type a bounded number into every line, take one identifier at a time,
+   and state what became of the job the reader started. */
+export { EntryTable } from './entry-table';
+export type { EntryColumn, EntryTotalsRow, EntrySync, EntryTableProps } from './entry-table';
+export { ScanField } from './scan-field';
+export type { ScanFieldProps, ScanResult, ScanTone } from './scan-field';
+export { JobList } from './job-list';
+export type { Job, JobState, JobListProps } from './job-list';
+
+/* v0.10 · the 0.8 surface — the number in relation: a hierarchy that rolls
+   up, a second dimension, and a total that narrows step by step. */
+export { TreeTable } from './tree-table';
+export type { TreeTableColumn, TreeTableNode, TreeTableTotal, TreeTableProps } from './tree-table';
+export { CrossTable } from './cross-table';
+export type { CrossAxisItem, CrossTableProps } from './cross-table';
+export { FunnelList } from './funnel-list';
+export type { FunnelStep, FunnelListProps } from './funnel-list';
+
+/* v0.10 · the 0.9 surface — the record and the console. */
+export { MessageThread } from './message-thread';
+export type { MessageThreadProps, ThreadMessage, ThreadAttachment, MessageDirection } from './message-thread';
+export { SettingList } from './setting-list';
+export type { SettingListProps, SettingRow, SettingControl } from './setting-list';
+
+/* v0.10 · the language layer. Every built-in word, every direction. */
+export {
+  LocaleProvider,
+  useStrings,
+  useLocale,
+  useDirection,
+  useFormat,
+  createFormatters,
+  directionOf,
+  inlineStep,
+  catalogs,
+  localeNames,
+} from '@/lib/i18n';
+export type { SvMessages, Direction, Formatters, ShippedLocale, LocaleProviderProps } from '@/lib/i18n';

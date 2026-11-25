@@ -19,10 +19,12 @@ import { InvoiceCheckout } from '@/templates/invoice-checkout';
 import { PaymentCheckout } from '@/templates/payment-checkout';
 import { ErpPurchaseOrder } from '@/templates/erp-purchase-order';
 import { CrmDealBoard } from '@/templates/crm-deal-board';
+import { CrmDeal } from '@/templates/crm-deal';
 import { ErpDashboard } from '@/templates/erp-dashboard';
 import { CrmPipeline } from '@/templates/crm-pipeline';
 import { PosTerminal } from '@/templates/pos-terminal';
 import { SettingsAccount } from '@/templates/settings-account';
+import { SettingsTeam } from '@/templates/settings-team';
 import { AiControlCenter } from '@/templates/ai-control-center';
 import { AnalyticsOverview } from '@/templates/analytics-overview';
 import { AuthSignIn } from '@/templates/auth-sign-in';
@@ -46,10 +48,12 @@ import invoiceCheckoutSrc from '@/templates/invoice-checkout.tsx?raw';
 import paymentCheckoutSrc from '@/templates/payment-checkout.tsx?raw';
 import erpPurchaseOrderSrc from '@/templates/erp-purchase-order.tsx?raw';
 import crmDealBoardSrc from '@/templates/crm-deal-board.tsx?raw';
+import crmDealSrc from '@/templates/crm-deal.tsx?raw';
 import erpDashboardSrc from '@/templates/erp-dashboard.tsx?raw';
 import crmPipelineSrc from '@/templates/crm-pipeline.tsx?raw';
 import posTerminalSrc from '@/templates/pos-terminal.tsx?raw';
 import settingsAccountSrc from '@/templates/settings-account.tsx?raw';
+import settingsTeamSrc from '@/templates/settings-team.tsx?raw';
 import aiControlCenterSrc from '@/templates/ai-control-center.tsx?raw';
 import analyticsOverviewSrc from '@/templates/analytics-overview.tsx?raw';
 import authSignInSrc from '@/templates/auth-sign-in.tsx?raw';
@@ -79,10 +83,12 @@ export const compositionRender: Record<string, CompositionRender> = {
   'payment-checkout': { Component: PaymentCheckout, source: paymentCheckoutSrc },
   'erp-purchase-order': { Component: ErpPurchaseOrder, source: erpPurchaseOrderSrc },
   'crm-deal-board': { Component: CrmDealBoard, source: crmDealBoardSrc },
+  'crm-deal': { Component: CrmDeal, source: crmDealSrc },
   'erp-dashboard': { Component: ErpDashboard, source: erpDashboardSrc },
   'crm-pipeline': { Component: CrmPipeline, source: crmPipelineSrc },
   'pos-terminal': { Component: PosTerminal, source: posTerminalSrc },
   'settings-account': { Component: SettingsAccount, source: settingsAccountSrc },
+  'settings-team': { Component: SettingsTeam, source: settingsTeamSrc },
   'ai-control-center': { Component: AiControlCenter, source: aiControlCenterSrc },
   'analytics-overview': { Component: AnalyticsOverview, source: analyticsOverviewSrc },
   'auth-sign-in': { Component: AuthSignIn, source: authSignInSrc },

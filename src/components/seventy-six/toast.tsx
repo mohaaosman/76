@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import './toast.css';
 
 /**
@@ -80,6 +81,7 @@ const TONE_ICONS: Record<ToastTone, ReactNode> = {
 };
 
 export function ToastProvider({ children }: { children: ReactNode }) {
+  const tr = useStrings();
   const [items, setItems] = useState<ToastItem[]>([]);
   const nextId = useRef(1);
   const timers = useRef(new Map<number, { handle: number; remaining: number; started: number }>());
@@ -141,7 +143,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={api}>
       {children}
-      <div className="sv-toaster" aria-label="Notifications">
+      <div className="sv-toaster" aria-label={tr.notifications}>
         {items.map((t) => (
           <div
             key={t.id}
@@ -160,7 +162,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             <button
               type="button"
               className="sv-toast__dismiss"
-              aria-label={`Dismiss: ${t.title}`}
+              aria-label={tr.dismiss(t.title)}
               onClick={() => remove(t.id)}
             >
               <svg viewBox="0 0 10 10" width="10" height="10" aria-hidden="true">

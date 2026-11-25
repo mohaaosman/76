@@ -12,6 +12,29 @@ interface Phase {
 const ROADMAP: Phase[] = [
   {
     title: 'Shipped',
+    note: 'v0.10.0 · the roadmap, finished — and every language',
+    items: [
+      { t: 'Posting the work (0.7)', d: '<b>EntryTable (B53)</b> types one bounded number into every line and posts the lot once — Enter moves down, never submits. <b>ScanField (B54)</b> takes one identifier at a time and states what it resolved to. <b>JobList (B58)</b> states what became of a background job and where its result landed. B7 gains <code>rowSync</code>: a word and a 6px dot for a row whose save has not landed.' },
+      { t: 'Density, as a posture', d: '<code>data-density="compact | regular | touch"</code> on a wrapper, resolved at the nearest declaration exactly as <code>data-seed</code> and <code>data-mode</code> are. It re-tokenizes three things — row inset, control inset, control minimum — and the touch posture takes B10’s POS numbers, so the bespoke variant becomes the posture.' },
+      { t: 'The number in relation (0.8)', d: '<b>TreeTable (B59)</b>, a hierarchy whose every parent is the sum of its children, on a real treegrid. <b>CrossTable (B60)</b>, one measure at every intersection of two dimensions — in figures, never a heatmap. <b>FunnelList (B61)</b>, one total narrowing step by step, on straight bars. <b>Delta</b> gains <code>against</code>, so no delta is an unsourced assertion, and <b>FilterLine</b> states when the view has drifted from the saved one.' },
+      { t: 'The record and the console (0.9)', d: '<b>MessageThread (B62)</b>, a conversation with direction stated in words. <b>SettingList (B63)</b>, the settable twin of B28 — every control beside the sentence that says what it does. Two templates: <b>crm-deal</b> and <b>settings-team</b>, the first administration console in the set.' },
+      { t: 'The language layer', d: '<code>LocaleProvider</code> carries every built-in word the components speak — "Clear all", "Close Purchase order", "Digit 3 of 6" — in English, French, Arabic and Somali, with real plural rules. No provider, no change. <code>useFormat()</code> gives the <i>caller</i> Intl-backed money, number and date strings, so C9 stands: no component formats a figure.' },
+      { t: 'The LTR boundary, repealed', d: 'Every component stylesheet is on logical properties, arrow keys follow the reading direction, drawers open from <code>start</code>/<code>end</code>, and a script layer keeps Arabic letters joined — no tracking, and a mono stack that falls through to a proportional face for the script while IDs stay mono. Code, PIN codes and the chart’s time axis stay left to right, on purpose.' },
+      { t: 'From Exploring', d: 'The <b>Iris</b> health seed through the seed rule (6.35:1 both ways, dark text 6.06:1). The <b>playground</b> — seed, mode, density, motion and language, live, on one real screen. And the <code>indeterminate</code> Checkbox the 0.6 review named.' },
+      { t: 'Defects fixed on the way', d: 'Placeholders were <code>--sv-ink-faint</code> (2.6:1) against the system’s own C2 rule; they are ink-soft now. <b>Field</b> and <b>Select</b> silently dropped a caller’s <code>aria-describedby</code>. Doc prose written with <code>&lt;i&gt;</code> printed the tags.' },
+    ],
+  },
+  {
+    title: 'Shipped',
+    note: 'v0.6 – v0.9 · promises kept, motion, the cover',
+    items: [
+      { t: 'The promises already made (0.6)', d: '<b>ErrorSummary (B52)</b>, DataTable <code>totals</code> and <code>leadHold</code>, the printed surface in tokens only, and the <b>erp-purchase-order</b> and <b>crm-deal-board</b> templates.' },
+      { t: 'Motion and money (0.7)', d: 'The opt-in motion posture, <code>useCountUp</code>, <b>SumList (B55)</b>, and the invoice and checkout templates.' },
+      { t: 'The cover (0.8 – 0.9)', d: '<b>IndexRow (B56)</b>, <b>CaptionRow (B57)</b>, the issue-scale Masthead, clean URLs, and the moving surface reaching the widgets.' },
+    ],
+  },
+  {
+    title: 'Shipped',
     note: 'v0.5.0 · the public surface',
     items: [
       { t: 'Not one refusal repealed', d: 'No photography, no illustration, no 3D, no logo cloud. <b>F11 survived the surface it was written against</b>, which is how a refusal proves it was right. What changed is the type ramp, and nothing else.' },
@@ -61,54 +84,14 @@ const ROADMAP: Phase[] = [
     ],
   },
   {
-    title: 'Next',
-    note: 'v0.6.0 · the promises already made',
-    items: [
-      { t: 'The gaps are the Book’s own binding text', d: 'Six independent inventories — ERP, CRM, finance, admin, analytics, platform — produced 47 candidates; 25 survived an adversarial vet. What stops a build hardest is not a missing idea but <b>a mandate with nothing behind it</b>.' },
-      { t: 'ErrorSummary (B52)', d: 'B11 mandates a top-of-form error summary linking to each failed field, and it is not in the barrel. Index a failed submit as one list of links to the fields that caused it.' },
-      { t: 'DataTable totals and leadHold (B7)', d: 'The closing row every ledger, invoice and transfer ends with — a real <code>&lt;tfoot&gt;</code>, outside the row, focus, selection and pagination models — and the identity column that today slides away at column seven of a wide line table. <b>F3 stands</b>: it refuses a table the reader rearranges, and neither of these lets the reader rearrange anything.' },
-      { t: 'The printed surface', d: 'C7 promises tables scroll and never truncate, and there is not one <code>@media print</code> rule in the repository. Specified the way dark was — <b>tokens only</b>, and a component that branches on the medium is a defect.' },
-      { t: 'Two templates', d: '<b>erp-purchase-order</b>, the record page thirteen shipped templates never drew, and <b>crm-deal-board</b>, which makes F2’s citation true — the Kanban widget stays refused, and only the screen ships.' },
-    ],
-  },
-  {
-    title: 'Planned',
-    note: 'v0.7.0 · posting the work',
-    items: [
-      { t: 'The system reads an operation; it cannot run one', d: 'B7 is a reader by spec — <code>render</code> returns a node, Enter opens the row, Space selects it, which are the two keys a typist presses most. The act with no vocabulary is the one a clerk performs forty times an hour.' },
-      { t: 'EntryTable (B53) · ScanField (B54)', d: 'Type one bounded number into every row of a fixed list and post the lot once. Take one identifier at a time, scanned or typed, and state what the last one resolved to.' },
-      { t: 'SumList (B55)', d: 'The invoice footer, and B44’s arithmetic sibling: <b>B44 divides ONE total into its shares; SumList builds ONE total from its lines</b>.' },
-      { t: 'JobList (B56) · rowSync (B7)', d: 'The ninety seconds after a bulk verb, today answered by a 5-second toast that auto-dismisses the only path to the file. And the row whose save has not landed, which has no surface at all.' },
-      { t: 'Density', d: 'Three registered postures on a wrapper, resolved at the nearest declaration exactly as <code>data-seed</code> and <code>data-mode</code> are. B10 already carries a bespoke POS variant — that per-component branching is what the dark-surface amendment exists to forbid.' },
-    ],
-  },
-  {
-    title: 'Planned',
-    note: 'v0.8.0 · the number in relation',
-    items: [
-      { t: 'Measured, changed — and against what?', d: '76° states a number that is measured (B4, B6, B44) and a number that changed (<b>Delta</b>). It has almost no vocabulary for a number read against something else. Every delta today asserts a change without naming what it changed from.' },
-      { t: 'TreeTable (B57) · CrossTable (B58)', d: 'A hierarchy of rows where every parent is the sum of its children, and one measure at every intersection of two dimensions. A trial balance is not grouped at runtime — its depth IS the chart of accounts, which B40 already accepted as structure.' },
-      { t: 'FunnelList (B59)', d: 'How one total narrows through an ordered sequence of steps. <b>PathLine (B60) was withdrawn before it was built</b> — the 0.6 review named it for what it was, a breadcrumb, and breadcrumbs are now refused as F13.' },
-      { t: 'The stated baseline (B35)', d: 'Print what a comparison is against, so no delta on any 76° screen is an unsourced assertion. Ship Gate 12 is not checkable against a denominator nobody printed.' },
-    ],
-  },
-  {
-    title: 'Planned',
-    note: 'v0.9.0 · the record and the console',
-    items: [
-      { t: 'MessageThread (B61)', d: 'The primary content of every service-desk record, which B41 forbids by its own Don’t list — never two sentences of body, never an interactive row — and whose tones are lifecycle, not direction.' },
-      { t: 'SettingList (B62)', d: 'The settable twin of B28, which is the right anatomy and refuses editing controls by name. <b>settings-account</b> today ships four bare switches with no statement of what flipping one does — an A3 failure with no component to prevent it.' },
-      { t: 'Two templates', d: '<b>crm-deal</b>, the record as a relationship rather than a document, editing in a Drawer without leaving the page; and <b>settings-team</b>, the administration console none of the fifteen shipped templates is.' },
-    ],
-  },
-  {
     title: 'Exploring',
     note: 'later',
     items: [
+      { t: 'Native-speaker review of the catalogs', d: 'French, Arabic and Somali ship machine-drafted and English-sourced. Each needs a native reviewer before a product ships it, and Hebrew and Persian are the next RTL catalogs.' },
       { t: 'Registry MCP server', d: 'Search components, blocks, and templates by metadata from any assistant.' },
-      { t: 'Health seed', d: 'A contrast-verified clinical seed, added through the seed rule — both directions ≥ 4.5:1.' },
-      { t: 'Full type tokenization', d: 'A complete <code>--sv-text-*</code> scale replacing the literals across every component.' },
-      { t: 'Theming playground', d: 'Swap the seed and the mode live and watch a real screen re-theme.' },
+      { t: 'Full type tokenization', d: 'A complete <code>--sv-text-*</code> scale replacing the literals across every component — now cheaper, because density already moved <code>--sv-body-size</code> into the token layer.' },
+      { t: 'Arabic in the faces', d: 'Hanken Grotesk and Fragment Mono carry no Arabic, so the script falls to the platform face. A registered Arabic companion face would make the voice the system’s rather than the operating system’s.' },
+      { t: '8-state preview files · token sync', d: 'The fundamentals state contract as a preview per component, and a Figma ⇄ <code>tokens.css</code> bridge.' },
     ],
   },
 ];

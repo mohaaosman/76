@@ -23,6 +23,23 @@
     border-color: var(--sv-band-soft);
   }
 
+  .site-lang {
+    display: inline-flex;
+  }
+
+  /* The select keeps the band's ghost-control voice; the native list it
+     opens is the browser's own, drawn in the reader's platform language. */
+  .site-lang__select {
+    appearance: none;
+    padding-inline-end: 10px;
+    background: transparent;
+  }
+
+  .site-lang__select option {
+    color: var(--sv-ink);
+    background: var(--sv-paper);
+  }
+
   .site-kbd {
     font-family: var(--sv-font-mono);
     font-size: 9.5px;
@@ -123,7 +140,7 @@
   .site-props th {
     padding: var(--sv-s2) 18px;
     border-bottom: 1px solid var(--sv-line);
-    text-align: left;
+    text-align: start;
     font-family: var(--sv-font-mono);
     font-size: 9.5px;
     font-weight: 400;
@@ -179,7 +196,8 @@
 
   .site-donts li {
     position: relative;
-    padding: 7px 0 7px var(--sv-s5);
+    padding-block: 7px;
+    padding-inline: var(--sv-s5) 0;
     border-bottom: 1px solid var(--sv-line);
     font-size: 12.5px;
     color: var(--sv-ink-soft);
@@ -192,7 +210,7 @@
   .site-donts li::before {
     content: '✕';
     position: absolute;
-    left: 0;
+    inset-inline-start: 0;
     color: var(--sv-bad);
     font-size: 11px;
     font-weight: 700;
@@ -460,10 +478,67 @@
 
   .tpl-back {
     position: fixed;
-    left: var(--sv-s4);
+    inset-inline-start: var(--sv-s4);
     bottom: var(--sv-s4);
     z-index: var(--sv-z-toast);
     background: var(--sv-paper);
     box-shadow: var(--sv-shadow);
+  }
+
+  /* ---- The playground ---- */
+
+  .site-playground__controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+    gap: var(--sv-s4);
+  }
+
+  .site-playground__stamp {
+    padding: var(--sv-s3) 18px var(--sv-s4);
+    border-top: 1px solid var(--sv-line);
+    color: var(--sv-ink-soft);
+    overflow-wrap: anywhere;
+  }
+
+  /* The preview is a whole screen on its own wall: the postures it
+     declares repaint this box, not the docs page around it. */
+  .site-playground__preview {
+    min-width: 0;
+    padding-block-end: var(--sv-s6);
+    background: var(--sv-wall);
+    color: var(--sv-ink);
+    border-radius: var(--sv-r);
+    overflow: clip;
+  }
+
+  /* Mixed-language pages. The site's reference prose stays English while
+     the chrome follows the reader's language, so on an RTL page an English
+     sentence would otherwise inherit RTL and print its full stop at the
+     wrong end. `plaintext` lets each paragraph take the direction of its
+     own first strong character — Arabic copy is unaffected, English reads
+     left to right, and the page layout still mirrors. */
+  [dir='rtl'] :where(p, li, dd, dt, h1, h2, h3, figcaption, .sv-card__subtitle) {
+    unicode-bidi: plaintext;
+  }
+
+  /* Code is left to right in every language (B43 says the same). */
+  [dir='rtl'] pre,
+  [dir='rtl'] code {
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+
+  [dir='rtl'] pre {
+    text-align: start;
+  }
+
+  /* One line, on the band's ink, stating what the translation covers. */
+  .site-langnote {
+    margin: 0;
+    padding: var(--sv-s2) var(--sv-s6);
+    background: var(--sv-band);
+    border-bottom: 1px solid var(--sv-band-line);
+    color: var(--sv-band-soft);
+    font-size: 11.5px;
   }
 }

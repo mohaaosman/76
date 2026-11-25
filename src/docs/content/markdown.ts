@@ -17,7 +17,7 @@ export function decodeEntities(s: string): string {
 }
 
 const strip = (s: string) =>
-  decodeEntities(s.replace(/<b>|<\/b>/g, '**').replace(/<code>|<\/code>/g, '`'));
+  decodeEntities(s.replace(/<b>|<\/b>/g, '**').replace(/<code>|<\/code>/g, '`').replace(/<i>|<\/i>/g, '_'));
 
 /**
  * Renders a doc entry as markdown — used by the "Copy page" button and

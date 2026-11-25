@@ -62,7 +62,7 @@
   .sv-sum__amount {
     font-size: 13px;
     font-weight: 600;
-    text-align: right;
+    text-align: end;
     color: var(--sv-ink);
   }
 

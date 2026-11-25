@@ -75,8 +75,22 @@
 
   .sv-tree__meta {
     flex: none;
-    padding-left: var(--sv-s3);
+    padding-inline-start: var(--sv-s3);
     font-size: 10.5px;
     color: var(--sv-ink-soft);
+  }
+
+  /* RTL · the selection rule moves to the start edge, and the collapsed
+     chevron points toward the reading direction (left), not away from it. */
+  .sv-tree__item--selected > .sv-tree__row:dir(rtl) {
+    box-shadow: inset -2px 0 0 var(--sv-seed);
+  }
+
+  .sv-tree__chevron:dir(rtl) {
+    transform: rotate(135deg);
+  }
+
+  .sv-tree__item[aria-expanded='true'] > .sv-tree__row > .sv-tree__chevron:dir(rtl) {
+    transform: rotate(45deg);
   }
 }

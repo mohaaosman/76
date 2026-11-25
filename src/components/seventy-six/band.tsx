@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import { Button } from './button';
 import { Drawer } from './drawer';
 import './band.css';
@@ -134,6 +135,7 @@ function toLink(item: BandNavItem, className: string, renderLink?: RenderLink) {
 }
 
 export function BandNav({ items, renderLink }: { items: BandNavItem[]; renderLink?: RenderLink }) {
+  const tr = useStrings();
   const subtabs = useContext(BandContext)?.subtabs ?? NO_SUBTABS;
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -161,7 +163,7 @@ export function BandNav({ items, renderLink }: { items: BandNavItem[]; renderLin
 
   return (
     <>
-      <nav className="sv-band__nav" aria-label="Primary">
+      <nav className="sv-band__nav" aria-label={tr.primaryNav}>
         <ul className="sv-band__navlist">
           {items.map((item) => (
             <li key={item.label}>
@@ -185,15 +187,15 @@ export function BandNav({ items, renderLink }: { items: BandNavItem[]; renderLin
         aria-controls={panelId}
         onClick={() => setOpen(true)}
       >
-        Menu
+        {tr.menu}
       </Button>
 
-      <Drawer open={open} onClose={() => setOpen(false)} title="Menu" side="left" size="sm">
+      <Drawer open={open} onClose={() => setOpen(false)} title={tr.menu} side="start" size="sm">
         {/* Delegated: any link in here navigates, so the drawer closes. */}
         <nav
           id={panelId}
           className="sv-band__drawernav"
-          aria-label="Primary"
+          aria-label={tr.primaryNav}
           onClick={() => setOpen(false)}
         >
           <ul className="sv-band__drawerlist">
@@ -232,6 +234,7 @@ export function BandNav({ items, renderLink }: { items: BandNavItem[]; renderLin
 /* ---------- SubTabs ---------- */
 
 export function BandSubTabs({ items, renderLink }: { items: BandNavItem[]; renderLink?: RenderLink }) {
+  const tr = useStrings();
   const register = useContext(BandContext)?.register;
   const latest = useRef<SubTabsSlot>({ items, renderLink });
 
@@ -255,7 +258,7 @@ export function BandSubTabs({ items, renderLink }: { items: BandNavItem[]; rende
 
   if (items.length === 0) return null; // collapses when the section has no children
   return (
-    <nav className="sv-band__subtabs" aria-label="Section">
+    <nav className="sv-band__subtabs" aria-label={tr.sectionNav}>
       <ul className="sv-band__container sv-band__subtablist">
         {items.map((item) => (
           <li key={item.label}>

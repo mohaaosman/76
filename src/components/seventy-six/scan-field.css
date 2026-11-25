@@ -1,0 +1,68 @@
+/* B54 · ScanField — B11 chrome, an identifier input, and one result line.
+   No inset of its own: inside a Card it takes `.sv-card__body` (rule 18). */
+
+@layer sv-components {
+  /* Identifiers are metadata, so the box speaks mono — but not uppercase
+     by CSS: the value sent is the value typed, and a transform that shows
+     "SKU" for "sku" would be lying about it. */
+  .sv-scan__input {
+    font-family: var(--sv-font-mono);
+    letter-spacing: 0.04em;
+  }
+
+  /* One line, reserved even before the first scan so the form below never
+     jumps when the first result arrives. */
+  .sv-scan__result {
+    min-height: 18px;
+    margin-block-start: var(--sv-s1);
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--sv-ink);
+  }
+
+  .sv-scan__line {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: var(--sv-s3);
+    row-gap: 2px;
+  }
+
+  .sv-scan__id {
+    font-size: 11px;
+    color: var(--sv-ink);
+  }
+
+  /* B12's anatomy: 6px currentColor dot + word, 12/600. Green and red
+     reach the word and the dot only. */
+  .sv-scan__tone {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .sv-scan__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    align-self: center;
+  }
+
+  .sv-scan__tone--ok      { color: var(--sv-ok); }
+  .sv-scan__tone--pending { color: var(--sv-ink-soft); }
+  .sv-scan__tone--bad     { color: var(--sv-bad); }
+
+  .sv-scan__text {
+    min-width: 0;
+    color: var(--sv-ink-soft);
+    text-wrap: pretty;
+  }
+
+  .sv-scan__ready {
+    color: var(--sv-ink-soft);
+  }
+}

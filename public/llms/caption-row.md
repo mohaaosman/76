@@ -19,7 +19,7 @@ The travel poster's `never too · far away · always there` line: three or four 
 
 Each caption is a PHRASE, not a sentence. Four is the cap — a fifth is a B48 **FeatureList**, which is the component for itemising a claim.
 
-**It is the accent's one non-fill, non-link use on the public surface.** F14 governs the seed FILL, and the argument there is about mass: a rectangle competes with a button. A 12.5px line has no area, so at the squint test the row blurs to a grey rule while the one seed rectangle on the page stays the only coloured object. What the seed buys is the row's job — saying <i>this, here, deliberately</i> about a specimen made of the same neutrals as everything else on the wall.
+**It is the accent's one non-fill, non-link use on the public surface.** F14 governs the seed FILL, and the argument there is about mass: a rectangle competes with a button. A 12.5px line has no area, so at the squint test the row blurs to a grey rule while the one seed rectangle on the page stays the only coloured object. What the seed buys is the row's job — saying _this, here, deliberately_ about a specimen made of the same neutrals as everything else on the wall.
 
 ## Examples
 

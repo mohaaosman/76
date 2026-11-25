@@ -14,7 +14,7 @@
        is the card at the top of the form, so A4 applies in full — one shadow,
        radius --sv-r, paper, and no border anywhere but the rule. */
     border: 0;
-    border-left: 2px solid var(--sv-bad);
+    border-inline-start: 2px solid var(--sv-bad);
     border-radius: var(--sv-r);
     box-shadow: var(--sv-shadow);
   }
@@ -50,7 +50,7 @@
 
   .sv-errsum__list {
     margin: var(--sv-s2) 0 0;
-    padding-left: var(--sv-s5);
+    padding-inline-start: var(--sv-s5);
     font-size: 12.5px;
     line-height: 1.5;
   }
@@ -81,7 +81,7 @@
   }
 
   .sv-errsum__message {
-    margin-left: var(--sv-s1);
+    margin-inline-start: var(--sv-s1);
     color: var(--sv-ink-soft);
   }
 }

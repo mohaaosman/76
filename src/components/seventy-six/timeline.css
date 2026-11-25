@@ -12,7 +12,8 @@
      continuous down the sequence. */
   .sv-timeline__item {
     position: relative;
-    padding: 0 0 var(--sv-s4) 28px;
+    padding-block: 0 var(--sv-s4);
+    padding-inline: 28px 0;
   }
 
   .sv-timeline__item:last-child {
@@ -22,7 +23,7 @@
   .sv-timeline__item::before {
     content: '';
     position: absolute;
-    left: 9.5px;
+    inset-inline-start: 9.5px;
     top: 0;
     bottom: 0;
     width: 1px;
@@ -45,7 +46,7 @@
      than crossing it, with no elevation shadow anywhere near it. */
   .sv-timeline__dot {
     position: absolute;
-    left: 4.5px;
+    inset-inline-start: 4.5px;
     top: 4.5px;
     width: 11px;
     height: 11px;

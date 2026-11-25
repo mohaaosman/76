@@ -79,6 +79,14 @@ import {
   useToast,
 } from '@/components/seventy-six';
 import type { FileRow, FieldError } from '@/components/seventy-six';
+import { entryTableDemos } from './demos/entry-table';
+import { scanFieldDemos } from './demos/scan-field';
+import { jobListDemos } from './demos/job-list';
+import { treeTableDemos } from './demos/tree-table';
+import { crossTableDemos } from './demos/cross-table';
+import { funnelListDemos } from './demos/funnel-list';
+import { messageThreadDemos } from './demos/message-thread';
+import { settingListDemos } from './demos/setting-list';
 
 /* Shared demo icons — 16px stroke, seed color comes from the tile. */
 const IconCoins = (
@@ -2597,4 +2605,12 @@ export const demos: Record<string, ComponentType> = {
   'sum-basic': SumBasic,
   'index-basic': IndexBasic,
   'caption-basic': CaptionBasic,
+  ...entryTableDemos,
+  ...scanFieldDemos,
+  ...jobListDemos,
+  ...treeTableDemos,
+  ...crossTableDemos,
+  ...funnelListDemos,
+  ...messageThreadDemos,
+  ...settingListDemos,
 };

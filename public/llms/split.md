@@ -97,7 +97,7 @@ Side reads wider and holds more ink on a desktop; stacked is closer to the dashb
 
 **Can the ink half be on the right?**
 
-Not as a prop. 76° is LTR-only (C10), and with nothing on either half to read there is nothing the mirror would buy. A product that needs it owns that override locally.
+Under an RTL locale it already is: the cut follows the reading direction (C10, v0.10), so an Arabic page puts the ink on the start side — the right. In LTR it is not a prop; with nothing on either half to read, a manual mirror buys nothing.
 
 **Does the seam survive dark mode?**
 

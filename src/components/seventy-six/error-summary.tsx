@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import './error-summary.css';
 
 /**
@@ -47,6 +48,7 @@ export interface ErrorSummaryProps {
 }
 
 export function ErrorSummary({ errors, title, autoFocus = true, className }: ErrorSummaryProps) {
+  const tr = useStrings();
   /* One base id, suffixed — never a random one. The title has to be nameable
      from the container, and a name that changes between renders unhooks the
      reference the moment React re-renders under it. */
@@ -73,7 +75,6 @@ export function ErrorSummary({ errors, title, autoFocus = true, className }: Err
      have to keep running as the set empties and refills. */
   if (errors.length === 0) return null;
 
-  const plural = errors.length !== 1;
 
   return (
     /* Focused, NOT alerted. Moving focus to an element announces its content;
@@ -108,8 +109,7 @@ export function ErrorSummary({ errors, title, autoFocus = true, className }: Err
         <p className="sv-errsum__title" id={titleId}>
           {title ?? (
             <>
-              <span className="sv-num">{errors.length}</span>
-              {plural ? ' fields need attention' : ' field needs attention'}
+              <span className="sv-num">{tr.fieldsNeedAttention(errors.length)}</span>
             </>
           )}
         </p>

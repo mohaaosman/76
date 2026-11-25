@@ -55,7 +55,7 @@
     font-size: 13px;
     font-weight: 500;
     color: var(--sv-ink);
-    text-align: left;
+    text-align: start;
     cursor: pointer;
     transition: background-color var(--sv-t-fast);
   }
@@ -121,7 +121,7 @@
     display: inline-block;
     width: 6px;
     height: 6px;
-    margin-left: var(--sv-s1);
+    margin-inline-start: var(--sv-s1);
     border-right: 1.5px solid currentColor;
     border-bottom: 1.5px solid currentColor;
     transform: translateY(-2px) rotate(45deg);
@@ -134,18 +134,18 @@
   }
 
   .sv-splitbtn .sv-splitbtn__main {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
   }
 
   .sv-splitbtn .sv-splitbtn__toggle {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
     padding-inline: var(--sv-s2);
   }
 
   .sv-splitbtn .sv-splitbtn__toggle .sv-menubtn__chevron {
-    margin-left: 0;
+    margin-inline-start: 0;
   }
 
   /* A hairline seam between the halves, drawn structurally. */
@@ -155,5 +155,14 @@
 
   .sv-splitbtn .sv-btn--ghost.sv-splitbtn__toggle {
     box-shadow: inset 1px 0 0 var(--sv-line);
+  }
+
+  /* RTL · the seam sits on the toggle's start edge, now its right side. */
+  .sv-splitbtn .sv-splitbtn__toggle:dir(rtl) {
+    box-shadow: inset -1px 0 0 var(--sv-seed-deep);
+  }
+
+  .sv-splitbtn .sv-btn--ghost.sv-splitbtn__toggle:dir(rtl) {
+    box-shadow: inset -1px 0 0 var(--sv-line);
   }
 }

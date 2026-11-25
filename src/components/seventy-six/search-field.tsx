@@ -1,6 +1,7 @@
 import { forwardRef, useId, useRef } from 'react';
 import type { ForwardedRef, InputHTMLAttributes, KeyboardEvent } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import './search-field.css';
 
 /**
@@ -40,7 +41,7 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
     label,
     value,
     onValueChange,
-    placeholder = 'Search',
+    placeholder: placeholderProp,
     labelHidden,
     hint,
     resultText,
@@ -52,6 +53,8 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
   },
   ref,
 ) {
+  const tr = useStrings();
+  const placeholder = placeholderProp ?? tr.search;
   const auto = useId();
   const id = explicitId ?? auto;
   const hintId = `${id}-hint`;
@@ -116,7 +119,7 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
           <button
             type="button"
             className="sv-search__clear"
-            aria-label={`Clear ${label}`}
+            aria-label={tr.clearField(label)}
             disabled={disabled}
             onClick={clear}
           >

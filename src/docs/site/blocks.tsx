@@ -7,13 +7,17 @@ import { decodeEntities } from '../content/markdown';
 
 /** Tiny renderer for <b> / <code> markup inside prose strings. */
 export function RichText({ text }: { text: string }) {
-  const parts = text.split(/(<b>.*?<\/b>|<code>.*?<\/code>)/g);
+  /* <i> was written into entries from v0.6 on and never parsed, so the
+     page printed the tags. It renders as <em>: stress in running prose,
+     never on a heading (A3 forbids italic headings, not emphasis). */
+  const parts = text.split(/(<b>.*?<\/b>|<code>.*?<\/code>|<i>.*?<\/i>)/g);
   return (
     <>
       {parts.map((part, i) => {
         /* React escapes its children, so entities must be decoded here or
            the page prints "&lt;select&gt;" verbatim. */
         if (part.startsWith('<b>')) return <b key={i}>{decodeEntities(part.slice(3, -4))}</b>;
+        if (part.startsWith('<i>')) return <em key={i}>{decodeEntities(part.slice(3, -4))}</em>;
         if (part.startsWith('<code>')) return <code key={i}>{decodeEntities(part.slice(6, -7))}</code>;
         return decodeEntities(part);
       })}

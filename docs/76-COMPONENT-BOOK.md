@@ -493,6 +493,66 @@ The cover treatment. The title takes `--sv-font-display` at `--sv-display-1`, **
 - It carries no inset of its own — inside a `<Card>` it takes `sv-card__body` (rule 18), like B6 and B41.
 - Don't: never computes a sum; never a currency symbol the caller did not supply; never a minus the component invented; never more rows than a reader can check by eye; never inside a table — that is B7 `totals`.
 
+### B53 · `EntryTable` (v0.10 · the 0.7 surface)
+
+**B7's writing sibling, and the keyboard is the whole difference.** B7 is a reader: Enter opens a row, Space selects it. Here Enter and ↓ move the caret to the next line's input, ↑ to the previous one, because a clerk receiving forty lines types a figure and presses Enter forty times. One job: **type one bounded number into every row of a fixed list of lines, and post the lot once.**
+- Exactly one column is `kind: 'entry'` — a native number input bounded by the caller's `bounds(row)`. The out-of-bounds sentence is the caller's (`boundsError`), what AND how to fix, shown on blur and then on every keystroke.
+- **Enter never posts.** Past the last line it lands on the one primary, labelled with the count it carries ("Post 3 lines"). A post with any line out of bounds states every error and focuses the first; `onPost` is not called.
+- Per-line save state is a mono word + 6px dot (`unsaved · saving · failed`). Totals are a `<tfoot>` the caller sums (C9). Rows follow the density posture.
+- Full-bleed like B7 — a direct child of a Card (rule 18).
+- Don't: never a second input column (two figures per line is two tables); never sorts, filters or pages — the list is the document's; never posts on Enter.
+
+### B54 · `ScanField` (v0.10)
+
+One job: **take one identifier at a time, scanned or typed, and state what the last one resolved to.** A labelled mono input that submits on Enter (scanners send Enter), clears itself and keeps focus; beneath it, one line in a polite live region — mono id, tone word + dot (`Matched · Not matched · Checking`), and the caller's sentence. The caller resolves; the field never guesses.
+- Don't: never auto-submits on a timer or a length; never uppercases by CSS (what is shown is what is sent); never a list of every scan — that is a B7 table beside it.
+
+### B58 · `JobList` (v0.10 · renumbered from B56)
+
+One job: **state what became of each background operation this reader started, and where its result landed.** Title, mono id + absolute time, a state word + dot (queued · running with a B31 Spinner · finished · failed), an optional pre-formatted progress figure with a B4 bar while running, the result link only when there is a result, and a fix sentence when it failed. One polite announcement for the list, not one per row.
+- Don't: never a toast as the only path to the result (B14 auto-dismisses); never a percentage without the absolute figure; never a failed job without what to do next.
+
+### B59 · `TreeTable` (v0.10 · renumbered from B57)
+
+One job: **state a hierarchy of rows in which every parent is the sum of its children, across the same numeric columns at every depth.** `role="treegrid"`, B40's keyboard model (↑/↓, → open or step in, ← close or step out — mirrored in RTL, Home/End), B40's indent and chevron, B7's voice. Parents are bold because a parent is its own total. **F3 survives:** the depth is the chart of accounts, set by data and never regrouped by the reader. It never computes — the caller states the parent's figures and owes the reader that they reconcile.
+
+### B60 · `CrossTable` (v0.10 · renumbered from B58)
+
+One job: **state ONE measure at every intersection of two dimensions.** Real `<th scope="col">` and `<th scope="row">`, a corner cell naming both dimensions and the measure, caller totals, ONE `highlight` in bold ink on the seed tint, and an em dash with an accessible "No value" where nothing is — never a zero. The row-header column holds on `--sv-z-sticky` while the matrix scrolls. **The heatmap stays refused:** a colour scale is six colours on one surface.
+
+### B61 · `FunnelList` (v0.10 · renumbered from B59)
+
+One job: **state how one total narrows through an ordered sequence of steps.** An `<ol>`: mono ordinal, label, bold absolute figure, a 3px bar at the step's share of the FIRST step (B6's track, a `scaleX`, never a width), and the conversion from the previous step as a pre-formatted line. An optional baseline prints once through `against`. No trapezoids — a funnel is a list that gets shorter.
+
+### B62 · `MessageThread` (v0.10 · renumbered from B61)
+
+One job: **state one conversation as an ordered list of messages, each attributed to a person and marked with its direction.** B41 forbids it by its own Don't list (never two sentences of body, never an interactive row) and its tones are lifecycle, not direction. Each message is an `<article>` in an `<ol>`: author, `<time>`, and the direction in WORDS (Received · Sent · Internal note, C5). Sent sits on the seed tint, indented from the start edge; a note is hairline-framed with no surface. No tails, no bubbles. **It has no composer** — the reply box is the screen's B11 multiline Field and B10 Button.
+
+### B63 · `SettingList` (v0.10 · renumbered from B62)
+
+**B28's settable twin.** B28 states facts and refuses editing controls by name; this states a setting and carries the one control that changes it. One job: **state one setting's consequence beside the instant-effect control that changes it.** Every row has a sentence saying what the CURRENT value does (`{ on, off }`, or per option for a select), the control is named by the row title, a sync word states saving / not saved with a fix, and a locked row always says why.
+- Don't: never a Save button — a form that applies on submit is B11; never a switch without its sentence; never a consequence in the future tense of the other value.
+
+### B7 · `DataTable` — v0.10 amendments · `rowSync` and the saved view
+
+**`rowSync(row)`** returns `'unsaved' | 'saving' | 'failed'` and the row says so as a mono word + 6px dot under its identity — never a row tint, because the row's background already means hover and selection, and only `failed` takes `--sv-bad`. **`FilterLine savedView`** states drift — "Changed from the saved view “Open POs”" — with Reset and Save view, inside the same live region as the filters, because the drift is a statement about the filters.
+
+### B3 · `Delta` — v0.10 amendment · the stated baseline
+
+`against` names what a change is measured against — "▲ 12.8% vs Q2" — in ink-soft at body weight, so the arrow and figure stay the coloured, bold part. It is in the accessible name. `StatS1 deltaAgainst` passes it through. **Every delta on a new screen should carry one;** Ship Gate 12 cannot check a change against a denominator nobody printed.
+
+### B11 · Forms — v0.10 amendments
+
+`Checkbox indeterminate` — the mixed state, set as the DOM property so the browser itself reports `aria-checked="mixed"`; seed fill with a 2px on-dark dash. `Field multiline` now renders the `<textarea>` it was always typed to. Placeholders are `--sv-ink-soft` (faint is 2.6:1 and failed C2). A caller's `aria-describedby` is merged, never overwritten.
+
+### The density posture — v0.10
+
+`data-density="compact | regular | touch"` on a wrapper, resolved at the nearest declaration — the fourth posture beside seed, mode and motion. It re-tokenizes the row block inset (`--sv-row-y`), the control block inset (`--sv-control-y`, `--sv-button-y`), the control minimum (`--sv-control-min`) and the body size (`--sv-body-size`), and nothing else: type ramp, colour, radius and the inline gutters do not move. **Touch takes B10's POS numbers**, so the bespoke variant becomes the posture. Density as a per-component prop stays refused.
+
+### The language layer — v0.10
+
+Every built-in word a component speaks lives in ONE typed catalog, `SvMessages`, read through `useStrings()` under a `<LocaleProvider locale>`; with no provider the components speak the English they always spoke. Catalogs ship for English (the source), French, Arabic and Somali; a product passes `messages` to override any key or bring its own language, and a missing key is a compile error. **C9 is unmoved:** `useFormat()` is a caller-layer helper and no component calls it. Machine-drafted catalogs must be reviewed by a native speaker before a product ships them.
+
 ### B5 · `Trend` — v0.7 amendment · the fit, the readout, and the opt-in draw
 
 **The fit was a bug, and it is worth naming.** A chart card in a `main` split stretches to match the taller card beside it, and the plot rendered ~90px tall at the top of a ~490px card with 250px of dead paper beneath. **A chart card is the one card whose content should GROW into the space it is given** — every other card wraps its content and lets the grid stretch the paper, but a chart placed at the top of a card it did not fill has not been fitted, it has been dropped in. The plot now fills the height available, with a floor so a short card cannot squash it.
@@ -614,7 +674,7 @@ Light-first stands: light is the default, dark is opt-in via `<html data-mode="d
 
 **C9 · Language:** `lang` attribute set; dates absolute in mono (24 JUL, not 7/24); numbers localized at the formatting layer, tabular always.
 
-**C10 · Direction — a stated scope boundary:** 76° is LTR only. The component layer uses physical direction properties (`left`/`right`, `margin-left`, `text-align:right` on numeric columns, `side="left"` on the nav drawer) and does not support RTL. Arabic, Hebrew, Persian and Urdu products are OUT OF SCOPE until this line is repealed. This is a weighed decision, not an oversight: logical properties were considered and rejected for v1 because a half-mirrored system — a band that flips while numeric alignment, the overlap, and focus order do not — reads as broken in a way a stated boundary does not. Repealing it is one system-wide change (band, overlap, drawer side, table alignment, focus order, tokens), never a per-component patch.
+**C10 · Direction — the boundary is repealed (v0.10).** ~~76° is LTR only.~~ It was declined in v0.4 because a half-mirrored system reads as broken, and that reasoning is why it was repealed as ONE system-wide change rather than patched per component: every component stylesheet uses logical properties (margins, padding, borders, insets, text alignment, corner radii); arrow keys follow the reading direction (`inlineStep()`); `Drawer side="start" | "end"`; the selection rules, split-button seams, chevrons and motion origins turn under `:dir(rtl)`; the overlap and focus order follow the DOM, which never reorders. **Left to right on purpose:** code (B43), PIN boxes (B25), and the Trend plot's time axis. **The script layer** (`@layer sv-script`) keeps joined scripts joined: no letter-spacing, micro labels at 11.5px, and a mono stack that falls through to the UI face for the script while Latin IDs stay mono. Direction follows `lang` at the nearest declaration — `LocaleProvider` writes both.
 
 ---
 

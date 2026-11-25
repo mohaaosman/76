@@ -1,0 +1,29 @@
+/* crm-deal · the composer and the Drawer form stack their B11 fields.
+   Neither the card body nor the drawer body spaces its children, so the
+   screen that composes the fields owns the rhythm between them. */
+
+@layer sv-components {
+  .crm-deal__stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sv-s4);
+  }
+
+  .crm-deal__send {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--sv-s3);
+  }
+
+  .crm-deal__composer {
+    border-block-start: 1px solid var(--sv-line);
+    padding-block-start: var(--sv-s4);
+  }
+
+  .crm-deal__composer textarea {
+    resize: vertical;
+    min-block-size: 76px;
+  }
+}

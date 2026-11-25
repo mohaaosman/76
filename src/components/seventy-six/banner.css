@@ -8,13 +8,13 @@
     padding: var(--sv-s3) var(--sv-s4);
     background: var(--sv-paper);
     border: 1px solid var(--sv-line);
-    border-left: 2px solid var(--sv-seed-line);
+    border-inline-start: 2px solid var(--sv-seed-line);
     border-radius: var(--sv-r);
   }
 
-  .sv-banner--ok   { border-left-color: var(--sv-ok); }
-  .sv-banner--warn { border-left-color: var(--sv-ink-soft); }
-  .sv-banner--bad  { border-left-color: var(--sv-bad); }
+  .sv-banner--ok   { border-inline-start-color: var(--sv-ok); }
+  .sv-banner--warn { border-inline-start-color: var(--sv-ink-soft); }
+  .sv-banner--bad  { border-inline-start-color: var(--sv-bad); }
 
   .sv-banner__icon {
     display: inline-flex;

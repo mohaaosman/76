@@ -4,6 +4,9 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 import { Band, BandTopbar, BandNav, BandSubTabs, Busy } from '@/components/seventy-six';
 import type { BandNavItem } from '@/components/seventy-six';
 import { categories } from '../content/categories';
+import { localeNames, useStrings } from '@/lib/i18n';
+import type { ShippedLocale } from '@/lib/i18n';
+import { siteLocales, useSiteLocale } from './site-i18n';
 
 /**
  * The docs site shell IS a 76° screen: ink band, horizontal nav,
@@ -26,14 +29,18 @@ export function Shell({ onSearch }: { onSearch: () => void }) {
     localStorage.setItem('sv-mode', mode);
   }, [mode]);
 
+  const { locale, setLocale, s: str } = useSiteLocale();
+  const tr = useStrings();
+
   const nav: BandNavItem[] = [
-    { label: 'Introduction', href: '/', active: pathname === '/' },
-    { label: 'Foundations', href: '/foundations', active: pathname === '/foundations' },
-    { label: 'Components', href: '/components', active: pathname.startsWith('/components') },
-    { label: 'Blocks', href: '/blocks', active: pathname === '/blocks' },
-    { label: 'Templates', href: '/templates', active: pathname.startsWith('/templates') },
-    { label: 'AI-ready', href: '/ai', active: pathname === '/ai' },
-    { label: 'Roadmap', href: '/roadmap', active: pathname === '/roadmap' },
+    { label: str.introduction, href: '/', active: pathname === '/' },
+    { label: str.foundations, href: '/foundations', active: pathname === '/foundations' },
+    { label: str.components, href: '/components', active: pathname.startsWith('/components') },
+    { label: str.blocks, href: '/blocks', active: pathname === '/blocks' },
+    { label: str.templates, href: '/templates', active: pathname.startsWith('/templates') },
+    { label: str.playground, href: '/playground', active: pathname === '/playground' },
+    { label: str.aiReady, href: '/ai', active: pathname === '/ai' },
+    { label: str.roadmap, href: '/roadmap', active: pathname === '/roadmap' },
   ];
 
   /* The category row is REAL navigation, and it reads the URL rather than
@@ -46,7 +53,7 @@ export function Shell({ onSearch }: { onSearch: () => void }) {
   const onIndex = pathname === '/components';
   const subtabs: BandNavItem[] = pathname.startsWith('/components')
     ? [
-        { label: 'ALL', href: '/components', active: onIndex && !cat },
+        { label: str.all, href: '/components', active: onIndex && !cat },
         ...categories.map((c) => ({
           label: c.label.toUpperCase(),
           href: `/components?cat=${c.id}`,
@@ -74,34 +81,51 @@ export function Shell({ onSearch }: { onSearch: () => void }) {
   return (
     <>
       <a className="sv-skip" href="#sv-content">
-        Skip to content
+        {tr.skipToContent}
       </a>
       <Band>
         <BandTopbar
-          app="Design System"
+          app={str.designSystem}
           nav={<BandNav items={nav} renderLink={renderLink} />}
           utilities={
             <>
+            {/* A native select: the browser draws the list, the endonyms let a
+                reader who cannot read the current language find their own. */}
+            <label className="site-lang">
+              <span className="sv-visually-hidden">{str.language}</span>
+              <select
+                className="site-search site-lang__select sv-mono"
+                value={locale}
+                onChange={(e) => setLocale(e.target.value as ShippedLocale)}
+              >
+                {siteLocales.map((l) => (
+                  <option key={l} value={l} lang={l}>
+                    {localeNames[l]}
+                  </option>
+                ))}
+              </select>
+            </label>
             <button
               type="button"
               className="site-search sv-mono"
               aria-pressed={mode === 'dark'}
               onClick={() => setMode((m) => (m === 'dark' ? 'light' : 'dark'))}
             >
-              {mode === 'dark' ? 'LIGHT' : 'DARK'}
+              {mode === 'dark' ? str.light : str.dark}
             </button>
             <button type="button" className="site-search sv-mono" onClick={onSearch}>
-              SEARCH <kbd className="site-kbd">⌘K</kbd>
+              {str.search} <kbd className="site-kbd">⌘K</kbd>
             </button>
             </>
           }
         />
         <BandSubTabs items={subtabs} renderLink={renderLink} />
       </Band>
+      {str.proseNote && <p className="site-langnote">{str.proseNote}</p>}
       {/* Routes are code-split, so a page can be in flight. The band stays
           put and the wall carries a B31 Busy — the system's own answer to
           "a region is fetching", used on itself. */}
-      <Suspense fallback={<Busy label="Loading the page…" minHeight={320} />}>
+      <Suspense fallback={<Busy label={str.loadingPage} minHeight={320} />}>
         <Outlet />
       </Suspense>
     </>

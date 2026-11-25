@@ -1,4 +1,5 @@
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import './stepper.css';
 
 /**
@@ -28,13 +29,10 @@ export interface StepperProps {
   className?: string;
 }
 
-const STATE_WORD = {
-  done: 'completed',
-  current: 'current step',
-  upcoming: 'not started',
-} as const;
+const STATE_KEY = { done: 'stepDone', current: 'stepCurrent', upcoming: 'stepUpcoming' } as const;
 
 export function Stepper({ steps, current, onStepSelect, label, className }: StepperProps) {
+  const tr = useStrings();
   return (
     <ol className={cx('sv-stepper', className)} aria-label={label}>
       {steps.map((step, i) => {
@@ -66,7 +64,7 @@ export function Stepper({ steps, current, onStepSelect, label, className }: Step
             {/* C5 · the seed fill is a colour, and colour never carries
                 meaning alone — every step also says its state in words. */}
             <span className="sv-visually-hidden">
-              {` Step ${i + 1} of ${steps.length}, ${STATE_WORD[state]}`}
+              {` ${tr.stepOf(i + 1, steps.length)}, ${tr[STATE_KEY[state]]}`}
             </span>
           </>
         );

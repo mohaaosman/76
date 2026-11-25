@@ -66,7 +66,7 @@
   /* C4 · Skip link — first tab stop, visible on focus over the band */
   .sv-skip {
     position: absolute;
-    left: var(--sv-s4);
+    inset-inline-start: var(--sv-s4);
     top: var(--sv-s2);
     z-index: var(--sv-z-skip);
     padding: var(--sv-s2) var(--sv-s4);
@@ -482,5 +482,61 @@
     font-size: 0.85em;
     color: var(--sv-ink-soft);
     word-break: break-all;
+  }
+}
+
+/* ============================================================
+   The script layer (v0.10) — what a language needs that a token
+   cannot say. It sits AFTER sv-components in the cascade, so it
+   wins over every component's own tracking without specificity
+   or an important flag, and before sv-site, so a product can still
+   override it.
+
+   Arabic, Persian, Urdu and the other joined scripts are written
+   with letters that CONNECT. Law 4's tracked mono voice (.13em)
+   pulls those letters apart, which breaks the joins — it is not a
+   style on those scripts, it is a misspelling. Uppercase has no
+   meaning there either, so it is a no-op and left alone.
+   ============================================================ */
+@layer sv-script {
+  :lang(ar),
+  :lang(fa),
+  :lang(ur),
+  :lang(ps),
+  :lang(ckb),
+  :lang(sd),
+  :lang(ug),
+  :lang(syr) {
+    letter-spacing: normal;
+    /* Fragment Mono has no Arabic glyphs, and the generic monospace a
+       browser falls back to sets each joined letter in a fixed-width cell
+       — the same broken word as tracking, by another route. The mono stack
+       keeps Fragment Mono FIRST, so Latin IDs, SKUs and timestamps stay in
+       the metadata voice, and lets the script fall through to the UI face. */
+    --sv-font-mono: 'Fragment Mono', var(--sv-font-ui);
+  }
+
+  /* The joined scripts need more than 10px to stay legible; the micro
+     labels step up one size, and nothing else in the ramp moves. */
+  :lang(ar) .sv-mono,
+  :lang(fa) .sv-mono,
+  :lang(ur) .sv-mono {
+    font-size: 11.5px;
+  }
+
+  /* Mono metadata is overwhelmingly Latin — IDs, SKUs, timestamps,
+     "16 NOV · 09:12" — and inside an RTL paragraph the bidi algorithm
+     reorders its neutral runs into "NOV · 09:12 16". Each mono run takes
+     the direction of its own first strong character instead; an Arabic
+     label is unaffected. */
+  [dir='rtl'] .sv-mono,
+  [dir='rtl'] time {
+    unicode-bidi: plaintext;
+  }
+
+  /* `display: contents`: the LocaleProvider wrapper declares lang and dir
+     for its subtree and adds no box to the layout. */
+  .sv-locale {
+    display: contents;
   }
 }

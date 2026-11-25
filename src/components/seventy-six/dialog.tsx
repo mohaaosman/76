@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef } from 'react';
 import type { ReactNode, MouseEvent } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import './dialog.css';
 
 /**
@@ -39,6 +40,7 @@ export function Dialog({
   children,
   footer,
 }: DialogProps) {
+  const tr = useStrings();
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const resolved = size ?? (wide ? 'wide' : 'default');
@@ -87,7 +89,7 @@ export function Dialog({
             <button
               type="button"
               className="sv-dialog__close"
-              aria-label={`Close ${title}`}
+              aria-label={tr.close(title)}
               onClick={onClose}
             >
               <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true">

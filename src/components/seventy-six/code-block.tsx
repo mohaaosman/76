@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import './code-block.css';
 
 /**
@@ -32,6 +33,7 @@ export function CodeBlock({
   ariaLabel,
   className,
 }: CodeBlockProps) {
+  const tr = useStrings();
   const preRef = useRef<HTMLPreElement>(null);
   const timer = useRef<number>(0);
   const [copied, setCopied] = useState(false);
@@ -39,7 +41,7 @@ export function CodeBlock({
 
   /* A control that cannot work is not shown. */
   const canCopy = copyable && typeof navigator !== 'undefined' && !!navigator.clipboard;
-  const name = ariaLabel ?? (label ? `Code, ${label}` : 'Code');
+  const name = ariaLabel ?? tr.codeLabel(label);
   const lines = code.replace(/\n$/, '').split('\n');
 
   /* Only a block that actually overflows becomes a focusable scroll region —
@@ -75,7 +77,7 @@ export function CodeBlock({
           {label && <span className="sv-code__label sv-mono">{label}</span>}
           {canCopy && (
             <button type="button" className="sv-btn sv-btn--link sv-code__copy" onClick={copy}>
-              {copied ? 'Copied' : 'Copy'}
+              {copied ? tr.copied : tr.copy}
             </button>
           )}
         </div>
@@ -101,7 +103,7 @@ export function CodeBlock({
         <code className="sv-code__code">{code}</code>
       </pre>
       <span className="sv-visually-hidden" aria-live="polite">
-        {copied ? 'Copied to clipboard' : ''}
+        {copied ? tr.copiedAnnounce : ''}
       </span>
     </div>
   );

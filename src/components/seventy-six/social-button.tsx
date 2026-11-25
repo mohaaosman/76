@@ -1,6 +1,7 @@
 import { forwardRef } from 'react';
 import type { ReactNode } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import { Button } from './button';
 import type { ButtonProps } from './button';
 import './social-button.css';
@@ -73,9 +74,11 @@ export interface SocialButtonProps
 }
 
 export const SocialButton = forwardRef<HTMLButtonElement, SocialButtonProps>(function SocialButton(
-  { provider, action = 'Continue with', type = 'button', className, ...rest },
+  { provider, action: actionProp, type = 'button', className, ...rest },
   ref,
 ) {
+  const tr = useStrings();
+  const action = actionProp ?? tr.continueWith;
   return (
     <Button
       {...rest}

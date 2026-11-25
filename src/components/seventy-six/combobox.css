@@ -9,7 +9,7 @@
 
   .sv-combo__input {
     width: 100%;
-    padding-right: var(--sv-s7);
+    padding-inline-end: var(--sv-s7);
   }
 
   /* The listbox is paper: card physics, one shadow, hairline-separated
@@ -18,8 +18,8 @@
   .sv-combo__list {
     position: absolute;
     top: calc(100% + var(--sv-s1));
-    left: 0;
-    right: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
     z-index: var(--sv-z-tip);
     max-height: 264px;
     overflow-y: auto;

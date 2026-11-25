@@ -1,0 +1,156 @@
+/* B63 · SettingList — a setting's consequence beside its instant control.
+   B28's settable twin, so it keeps B28's discipline: hairline rows, the
+   last one unruled. Text at the start, control at the inline END — logical
+   properties, so RTL mirrors it without a branch.
+   Rows breathe with the density posture (--sv-row-y), never a prop.
+   NO inset of its own: inside a Card it takes `.sv-card__body` (rule 18). */
+
+@layer sv-components {
+  .sv-settings {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sv-setting {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--sv-s5);
+    align-items: start;
+    padding-block: var(--sv-row-y);
+    border-block-end: 1px solid var(--sv-line);
+  }
+
+  .sv-setting:first-child {
+    padding-block-start: 0;
+  }
+
+  .sv-setting:last-child {
+    padding-block-end: 0;
+    border-block-end: 0;
+  }
+
+  .sv-setting__text {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .sv-setting__title {
+    margin: 0;
+    font-size: var(--sv-body-size);
+    font-weight: 700;
+    color: var(--sv-ink);
+  }
+
+  /* Soft, never faint: the consequence is the information (C2). */
+  .sv-setting__consequence,
+  .sv-setting__locked,
+  .sv-setting__fix {
+    margin: 0;
+    max-width: 68ch;
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--sv-ink-soft);
+    text-wrap: pretty;
+  }
+
+  .sv-setting__consequence:empty {
+    display: none;
+  }
+
+  .sv-setting__locked {
+    font-size: 11.5px;
+  }
+
+  .sv-setting__fix {
+    font-size: 11.5px;
+  }
+
+  .sv-setting__sync {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-block-start: 2px;
+  }
+
+  .sv-setting__sync:empty {
+    display: none;
+  }
+
+  /* The control sits level with the title, not centred on the paragraph. */
+  .sv-setting__control {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: calc(var(--sv-body-size) * 1.4);
+  }
+
+  .sv-setting--select .sv-setting__control {
+    width: min(220px, 40vw);
+  }
+
+  .sv-setting--select .sv-field__selectwrap {
+    width: 100%;
+  }
+
+  /* The title names the control, so B11's own label is kept in the DOM
+     for its anatomy and hidden from sight (the input is named by
+     aria-labelledby, so it is read once). */
+  .sv-setting__control .sv-check__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* Touch posture: the whole control reaches the 48px floor. */
+  .sv-setting__control .sv-toggle,
+  .sv-setting__control .sv-check {
+    min-height: var(--sv-control-min);
+  }
+
+  /* Locked — never bare opacity (Craft Floor). B11 draws no disabled
+     toggle or checkbox, so the row draws it: wall track, faint thumb,
+     a hairline frame, a not-allowed cursor. The position still reads,
+     and the consequence sentence still says the value in words. */
+  .sv-setting--locked .sv-toggle,
+  .sv-setting--locked .sv-check {
+    cursor: not-allowed;
+  }
+
+  .sv-setting--locked .sv-toggle__track,
+  .sv-setting--locked .sv-toggle__input:checked + .sv-toggle__track {
+    background: var(--sv-wall);
+    box-shadow: inset 0 0 0 1px var(--sv-field-line);
+  }
+
+  .sv-setting--locked .sv-toggle__thumb {
+    background: var(--sv-ink-faint);
+  }
+
+  .sv-setting--locked .sv-check__box,
+  .sv-setting--locked .sv-check__input:checked + .sv-check__box {
+    background: var(--sv-wall);
+    border-color: var(--sv-field-line);
+    color: var(--sv-ink-faint);
+  }
+
+  /* C7 · at the 320px floor a select stacks under its sentence; a toggle
+     is 32px wide and keeps its place at the end. */
+  @media (max-width: 520px) {
+    .sv-setting--select {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--sv-s2);
+    }
+
+    .sv-setting--select .sv-setting__control {
+      width: 100%;
+      justify-content: flex-start;
+    }
+  }
+}

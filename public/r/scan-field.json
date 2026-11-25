@@ -1,0 +1,51 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "scan-field",
+  "type": "registry:ui",
+  "title": "ScanField",
+  "description": "The scanner input — one identifier at a time, and what it resolved to. One job: Take one identifier at a time, scanned or typed, and state what the last one resolved to.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/field.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/scan-field.tsx",
+      "content": "import { forwardRef, useId, useState } from 'react';\nimport type { InputHTMLAttributes } from 'react';\nimport { cx } from '@/lib/cx';\nimport { useStrings } from '@/lib/i18n';\nimport './field.css';\nimport './scan-field.css';\n\n/**\n * B54 · ScanField — one job: take one identifier at a time, scanned or\n * typed, and state what the last one resolved to.\n *\n * A barcode scanner is a keyboard that types an identifier and presses\n * Enter, so this is a B11 text field that treats Enter as \"take it\": the\n * value goes to `onScan`, the box empties, and the caret stays where it\n * was, ready for the next one. Nothing else submits it — never a timer,\n * never a length, never a pause in typing — because a clerk typing a\n * smudged label by hand is as legitimate as the gun.\n *\n * **The boundary against B36 SearchField.** Search narrows a set while you\n * type and keeps the query; a scan is a discrete event that is consumed and\n * answered. If the box should still hold the text afterwards, it is search.\n *\n * It never resolves. The caller looks the identifier up and passes `last`;\n * the field only states it — one line, mono id, word + dot, one sentence —\n * in a polite live region, so a reader who never looks up from the pallet\n * still hears what the scan became.\n *\n * Don't: never auto-submits; never keeps the scanned value in the box;\n * never a history of scans (that is a B7 DataTable or B53 EntryTable of\n * what was received); never the tone as colour alone; never steals focus\n * on mount unless the screen exists to scan.\n */\nexport type ScanTone = 'ok' | 'bad' | 'pending';\n\nexport interface ScanResult {\n  /** The identifier as resolved: \"SKU-4471\". Mono. */\n  id: string;\n  tone: ScanTone;\n  /** One sentence: \"Pallet racking, 2.4m · 3 of 12 received\". */\n  text: string;\n}\n\nexport interface ScanFieldProps\n  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'defaultValue' | 'onChange' | 'type'> {\n  label: string;\n  hint?: string;\n  /** Called with the trimmed identifier on Enter. Never on a timer. */\n  onScan: (value: string) => void;\n  /** What the last identifier resolved to. Absent = nothing scanned yet. */\n  last?: ScanResult;\n  /** Override the tone words; defaults come from the locale catalog. */\n  toneWords?: Record<ScanTone, string>;\n}\n\nexport const ScanField = forwardRef<HTMLInputElement, ScanFieldProps>(function ScanField(\n  { label, hint, onScan, last, toneWords: toneWordsProp, id: explicitId, className, onKeyDown, disabled, ...rest },\n  ref,\n) {\n  const t = useStrings();\n  const toneWords = toneWordsProp ?? { ok: t.scanOk, bad: t.scanBad, pending: t.scanPending };\n  const auto = useId();\n  const id = explicitId ?? auto;\n  const hintId = `${id}-hint`;\n  const resultId = `${id}-result`;\n  const [draft, setDraft] = useState('');\n\n  /* The same identifier scanned twice resolves to the same sentence, and a\n     live region does not re-announce text that did not change. Each new\n     `last` object gets a fresh key, so the line is re-inserted and heard\n     again — the second carton of SKU-4471 is still news. */\n  const [seen, setSeen] = useState<{ last?: ScanResult; n: number }>({ last, n: 0 });\n  if (seen.last !== last) setSeen({ last, n: seen.n + 1 });\n\n  return (\n    <div className={cx('sv-field sv-scan', className)}>\n      <label className=\"sv-field__label\" htmlFor={id}>\n        {label}\n      </label>\n      {hint && (\n        <p className=\"sv-field__hint\" id={hintId}>\n          {hint}\n        </p>\n      )}\n      <input\n        {...rest}\n        ref={ref}\n        id={id}\n        type=\"text\"\n        className=\"sv-field__input sv-scan__input\"\n        value={draft}\n        disabled={disabled}\n        autoComplete=\"off\"\n        autoCapitalize=\"characters\"\n        autoCorrect=\"off\"\n        spellCheck={false}\n        enterKeyHint=\"done\"\n        aria-describedby={[hint ? hintId : null, resultId].filter(Boolean).join(' ')}\n        onChange={(e) => setDraft(e.target.value)}\n        onKeyDown={(e) => {\n          onKeyDown?.(e);\n          if (e.defaultPrevented || e.key !== 'Enter') return;\n          /* preventDefault: inside a page form, Enter would otherwise submit\n             the whole form — a scan is not a submission. */\n          e.preventDefault();\n          const value = draft.trim();\n          if (!value) return;\n          setDraft('');\n          onScan(value);\n        }}\n      />\n      <p id={resultId} className=\"sv-scan__result\" aria-live=\"polite\">\n        {last ? (\n          <span key={seen.n} className=\"sv-scan__line\">\n            <span className=\"sv-visually-hidden\">{t.scanResolved(last.id)}. </span>\n            <span className=\"sv-scan__id sv-mono\" aria-hidden=\"true\">\n              {last.id}\n            </span>\n            <span className={cx('sv-scan__tone', `sv-scan__tone--${last.tone}`)}>\n              <span className=\"sv-scan__dot\" aria-hidden=\"true\" />\n              {toneWords[last.tone]}\n            </span>\n            <span className=\"sv-scan__text sv-num\">{last.text}</span>\n          </span>\n        ) : (\n          <span className=\"sv-scan__ready sv-mono\">{t.scanReady}</span>\n        )}\n      </p>\n    </div>\n  );\n});\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/scan-field.tsx"
+    },
+    {
+      "path": "registry/seventy-six/scan-field.css",
+      "content": "/* B54 · ScanField — B11 chrome, an identifier input, and one result line.\n   No inset of its own: inside a Card it takes `.sv-card__body` (rule 18). */\n\n@layer sv-components {\n  /* Identifiers are metadata, so the box speaks mono — but not uppercase\n     by CSS: the value sent is the value typed, and a transform that shows\n     \"SKU\" for \"sku\" would be lying about it. */\n  .sv-scan__input {\n    font-family: var(--sv-font-mono);\n    letter-spacing: 0.04em;\n  }\n\n  /* One line, reserved even before the first scan so the form below never\n     jumps when the first result arrives. */\n  .sv-scan__result {\n    min-height: 18px;\n    margin-block-start: var(--sv-s1);\n    font-size: 12.5px;\n    line-height: 1.45;\n    color: var(--sv-ink);\n  }\n\n  .sv-scan__line {\n    display: inline-flex;\n    flex-wrap: wrap;\n    align-items: baseline;\n    column-gap: var(--sv-s3);\n    row-gap: 2px;\n  }\n\n  .sv-scan__id {\n    font-size: 11px;\n    color: var(--sv-ink);\n  }\n\n  /* B12's anatomy: 6px currentColor dot + word, 12/600. Green and red\n     reach the word and the dot only. */\n  .sv-scan__tone {\n    display: inline-flex;\n    align-items: center;\n    gap: 6px;\n    font-size: 12px;\n    font-weight: 600;\n    white-space: nowrap;\n  }\n\n  .sv-scan__dot {\n    width: 6px;\n    height: 6px;\n    border-radius: 50%;\n    background: currentColor;\n    align-self: center;\n  }\n\n  .sv-scan__tone--ok      { color: var(--sv-ok); }\n  .sv-scan__tone--pending { color: var(--sv-ink-soft); }\n  .sv-scan__tone--bad     { color: var(--sv-bad); }\n\n  .sv-scan__text {\n    min-width: 0;\n    color: var(--sv-ink-soft);\n    text-wrap: pretty;\n  }\n\n  .sv-scan__ready {\n    color: var(--sv-ink-soft);\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/scan-field.css"
+    }
+  ],
+  "categories": [
+    "forms"
+  ],
+  "docs": "https://76.zifala.com/llms/scan-field.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B54",
+    "job": "Take one identifier at a time, scanned or typed, and state what the last one resolved to.",
+    "tags": [
+      "scan",
+      "barcode",
+      "scanner",
+      "sku",
+      "receiving",
+      "picking",
+      "identifier",
+      "warehouse",
+      "pos"
+    ],
+    "exports": [
+      "ScanField",
+      "ScanResult",
+      "ScanTone",
+      "ScanFieldProps"
+    ]
+  }
+}

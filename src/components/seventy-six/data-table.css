@@ -13,7 +13,7 @@
   .sv-table__th {
     padding: var(--sv-s2) 18px;
     border-bottom: 1px solid var(--sv-line);
-    text-align: left;
+    text-align: start;
     color: var(--sv-ink-soft);
     font-weight: 400;
   }
@@ -47,9 +47,9 @@
   }
 
   .sv-table__td {
-    padding: 10.5px 18px;
+    padding: var(--sv-row-y) 18px;
     border-bottom: 1px solid var(--sv-line);
-    font-size: 13px;
+    font-size: var(--sv-body-size);
     font-weight: 500;
   }
 
@@ -58,7 +58,7 @@
   }
 
   .sv-table__cell--num {
-    text-align: right;
+    text-align: end;
     font-weight: 600;
   }
 
@@ -170,7 +170,7 @@
     display: flex;
     align-items: flex-end;
     gap: var(--sv-s3);
-    margin-left: auto;
+    margin-inline-start: auto;
   }
 
   /* ---- v0.6 · the closing figures (B7 amendment) ---- */
@@ -189,7 +189,7 @@
      work in the other axis: it names its row. */
   .sv-table__footlabel {
     padding: 10.5px 18px;
-    text-align: left;
+    text-align: start;
     font-size: 9.5px;
     letter-spacing: 0.1em;
     color: var(--sv-ink-soft);
@@ -227,7 +227,7 @@
      same reason: it takes what its ID needs and not a pixel more. */
   .sv-table__cell--held {
     position: sticky;
-    left: 0;
+    inset-inline-start: 0;
     z-index: var(--sv-z-sticky);
     /* The rest of the table scrolls UNDER this cell, so it owes a real
        surface — a transparent held cell prints two columns on top of each
@@ -236,7 +236,7 @@
     /* The seam, stated rather than implied. The table draws horizontal
        hairlines only — no cell carries a vertical rule — so this is the one
        vertical line in the table and has nothing to double with. */
-    border-right: 1px solid var(--sv-line);
+    border-inline-end: 1px solid var(--sv-line);
     transition: background-color var(--sv-t-fast);
   }
 
@@ -255,5 +255,50 @@
      seed rule the selected <tr> paints, so the held cell redraws it. */
   .sv-table__row--selected > .sv-table__cell--held {
     box-shadow: inset 2px 0 0 var(--sv-seed);
+  }
+
+  /* RTL · the selection rule sits on the row's START edge, which is the
+     right in a right-to-left table. box-shadow has no logical form. */
+  .sv-table__row--selected:dir(rtl) {
+    box-shadow: inset -2px 0 0 var(--sv-seed);
+  }
+
+  /* 0.8 · the saved-view drift, in FilterLine's own mono line. */
+  .sv-filterline__drift {
+    display: block;
+    color: var(--sv-ink);
+  }
+
+  .sv-filterline__actions {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--sv-s3);
+    margin-inline-start: auto;
+  }
+
+  /* 0.7 · rowSync. A word and a 6px dot under the identity, never a row
+     tint: the row's background already means hover and selection. Unsaved
+     and saving are ink-soft — nothing has gone wrong yet — and only a
+     failed save takes --sv-bad, on the word and the dot alone (Law 2). */
+  .sv-table__sync {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-block-start: 2px;
+    font-size: 9.5px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-table__syncdot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .sv-table__sync--failed {
+    color: var(--sv-bad);
   }
 }

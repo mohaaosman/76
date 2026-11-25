@@ -40,11 +40,11 @@
     flex-grow: 0;
     flex-shrink: 0;
     min-width: 0;
-    border-right: 2px solid var(--sv-paper);
+    border-inline-end: 2px solid var(--sv-paper);
   }
 
   .sv-dist__seg:last-child {
-    border-right: 0;
+    border-inline-end: 0;
   }
 
   .sv-dist__legend {
@@ -76,7 +76,7 @@
   }
 
   .sv-dist__figure {
-    margin-left: auto;
+    margin-inline-start: auto;
     font-size: 11px;
     color: var(--sv-ink-soft);
   }
@@ -126,5 +126,10 @@
     [data-motion='on'] .sv-dist__seg {
       animation: none;
     }
+  }
+
+  /* RTL · the bar grows from the reading start, which is the right edge. */
+  [data-motion='on'] .sv-dist__seg:dir(rtl) {
+    transform-origin: right center;
   }
 }

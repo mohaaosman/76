@@ -1,6 +1,7 @@
 import { useId } from 'react';
 import type { ReactNode } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import './site-footer.css';
 
 /**
@@ -91,6 +92,7 @@ export function SiteFooter({
   renderLink,
   className,
 }: SiteFooterProps) {
+  const tr = useStrings();
   /* ONE base id, suffixed per group index. A random id per render breaks
      hydration and re-points every aria-labelledby on every paint; useId is
      stable across server and client, which is what an IDREF has to be. */
@@ -108,7 +110,7 @@ export function SiteFooter({
             component exists to make impossible. The brand column and the
             legal line ride inside it because they are part of the same
             closing block; neither is a link, so neither joins the list. */}
-        <nav className="sv-site-footer__nav" aria-label="Footer">
+        <nav className="sv-site-footer__nav" aria-label={tr.footerNav}>
           <div className="sv-site-footer__grid">
             <div className="sv-site-footer__brand">
               {WORDMARK}

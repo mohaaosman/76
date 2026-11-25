@@ -14,7 +14,7 @@
   }
 
   .sv-field__req {
-    margin-left: var(--sv-s1);
+    margin-inline-start: var(--sv-s1);
     color: var(--sv-ink-soft);
   }
 
@@ -24,18 +24,28 @@
   }
 
   .sv-field__input {
-    padding: 9px 12px;
+    min-height: var(--sv-control-min);
+    padding: var(--sv-control-y) 12px;
     background: var(--sv-paper);
     border: 1px solid var(--sv-field-line);
     border-radius: var(--sv-r);
-    font-size: 13px;
+    font-size: var(--sv-body-size);
     font-weight: 500;
     color: var(--sv-ink);
     transition: border-color var(--sv-t-fast);
   }
 
+  /* A textarea grows downward only — a sideways resize breaks the measure. */
+  .sv-field__input--multiline {
+    min-height: 88px;
+    resize: vertical;
+    line-height: 1.5;
+  }
+
+  /* --sv-ink-soft, never faint: faint is 2.6:1 and a placeholder is text
+     the reader must read (C2). It still never replaces the label. */
   .sv-field__input::placeholder {
-    color: var(--sv-ink-faint);
+    color: var(--sv-ink-soft);
   }
 
   /* Focus: 1.5px seed border, no glow rings. */
@@ -67,13 +77,13 @@
   .sv-field__select {
     appearance: none;
     width: 100%;
-    padding-right: var(--sv-s7);
+    padding-inline-end: var(--sv-s7);
   }
 
   /* Chevron drawn from tokens — no color literals outside tokens.css (A1). */
   .sv-field__chevron {
     position: absolute;
-    right: 13px;
+    inset-inline-end: 13px;
     top: 50%;
     width: 7px;
     height: 7px;
@@ -130,6 +140,32 @@
 
   .sv-check__input:checked + .sv-check__box svg {
     opacity: 1;
+  }
+
+  /* The mixed state: seed fill, a 2px on-dark dash, no tick. */
+  .sv-check__dash {
+    position: absolute;
+    width: 8px;
+    height: 2px;
+    background: var(--sv-on-dark);
+    opacity: 0;
+  }
+
+  .sv-check__box {
+    position: relative;
+  }
+
+  .sv-check__input:indeterminate + .sv-check__box {
+    background: var(--sv-seed);
+    border-color: var(--sv-seed-line);
+  }
+
+  .sv-check__input:indeterminate + .sv-check__box .sv-check__dash {
+    opacity: 1;
+  }
+
+  .sv-check__input:indeterminate + .sv-check__box svg {
+    opacity: 0;
   }
 
   .sv-check__dot {
@@ -205,5 +241,10 @@
   .sv-toggle__input:focus-visible + .sv-toggle__track {
     outline: 2px solid var(--sv-seed-line);
     outline-offset: 2px;
+  }
+
+  /* RTL · the thumb travels toward the END edge, which is leftward. */
+  .sv-toggle__input:checked + .sv-toggle__track .sv-toggle__thumb:dir(rtl) {
+    transform: translateX(-14px);
   }
 }

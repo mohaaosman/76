@@ -1,5 +1,6 @@
 import { useRef, type ReactNode } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import { Card } from './card';
 import { useCountUp } from './count-up';
 import './stat-s1.css';
@@ -22,6 +23,8 @@ interface StatS1Base {
   deltaSuffix?: string;
   /** Which direction is good. Returns, cost and churn are 'down-good'. */
   deltaPolarity?: DeltaProps['polarity'];
+  /** The baseline the delta is against: "Q2", "plan". See `Delta.against`. */
+  deltaAgainst?: string;
   /** 16px stroke icon, rendered in a 34px seed-tint tile. */
   icon: ReactNode;
   /** Footnote: MUST contain information not already in the card
@@ -76,18 +79,27 @@ export interface DeltaProps {
   suffix?: string;
   /** Which direction is good. Cost and churn are 'down-good'. */
   polarity?: 'up-good' | 'down-good';
+  /**
+   * The stated baseline (0.8): WHAT the change is measured against —
+   * "Q2", "June", "plan", "same week 2025". Printed beside the figure in
+   * ink-soft, so no delta on a 76° screen is an unsourced assertion and
+   * Ship Gate point 12 has a denominator to check against.
+   */
+  against?: string;
   className?: string;
 }
 
-export function Delta({ value, suffix = '%', polarity = 'up-good', className }: DeltaProps) {
+export function Delta({ value, suffix = '%', polarity = 'up-good', against, className }: DeltaProps) {
+  const tr = useStrings();
   const up = value >= 0;
   const good = polarity === 'up-good' ? up : !up;
   return (
     <span className={cx('sv-delta sv-num', good ? 'sv-delta--ok' : 'sv-delta--bad', className)}>
       <span aria-hidden="true">{up ? '▲' : '▼'}</span>
-      <span className="sv-visually-hidden">{up ? 'up ' : 'down '}</span>
+      <span className="sv-visually-hidden">{up ? tr.up : tr.down} </span>
       {Math.abs(value)}
       {suffix}
+      {against && <span className="sv-delta__against"> {tr.against(against)}</span>}
     </span>
   );
 }
@@ -99,6 +111,7 @@ export function StatS1({
   delta,
   deltaSuffix = '%',
   deltaPolarity = 'up-good',
+  deltaAgainst,
   icon,
   footnote,
   footnoteText,
@@ -106,8 +119,13 @@ export function StatS1({
   format,
   className,
 }: StatS1Props) {
+  const tr = useStrings();
   const deltaText =
-    delta === undefined ? '' : `${delta >= 0 ? 'up' : 'down'} ${Math.abs(delta)}${deltaSuffix}`;
+    delta === undefined
+      ? ''
+      : [`${delta >= 0 ? tr.up : tr.down} ${Math.abs(delta)}${deltaSuffix}`, deltaAgainst && tr.against(deltaAgainst)]
+          .filter(Boolean)
+          .join(' ');
 
   /* THE ACCESSIBLE NAME IS BUILT FROM `value`, ALWAYS — never from the
      counting figure. A screen reader must never hear a number counting,
@@ -137,7 +155,7 @@ export function StatS1({
       <div aria-hidden="true">
         <div className="sv-stat__top">
           <span className="sv-stat__label sv-mono">{label}</span>
-          {delta !== undefined && <Delta value={delta} suffix={deltaSuffix} polarity={deltaPolarity} />}
+          {delta !== undefined && <Delta value={delta} suffix={deltaSuffix} polarity={deltaPolarity} against={deltaAgainst} />}
         </div>
         <div className="sv-stat__mid">
           <span className="sv-stat__tile">{icon}</span>

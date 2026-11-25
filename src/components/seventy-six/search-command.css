@@ -33,7 +33,7 @@
   }
 
   .sv-command__input::placeholder {
-    color: var(--sv-ink-faint);
+    color: var(--sv-ink-soft);
   }
 
   .sv-command__list {

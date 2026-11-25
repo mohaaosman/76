@@ -40,8 +40,8 @@
   .sv-tabs__tab--active::after {
     content: '';
     position: absolute;
-    left: 0;
-    right: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
     bottom: -1px;
     height: 2px;
     background: var(--sv-seed);
@@ -88,5 +88,10 @@
       column-gap: var(--sv-s4);
       row-gap: 0;
     }
+  }
+
+  /* RTL · the bar grows from the reading start, which is the right edge. */
+  .sv-tabs__tab--active:dir(rtl)::after {
+    transform-origin: right center;
   }
 }

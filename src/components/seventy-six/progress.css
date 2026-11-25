@@ -86,4 +86,9 @@
       transition: none;
     }
   }
+
+  /* RTL · the bar grows from the reading start, which is the right edge. */
+  [data-motion='on'] .sv-progress__fill:dir(rtl) {
+    transform-origin: right center;
+  }
 }

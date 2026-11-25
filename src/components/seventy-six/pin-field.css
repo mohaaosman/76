@@ -1,7 +1,10 @@
 /* B25 · PinField — verification code, B11 chrome */
 
 @layer sv-components {
+  /* A code is typed left to right in every language — the boxes do not
+     mirror, so ← and → keep their physical meaning here. */
   .sv-pin__boxes {
+    direction: ltr;
     display: flex;
     gap: var(--sv-s2);
   }

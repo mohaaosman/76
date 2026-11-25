@@ -4,6 +4,29 @@ What has shipped, what is next, and what we are still weighing. The visual
 system is settled; the work now is reach and rigor — never new chrome for its
 own sake. Live version: <https://76.zifala.com/#/roadmap>.
 
+## Shipped — v0.10.0 · the roadmap, finished — and every language
+
+0.7, 0.8 and 0.9 were planned as three releases. They land as one, because
+each had already been argued line by line and the remaining work was
+building, not deciding — and because the owner asked for one more thing the
+Book had refused by name: **translation**. That refusal is repealed below,
+in the open, with its reasons.
+
+- **Posting the work (0.7).** `EntryTable` (B53) types one bounded number into every line of a fixed list and posts the lot once — Enter and ↓ move down, and Enter never submits. `ScanField` (B54) takes one identifier at a time, scanned or typed, and states what it resolved to. `JobList` (B58) states what became of each background job and where its result landed. B7 gains `rowSync`.
+- **Density.** `data-density="compact | regular | touch"`, a posture on a wrapper resolved at the nearest declaration. It re-tokenizes the row inset, the control inset and the control minimum, and nothing else. Density as a per-component prop stays refused.
+- **The number in relation (0.8).** `TreeTable` (B59), `CrossTable` (B60), `FunnelList` (B61). `Delta` and `StatS1` gain `against` — the stated baseline — and `FilterLine` gains `savedView`, the line that states drift from a saved view.
+- **The record and the console (0.9).** `MessageThread` (B62), `SettingList` (B63), and the `crm-deal` and `settings-team` templates.
+- **The language layer.** `LocaleProvider`, `useStrings`, `useDirection`, `useFormat`. Every built-in word the components speak, in English (source), French, Arabic and Somali, with CLDR plural rules for Arabic. No provider, no change. `useFormat()` gives the *caller* Intl-backed strings; C9 stands and no component formats a figure.
+- **RTL.** The LTR boundary is repealed (see below).
+- **From Exploring.** The **Iris** health seed (6.35:1 both ways; dark text #A98CF0 at 6.06:1), the **theming playground** at `/playground`, and `Checkbox indeterminate`.
+- **Fixed.** Input placeholders were `--sv-ink-faint` (2.6:1), against C2 — now `--sv-ink-soft`. `Field` and `Select` overwrote a caller's `aria-describedby`. Doc prose written with `<i>` printed its tags.
+
+**Numbering.** B56 and B57 went to `IndexRow` and `CaptionRow` in 0.8's cover, so the 0.7–0.9 widgets renumber: JobList B58, TreeTable B59, CrossTable B60, FunnelList B61, MessageThread B62, SettingList B63. The saved-view line ships as a B7 amendment on `FilterLine` rather than a new number, because the drift IS a statement about the filters.
+
+## Shipped — v0.6 – v0.9
+
+The promises already made (B52, `totals`, `leadHold`, the printed surface, two templates); motion, money and the review (`useCountUp`, B55, the checkout templates); the cover (B56, B57, the issue Masthead, clean URLs); and the moving surface reaching the widgets. Each is recorded in full in CHANGELOG.md.
+
 ## Shipped — v0.5.0 · the public surface
 
 76° dresses the pitch on its own terms, and **not one refusal was repealed to
@@ -95,9 +118,10 @@ leaks.
 | **0.4** | Closing the product taxonomy | Shipped |
 | **0.5** | The public surface | Shipped |
 | **0.6** | The promises already made | Shipped |
-| **0.7** | Motion, money, and posting the work | In progress |
-| **0.8** | The number in relation | Planned |
-| **0.9** | The record and the console | Planned |
+| **0.7** | Motion, money, and posting the work | Shipped (v0.10) |
+| **0.8** | The number in relation | Shipped (v0.10) |
+| **0.9** | The record and the console | Shipped (v0.10) |
+| **0.10** | Every language, both directions | Shipped |
 
 ---
 
@@ -133,12 +157,17 @@ localized, and accessible. That composition shipped in v0.4.0 as **B35
 `DateRangeField`** — the refusal now has a component, and it still contains no
 grid.
 
-## Stated scope boundary
+## Stated scope boundary — repealed in v0.10
 
-**76° is LTR only.** The component layer uses physical direction properties and
-does not support RTL. Arabic, Hebrew, Persian, and Urdu products are out of
-scope until this line is repealed. *(Weighed and deliberately declined: the
-conversion is ~29 declarations today and grows with every component shipped.)*
+~~76° is LTR only.~~ The boundary was declined in v0.4 because the
+conversion was ~29 declarations and "grows with every component shipped".
+It had grown to 111 by v0.10, which is the argument for doing it now rather
+than the argument against: every release made it dearer. What shipped:
+
+- **Logical properties everywhere** a component lays out — margins, padding, borders, insets, text alignment, corner radii. Glyph-shaped chevrons (drawn from two borders and a rotation) stay physical and turn under `:dir(rtl)`.
+- **Arrow keys follow the reading direction** in Tabs, CardTabs and TreeList (`inlineStep()`), and `Drawer` gains `side="start" | "end"`.
+- **What stays left to right, on purpose:** code (B43), PIN codes (B25), and the Trend plot's time axis — the convention RTL financial screens already follow. Their labels still mirror.
+- **The script layer** (`@layer sv-script`, after components): joined scripts take no tracking, the micro labels step up to 11.5px, and the mono stack falls through to the UI face for Arabic glyphs while Latin IDs stay in Fragment Mono.
 
 ## 0.4 — closing the product taxonomy · what the inventory found
 
@@ -209,12 +238,12 @@ typist presses most.
 
 | | Name | One job |
 |---|---|---|
-| **B53** | `EntryTable` | Type one bounded number into every row of a fixed list of lines, and post the lot once. |
-| **B54** | `ScanField` | Take one identifier at a time, scanned or typed, and state what the last one resolved to. |
+| **B53** | `EntryTable` · **shipped** | Type one bounded number into every row of a fixed list of lines, and post the lot once. |
+| **B54** | `ScanField` · **shipped** | Take one identifier at a time, scanned or typed, and state what the last one resolved to. |
 | **B55** | `SumList` | **Shipped.** State a set of amounts and the figure they add up to. |
-| **B56** | `JobList` | State what became of each background operation this reader started, and where its result landed. |
-| **B7 amd** | `rowSync` | State that a row's change has not been saved yet, or failed to save. |
-| **surface** | Density | Re-tokenize spacing, row height and control minimum into three registered postures, declared on a wrapper and resolved at the nearest declaration. |
+| **B58** | `JobList` · **shipped** (renumbered) | State what became of each background operation this reader started, and where its result landed. |
+| **B7 amd** | `rowSync` · **shipped** | State that a row's change has not been saved yet, or failed to save. |
+| **surface** | Density · **shipped** | Re-tokenize spacing, row height and control minimum into three registered postures, declared on a wrapper and resolved at the nearest declaration. |
 
 `SumList` is B44's arithmetic sibling and the pairing is the point: **B44
 divides ONE total into its shares; `SumList` builds ONE total from its lines.**
@@ -238,11 +267,11 @@ point 12 is not checkable against a denominator nobody printed.
 
 | | Name | One job |
 |---|---|---|
-| **B57** | `TreeTable` | State a hierarchy of rows in which every parent is the sum of its children, across the same numeric columns at every depth. |
-| **B58** | `CrossTable` | State ONE measure at every intersection of two dimensions. |
-| **B59** | `FunnelList` | State how one total narrows through an ordered sequence of steps. |
-| **B35 amd** | The stated baseline | Print what a comparison is against, so no delta on any 76° screen is an unsourced assertion. |
-| **surface** | `saved-view-line` | State that the view on screen has drifted from the view that was saved. |
+| **B59** | `TreeTable` · **shipped** (renumbered) | State a hierarchy of rows in which every parent is the sum of its children, across the same numeric columns at every depth. |
+| **B60** | `CrossTable` · **shipped** (renumbered) | State ONE measure at every intersection of two dimensions. |
+| **B61** | `FunnelList` · **shipped** (renumbered) | State how one total narrows through an ordered sequence of steps. |
+| **B3 amd** | The stated baseline · **shipped** as `Delta against` | Print what a comparison is against, so no delta on any 76° screen is an unsourced assertion. |
+| **B7 amd** | `saved-view-line` · **shipped** as `FilterLine savedView` | State that the view on screen has drifted from the view that was saved. |
 
 **`PathLine` was withdrawn before it was built.** The 0.6 review named it for
 what it was — a breadcrumb — and breadcrumbs are now refused outright as
@@ -270,10 +299,10 @@ of what flipping one does, an A3 failure the system has no component to prevent.
 
 | | Name | One job |
 |---|---|---|
-| **B61** | `MessageThread` | State one conversation as an ordered list of messages, each attributed to a person and marked with its direction. |
-| **B62** | `SettingList` | State one setting's consequence beside the instant-effect control that changes it. |
-| **template** | `crm-deal` | Open ONE record from its list and hold its facts, its history and its verbs on one page, editing in a Drawer rather than on another screen. |
-| **template** | `settings-team` | Administer one workspace's people — who is a member, what each may do, and which invitations are outstanding. |
+| **B62** | `MessageThread` · **shipped** (renumbered) | State one conversation as an ordered list of messages, each attributed to a person and marked with its direction. |
+| **B63** | `SettingList` · **shipped** (renumbered) | State one setting's consequence beside the instant-effect control that changes it. |
+| **template** | `crm-deal` · **shipped** | Open ONE record from its list and hold its facts, its history and its verbs on one page, editing in a Drawer rather than on another screen. |
+| **template** | `settings-team` · **shipped** | Administer one workspace's people — who is a member, what each may do, and which invitations are outstanding. |
 
 B41 forbids the message thread by its own Don't list — "never two sentences of
 body", "never an interactive row" — and its tones are lifecycle, not direction.
@@ -323,17 +352,14 @@ sub-taxonomy, it is a screen composed of 76° parts — not a component.**
 
 ## Exploring — later
 
+- **Native-speaker review of the catalogs** — French, Arabic and Somali ship machine-drafted from the English source. Each needs a native reviewer before a product ships it. Hebrew and Persian are the next RTL catalogs.
+- **Arabic in the faces** — Hanken Grotesk and Fragment Mono carry no Arabic, so the script falls through to the platform face. A registered Arabic companion face would make that voice the system's own.
 - **Registry MCP server** — search components, blocks, and templates by metadata from any assistant.
-- **Health seed** — a contrast-verified clinical seed, added through the seed rule (both directions ≥ 4.5:1), including its dark `--sv-seed-text` variant.
 - **8-state preview files** — the fundamentals state contract shipped as a preview per component.
-- **Full type tokenization** — a complete `--sv-text-*` scale replacing the literals across every component. Correct, and large enough to need its own release.
-- **More templates** — billing and onboarding screens. *(Analytics shipped in v0.4.0. The inbox is unblocked by `MessageThread` in 0.9, and the purchase order, deal board, deal record and team console are scheduled in 0.6 and 0.9.)*
-- **Theming playground** — swap the seed and the mode live and watch a real screen re-theme.
+- **Full type tokenization** — a complete `--sv-text-*` scale. Density already moved `--sv-body-size` into the token layer, which makes the rest cheaper.
+- **More templates** — billing, onboarding and the inbox (now unblocked by `MessageThread`).
 - **Token sync** — a Figma ⇄ `tokens.css` bridge so design and code share one source.
-
-*Full type tokenization is still listed above, and 0.7's density postures will
-touch the same layer. If the two land together the `--sv-text-*` scale is the
-cheaper half of that change, not a separate release.*
+- ~~**Health seed**~~ — shipped in v0.10 as Iris. ~~**Theming playground**~~ — shipped in v0.10 at `/playground`.
 
 ## Quality gates — every item, every phase
 

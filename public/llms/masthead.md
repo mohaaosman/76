@@ -21,7 +21,7 @@ It is `PageHero`&rsquo;s (B1) public-surface sibling and speaks the same vocabul
 
 **The header anatomy is closed, and F12 is what closes it: a title, ONE line under it, and ONE or TWO buttons.** There is no `eyebrow` prop and no `note` prop, because a slot that exists is a slot that gets filled. The mono kicker above a title states the page&rsquo;s category to a reader who is already on the page; the mono line of terms under the buttons is a footnote nobody reads, in the voice reserved for metadata. Both are the most reliable tells of a header nobody wrote, and the refusal is enforced by the props not existing.
 
-The display steps clamp rather than sit at a fixed size: `--sv-display-1` is 64px at full width and 34px at 320px, which is the size the same line takes in the product ramp. The page degrades <i>into</i> the system, never out of it (C7).
+The display steps clamp rather than sit at a fixed size: `--sv-display-1` is 64px at full width and 34px at 320px, which is the size the same line takes in the product ramp. The page degrades _into_ the system, never out of it (C7).
 
 ## Examples
 

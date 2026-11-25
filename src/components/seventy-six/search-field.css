@@ -10,8 +10,8 @@
     width: 100%;
     /* Left clears the 14px magnifier; right is reserved permanently so the
        text never shifts when the clear button appears on the first keystroke. */
-    padding-left: 32px;
-    padding-right: 30px;
+    padding-inline-start: 32px;
+    padding-inline-end: 30px;
   }
 
   /* WebKit's native cancel button is unlabelled, unstyleable and duplicates
@@ -22,7 +22,7 @@
 
   .sv-search__icon {
     position: absolute;
-    left: 11px;
+    inset-inline-start: 11px;
     top: 50%;
     transform: translateY(-50%);
     color: var(--sv-ink-faint);
@@ -31,7 +31,7 @@
 
   .sv-search__clear {
     position: absolute;
-    right: 6px;
+    inset-inline-end: 6px;
     top: 50%;
     display: inline-flex;
     align-items: center;

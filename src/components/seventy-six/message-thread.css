@@ -1,0 +1,186 @@
+/* B62 · MessageThread — one conversation, attributed and directional.
+   Flat: received is plain paper, sent is the one permitted seed-tint panel
+   indented from the START edge, a note is hairline-ruled. Every message
+   gets the same inner padding so the text column holds whatever the
+   direction. Logical properties throughout — RTL mirrors for free.
+   NO inset of its own: inside a Card it takes `.sv-card__body` (rule 18). */
+
+@layer sv-components {
+  .sv-thread {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sv-s3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* The day row: mono label, then a hairline to the end edge. */
+  .sv-thread__day {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--sv-s3);
+    align-items: center;
+    padding-block-start: var(--sv-s2);
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-thread__day::after {
+    content: '';
+    height: 1px;
+    background: var(--sv-line);
+  }
+
+  .sv-thread__day:first-child {
+    padding-block-start: 0;
+  }
+
+  .sv-thread__msg {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sv-s2);
+    padding: 10px 12px;
+    border: 1px solid transparent;
+    border-radius: var(--sv-r);
+  }
+
+  /* Sent: tint and indent repeat the word; neither replaces it (C5). */
+  .sv-thread__msg--outbound {
+    margin-inline-start: var(--sv-s8);
+    background: var(--sv-seed-tint);
+  }
+
+  /* A note never reached the other party: no surface, a hairline frame. */
+  .sv-thread__msg--note {
+    border-color: var(--sv-field-line);
+  }
+
+  .sv-thread__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: var(--sv-s2);
+    row-gap: 2px;
+  }
+
+  .sv-thread--avatars .sv-thread__head {
+    align-items: center;
+  }
+
+  .sv-thread__face {
+    display: inline-flex;
+  }
+
+  .sv-thread__author {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--sv-ink);
+  }
+
+  /* Soft, never faint: this word carries the direction (C2). */
+  .sv-thread__dir {
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-thread__msg--note .sv-thread__dir {
+    color: var(--sv-ink);
+  }
+
+  .sv-thread__time {
+    margin-inline-start: auto;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-thread__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sv-s2);
+    max-width: 72ch;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--sv-ink);
+    text-wrap: pretty;
+  }
+
+  .sv-thread__body p {
+    margin: 0;
+  }
+
+  .sv-thread__files {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-block-start: 1px solid var(--sv-line);
+  }
+
+  .sv-thread__file {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: var(--sv-s3);
+    padding-block: 6px;
+    border-block-end: 1px solid var(--sv-line);
+  }
+
+  .sv-thread__file:last-child {
+    border-block-end: 0;
+    padding-block-end: 0;
+  }
+
+  /* A file name is an identifier, so it speaks mono — but in its own case:
+     uppercasing "Q-2291-rev2.pdf" would misstate the name. */
+  .sv-thread__filename {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    font-family: var(--sv-font-mono);
+    font-size: 11.5px;
+    color: var(--sv-ink);
+  }
+
+  a.sv-thread__filename {
+    color: var(--sv-seed-text);
+    text-decoration: none;
+    transition: color var(--sv-t-fast);
+  }
+
+  a.sv-thread__filename:hover {
+    text-decoration: underline;
+  }
+
+  a.sv-thread__filename:focus-visible {
+    outline: 2px solid var(--sv-seed-line);
+    outline-offset: 2px;
+    border-radius: var(--sv-r);
+  }
+
+  .sv-thread__filemeta {
+    font-family: var(--sv-font-mono);
+    font-size: 10.5px;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-thread__status {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .sv-thread__status:empty {
+    display: none;
+  }
+
+  .sv-thread__fix {
+    margin: 0;
+    font-size: 11.5px;
+    color: var(--sv-ink-soft);
+  }
+
+  /* C7 · at the 320px floor a 40px indent costs an eighth of the line. */
+  @media (max-width: 520px) {
+    .sv-thread__msg--outbound {
+      margin-inline-start: var(--sv-s5);
+    }
+  }
+}

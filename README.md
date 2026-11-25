@@ -84,6 +84,21 @@ F4 range, still with no month grid). Charts gain stacked bars and a
 **Sparkline**, and the S1 delta chip is extracted as **Delta** with an
 honest `polarity` for inverse metrics.
 
+## The roadmap, finished — and every language (v0.10.0)
+
+- **0.7 – 0.9 shipped:** `EntryTable` (B53), `ScanField` (B54), `JobList` (B58), `TreeTable` (B59), `CrossTable` (B60), `FunnelList` (B61), `MessageThread` (B62), `SettingList` (B63); DataTable `rowSync`, FilterLine `savedView`, Delta `against`; the `crm-deal` and `settings-team` templates.
+- **Translation:** `LocaleProvider` + `useStrings()` carry every built-in word in English, French, Arabic and Somali; `useFormat()` gives callers Intl-formatted figures (components still never format, C9).
+- **RTL:** logical properties throughout, direction-aware arrow keys, `Drawer side="start" | "end"`, and a script layer that keeps Arabic letters joined.
+- **Postures:** `data-density="compact | regular | touch"` joins seed, mode and motion; the **Iris** health seed; a live **playground** at `/playground`.
+
+```tsx
+import { LocaleProvider } from '@/components/seventy-six';
+
+<LocaleProvider locale="ar">   {/* writes lang + dir; every component speaks Arabic, mirrored */}
+  <div data-seed="iris" data-density="touch">…</div>
+</LocaleProvider>
+```
+
 ## Zero runtime dependencies
 
 Every component runs on the platform: native `<dialog>` (Dialog, Drawer,

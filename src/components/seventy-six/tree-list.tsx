@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from 'react';
 import type { CSSProperties, KeyboardEvent } from 'react';
 import { cx } from '@/lib/cx';
+import { useDirection } from '@/lib/i18n';
 import './tree-list.css';
 
 /**
@@ -85,6 +86,7 @@ export function TreeList({
   onSelect,
   className,
 }: TreeListProps) {
+  const dir = useDirection();
   const rows = useMemo(() => flatten(nodes, expanded), [nodes, expanded]);
   const byId = useMemo(() => new Map(rows.map((r) => [r.node.id, r])), [rows]);
   const [focusedId, setFocusedId] = useState<string | null>(null);
@@ -121,7 +123,12 @@ export function TreeList({
     const { node } = row;
     const open = hasKids(node) && expanded.has(node.id);
     const i = rows.indexOf(row);
-    switch (e.key) {
+    /* In RTL a child sits to the LEFT of its parent, so ← opens and → closes. */
+    const key =
+      dir === 'rtl' && e.key === 'ArrowLeft' ? 'ArrowRight'
+      : dir === 'rtl' && e.key === 'ArrowRight' ? 'ArrowLeft'
+      : e.key;
+    switch (key) {
       case 'ArrowDown':
         move(rows[i + 1]);
         break;

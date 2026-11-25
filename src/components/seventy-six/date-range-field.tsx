@@ -1,5 +1,6 @@
 import { useId } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import './date-range-field.css';
 
 /**
@@ -83,13 +84,14 @@ export function DateRangeField({
   context,
   className,
 }: DateRangeFieldProps) {
+  const tr = useStrings();
   const id = useId();
   const hintId = `${id}-hint`;
   const errorId = `${id}-error`;
 
   const inverted = value.from !== '' && value.to !== '' && toMs(value.from) > toMs(value.to);
   const shownError =
-    error ?? (inverted ? 'The start date is after the end date. Move the start date back.' : undefined);
+    error ?? (inverted ? tr.rangeInverted : undefined);
   const describedBy = [hint ? hintId : null, shownError ? errorId : null].filter(Boolean).join(' ') || undefined;
 
   const active = presets.find(
@@ -109,7 +111,7 @@ export function DateRangeField({
           {hint}
         </p>
       )}
-      <div className="sv-daterange__presets" role="group" aria-label={`${label} presets`}>
+      <div className="sv-daterange__presets" role="group" aria-label={tr.presets(label)}>
         {presets.map((preset) => (
           <button
             key={preset}
@@ -131,7 +133,7 @@ export function DateRangeField({
           value={value.from}
           min={min}
           max={max}
-          aria-label={`${label}, start date`}
+          aria-label={tr.startDate(label)}
           aria-invalid={shownError ? true : undefined}
           aria-describedby={describedBy}
           onChange={(e) => onValueChange({ ...value, from: e.target.value })}
@@ -145,7 +147,7 @@ export function DateRangeField({
           value={value.to}
           min={value.from || min}
           max={max}
-          aria-label={`${label}, end date`}
+          aria-label={tr.endDate(label)}
           aria-invalid={shownError ? true : undefined}
           aria-describedby={describedBy}
           onChange={(e) => onValueChange({ ...value, to: e.target.value })}

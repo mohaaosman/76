@@ -6,6 +6,59 @@ project uses [semantic versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.10.0-alpha.1] — 2026-11-25
+
+**The roadmap, finished — and every language.** 0.7, 0.8 and 0.9 land
+together: every component and amendment those three bodies of work named is
+built, registered, documented and installable. And one refusal is repealed
+by name rather than worn down: **76° was LTR-only, and English-only by
+omission. It is neither now.**
+
+### Added — posting the work (0.7)
+- **`EntryTable` (B53)** — type one bounded number into every line of a fixed list, and post the lot once. B7's voice; a native number input on the one `entry` column; Enter and ↓ move to the next line, ↑ back, and **Enter never posts** — past the last line it lands on the one primary, labelled with the count it carries ("Post 3 lines"). Out-of-bounds lines state what and how to fix, on blur; a post with any line out of bounds states every error and focuses the first. Per-line sync word + dot. `<tfoot>` totals the caller sums.
+- **`ScanField` (B54)** — one identifier at a time, scanned or typed. Enter submits (scanners send Enter), the field clears and keeps focus, and the last resolution is stated beneath as mono id + tone word + sentence in a polite live region. Never a timer.
+- **`JobList` (B58)** — what became of each background job this reader started, and where its result landed: queued / running (B31 Spinner) / finished / failed with a fix sentence, optional B4 progress, and the result link only when there is a result.
+- **`DataTable rowSync` (B7 amendment)** — `'unsaved' | 'saving' | 'failed'` stated as a mono word and a 6px dot under the row's identity. Never a row tint: the row's background already means hover and selection.
+- **The density posture** — `data-density="compact | regular | touch"` on a wrapper, resolved at the nearest declaration, re-tokenizing `--sv-row-y`, `--sv-control-y`, `--sv-button-y`, `--sv-control-min` and `--sv-body-size`. DataTable, Field and Button read them. Touch takes B10's POS numbers (≥48px).
+
+### Added — the number in relation (0.8)
+- **`TreeTable` (B59)** — a hierarchy whose every parent is the sum of its children, across the same columns at every depth. `role="treegrid"`, B40's keyboard model mirrored in RTL, pre-formatted cells it never computes. **F3 survives**: its depth is the chart of accounts, set by data, never regrouped by the reader.
+- **`CrossTable` (B60)** — one measure at every intersection of two dimensions, with real row and column headers, a corner cell naming both and the measure, caller totals, and ONE highlight. **The heatmap stays refused.**
+- **`FunnelList` (B61)** — one total narrowing through ordered steps, absolute figures required, straight 3px bars on B6's track. No trapezoids.
+- **The stated baseline** — `Delta against` and `StatS1 deltaAgainst` print what a change is measured against ("▲ 12.8% vs Q2"), and say it to a screen reader. Ship Gate 12 finally has a denominator.
+- **The saved view, stated (B7 amendment)** — `FilterLine savedView` adds the line "Changed from the saved view “Open POs”" with Reset and Save view, in the same live region as the filters.
+
+### Added — the record and the console (0.9)
+- **`MessageThread` (B62)** — one conversation; every message attributed, timestamped in a `<time>`, and its direction stated in words (Received · Sent · Internal note). Sent sits on the seed tint, a note in a hairline frame, and the indent is `margin-inline-start`, so an Arabic thread mirrors itself. No composer: that is a screen's B11 textarea and B10 button.
+- **`SettingList` (B63)** — B28's settable twin. Every control sits beside the sentence that states what its CURRENT value does; `{ on, off }` consequences, per-option consequences for selects, a sync word, and a locked row that always says why. Instant effect, so no Save button.
+- **`crm-deal` and `settings-team` templates** — the record as a relationship, edited in a Drawer, and the first administration console in the set.
+
+### Added — the language layer
+- **`LocaleProvider`, `useStrings`, `useLocale`, `useDirection`, `useFormat`** in `src/lib/i18n.tsx`, shipped in the `tokens` registry item. Every built-in word the components speak moved into one typed catalog — `SvMessages` — with **English (source), French, Arabic and Somali**, Arabic plurals through `Intl.PluralRules`. A missing key in a custom catalog is a compile error. **No provider, no change**: every component renders the English it rendered before.
+- **C9 stands.** `useFormat()` / `createFormatters()` give the CALLER Intl-backed `number`, `money`, `percent`, `delta` (with a true U+2212 minus), `date`, `dateTime`, `time` and `list`. No component calls them.
+- **The docs speak four languages.** A native language select in the band (endonyms, so a reader can find their own), chrome translated, `lang` and `dir` on `<html>`. The reference prose stays English and says so: a machine-translated spec is a second spec.
+
+### Changed — the LTR boundary, repealed
+- **111 physical declarations became logical** across every component stylesheet and the site. Glyph chevrons stay physical and turn under `:dir(rtl)`; inset box-shadows (selection rules, split-button seams) gain RTL twins; motion `transform-origin`s follow the reading start.
+- **Arrow keys follow the reading direction** in Tabs, CardTabs and TreeList via `inlineStep()`. `Drawer side` gains `start` / `end` (default `end`), and the band's nav drawer opens from `start`.
+- **Left to right on purpose:** CodeBlock, PinField's boxes, and the Trend plot's time axis.
+- **`@layer sv-script`** — a fifth cascade layer after components. Joined scripts (Arabic, Persian, Urdu, Pashto, Sorani, Sindhi, Uyghur, Syriac) take no letter-spacing, micro labels step to 11.5px, and `--sv-font-mono` falls through to the UI face so Arabic letters do not sit in fixed-width cells while Latin IDs stay mono. Mono runs and `<time>` isolate their direction, so "16 NOV · 09:12" is not reordered.
+
+### Added — from Exploring
+- **Iris, the health seed** — `data-seed="iris"`, #6A45C9: 6.35:1 seed-on-white AND white-on-seed; deep #5233A6; dark text #A98CF0 at 6.06:1; restated for print.
+- **The theming playground** (`/playground`) — seed, mode, density, motion and language applied live to a real goods receipt, declared on a wrapper and never on `<html>`.
+- **`Checkbox indeterminate`** (B11 amendment) — the mixed state, set as the DOM property so the browser reports `aria-checked="mixed"`.
+
+### Fixed
+- **Placeholders failed C2.** `.sv-field__input::placeholder` and the command palette's used `--sv-ink-faint` (2.6:1). Both are `--sv-ink-soft`.
+- **`Field` and `Select` dropped a caller's `aria-describedby`** — the spread was overwritten by the component's own. They merge now.
+- **Doc prose with `<i>` printed its tags** on six pages; the renderer and the markdown export both handle it.
+- **Firewall rule 18** lists EntryTable, TreeTable and CrossTable as full-bleed, beside the DataTable they extend.
+
+---
+
+## [0.9.0] — the moving surface
+
 **The surface reaches the widgets.** v0.6.1 built the moving surface and wired
 exactly one component to it — B5 `Trend`. v0.7 declared the posture, v0.8
 switched it on, and the widgets that most obviously wanted it were still

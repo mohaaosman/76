@@ -29,8 +29,8 @@
   }
 
   .sv-proof__item + .sv-proof__item {
-    padding-left: var(--sv-s6);
-    border-left: 1px solid var(--sv-line);
+    padding-inline-start: var(--sv-s6);
+    border-inline-start: 1px solid var(--sv-line);
   }
 
   /* The one line of layout that answers for the DOM order: the <dt> is first
@@ -86,8 +86,8 @@
        rule between nothing and nothing is worse than no rule at all — it
        also pushes column one out of alignment with the column above it. */
     .sv-proof__item:nth-child(odd) {
-      padding-left: 0;
-      border-left: 0;
+      padding-inline-start: 0;
+      border-inline-start: 0;
     }
   }
 
@@ -100,8 +100,8 @@
     }
 
     .sv-proof__item + .sv-proof__item {
-      padding-left: 0;
-      border-left: 0;
+      padding-inline-start: 0;
+      border-inline-start: 0;
     }
   }
 }

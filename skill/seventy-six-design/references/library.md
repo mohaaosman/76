@@ -75,6 +75,14 @@ Every name below is exported from `src/components/seventy-six/index.ts`. Do not 
 | `DataTable`, `SelectionHead`, `FilterLine`, `FilterBar` | The ERP workhorse: mono headers/IDs, dot+word statuses, tabular numbers, keyboard contract. `FilterBar` SETS filters, `FilterLine` STATES what is set, `SelectionHead` replaces the CardHead in place while rows are selected. | `Column`, `SelectionHeadProps`, `FilterLineProps`, `FilterBarProps`, `ActiveFilter` |
 | `CardTabs` | In-card filter tabs on the card hairline — filter one card's content in place. | `CardTab` |
 | `ActivityList` | Mono timestamp column beside sentence rows with bold entities — "what needs me." | `ActivityItem` |
+| `EntryTable` | B53 — type one bounded number into every line of a fixed list, post the lot once. Enter moves down, never posts. | `EntryColumn`, `EntryTotalsRow`, `EntrySync`, `EntryTableProps` |
+| `JobList` | B58 — what became of each background job, and where its result landed. | `Job`, `JobState`, `JobListProps` |
+| `TreeTable` | B59 — a hierarchy whose every parent is the sum of its children (treegrid). Never computes. | `TreeTableColumn`, `TreeTableNode`, `TreeTableTotal`, `TreeTableProps` |
+| `CrossTable` | B60 — one measure at every intersection of two dimensions. Figures, never a heatmap. | `CrossAxisItem`, `CrossTableProps` |
+| `FunnelList` | B61 — one total narrowing through ordered steps, on straight bars. | `FunnelStep`, `FunnelListProps` |
+| `MessageThread` | B62 — one conversation; each message attributed, timed, direction stated in words. No composer. | `ThreadMessage`, `ThreadAttachment`, `MessageDirection`, `MessageThreadProps` |
+
+`DataTable` also takes `rowSync(row)` (unsaved/saving/failed as word + dot) and `FilterLine` takes `savedView` (drift from a saved view). `Delta`/`StatS1` take `against`/`deltaAgainst` — the stated baseline; print one on every new delta.
 
 ### Primitives — the atoms widgets and pages compose
 
@@ -119,6 +127,20 @@ Every name below is exported from `src/components/seventy-six/index.ts`. Do not 
 | `DateRangeField`, `presetRange` | A date range with no month grid (F4) — mono presets + two native date inputs. | `DateRange`, `DateRangePreset`, `DateRangeFieldProps` |
 | `PinField` | A short fixed-length code — one semantic input behind 4–8 boxes. | `PinFieldProps`, `PinCharset` |
 | `SocialButton` | Hand authentication to one named provider; the mark is one `currentColor` path. | `SocialButtonProps`, `SocialProvider` |
+| `ScanField` | B54 — one identifier at a time, scanned or typed; states what the last one resolved to. | `ScanFieldProps`, `ScanResult`, `ScanTone` |
+| `SettingList` | B63 — each setting's consequence sentence beside the instant-effect control. No Save button. | `SettingRow`, `SettingControl`, `SettingListProps` |
+
+`Field multiline` renders a real `<textarea>`; `Checkbox indeterminate` is the mixed state.
+
+### Language & postures (v0.10)
+
+| Import | One job |
+| --- | --- |
+| `LocaleProvider`, `useStrings` | Every built-in component word from one typed catalog (`SvMessages`): `en` (source), `fr`, `ar`, `so`. No provider = English, unchanged. Override keys with `messages`. |
+| `useDirection`, `inlineStep`, `directionOf` | RTL support. CSS is logical everywhere; these are for arrow-key handlers only. |
+| `useFormat`, `createFormatters` | CALLER-layer Intl formatting (money, number, percent, delta with U+2212, dates). Components never call them (C9). |
+
+Postures on a wrapper, resolved at the nearest declaration: `data-seed` (cobalt · verdigris · signal · iris), `data-mode="dark"`, `data-motion="on"`, and `data-density="compact | regular | touch"`.
 
 ### Marketing — the public surface (v0.5, B47–B51)
 

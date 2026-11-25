@@ -38,8 +38,8 @@
      display title above it. The gap opens the space left of the rule, the
      padding opens it right, so the line stays off the type on both sides. */
   .sv-index__cell + .sv-index__cell {
-    padding-left: var(--sv-s5);
-    border-left: 1px solid var(--sv-line);
+    padding-inline-start: var(--sv-s5);
+    border-inline-start: 1px solid var(--sv-line);
   }
 
   /* RULE 20 · THE ONE DISPLAY-FACE MARK IN THIS COMPONENT, and the case for
@@ -132,8 +132,8 @@
        and a rule between nothing and nothing is worse than no rule at all
        — it also pushes column one out of line with the column above it. */
     .sv-index__cell:nth-child(2n + 1) {
-      padding-left: 0;
-      border-left: 0;
+      padding-inline-start: 0;
+      border-inline-start: 0;
     }
 
     /* Five and six cells: three columns, two rows. The rule is restored on
@@ -146,14 +146,14 @@
 
     .sv-index__list[data-count='5'] .sv-index__cell,
     .sv-index__list[data-count='6'] .sv-index__cell {
-      padding-left: var(--sv-s5);
-      border-left: 1px solid var(--sv-line);
+      padding-inline-start: var(--sv-s5);
+      border-inline-start: 1px solid var(--sv-line);
     }
 
     .sv-index__list[data-count='5'] .sv-index__cell:nth-child(3n + 1),
     .sv-index__list[data-count='6'] .sv-index__cell:nth-child(3n + 1) {
-      padding-left: 0;
-      border-left: 0;
+      padding-inline-start: 0;
+      border-inline-start: 0;
     }
 
     /* Seven and eight cells: four columns, two rows. */
@@ -164,14 +164,14 @@
 
     .sv-index__list[data-count='7'] .sv-index__cell,
     .sv-index__list[data-count='8'] .sv-index__cell {
-      padding-left: var(--sv-s5);
-      border-left: 1px solid var(--sv-line);
+      padding-inline-start: var(--sv-s5);
+      border-inline-start: 1px solid var(--sv-line);
     }
 
     .sv-index__list[data-count='7'] .sv-index__cell:nth-child(4n + 1),
     .sv-index__list[data-count='8'] .sv-index__cell:nth-child(4n + 1) {
-      padding-left: 0;
-      border-left: 0;
+      padding-inline-start: 0;
+      border-inline-start: 0;
     }
   }
 
@@ -195,9 +195,9 @@
 
     .sv-index__list[data-count] .sv-index__cell {
       padding-top: var(--sv-s3);
-      padding-left: 0;
+      padding-inline-start: 0;
       border-top: 1px solid var(--sv-line);
-      border-left: 0;
+      border-inline-start: 0;
     }
   }
 }

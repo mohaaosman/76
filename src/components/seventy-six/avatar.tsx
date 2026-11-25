@@ -1,4 +1,5 @@
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import './avatar.css';
 
 /**
@@ -47,6 +48,7 @@ export interface AvatarGroupProps {
  * count; the full list belongs in a Drawer or a table, never in a hover.
  */
 export function AvatarGroup({ people, max = 4, size = 'sm', className }: AvatarGroupProps) {
+  const tr = useStrings();
   const shown = people.slice(0, max);
   const rest = people.length - shown.length;
   return (
@@ -55,7 +57,7 @@ export function AvatarGroup({ people, max = 4, size = 'sm', className }: AvatarG
         <Avatar key={person.name} name={person.name} src={person.src} size={size} />
       ))}
       {rest > 0 && (
-        <span className={cx('sv-avatar', `sv-avatar--${size}`, 'sv-avatar--rest', 'sv-mono')} role="img" aria-label={`${rest} more`}>
+        <span className={cx('sv-avatar', `sv-avatar--${size}`, 'sv-avatar--rest', 'sv-mono')} role="img" aria-label={tr.more(rest)}>
           <span aria-hidden="true">+{rest}</span>
         </span>
       )}

@@ -22,6 +22,19 @@
     inset: 0 auto 0 0;
   }
 
+  /* The logical sides (v0.10): `start` is the edge reading begins at, so a
+     navigation drawer opens from the left in English and the right in
+     Arabic with no branch in the caller. */
+  .sv-drawer--end {
+    inset-block: 0;
+    inset-inline: auto 0;
+  }
+
+  .sv-drawer--start {
+    inset-block: 0;
+    inset-inline: 0 auto;
+  }
+
   .sv-drawer--sm {
     width: min(360px, 100vw);
   }
@@ -51,6 +64,16 @@
     }
 
     .sv-drawer--left[open] {
+      transform: translateX(-24px);
+    }
+
+    .sv-drawer--end[open],
+    .sv-drawer--start[open]:dir(rtl) {
+      transform: translateX(24px);
+    }
+
+    .sv-drawer--start[open],
+    .sv-drawer--end[open]:dir(rtl) {
       transform: translateX(-24px);
     }
   }

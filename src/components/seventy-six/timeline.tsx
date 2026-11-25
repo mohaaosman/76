@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import type { ReactNode } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import './timeline.css';
 
 /**
@@ -38,13 +39,10 @@ export interface TimelineProps {
 /* C5 · a coloured dot is colour-only meaning, so every row says its tone
    in words too — and says it BEFORE the title, the way a reader scanning
    the rail sees the marker before the text. */
-const TONE_WORD: Record<TimelineTone, string> = {
-  done: 'Completed',
-  pending: 'Not started',
-  bad: 'Failed',
-};
+const TONE_KEY = { done: 'toneDone', pending: 'tonePending', bad: 'toneBad' } as const satisfies Record<TimelineTone, string>;
 
 export function Timeline({ items, className }: TimelineProps) {
+  const tr = useStrings();
   return (
     <ol className={cx('sv-timeline', className)}>
       {items.map((item) => {
@@ -71,7 +69,7 @@ export function Timeline({ items, className }: TimelineProps) {
                 {item.time}
               </time>
               <p className="sv-timeline__title">
-                <span className="sv-visually-hidden">{TONE_WORD[tone]}. </span>
+                <span className="sv-visually-hidden">{tr[TONE_KEY[tone]]}. </span>
                 {item.title}
               </p>
               {item.body && <p className="sv-timeline__body">{item.body}</p>}

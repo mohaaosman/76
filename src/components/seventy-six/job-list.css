@@ -1,0 +1,121 @@
+/* B58 · JobList — one row per background operation, changing in place.
+   No inset of its own: inside a Card it takes `.sv-card__body` (rule 18),
+   the same as B6 MeterList and B41 Timeline. */
+
+@layer sv-components {
+  .sv-jobs__list {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Name and detail at the inline start, the state pinned at the inline
+     end so every state word lines up down the list. */
+  .sv-jobs__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--sv-s4);
+    align-items: start;
+    padding-block: var(--sv-row-y);
+    border-block-end: 1px solid var(--sv-line);
+  }
+
+  .sv-jobs__row:first-child {
+    padding-block-start: 0;
+  }
+
+  .sv-jobs__row:last-child {
+    padding-block-end: 0;
+    border-block-end: 0;
+  }
+
+  .sv-jobs__main {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .sv-jobs__title {
+    font-size: var(--sv-body-size);
+    font-weight: 700;
+    color: var(--sv-ink);
+    text-wrap: pretty;
+  }
+
+  .sv-jobs__meta {
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-jobs__progress {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-jobs__track {
+    max-inline-size: 240px;
+    margin-block: 2px;
+  }
+
+  /* What failed and how to fix it. Ink, not red: the state word already
+     carries the red, and a sentence the reader must act on is read at
+     full contrast. */
+  .sv-jobs__error {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--sv-ink);
+    text-wrap: pretty;
+  }
+
+  /* B10 text link: 12/600 seed, underline on hover. */
+  .sv-jobs__link {
+    align-self: flex-start;
+    margin-block-start: 2px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--sv-seed-text);
+    text-decoration: none;
+  }
+
+  .sv-jobs__link:hover {
+    text-decoration: underline;
+  }
+
+  .sv-jobs__link:focus-visible {
+    outline: 2px solid var(--sv-seed-line);
+    outline-offset: 2px;
+    border-radius: var(--sv-r);
+  }
+
+  /* B12 anatomy: 6px dot + word 12/600. Running swaps the dot for B31's
+     12px spinner — the one sanctioned continuous animation — and keeps
+     the word, so the state never rests on motion alone. */
+  .sv-jobs__state {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .sv-jobs__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .sv-jobs__state--queued,
+  .sv-jobs__state--running { color: var(--sv-ink-soft); }
+  .sv-jobs__state--done    { color: var(--sv-ok); }
+  .sv-jobs__state--failed  { color: var(--sv-bad); }
+
+  .sv-jobs__spin {
+    color: inherit;
+  }
+}

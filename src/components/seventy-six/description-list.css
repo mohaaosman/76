@@ -39,7 +39,7 @@
 
   .sv-dl__value--num {
     font-weight: 600;
-    text-align: right;
+    text-align: end;
   }
 
   .sv-dl--stacked .sv-dl__row {
@@ -48,7 +48,7 @@
   }
 
   .sv-dl--stacked .sv-dl__value--num {
-    text-align: left;
+    text-align: start;
   }
 
   /* C7 · the 320px floor: two columns become one rather than crushing the
@@ -60,7 +60,7 @@
     }
 
     .sv-dl__value--num {
-      text-align: left;
+      text-align: start;
     }
   }
 }

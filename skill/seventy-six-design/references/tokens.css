@@ -9,7 +9,7 @@
    product's own rules can silently lose to a component's — layer order
    beats specificity, so no amount of selector weight recovers it.
    A consuming app appends its own layer after these four. */
-@layer sv-tokens, sv-base, sv-components, sv-site;
+@layer sv-tokens, sv-base, sv-components, sv-script, sv-site;
 
 @layer sv-tokens {
   :root {
@@ -159,6 +159,19 @@
     --sv-seed-deep: #A83E12;
     --sv-seed-tint: #FCF0EA;
   }
+
+  /* HEALTH · Iris (v0.10). A clinical product needed a seed that is not
+     the CRM's teal and not the ERP's blue, and that never reads as an
+     alarm — red is --sv-bad's, and a ward screen with a red accent
+     says "emergency" on every button. Through the seed rule:
+     6.35:1 seed-on-white AND 6.35:1 white-on-seed. */
+  [data-seed='iris'] {
+    --sv-seed:      #6A45C9;   /* HEALTH · 6.35:1 both ways */
+    --sv-seed-text: #6A45C9;
+    --sv-seed-line: var(--sv-seed);  /* 6.35:1 on paper */
+    --sv-seed-deep: #5233A6;   /* 8.81:1 white-on-deep */
+    --sv-seed-tint: #F3F0FB;
+  }
 }
 
 /* ============================================================
@@ -239,6 +252,11 @@
   [data-mode='dark'][data-seed='signal'],
   [data-mode='dark'] [data-seed='signal'] {
     --sv-seed-text: #F59A6B;
+    --sv-seed-line: var(--sv-seed-text);
+  }
+  [data-mode='dark'][data-seed='iris'],
+  [data-mode='dark'] [data-seed='iris'] {
+    --sv-seed-text: #A98CF0;    /* 6.06:1 on dark paper — AA */
     --sv-seed-line: var(--sv-seed-text);
   }
 
@@ -456,6 +474,12 @@
                                      #D9531E is 4.0:1 on white and fails */
       --sv-seed-line: var(--sv-seed);
     }
+
+    [data-mode='dark'][data-seed='iris'],
+    [data-mode='dark'] [data-seed='iris'] {
+      --sv-seed-text: #6A45C9;    /* 6.35:1 on paper */
+      --sv-seed-line: var(--sv-seed);
+    }
   }
 }
 
@@ -587,5 +611,56 @@
       --sv-t-enter: 0ms;
       --sv-t-count: 0ms;
     }
+  }
+}
+
+/* ============================================================
+   THE DENSITY POSTURE (v0.10 · the 0.7 surface, shipped)
+
+   One fixed row height served neither a warehouse floor at arm's
+   length nor an analyst at 27 inches, and B10 had already solved
+   it once, per component, with a bespoke POS variant — exactly the
+   ad-hoc branching the dark surface exists to forbid. Density is a
+   POSTURE on a wrapper, resolved at the nearest declaration, the
+   same way `data-seed`, `data-mode` and `data-motion` are:
+
+     <div data-density="compact">   analyst · 27-inch · 40-line ledgers
+     (nothing declared)             regular · the 76° default
+     <div data-density="touch">     floor · counter · arm's length, ≥48px
+
+   It re-tokenizes three things and only three: the block inset of
+   a row, the block inset of a control, and the control's minimum
+   height. Type, colour, radius and the inline gutters do not move —
+   a compact screen is the same screen with less air, not a smaller
+   one. Density as a per-component prop stays REFUSED.
+   ============================================================ */
+
+@layer sv-tokens {
+  :root,
+  [data-density='regular'] {
+    --sv-row-y: 10.5px;      /* DataTable / EntryTable cell block inset */
+    --sv-control-y: 9px;     /* Field input block inset */
+    --sv-button-y: var(--sv-s2);
+    --sv-control-min: 0px;   /* no floor: the padding sets the height */
+    --sv-body-size: 13px;    /* table body + field value */
+  }
+
+  [data-density='compact'] {
+    --sv-row-y: 6px;
+    --sv-control-y: 5px;
+    --sv-button-y: 5px;
+    --sv-control-min: 0px;
+    --sv-body-size: 13px;
+  }
+
+  /* WCAG 2.5.8 asks 24px; a counter asks 48. The floor posture takes
+     B10's POS numbers verbatim, so the bespoke variant becomes the
+     posture rather than a second implementation of it. */
+  [data-density='touch'] {
+    --sv-row-y: 16px;
+    --sv-control-y: 13px;
+    --sv-button-y: var(--sv-s3);
+    --sv-control-min: 48px;
+    --sv-body-size: 16px;
   }
 }

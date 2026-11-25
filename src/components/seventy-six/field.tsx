@@ -1,5 +1,6 @@
-import { forwardRef, useId } from 'react';
+import { forwardRef, useEffect, useId, useRef } from 'react';
 import type {
+  Ref,
   InputHTMLAttributes,
   SelectHTMLAttributes,
   TextareaHTMLAttributes,
@@ -65,24 +66,42 @@ export type FieldProps = FieldChromeProps &
 export type TextareaFieldProps = FieldChromeProps &
   TextareaHTMLAttributes<HTMLTextAreaElement> & { multiline: true };
 
-export const Field = forwardRef<HTMLInputElement, FieldProps>(function Field(
-  { label, hint, error, required, id: explicitId, className, ...rest },
+/**
+ * `multiline` was typed since v0.1 and never rendered — the component always
+ * drew an <input>, so every "B11 multiline Field" in the docs was a single
+ * line. It now draws a real <textarea> with the same chrome, ids and error
+ * wiring (v0.10).
+ */
+export const Field = forwardRef<HTMLInputElement | HTMLTextAreaElement, FieldProps | TextareaFieldProps>(function Field(
+  props,
   ref,
 ) {
+  const { label, hint, error, required, id: explicitId, className } = props;
   const { id, hintId, errorId } = useFieldIds(explicitId);
-  const describedBy = [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(' ') || undefined;
+  /* A caller's own aria-describedby is MERGED, never replaced. */
+  const describedBy =
+    [hint ? hintId : null, error ? errorId : null, props['aria-describedby']].filter(Boolean).join(' ') || undefined;
+  const shared = {
+    id,
+    required,
+    className: cx('sv-field__input', props.multiline && 'sv-field__input--multiline', error && 'sv-field__input--error'),
+    'aria-invalid': error ? true : undefined,
+    'aria-describedby': describedBy,
+  } as const;
   return (
     <div className={cx('sv-field', className)}>
       <FieldLabel id={id} label={label} required={required} hint={hint} hintId={hintId} />
-      <input
-        {...rest}
-        ref={ref}
-        id={id}
-        required={required}
-        className={cx('sv-field__input', error && 'sv-field__input--error')}
-        aria-invalid={error ? true : undefined}
-        aria-describedby={describedBy}
-      />
+      {props.multiline ? (
+        (() => {
+          const { label: _l, hint: _h, error: _e, required: _r, id: _i, className: _c, multiline: _m, ...rest } = props;
+          return <textarea rows={4} {...rest} {...shared} ref={ref as Ref<HTMLTextAreaElement>} />;
+        })()
+      ) : (
+        (() => {
+          const { label: _l, hint: _h, error: _e, required: _r, id: _i, className: _c, multiline: _m, ...rest } = props;
+          return <input {...rest} {...shared} ref={ref as Ref<HTMLInputElement>} />;
+        })()
+      )}
       <FieldError error={error} errorId={errorId} />
     </div>
   );
@@ -98,7 +117,11 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
   ref,
 ) {
   const { id, hintId, errorId } = useFieldIds(explicitId);
-  const describedBy = [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(' ') || undefined;
+  /* A caller's own aria-describedby is MERGED, never replaced: the spread
+     above used to be overwritten by this line, silently unhooking whatever
+     the caller pointed at (a SettingList consequence, a FilterLine). */
+  const describedBy =
+    [hint ? hintId : null, error ? errorId : null, rest['aria-describedby']].filter(Boolean).join(' ') || undefined;
   return (
     <div className={cx('sv-field', className)}>
       <FieldLabel id={id} label={label} required={required} hint={hint} hintId={hintId} />
@@ -125,19 +148,40 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
 
 export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
+  /**
+   * B11 amendment (v0.10) · the mixed state — "some of the rows below are
+   * on". A DOM property, not an attribute, so it is set on the node; the
+   * browser then reports `aria-checked="mixed"` itself. The select-all box
+   * over a partly selected table, and the parent row of a permission set.
+   */
+  indeterminate?: boolean;
 }
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
-  { label, className, ...rest },
+  { label, className, indeterminate = false, ...rest },
   ref,
 ) {
+  const local = useRef<HTMLInputElement | null>(null);
+  useEffect(() => {
+    if (local.current) local.current.indeterminate = indeterminate;
+  }, [indeterminate]);
   return (
     <label className={cx('sv-check', className)}>
-      <input {...rest} ref={ref} type="checkbox" className="sv-check__input" />
+      <input
+        {...rest}
+        ref={(node) => {
+          local.current = node;
+          if (typeof ref === 'function') ref(node);
+          else if (ref) ref.current = node;
+        }}
+        type="checkbox"
+        className="sv-check__input"
+      />
       <span className="sv-check__box" aria-hidden="true">
-        <svg viewBox="0 0 10 8" width="10" height="8">
+        <svg className="sv-check__tick" viewBox="0 0 10 8" width="10" height="8">
           <path d="M1 4l2.5 2.5L9 1" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
+        <span className="sv-check__dash" />
       </span>
       <span className="sv-check__label">{label}</span>
     </label>

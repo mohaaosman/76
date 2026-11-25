@@ -3,9 +3,19 @@
 @layer sv-components {
   .sv-stat__top {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
+    gap: 2px var(--sv-s2);
     padding: 14px 18px 0;
+  }
+
+  /* v0.10 · a delta that states its baseline is longer than two glyphs and
+     a figure, and a translated baseline longer still. Rather than truncate
+     the label to make room, the delta wraps under it — the label is the
+     card's name and is never the thing that gives way to context. */
+  .sv-stat__top:has(.sv-delta__against) .sv-stat__label {
+    white-space: normal;
   }
 
   /* The label yields before the delta does: the delta is two glyphs and a
@@ -27,6 +37,13 @@
     font-size: 12px;
     font-weight: 700;
     white-space: nowrap;
+  }
+
+  /* The baseline is context, not the change: soft ink and the body
+     weight, so the arrow and figure stay the coloured, bold part. */
+  .sv-delta__against {
+    font-weight: 500;
+    color: var(--sv-ink-soft);
   }
 
   .sv-delta--ok  { color: var(--sv-ok); }
@@ -75,7 +92,7 @@
   }
 
   .sv-stat__unit {
-    margin-left: 2px;
+    margin-inline-start: 2px;
     font-size: 14px;
     font-weight: 600;
     color: var(--sv-ink-soft);

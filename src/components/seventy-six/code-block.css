@@ -27,8 +27,8 @@
      share one width. */
   .sv-code__copy {
     min-width: 46px;
-    margin-left: auto;
-    text-align: right;
+    margin-inline-start: auto;
+    text-align: end;
   }
 
   .sv-code__pre {
@@ -59,21 +59,28 @@
   /* Sticky so the numbers stay put while the code scrolls under them. */
   .sv-code__gutter {
     position: sticky;
-    left: 0;
+    inset-inline-start: 0;
     display: flex;
     flex: none;
     flex-direction: column;
     padding: 14px var(--sv-s2);
-    border-right: 1px solid var(--sv-line);
+    border-inline-end: 1px solid var(--sv-line);
     background: var(--sv-wall);
     font-size: 10px;
     color: var(--sv-ink-faint);
-    text-align: right;
+    text-align: end;
     user-select: none;
   }
 
   .sv-code__num {
     display: block;
     line-height: var(--sv-code-line);
+  }
+
+  /* Code is written left to right in every language. An Arabic page that
+     mirrors its code block has reversed the program, not translated it. */
+  .sv-code__pre {
+    direction: ltr;
+    text-align: start;
   }
 }

@@ -1,6 +1,7 @@
 import { useId, useRef, useState } from 'react';
 import type { DragEvent } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 /* The row bar IS the B4 bar — its track, fill and single 160ms width
    transition are defined once, in progress.css, and worn here. */
 import './progress.css';
@@ -64,6 +65,7 @@ export function FileField({
   id: explicitId,
   className,
 }: FileFieldProps) {
+  const tr = useStrings();
   const auto = useId();
   const id = explicitId ?? auto;
   const hintId = `${id}-hint`;
@@ -110,7 +112,7 @@ export function FileField({
         onDrop={onDrop}
       >
         <p className="sv-filefield__prompt">
-          {multiple ? 'Drop files here, or choose them from your computer.' : 'Drop a file here, or choose one from your computer.'}
+          {multiple ? tr.dropFiles : tr.dropFile}
         </p>
         <button
           type="button"
@@ -118,7 +120,7 @@ export function FileField({
           disabled={disabled}
           onClick={() => inputRef.current?.click()}
         >
-          {multiple ? 'Choose files' : 'Choose file'}
+          {multiple ? tr.chooseFiles : tr.chooseFile}
         </button>
         <input
           ref={inputRef}
@@ -159,7 +161,7 @@ export function FileField({
                   <span
                     className="sv-progress__track sv-filefield__track"
                     role="progressbar"
-                    aria-label={`Uploading ${file.name}`}
+                    aria-label={tr.uploading(file.name)}
                     aria-valuenow={percent}
                     aria-valuemin={0}
                     aria-valuemax={100}
@@ -194,7 +196,7 @@ export function FileField({
               <button
                 type="button"
                 className="sv-btn sv-btn--link"
-                aria-label={`Remove ${file.name}`}
+                aria-label={tr.remove(file.name)}
                 onClick={() => onRemove(file.id)}
               >
                 Remove

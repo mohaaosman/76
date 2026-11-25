@@ -1,0 +1,80 @@
+/* B61 · FunnelList — one total, narrowing. B6's straight 3px bars, every one
+   drawn against the FIRST step. No trapezoid. No inset of its own — inside a
+   Card it takes `.sv-card__body` (rule 18). */
+
+@layer sv-components {
+  .sv-funnel__baseline {
+    margin: 0 0 var(--sv-s3);
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-funnel__list {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sv-funnel__step {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--sv-s3);
+    align-items: baseline;
+  }
+
+  .sv-funnel__ordinal {
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-funnel__line {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sv-s3);
+    margin-block-end: var(--sv-s1);
+  }
+
+  .sv-funnel__label {
+    min-inline-size: 0;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-funnel__value {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--sv-ink);
+    white-space: nowrap;
+  }
+
+  /* B6's track and fill. The fill is always full width and scaled, so the
+     bar is drawn by transform alone — no width is ever set or animated. The
+     origin is the inline start, mirrored for RTL. */
+  .sv-funnel__track {
+    block-size: 3px;
+    border-radius: 2px;
+    background: var(--sv-wall);
+  }
+
+  .sv-funnel__fill {
+    block-size: 100%;
+    border-radius: 2px;
+    background: var(--sv-seed);
+    transform: scaleX(var(--sv-funnel-share, 0));
+    transform-origin: 0 50%;
+    transition: transform var(--sv-t);
+  }
+
+  .sv-funnel__fill:dir(rtl) {
+    transform-origin: 100% 50%;
+  }
+
+  .sv-funnel__conversion {
+    margin: var(--sv-s1) 0 0;
+    font-size: 11px;
+    color: var(--sv-ink-soft);
+  }
+}

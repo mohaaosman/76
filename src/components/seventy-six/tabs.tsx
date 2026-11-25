@@ -1,6 +1,7 @@
 import { useId, useRef } from 'react';
 import type { KeyboardEvent, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
+import { inlineStep, useDirection } from '@/lib/i18n';
 import './tabs.css';
 
 /**
@@ -39,6 +40,7 @@ export interface TabsProps {
 }
 
 export function Tabs({ tabs, active, onChange, idBase, label, className }: TabsProps) {
+  const dir = useDirection();
   const autoId = useId();
   const base = idBase ?? autoId;
   const listRef = useRef<HTMLDivElement>(null);
@@ -49,8 +51,9 @@ export function Tabs({ tabs, active, onChange, idBase, label, className }: TabsP
   function onKeyDown(e: KeyboardEvent) {
     const idx = tabs.findIndex((t) => t.id === active);
     let next = -1;
-    if (e.key === 'ArrowRight') next = (idx + 1) % tabs.length;
-    if (e.key === 'ArrowLeft') next = (idx - 1 + tabs.length) % tabs.length;
+    /* ← and → follow the reading direction: in RTL the next tab is to the left. */
+    const step = inlineStep(e.key, dir);
+    if (step !== 0) next = (idx + step + tabs.length) % tabs.length;
     if (e.key === 'Home') next = 0;
     if (e.key === 'End') next = tabs.length - 1;
     if (next >= 0) {

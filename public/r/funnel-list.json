@@ -1,0 +1,47 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "funnel-list",
+  "type": "registry:ui",
+  "title": "FunnelList",
+  "description": "The narrowing — one total through an ordered sequence of steps, on B6's straight bars. One job: State how one total narrows through an ordered sequence of steps.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/funnel-list.tsx",
+      "content": "import type { CSSProperties } from 'react';\nimport { cx } from '@/lib/cx';\nimport { useStrings } from '@/lib/i18n';\nimport './funnel-list.css';\n\n/**\n * B61 · FunnelList — one job: state how one total narrows through an ordered\n * sequence of steps. Sessions to orders; leads to won deals.\n *\n * **The boundary.** B6 `MeterList` measures each part against ITS OWN\n * maximum; B44 `DistributionStrip` divides one total into parallel shares.\n * Here the parts are not parallel — each step is a subset of the one before\n * it — so the list is an `<ol>`, every bar is drawn against the FIRST step,\n * and every step after the first states what it kept from the previous one.\n * The funnel trapezoid stays refused: it is a shape performing a number. The\n * bars are B6's straight 3px bars.\n *\n * **It never computes (C9).** Every figure, rate and loss is a pre-formatted\n * string; `share` (0–1 of the first step) only draws the bar. The absolute\n * figure is required on every step — a bare percentage is a defect (B6).\n *\n * It carries NO inset of its own — inside a `<Card>` it takes\n * `sv-card__body` (firewall rule 18), like B6.\n *\n * Don't: never a trapezoid or tapering shape; never a step without its\n * absolute figure; never steps that are not subsets of the step before\n * (that is B44 or B6); never more steps than a reader holds — eight is a\n * B7 DataTable; never coloured bars for good or bad steps.\n */\nexport interface FunnelStep {\n  /** Defaults to `label`. */\n  id?: string;\n  label: string;\n  /** REQUIRED, PRE-FORMATTED absolute figure: \"12,530\". */\n  value: string;\n  /** 0–1 of the FIRST step, for drawing only. The first step is 1. */\n  share: number;\n  /** PRE-FORMATTED, from the previous step: \"26.0% of previous · 35,670 lost\". */\n  conversion?: string;\n}\n\nexport interface FunnelListProps {\n  /** Accessible name for the list, e.g. \"Checkout funnel, July 2026\". */\n  label: string;\n  steps: FunnelStep[];\n  /** What the conversion lines are compared against, printed once at the head: \"Q2 2026\". */\n  baseline?: string;\n  className?: string;\n}\n\nconst clamp = (n: number) => (Number.isFinite(n) ? Math.min(1, Math.max(0, n)) : 0);\n\nexport function FunnelList({ label, steps, baseline, className }: FunnelListProps) {\n  const t = useStrings();\n  return (\n    <div className={cx('sv-funnel', className)}>\n      {baseline && <p className=\"sv-funnel__baseline sv-mono\">{t.against(baseline)}</p>}\n      <ol className=\"sv-funnel__list\" aria-label={label}>\n        {steps.map((step, i) => (\n          <li key={step.id ?? step.label} className=\"sv-funnel__step\">\n            {/* The ordinal is the list's own position; <ol> already announces it. */}\n            <span className=\"sv-funnel__ordinal sv-mono sv-num\" aria-hidden=\"true\">\n              {String(i + 1).padStart(2, '0')}\n            </span>\n            <div className=\"sv-funnel__body\">\n              <div className=\"sv-funnel__line\">\n                <span className=\"sv-funnel__label\">{step.label}</span>\n                <span className=\"sv-funnel__value sv-num\">{step.value}</span>\n              </div>\n              {/* Illustration only — the figure is printed beside it. */}\n              <div className=\"sv-funnel__track\" aria-hidden=\"true\">\n                <div\n                  className=\"sv-funnel__fill\"\n                  style={{ '--sv-funnel-share': clamp(step.share) } as CSSProperties}\n                />\n              </div>\n              {step.conversion && <p className=\"sv-funnel__conversion sv-num\">{step.conversion}</p>}\n            </div>\n          </li>\n        ))}\n      </ol>\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/funnel-list.tsx"
+    },
+    {
+      "path": "registry/seventy-six/funnel-list.css",
+      "content": "/* B61 · FunnelList — one total, narrowing. B6's straight 3px bars, every one\n   drawn against the FIRST step. No trapezoid. No inset of its own — inside a\n   Card it takes `.sv-card__body` (rule 18). */\n\n@layer sv-components {\n  .sv-funnel__baseline {\n    margin: 0 0 var(--sv-s3);\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-funnel__list {\n    display: flex;\n    flex-direction: column;\n    gap: 13px;\n    margin: 0;\n    padding: 0;\n    list-style: none;\n  }\n\n  .sv-funnel__step {\n    display: grid;\n    grid-template-columns: auto minmax(0, 1fr);\n    gap: var(--sv-s3);\n    align-items: baseline;\n  }\n\n  .sv-funnel__ordinal {\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-funnel__line {\n    display: flex;\n    align-items: baseline;\n    justify-content: space-between;\n    gap: var(--sv-s3);\n    margin-block-end: var(--sv-s1);\n  }\n\n  .sv-funnel__label {\n    min-inline-size: 0;\n    font-size: 12.5px;\n    font-weight: 500;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-funnel__value {\n    font-size: 12.5px;\n    font-weight: 700;\n    color: var(--sv-ink);\n    white-space: nowrap;\n  }\n\n  /* B6's track and fill. The fill is always full width and scaled, so the\n     bar is drawn by transform alone — no width is ever set or animated. The\n     origin is the inline start, mirrored for RTL. */\n  .sv-funnel__track {\n    block-size: 3px;\n    border-radius: 2px;\n    background: var(--sv-wall);\n  }\n\n  .sv-funnel__fill {\n    block-size: 100%;\n    border-radius: 2px;\n    background: var(--sv-seed);\n    transform: scaleX(var(--sv-funnel-share, 0));\n    transform-origin: 0 50%;\n    transition: transform var(--sv-t);\n  }\n\n  .sv-funnel__fill:dir(rtl) {\n    transform-origin: 100% 50%;\n  }\n\n  .sv-funnel__conversion {\n    margin: var(--sv-s1) 0 0;\n    font-size: 11px;\n    color: var(--sv-ink-soft);\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/funnel-list.css"
+    }
+  ],
+  "categories": [
+    "widgets"
+  ],
+  "docs": "https://76.zifala.com/llms/funnel-list.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B61",
+    "job": "State how one total narrows through an ordered sequence of steps.",
+    "tags": [
+      "funnel",
+      "conversion",
+      "checkout",
+      "pipeline",
+      "drop-off",
+      "steps",
+      "baseline"
+    ],
+    "exports": [
+      "FunnelList",
+      "FunnelStep",
+      "FunnelListProps"
+    ]
+  }
+}

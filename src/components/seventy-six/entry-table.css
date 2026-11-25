@@ -1,0 +1,185 @@
+/* B53 · EntryTable — B7's voice, with one number input per row.
+   Full-bleed like B7: the cells carry the 18px inline inset, so the rows
+   rule edge to edge of the card. Logical properties throughout, so an RTL
+   subtree mirrors without a branch. */
+
+@layer sv-components {
+  .sv-entry__scroll {
+    overflow-x: auto;
+  }
+
+  .sv-entry__table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .sv-entry__th {
+    padding: var(--sv-s2) 18px;
+    border-block-end: 1px solid var(--sv-line);
+    text-align: start;
+    color: var(--sv-ink-soft);
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  .sv-entry__th .sv-mono {
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+  }
+
+  /* The line being typed into is the line that is tinted. No hover tint:
+     hover is a reader's gesture, and the typist's caret is the pointer. */
+  .sv-entry__row {
+    transition: background-color var(--sv-t-fast);
+  }
+
+  .sv-entry__row:focus-within {
+    background: var(--sv-seed-tint);
+  }
+
+  .sv-entry__td {
+    padding: var(--sv-row-y) 18px;
+    border-block-end: 1px solid var(--sv-line);
+    font-size: var(--sv-body-size);
+    font-weight: 500;
+    vertical-align: middle;
+  }
+
+  .sv-entry__row:last-child .sv-entry__td {
+    border-block-end: 0;
+  }
+
+  .sv-entry__cell--num {
+    text-align: end;
+    font-weight: 600;
+  }
+
+  .sv-entry__cell--id {
+    font-family: var(--sv-font-mono);
+    font-size: 11px;
+    color: var(--sv-ink-soft);
+    white-space: nowrap;
+  }
+
+  /* The entry cell: the input pinned to the inline end so every figure
+     lines up under the one above it; the save state sits before it so a
+     word appearing never pushes the column out of line. Block padding is
+     trimmed by the input's own so the row height stays the density's. */
+  .sv-entry__cell--entry {
+    padding-block: calc(var(--sv-row-y) - var(--sv-control-y) + 2px);
+    text-align: end;
+  }
+
+  .sv-entry__control {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--sv-s3);
+  }
+
+  .sv-entry__input {
+    width: 96px;
+    padding-block: calc(var(--sv-control-y) - 3px);
+    text-align: end;
+    font-weight: 600;
+    /* The native spinners nudge by one and cannot be styled to system;
+       a typist table never nudges, it types. */
+    appearance: textfield;
+  }
+
+  .sv-entry__input::-webkit-outer-spin-button,
+  .sv-entry__input::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  .sv-entry__input:read-only {
+    color: var(--sv-ink-soft);
+  }
+
+  /* The save state: mono word + 6px dot, never colour alone (C5). Unsaved
+     and saving speak soft ink; only a failed save is red, and only the
+     word and the dot. */
+  .sv-entry__sync {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    white-space: nowrap;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-entry__sync--failed {
+    color: var(--sv-bad);
+  }
+
+  .sv-entry__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex: none;
+  }
+
+  /* A line's error is stated at its line, inline-end aligned under the
+     input it is about. */
+  .sv-entry__error {
+    margin-block-start: var(--sv-s1);
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--sv-bad);
+    text-align: end;
+  }
+
+  /* ---- the closing figures: B7 `totals` verbatim ---- */
+
+  .sv-entry__footrow > .sv-entry__td,
+  .sv-entry__footlabel {
+    border-block-start: 1px solid var(--sv-line);
+    border-block-end: 0;
+  }
+
+  .sv-entry__footlabel {
+    padding: 10.5px 18px;
+    text-align: start;
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    color: var(--sv-ink-soft);
+    font-weight: 400;
+  }
+
+  .sv-entry__footrow--strong > .sv-entry__td,
+  .sv-entry__footrow--strong > .sv-entry__footlabel {
+    border-block-start: 1px solid var(--sv-field-line-strong);
+  }
+
+  .sv-entry__footrow--strong > .sv-entry__td {
+    font-weight: 700;
+  }
+
+  .sv-entry__footrow--strong > .sv-entry__footlabel {
+    color: var(--sv-ink);
+  }
+
+  /* ---- the foot: one sentence, one primary ---- */
+
+  .sv-entry__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--sv-s3);
+    padding: var(--sv-s3) 18px;
+    border-block-start: 1px solid var(--sv-line);
+  }
+
+  .sv-entry__summary {
+    margin-inline-end: auto;
+    font-size: 12px;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-entry__post {
+    white-space: nowrap;
+  }
+}

@@ -4,7 +4,7 @@
 @layer sv-components {
   .sv-toaster {
     position: fixed;
-    left: var(--sv-s5);
+    inset-inline-start: var(--sv-s5);
     bottom: var(--sv-s5);
     z-index: var(--sv-z-toast);
     display: flex;
@@ -18,11 +18,12 @@
     align-items: flex-start;
     gap: var(--sv-s3);
     width: min(360px, 100%);
-    padding: var(--sv-s3) var(--sv-s3) var(--sv-s3) var(--sv-s4);
+    padding-block: var(--sv-s3);
+    padding-inline: var(--sv-s4) var(--sv-s3);
     background: var(--sv-paper);
     border-radius: var(--sv-r);
     box-shadow: var(--sv-shadow);
-    border-left: 2px solid var(--sv-seed-line);
+    border-inline-start: 2px solid var(--sv-seed-line);
 
     /* ---- v0.9 · the toast arrives ------------------------------
 
@@ -60,9 +61,9 @@
     width: min(440px, 100%);
   }
 
-  .sv-toast--ok   { border-left-color: var(--sv-ok); }
-  .sv-toast--warn { border-left-color: var(--sv-ink-soft); }
-  .sv-toast--bad  { border-left-color: var(--sv-bad); }
+  .sv-toast--ok   { border-inline-start-color: var(--sv-ok); }
+  .sv-toast--warn { border-inline-start-color: var(--sv-ink-soft); }
+  .sv-toast--bad  { border-inline-start-color: var(--sv-bad); }
 
   .sv-toast__icon {
     display: inline-flex;

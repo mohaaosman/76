@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useId, useRef, useState } from 'react';
 import type { ChangeEvent, ClipboardEvent, FocusEvent, KeyboardEvent } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import './pin-field.css';
 
 /**
@@ -73,6 +74,7 @@ export const PinField = forwardRef<HTMLInputElement, PinFieldProps>(function Pin
   },
   ref,
 ) {
+  const tr = useStrings();
   const auto = useId();
   const id = explicitId ?? auto;
   const labelId = `${id}-label`;
@@ -204,7 +206,6 @@ export const PinField = forwardRef<HTMLInputElement, PinFieldProps>(function Pin
 
   const describedBy =
     [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(' ') || undefined;
-  const boxWord = charset === 'numeric' ? 'Digit' : 'Character';
 
   return (
     <div className={cx('sv-field sv-pin', className)}>
@@ -248,7 +249,7 @@ export const PinField = forwardRef<HTMLInputElement, PinFieldProps>(function Pin
             required={required}
             disabled={disabled}
             /* NOT the DOM autoFocus attribute — see the effect above. */
-            aria-label={`${boxWord} ${i + 1} of ${size}`}
+            aria-label={charset === 'numeric' ? tr.digitOf(i + 1, size) : tr.characterOf(i + 1, size)}
             aria-invalid={error ? true : undefined}
             value={code[i] ?? ''}
             onChange={(e) => onInput(e, i)}

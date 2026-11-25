@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { KeyboardEvent, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import './data-table.css';
 
 /**
@@ -69,6 +70,13 @@ export interface DataTableProps<Row> {
   announcement?: string;
   /** Pagination line, e.g. { from: 1, to: 50, of: 248 }. */
   page?: { from: number; to: number; of: number; onPrev?: () => void; onNext?: () => void };
+  /**
+   * B7 amendment (0.7) · rowSync — state that a row's change has not been
+   * saved yet, is saving, or failed to save. Stated as a word + dot in the
+   * row's first cell (C5), never as a row colour, and never for a row that
+   * is in sync — return undefined and the row says nothing.
+   */
+  rowSync?: (row: Row) => RowSync | undefined;
   /** Closing figures, rendered as a real `<tfoot>`. Never records. */
   totals?: TotalsRow[];
   /** Holds the first column in place while the rest scrolls. Ignored unless
@@ -97,6 +105,8 @@ function cellKind<Row>(col: Column<Row>): string {
  * owns that row. Destructive verbs still route through a typed-object
  * Dialog confirm (B10).
  */
+export type RowSync = 'unsaved' | 'saving' | 'failed';
+
 export interface SelectionHeadProps {
   count: number;
   /** The object, singular: "order", "invoice". Pluralised for the count. */
@@ -108,6 +118,7 @@ export interface SelectionHeadProps {
 }
 
 export function SelectionHead({ count, noun, onClear, actions, className }: SelectionHeadProps) {
+  const tr = useStrings();
   return (
     <header className={cx('sv-card__head sv-selhead', className)}>
       <p className="sv-selhead__count sv-mono sv-num" aria-live="polite">
@@ -116,7 +127,7 @@ export function SelectionHead({ count, noun, onClear, actions, className }: Sele
       <div className="sv-selhead__verbs">
         {actions}
         <button type="button" className="sv-btn sv-btn--link" onClick={onClear}>
-          Clear
+          {tr.clear}
         </button>
       </div>
     </header>
@@ -136,27 +147,65 @@ export interface ActiveFilter {
   value: string;
 }
 
+/**
+ * B7 amendment (0.8) · the saved view, stated. B42 already names the saved-
+ * view PICKER as a reason Popover exists; the gap was the LINE that says
+ * the view on screen is no longer the one that was saved. It is stated in
+ * FilterLine's own voice, on FilterLine's own row, because the drift IS a
+ * statement about the filters — and a second line elsewhere would be two
+ * statements about one state.
+ */
+export interface SavedView {
+  /** The saved view's name: "Open POs · Cobalt". */
+  name: string;
+  /** True when the filters on screen differ from the saved ones. */
+  drifted: boolean;
+  /** Overwrite the saved view with what is on screen. */
+  onSave?: () => void;
+  /** Return to the saved filters. */
+  onReset?: () => void;
+}
+
 export interface FilterLineProps {
   filters: ActiveFilter[];
   onClearAll: () => void;
   /** Optional lead, e.g. "12 of 248". Rendered first, tabular. */
   count?: string;
+  /** The saved view this line is measured against (0.8). */
+  savedView?: SavedView;
   className?: string;
 }
 
-export function FilterLine({ filters, onClearAll, count, className }: FilterLineProps) {
-  if (filters.length === 0 && !count) return null;
+export function FilterLine({ filters, onClearAll, count, savedView, className }: FilterLineProps) {
+  const tr = useStrings();
+  const drift = savedView?.drifted ? tr.savedViewDrift(savedView.name) : '';
+  if (filters.length === 0 && !count && !drift) return null;
   const stated = filters.map((filter) => `${filter.label}: ${filter.value}`).join(' · ');
   return (
     <div className={cx('sv-filterline', className)}>
       <p className="sv-filterline__text sv-mono sv-num" aria-live="polite">
         {[count, stated].filter(Boolean).join(' · ')}
+        {/* The drift rides in the same live region, so the reader hears
+            "Status: Pending · Changed from the saved view" as ONE change. */}
+        {drift && <span className="sv-filterline__drift">{drift}</span>}
       </p>
-      {filters.length > 0 && (
-        <button type="button" className="sv-btn sv-btn--link" onClick={onClearAll}>
-          Clear all
-        </button>
-      )}
+      <span className="sv-filterline__actions">
+        {drift && savedView?.onReset && (
+          <button type="button" className="sv-btn sv-btn--link" onClick={savedView.onReset}>
+            {tr.resetView}
+          </button>
+        )}
+        {drift && savedView?.onSave && (
+          <button type="button" className="sv-btn sv-btn--link" onClick={savedView.onSave}>
+            {tr.saveView}
+          </button>
+        )}
+        {filters.length > 0 && (
+          <button type="button" className="sv-btn sv-btn--link" onClick={onClearAll}>
+            {tr.clearAll}
+          </button>
+        )}
+      </span>
     </div>
   );
 }
@@ -187,9 +236,11 @@ export function FilterBar({
   actions,
   active = false,
   onClearAll,
-  label = 'Filters',
+  label: labelProp,
   className,
 }: FilterBarProps) {
+  const tr = useStrings();
+  const label = labelProp ?? tr.filters;
   return (
     <div className={cx('sv-filterbar', className)} role="group" aria-label={label}>
       <div className="sv-filterbar__controls">{controls}</div>
@@ -198,7 +249,7 @@ export function FilterBar({
           {actions}
           {active && (
             <button type="button" className="sv-btn sv-btn--link" onClick={onClearAll}>
-              Clear all
+              {tr.clearAll}
             </button>
           )}
         </div>
@@ -220,8 +271,10 @@ export function DataTable<Row>({
   page,
   totals,
   leadHold = false,
+  rowSync,
   className,
 }: DataTableProps<Row>) {
+  const tr = useStrings();
   /* The ignore, implemented rather than documented: the hold is legal only
      on a first column that is already the row's identity. Everything the
      reader could rearrange is what F3 refuses, so there is nothing here to
@@ -334,6 +387,7 @@ export function DataTable<Row>({
             {rows.map((row, idx) => {
               const key = rowKey(row);
               const isSelected = selected?.has(key) ?? false;
+              const sync = rowSync?.(row);
               return (
                 <tr
                   key={key}
@@ -354,6 +408,12 @@ export function DataTable<Row>({
                       )}
                     >
                       {col.render(row)}
+                      {colIdx === 0 && sync && (
+                        <span className={cx('sv-table__sync sv-mono', `sv-table__sync--${sync}`)}>
+                          <span className="sv-table__syncdot" aria-hidden="true" />
+                          {sync === 'unsaved' ? tr.rowUnsaved : sync === 'saving' ? tr.rowSaving : tr.rowFailed}
+                        </span>
+                      )}
                     </td>
                   ))}
                 </tr>
@@ -414,7 +474,7 @@ export function DataTable<Row>({
       {page && (
         <div className="sv-table__pager">
           <span className="sv-mono sv-num">
-            {page.from}–{page.to} OF {page.of}
+            {tr.rangeOf(page.from, page.to, page.of)}
           </span>
           <span className="sv-table__pager-controls">
             <button
@@ -423,7 +483,7 @@ export function DataTable<Row>({
               onClick={page.onPrev}
               disabled={!page.onPrev}
             >
-              Previous
+              {tr.previous}
             </button>
             <button
               type="button"
@@ -431,7 +491,7 @@ export function DataTable<Row>({
               onClick={page.onNext}
               disabled={!page.onNext}
             >
-              Next
+              {tr.next}
             </button>
           </span>
         </div>

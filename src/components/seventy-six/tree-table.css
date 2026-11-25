@@ -1,0 +1,181 @@
+/* B59 · TreeTable — B7's voice, B40's indent. The depth is the data, so it
+   is drawn, not decorated. Full-bleed like B7: no inset of its own. */
+
+@layer sv-components {
+  .sv-ttable__scroll {
+    overflow-x: auto;
+  }
+
+  .sv-ttable__table {
+    inline-size: 100%;
+    border-collapse: collapse;
+  }
+
+  .sv-ttable__th {
+    padding-block: var(--sv-s2);
+    padding-inline: 18px;
+    border-block-end: 1px solid var(--sv-line);
+    text-align: start;
+    font-weight: 400;
+    color: var(--sv-ink-soft);
+    white-space: nowrap;
+  }
+
+  .sv-ttable__th .sv-mono {
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+  }
+
+  .sv-ttable__row {
+    cursor: default;
+    transition: background-color var(--sv-t-fast);
+  }
+
+  .sv-ttable__row:hover {
+    background: var(--sv-seed-tint);
+  }
+
+  /* The row owns the roving tabindex, so it owns the ring — drawn inside the
+     row so the scroll region never clips it. */
+  .sv-ttable__row:focus-visible {
+    outline: 2px solid var(--sv-seed);
+    outline-offset: -2px;
+    background: var(--sv-seed-tint);
+  }
+
+  .sv-ttable__td,
+  .sv-ttable__lead {
+    padding-block: var(--sv-row-y);
+    padding-inline: 18px;
+    border-block-end: 1px solid var(--sv-line);
+    font-size: var(--sv-body-size);
+    font-weight: 500;
+    text-align: start;
+    color: var(--sv-ink);
+  }
+
+  .sv-ttable__row:last-child > .sv-ttable__td,
+  .sv-ttable__row:last-child > .sv-ttable__lead {
+    border-block-end: 0;
+  }
+
+  /* 18px per level, set inline as --sv-ttable-depth — B40's step exactly.
+     The toggle sits in the indent, so the start padding is the cell's 18px
+     less the toggle's own optical inset. */
+  .sv-ttable__lead {
+    padding-inline-start: calc(10px + var(--sv-ttable-depth, 0) * 18px);
+    min-inline-size: 220px;
+  }
+
+  .sv-ttable__leadline {
+    display: flex;
+    align-items: center;
+    gap: var(--sv-s2);
+  }
+
+  .sv-ttable__cell--num {
+    text-align: end;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* Parent rows are bold, because a parent IS its total. */
+  .sv-ttable__row--parent > .sv-ttable__lead .sv-ttable__label,
+  .sv-ttable__row--parent > .sv-ttable__td {
+    font-weight: 700;
+  }
+
+  .sv-ttable__code {
+    flex: none;
+    font-size: 11px;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-ttable__label {
+    min-inline-size: 0;
+  }
+
+  /* A 24px pointer target (WCAG 2.5.8) that does not grow the row. A leaf
+     holds the same slot open so every label on a level starts at one x. */
+  .sv-ttable__toggle {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    inline-size: 24px;
+    block-size: 24px;
+    margin-block: -4px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--sv-r);
+    background: transparent;
+    color: var(--sv-ink-soft);
+    cursor: pointer;
+    transition: color var(--sv-t-fast);
+  }
+
+  .sv-ttable__toggle:hover {
+    color: var(--sv-ink);
+  }
+
+  .sv-ttable__toggle:focus-visible {
+    outline: 2px solid var(--sv-seed);
+    outline-offset: 2px;
+  }
+
+  .sv-ttable__toggle--leaf {
+    cursor: inherit;
+  }
+
+  /* B40's chevron: two 1.5px strokes turned to point along the reading
+     direction. The strokes are logical, so in RTL the corner moves to the
+     other side and the turn flips with it — closed points to the inline
+     end, open points down, in both directions. */
+  .sv-ttable__chevron {
+    --sv-ttable-turn: -45deg;
+    inline-size: 7px;
+    block-size: 7px;
+    border-inline-end: 1.5px solid currentColor;
+    border-block-end: 1.5px solid currentColor;
+    transform: rotate(var(--sv-ttable-turn));
+    transition: transform var(--sv-t-fast);
+  }
+
+  .sv-ttable__chevron:dir(rtl) {
+    --sv-ttable-turn: 45deg;
+  }
+
+  .sv-ttable__row[aria-expanded='true'] .sv-ttable__chevron {
+    transform: rotate(calc(var(--sv-ttable-turn) * -1));
+  }
+
+  /* ---- the closing figures — B7's foot, verbatim ---- */
+
+  .sv-ttable__footrow > .sv-ttable__td,
+  .sv-ttable__footlabel {
+    border-block-start: 1px solid var(--sv-line);
+    border-block-end: 0;
+  }
+
+  .sv-ttable__footlabel {
+    padding-block: var(--sv-row-y);
+    padding-inline: 18px;
+    text-align: start;
+    font-size: 9.5px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: var(--sv-ink-soft);
+  }
+
+  .sv-ttable__footrow--strong > .sv-ttable__td,
+  .sv-ttable__footrow--strong > .sv-ttable__footlabel {
+    border-block-start: 1px solid var(--sv-field-line-strong);
+  }
+
+  .sv-ttable__footrow--strong > .sv-ttable__td {
+    font-weight: 700;
+  }
+
+  .sv-ttable__footrow--strong > .sv-ttable__footlabel {
+    color: var(--sv-ink);
+  }
+}

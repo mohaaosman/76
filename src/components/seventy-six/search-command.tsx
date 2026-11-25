@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import './search-command.css';
 
 /**
@@ -40,10 +41,12 @@ export function SearchCommand({
   onClose,
   items,
   onPick,
-  placeholder = 'Search…',
+  placeholder: placeholderProp,
   bindShortcut = true,
   onOpen,
 }: SearchCommandProps & { open: boolean; onClose: () => void }) {
+  const tr = useStrings();
+  const placeholder = placeholderProp ?? tr.searchEllipsis;
   const ref = useRef<HTMLDialogElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState('');
@@ -115,7 +118,7 @@ export function SearchCommand({
     <dialog
       ref={ref}
       className="sv-command"
-      aria-label="Search"
+      aria-label={tr.search}
       onCancel={(e) => {
         e.preventDefault();
         onClose();
@@ -141,7 +144,7 @@ export function SearchCommand({
             setActiveIdx(0);
           }}
         />
-        <ul className="sv-command__list" id="sv-command-list" role="listbox" aria-label="Results">
+        <ul className="sv-command__list" id="sv-command-list" role="listbox" aria-label={tr.results}>
           {groups.map(([group, groupItems]) => (
             <li key={group}>
               <p className="sv-command__group sv-mono">{group}</p>

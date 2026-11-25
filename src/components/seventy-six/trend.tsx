@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from 'react';
 import type { CSSProperties, KeyboardEvent, PointerEvent as ReactPointerEvent } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import './trend.css';
 
 /**
@@ -139,6 +140,7 @@ export function Trend({
   readouts,
   className,
 }: TrendProps) {
+  const tr = useStrings();
   const capped = series.slice(0, 3); // max 3 series (B5)
   const width = 560;
   const colsRef = useRef<HTMLDivElement>(null);
@@ -280,7 +282,7 @@ export function Trend({
               className="sv-trend__cols"
               style={{ '--sv-trend-hits': live.n } as CSSProperties}
               role="group"
-              aria-label="Chart columns"
+              aria-label={tr.chartColumns}
               onKeyDown={onColsKeyDown}
               onPointerLeave={onColsPointerLeave}
               onBlur={(e) => {

@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef } from 'react';
 import type { MouseEvent, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import './drawer.css';
 
 /**
@@ -16,7 +17,12 @@ export interface DrawerProps {
   title: string;
   /** Mono context line under the title, e.g. "ORD-2291 · 24 JUL". */
   context?: string;
-  side?: 'right' | 'left';
+  /**
+   * `end` (default) and `start` follow the reading direction — the right
+   * and left edges in English, mirrored in Arabic. `right` / `left` are
+   * physical and stay for callers that mean a fixed edge.
+   */
+  side?: 'end' | 'start' | 'right' | 'left';
   /** sm 360 · md 480 (default) · lg 640 · full — a mobile-style takeover. */
   size?: 'sm' | 'md' | 'lg' | 'full';
   /** Footer actions, right-aligned: ghost cancel + ONE primary/danger. */
@@ -31,12 +37,13 @@ export function Drawer({
   onClose,
   title,
   context,
-  side = 'right',
+  side = 'end',
   size = 'md',
   footer,
   dismissible = true,
   children,
 }: DrawerProps) {
+  const tr = useStrings();
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
 
@@ -75,7 +82,7 @@ export function Drawer({
           <button
             type="button"
             className="sv-drawer__close"
-            aria-label={`Close ${title}`}
+            aria-label={tr.close(title)}
             onClick={onClose}
           >
             <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true">

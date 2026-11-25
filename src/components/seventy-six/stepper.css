@@ -82,7 +82,7 @@
     align-items: center;
     gap: var(--sv-s3);
     min-width: 0;
-    text-align: left;
+    text-align: start;
   }
 
   .sv-stepper__hit--button {
@@ -170,7 +170,7 @@
 
     .sv-stepper__step::after {
       position: absolute;
-      left: 11.5px;
+      inset-inline-start: 11.5px;
       top: 28px;
       bottom: var(--sv-s1);
       flex: none;
@@ -201,5 +201,10 @@
     [data-motion='on'] .sv-stepper__step--done::after {
       animation: none;
     }
+  }
+
+  /* RTL · the bar grows from the reading start, which is the right edge. */
+  [data-motion='on'] .sv-stepper__step--done:dir(rtl)::after {
+    transform-origin: right center;
   }
 }

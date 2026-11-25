@@ -34,7 +34,7 @@
   }
 
   .sv-accordion__meta {
-    margin-left: auto;
+    margin-inline-start: auto;
     font-size: 10.5px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -58,7 +58,8 @@
   }
 
   .sv-accordion__panel {
-    padding: 0 0 var(--sv-s4) 14px;
+    padding-block: 0 var(--sv-s4);
+    padding-inline: 14px 0;
     font-size: 13px;
     line-height: 1.55;
     color: var(--sv-ink-soft);
@@ -94,5 +95,14 @@
     from {
       opacity: 0;
     }
+  }
+
+  /* RTL · a closed section's chevron points along the reading direction. */
+  .sv-accordion__chevron:dir(rtl) {
+    transform: rotate(135deg);
+  }
+
+  .sv-accordion__item[open] .sv-accordion__chevron:dir(rtl) {
+    transform: rotate(45deg);
   }
 }

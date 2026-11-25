@@ -15,7 +15,7 @@ Manual: copy components/seventy-six/error-summary.tsx, components/seventy-six/er
 
 ## Overview
 
-B11's validation contract has ended the same way since v0.1.0: <i>"Submit reveals a top-of-form error summary linking to each field (focus moves to summary)."</i> Every 76° form that shipped skipped that sentence, because there was nothing in the barrel to satisfy it. This is that component, and it is why 0.6 is called **the promises already made**.
+B11's validation contract has ended the same way since v0.1.0: _"Submit reveals a top-of-form error summary linking to each field (focus moves to summary)."_ Every 76° form that shipped skipped that sentence, because there was nothing in the barrel to satisfy it. This is that component, and it is why 0.6 is called **the promises already made**.
 
 It is **not** a replacement for the inline field error. A2 sends every error to its source, B11 states it at the field, and B22 says it a third time. The summary is the **index**; the field error is the **statement**. A long form that fails on field eleven needs both — one to find it, one to fix it.
 

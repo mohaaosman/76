@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { cx } from '@/lib/cx';
+import { useStrings } from '@/lib/i18n';
 import './banner.css';
 
 /**
@@ -52,6 +53,7 @@ const TONE_ICONS: Record<BannerTone, ReactNode> = {
 };
 
 export function Banner({ tone = 'info', title, children, action, onDismiss, className }: BannerProps) {
+  const tr = useStrings();
   return (
     <div
       role={tone === 'bad' ? 'alert' : 'status'}
@@ -69,7 +71,7 @@ export function Banner({ tone = 'info', title, children, action, onDismiss, clas
         <button
           type="button"
           className="sv-banner__dismiss"
-          aria-label={`Dismiss: ${title}`}
+          aria-label={tr.dismiss(title)}
           onClick={onDismiss}
         >
           <svg viewBox="0 0 10 10" width="10" height="10" aria-hidden="true">

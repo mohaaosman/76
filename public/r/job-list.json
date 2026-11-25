@@ -1,0 +1,52 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "job-list",
+  "type": "registry:ui",
+  "title": "JobList",
+  "description": "Your background operations — what became of each, and where it landed. One job: State what became of each background operation this reader started, and where its result landed.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/spinner.json",
+    "https://76.zifala.com/r/progress.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/job-list.tsx",
+      "content": "import { useId } from 'react';\nimport { cx } from '@/lib/cx';\nimport { useStrings } from '@/lib/i18n';\nimport { Spinner } from './spinner';\nimport './progress.css';\nimport './job-list.css';\n\n/**\n * B58 · JobList — one job: state what became of each background operation\n * this reader started, and where its result landed.\n *\n * The posting is ninety seconds away from its outcome, and the reader has\n * moved on. This is where they come back to: one row per operation — its\n * name, its mono id and the absolute time it started, its state as word +\n * dot, how far it has got, and, once it has landed, the one link to what it\n * produced. A failed row states what failed and how to fix it, in the row,\n * because that is where the reader is looking (errors never toast).\n *\n * **The boundary against B9 ActivityList and B41 Timeline.** ActivityList is\n * what OTHER people did across many records; Timeline is one record's\n * history. A JobList is only this reader's own operations, and each row\n * changes in place — queued becomes running becomes finished — rather than\n * a new row being appended for each step.\n *\n * It never computes progress. `progress` is the caller's pre-formatted\n * sentence (\"3,120 of 4,700 rows\") and `ratio` only draws B4's 3px bar\n * under it; the words are the information and the bar is illustration.\n *\n * No inset of its own — inside a Card it takes `sv-card__body` (rule 18).\n *\n * Don't: never a percentage without the absolute numbers; never relative\n * time (\"2 min ago\") in an ERP; never a failed row without the fix; never\n * more than one link per row; never the state as colour or spinner alone;\n * never other people's operations.\n */\nexport type JobState = 'queued' | 'running' | 'done' | 'failed';\n\nexport interface Job {\n  id: string;\n  /** Names the operation and its object: \"Post goods receipt PO-2291\". */\n  title: string;\n  state: JobState;\n  /** Absolute display time, e.g. \"24 JUL · 14:28\". */\n  time: string;\n  /** Machine timestamp for <time dateTime>. */\n  dateTime?: string;\n  /** PRE-FORMATTED: \"3,120 of 4,700 rows\". */\n  progress?: string;\n  /** 0–1. Draws the B4 bar under `progress`; ignored without it. */\n  ratio?: number;\n  /** Where the result landed. `label` names it: \"Open GR-50817\". */\n  result?: { href: string; label?: string };\n  /** Failed only: what failed and how to fix it, one sentence. */\n  error?: string;\n}\n\nexport interface JobListProps {\n  jobs: Job[];\n  /** Polite announcement of the latest change: \"Post goods receipt PO-2291 finished\". */\n  announcement?: string;\n  className?: string;\n}\n\nexport function JobList({ jobs, announcement, className }: JobListProps) {\n  const t = useStrings();\n  const base = useId();\n  const word: Record<JobState, string> = {\n    queued: t.jobQueued,\n    running: t.jobRunning,\n    done: t.jobDone,\n    failed: t.jobFailed,\n  };\n\n  return (\n    <div className={cx('sv-jobs', className)}>\n      <ul className=\"sv-jobs__list\">\n        {jobs.map((job, idx) => {\n          const titleId = `${base}-${idx}-title`;\n          const showBar = job.state === 'running' && job.progress && job.ratio != null;\n          const pct = Math.max(0, Math.min(1, job.ratio ?? 0)) * 100;\n          return (\n            <li key={job.id} className=\"sv-jobs__row\">\n              <div className=\"sv-jobs__main\">\n                <p className=\"sv-jobs__title\" id={titleId}>\n                  {job.title}\n                </p>\n                <p className=\"sv-jobs__meta sv-mono\">\n                  <span>{job.id}</span>\n                  <span aria-hidden=\"true\"> · </span>\n                  <time dateTime={job.dateTime} className=\"sv-num\">\n                    {job.time}\n                  </time>\n                </p>\n                {job.progress && <p className=\"sv-jobs__progress sv-num\">{job.progress}</p>}\n                {showBar && (\n                  <div\n                    className=\"sv-progress__track sv-jobs__track\"\n                    role=\"progressbar\"\n                    aria-labelledby={titleId}\n                    aria-valuemin={0}\n                    aria-valuemax={100}\n                    aria-valuenow={Math.round(pct)}\n                    aria-valuetext={job.progress}\n                  >\n                    <div className=\"sv-progress__fill\" style={{ width: `${pct}%` }} />\n                  </div>\n                )}\n                {job.state === 'failed' && job.error && <p className=\"sv-jobs__error\">{job.error}</p>}\n                {job.result && job.state === 'done' && (\n                  <a className=\"sv-jobs__link\" href={job.result.href} aria-describedby={titleId}>\n                    {job.result.label ?? t.openResult}\n                  </a>\n                )}\n              </div>\n              <span className={cx('sv-jobs__state', `sv-jobs__state--${job.state}`)}>\n                {job.state === 'running' ? (\n                  <Spinner size={12} className=\"sv-jobs__spin\" />\n                ) : (\n                  <span className=\"sv-jobs__dot\" aria-hidden=\"true\" />\n                )}\n                {word[job.state]}\n              </span>\n            </li>\n          );\n        })}\n      </ul>\n      <p className=\"sv-visually-hidden\" aria-live=\"polite\">\n        {announcement}\n      </p>\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/job-list.tsx"
+    },
+    {
+      "path": "registry/seventy-six/job-list.css",
+      "content": "/* B58 · JobList — one row per background operation, changing in place.\n   No inset of its own: inside a Card it takes `.sv-card__body` (rule 18),\n   the same as B6 MeterList and B41 Timeline. */\n\n@layer sv-components {\n  .sv-jobs__list {\n    display: flex;\n    flex-direction: column;\n    margin: 0;\n    padding: 0;\n    list-style: none;\n  }\n\n  /* Name and detail at the inline start, the state pinned at the inline\n     end so every state word lines up down the list. */\n  .sv-jobs__row {\n    display: grid;\n    grid-template-columns: minmax(0, 1fr) auto;\n    gap: var(--sv-s4);\n    align-items: start;\n    padding-block: var(--sv-row-y);\n    border-block-end: 1px solid var(--sv-line);\n  }\n\n  .sv-jobs__row:first-child {\n    padding-block-start: 0;\n  }\n\n  .sv-jobs__row:last-child {\n    padding-block-end: 0;\n    border-block-end: 0;\n  }\n\n  .sv-jobs__main {\n    display: flex;\n    min-width: 0;\n    flex-direction: column;\n    gap: 3px;\n  }\n\n  .sv-jobs__title {\n    font-size: var(--sv-body-size);\n    font-weight: 700;\n    color: var(--sv-ink);\n    text-wrap: pretty;\n  }\n\n  .sv-jobs__meta {\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-jobs__progress {\n    font-size: 12px;\n    font-weight: 500;\n    color: var(--sv-ink-soft);\n  }\n\n  .sv-jobs__track {\n    max-inline-size: 240px;\n    margin-block: 2px;\n  }\n\n  /* What failed and how to fix it. Ink, not red: the state word already\n     carries the red, and a sentence the reader must act on is read at\n     full contrast. */\n  .sv-jobs__error {\n    font-size: 12px;\n    font-weight: 500;\n    line-height: 1.45;\n    color: var(--sv-ink);\n    text-wrap: pretty;\n  }\n\n  /* B10 text link: 12/600 seed, underline on hover. */\n  .sv-jobs__link {\n    align-self: flex-start;\n    margin-block-start: 2px;\n    font-size: 12px;\n    font-weight: 600;\n    color: var(--sv-seed-text);\n    text-decoration: none;\n  }\n\n  .sv-jobs__link:hover {\n    text-decoration: underline;\n  }\n\n  .sv-jobs__link:focus-visible {\n    outline: 2px solid var(--sv-seed-line);\n    outline-offset: 2px;\n    border-radius: var(--sv-r);\n  }\n\n  /* B12 anatomy: 6px dot + word 12/600. Running swaps the dot for B31's\n     12px spinner — the one sanctioned continuous animation — and keeps\n     the word, so the state never rests on motion alone. */\n  .sv-jobs__state {\n    display: inline-flex;\n    align-items: center;\n    gap: 6px;\n    font-size: 12px;\n    font-weight: 600;\n    white-space: nowrap;\n  }\n\n  .sv-jobs__dot {\n    width: 6px;\n    height: 6px;\n    border-radius: 50%;\n    background: currentColor;\n  }\n\n  .sv-jobs__state--queued,\n  .sv-jobs__state--running { color: var(--sv-ink-soft); }\n  .sv-jobs__state--done    { color: var(--sv-ok); }\n  .sv-jobs__state--failed  { color: var(--sv-bad); }\n\n  .sv-jobs__spin {\n    color: inherit;\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/job-list.css"
+    }
+  ],
+  "categories": [
+    "widgets"
+  ],
+  "docs": "https://76.zifala.com/llms/job-list.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B58",
+    "job": "State what became of each background operation this reader started, and where its result landed.",
+    "tags": [
+      "jobs",
+      "background",
+      "export",
+      "import",
+      "posting",
+      "queue",
+      "status",
+      "async",
+      "operations"
+    ],
+    "exports": [
+      "JobList",
+      "Job",
+      "JobState",
+      "JobListProps"
+    ]
+  }
+}

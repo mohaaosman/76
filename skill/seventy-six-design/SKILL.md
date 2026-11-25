@@ -75,9 +75,17 @@ projects; it is the ONLY file allowed to contain color literals. The core:
 | `--sv-t-fast` / `--sv-t` | 120ms / 160ms | the only durations; collapse to 0 under reduced motion |
 
 Seed registry: ERP = Cobalt #2C5BE0 · CRM = Verdigris #12836F · POS = Signal
-#D9531E (fills only; text uses #C24413 as `--sv-seed-text`). A new seed is
+#D9531E (fills only; text uses #C24413 as `--sv-seed-text`) · HEALTH = Iris
+#6A45C9. A new seed is
 REJECTED unless seed-on-white ≥ 4.5:1 AND white-on-seed ≥ 4.5:1. Products
 theme via `<html data-seed="...">` — nothing else may change per product.
+Density is a posture too: `data-density="compact | regular | touch"`.
+
+**Language & direction (v0.10).** Built-in component words come from
+`LocaleProvider` catalogs (en · fr · ar · so); RTL is supported — write
+logical CSS properties only (`margin-inline-start`, `inset-inline-end`,
+`text-align: end`), never `left`/`right`, and read `useDirection()` for
+arrow keys. Code, PIN codes and chart time axes stay LTR.
 
 ## Typography
 

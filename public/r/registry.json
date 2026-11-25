@@ -7,7 +7,7 @@
       "name": "tokens",
       "type": "registry:theme",
       "title": "76° tokens",
-      "description": "The 76° foundation: tokens.css (the only file allowed to contain color literals), base.css (reset, focus contract, mono/tabular utilities), and the cx class combiner."
+      "description": "The 76° foundation: tokens.css (the only file allowed to contain color literals), base.css (reset, focus contract, mono/tabular utilities, the script layer), the cx class combiner, and i18n (LocaleProvider, the built-in string catalogs en/fr/ar/so, direction helpers, caller-layer formatters)."
     },
     {
       "name": "band",
@@ -1082,6 +1082,158 @@
       ]
     },
     {
+      "name": "entry-table",
+      "type": "registry:ui",
+      "title": "EntryTable",
+      "description": "The typist table — one bounded number per line, posted once. One job: Type one bounded number into every row of a fixed list of lines, and post the lot once.",
+      "categories": [
+        "widgets"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/entry-table.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/entry-table.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "scan-field",
+      "type": "registry:ui",
+      "title": "ScanField",
+      "description": "The scanner input — one identifier at a time, and what it resolved to. One job: Take one identifier at a time, scanned or typed, and state what the last one resolved to.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/scan-field.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/scan-field.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "job-list",
+      "type": "registry:ui",
+      "title": "JobList",
+      "description": "Your background operations — what became of each, and where it landed. One job: State what became of each background operation this reader started, and where its result landed.",
+      "categories": [
+        "widgets"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/job-list.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/job-list.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tree-table",
+      "type": "registry:ui",
+      "title": "TreeTable",
+      "description": "The rolled-up table — a hierarchy whose every parent is the sum of its children, on B7's columns. One job: State a hierarchy of rows in which every parent is the sum of its children, across the same numeric columns at every depth.",
+      "categories": [
+        "widgets"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/tree-table.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/tree-table.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "cross-table",
+      "type": "registry:ui",
+      "title": "CrossTable",
+      "description": "The matrix in figures — one measure at every intersection of two dimensions. One job: State ONE measure at every intersection of two dimensions.",
+      "categories": [
+        "widgets"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/cross-table.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/cross-table.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "funnel-list",
+      "type": "registry:ui",
+      "title": "FunnelList",
+      "description": "The narrowing — one total through an ordered sequence of steps, on B6's straight bars. One job: State how one total narrows through an ordered sequence of steps.",
+      "categories": [
+        "widgets"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/funnel-list.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/funnel-list.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "message-thread",
+      "type": "registry:ui",
+      "title": "MessageThread",
+      "description": "One conversation — every message attributed to a person and marked with its direction, in words. One job: State one conversation as an ordered list of messages, each attributed to a person and marked with its direction.",
+      "categories": [
+        "widgets"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/message-thread.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/message-thread.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "setting-list",
+      "type": "registry:ui",
+      "title": "SettingList",
+      "description": "Settings that say what they do — a consequence sentence beside the instant-effect control that changes it. One job: State one setting’s consequence beside the instant-effect control that changes it.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/setting-list.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/setting-list.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "block-stats-row",
       "type": "registry:block",
       "title": "Stats row",
@@ -1272,6 +1424,36 @@
       "files": [
         {
           "path": "templates/crm-deal-board.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "template-crm-deal",
+      "type": "registry:block",
+      "title": "Deal record",
+      "description": "One deal opened from its list — its conversation, its facts, its history and its verbs on one page.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/crm-deal.tsx",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "template-settings-team",
+      "type": "registry:block",
+      "title": "Team settings",
+      "description": "Administer one workspace’s people — members, roles and pending invitations.",
+      "categories": [
+        "templates"
+      ],
+      "files": [
+        {
+          "path": "templates/settings-team.tsx",
           "type": "registry:block"
         }
       ]
