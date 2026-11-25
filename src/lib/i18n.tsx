@@ -96,6 +96,8 @@ export interface SvMessages {
   characterOf: (i: number, n: number) => string;
   /* display */
   more: (n: number) => string;
+  /** "3 invoices selected". `noun` is already in the right number form. */
+  nSelected: (n: number, noun?: string) => string;
   notifications: string;
   chartColumns: string;
   codeLabel: (label?: string) => string;
@@ -183,6 +185,7 @@ const en: SvMessages = {
   digitOf: (i, n) => `Digit ${i} of ${n}`,
   characterOf: (i, n) => `Character ${i} of ${n}`,
   more: (n) => `${n} more`,
+  nSelected: (n, noun) => (noun ? `${n} ${noun} selected` : `${n} selected`),
   notifications: 'Notifications',
   chartColumns: 'Chart columns',
   codeLabel: (label) => (label ? `Code, ${label}` : 'Code'),
@@ -270,6 +273,7 @@ const fr: SvMessages = {
   digitOf: (i, n) => `Chiffre ${i} sur ${n}`,
   characterOf: (i, n) => `Caractère ${i} sur ${n}`,
   more: (n) => `${n} de plus`,
+  nSelected: (n, noun) => (noun ? `${n} ${noun} sélectionné(e)s` : `${n} sélectionné(e)s`),
   notifications: 'Notifications',
   chartColumns: 'Colonnes du graphique',
   codeLabel: (label) => (label ? `Code, ${label}` : 'Code'),
@@ -371,6 +375,7 @@ const ar: SvMessages = {
   digitOf: (i, n) => `الرقم ${i} من ${n}`,
   characterOf: (i, n) => `الحرف ${i} من ${n}`,
   more: (n) => `${n} آخرون`,
+  nSelected: (n, noun) => (noun ? `تم تحديد ${n} ${noun}` : `تم تحديد ${n}`),
   notifications: 'الإشعارات',
   chartColumns: 'أعمدة الرسم البياني',
   codeLabel: (label) => (label ? `شيفرة، ${label}` : 'شيفرة'),
@@ -466,6 +471,7 @@ const so: SvMessages = {
   digitOf: (i, n) => `Lambarka ${i} ee ${n}`,
   characterOf: (i, n) => `Xarafka ${i} ee ${n}`,
   more: (n) => `${n} kale`,
+  nSelected: (n, noun) => (noun ? `${n} ${noun} ayaa la doortay` : `${n} ayaa la doortay`),
   notifications: 'Ogeysiisyada',
   chartColumns: 'Tiirarka jaantuska',
   codeLabel: (label) => (label ? `Kood, ${label}` : 'Kood'),
@@ -582,6 +588,19 @@ export function useStrings(): SvMessages {
 export function useLocale(): { locale: string; dir: Direction } {
   const { locale, dir } = useContext(LocaleContext);
   return { locale, dir };
+}
+
+/**
+ * Pick the noun form for a count in the nearest locale: `one` when the
+ * language's plural rules say so, else `other`. Never `noun + 's'` — that
+ * printed "statuss" for v0.4–v0.9.
+ */
+export function useNounFor(): (n: number, one: string, other?: string) => string {
+  const { locale } = useContext(LocaleContext);
+  return useMemo(() => {
+    const rules = new Intl.PluralRules(locale);
+    return (n, one, other) => (rules.select(n) === 'one' ? one : (other ?? one));
+  }, [locale]);
 }
 
 /** 'rtl' or 'ltr' — for arrow-key handlers, never for styling (CSS uses logical properties). */

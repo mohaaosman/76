@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { KeyboardEvent, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
-import { useStrings } from '@/lib/i18n';
+import { useLocale, useNounFor, useStrings } from '@/lib/i18n';
 import './combobox.css';
 
 /**
@@ -56,8 +56,10 @@ export interface ComboboxMulti {
   /** Controlled selection, in pick order. */
   value: string[];
   onChange: (values: string[], options: ComboOption[]) => void;
-  /** Singular noun for the selection line: "status" → "3 STATUSES". */
+  /** Singular noun for the selection line: "status". */
   noun?: string;
+  /** Its plural: "statuses" → "3 STATUSES". English falls back to noun + "s". */
+  nounPlural?: string;
 }
 
 /** A discriminated union: the two modes cannot be mixed by accident. */
@@ -87,6 +89,8 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
   } = props;
   const placeholder = placeholderProp ?? tr.typeToSearch;
   const emptyText = emptyTextProp ?? tr.noMatches;
+  const { locale } = useLocale();
+  const nounFor = useNounFor();
 
   /* Narrow once, here: past this line the two modes never share a shape. */
   const multi = props.multiple === true ? props : null;
@@ -251,15 +255,16 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
   const activeId = open && filtered[active] ? `${id}-opt-${filtered[active].value}` : undefined;
 
   const noun = multi?.noun;
+  const plural = multi?.nounPlural ?? (noun && locale.startsWith('en') ? `${noun}s` : noun);
   const lead = noun
-    ? `${values.length} ${values.length === 1 ? noun : `${noun}s`}`
-    : `${values.length} selected`;
+    ? `${values.length} ${nounFor(values.length, noun, plural)}`
+    : tr.nSelected(values.length);
   const named = values.map((v) => options.find((o) => o.value === v)?.label ?? v);
   const overflow = named.length - NAMED_MAX;
   const stated = [
     lead.toUpperCase(),
     ...named.slice(0, NAMED_MAX),
-    overflow > 0 ? `+${overflow} more` : null,
+    overflow > 0 ? `+${tr.more(overflow)}` : null,
   ]
     .filter(Boolean)
     .join(' · ');
@@ -387,7 +392,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
               inputRef.current?.focus();
             }}
           >
-            Clear
+            {tr.clear}
           </button>
         </div>
       )}

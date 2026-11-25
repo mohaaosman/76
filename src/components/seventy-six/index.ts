@@ -152,6 +152,7 @@ export {
   useLocale,
   useDirection,
   useFormat,
+  useNounFor,
   createFormatters,
   directionOf,
   inlineStep,

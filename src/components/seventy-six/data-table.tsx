@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { KeyboardEvent, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
-import { useStrings } from '@/lib/i18n';
+import { useLocale, useNounFor, useStrings } from '@/lib/i18n';
 import './data-table.css';
 
 /**
@@ -109,20 +109,29 @@ export type RowSync = 'unsaved' | 'saving' | 'failed';
 
 export interface SelectionHeadProps {
   count: number;
-  /** The object, singular: "order", "invoice". Pluralised for the count. */
+  /** The object, singular: "order", "invoice". */
   noun: string;
+  /**
+   * The plural form: "orders", "statuses". Defaults to `noun` + "s" in
+   * English only — any other language, and any irregular English noun,
+   * passes it, because a component cannot pluralise a word it does not know.
+   */
+  nounPlural?: string;
   onClear: () => void;
   /** The verbs, as Buttons. Keep to three; the fourth belongs in a Menu. */
   actions?: ReactNode;
   className?: string;
 }
 
-export function SelectionHead({ count, noun, onClear, actions, className }: SelectionHeadProps) {
+export function SelectionHead({ count, noun, nounPlural, onClear, actions, className }: SelectionHeadProps) {
   const tr = useStrings();
+  const { locale } = useLocale();
+  const nounFor = useNounFor();
+  const plural = nounPlural ?? (locale.startsWith('en') ? `${noun}s` : noun);
   return (
     <header className={cx('sv-card__head sv-selhead', className)}>
       <p className="sv-selhead__count sv-mono sv-num" aria-live="polite">
-        {count} {count === 1 ? noun : `${noun}s`} selected
+        {tr.nSelected(count, nounFor(count, noun, plural))}
       </p>
       <div className="sv-selhead__verbs">
         {actions}
