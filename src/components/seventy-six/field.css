@@ -87,7 +87,7 @@
     top: 50%;
     width: 7px;
     height: 7px;
-    border-right: 1.5px solid var(--sv-ink-soft);
+    border-right: 1.5px solid var(--sv-ink-soft); /* rule 21: chevron glyph, points down in both directions */
     border-bottom: 1.5px solid var(--sv-ink-soft);
     transform: translateY(-70%) rotate(45deg);
     pointer-events: none;

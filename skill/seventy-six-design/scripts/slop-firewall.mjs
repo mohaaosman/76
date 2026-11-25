@@ -357,6 +357,29 @@ function check(file, source) {
       flag('display face outside the public surface (rule 20)');
     }
 
+    /* RULE 21 · LOGICAL PROPERTIES ONLY (v0.10, C10 repealed). Every
+       component lays out in the reading direction, so a physical left/right
+       in a stylesheet is a box that will not mirror in Arabic — the exact
+       half-mirrored screen C10 was written to prevent. Exceptions exist
+       and are honest: a chevron DRAWN from two borders is a glyph, not a
+       layout, and it turns under :dir(rtl) instead; an optical kern belongs
+       to a Latin wordmark. Each one carries a `rule 21: <why>` comment on its
+       own line, so the exemption is read where it is used rather than
+       hidden in a list here. trend.css is registered whole: the plot keeps
+       a left-to-right time axis on purpose (C10). */
+    if (
+      /\.css$/.test(file) &&
+      base !== 'trend.css' &&
+      !/^\s*(\/\*|\*)/.test(line) &&
+      !/\/\*\s*rule 21:/.test(line) &&
+      (/\b(margin|padding|border)-(left|right)\b/.test(line) ||
+        /(^|[\s;{])(left|right)\s*:/.test(line.replace(/left\s*:\s*50%/, '')) ||
+        /text-align\s*:\s*(left|right)\b/.test(line) ||
+        /border-(top|bottom)-(left|right)-radius/.test(line))
+    ) {
+      flag('physical direction property (rule 21: use the logical property, or annotate a glyph)');
+    }
+
     /* ---- Part E · fundamentals gates ---- */
 
     /* prose.css is the registered exception: B45 IS running body copy, and

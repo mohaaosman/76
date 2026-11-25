@@ -56,6 +56,7 @@
     "firewall": "node scripts/slop-firewall.mjs",
     "screens": "node scripts/shipgate-screens.mjs",
     "check:sync": "node scripts/check-sync.mjs",
+    "test:interaction": "node scripts/interaction-tests.mjs",
     "prepublishOnly": "npm run check:sync && npm run registry && npm run llms",
     "doctor": "npx react-doctor@latest"
   },

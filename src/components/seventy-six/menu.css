@@ -122,7 +122,7 @@
     width: 6px;
     height: 6px;
     margin-inline-start: var(--sv-s1);
-    border-right: 1.5px solid currentColor;
+    border-right: 1.5px solid currentColor; /* rule 21: chevron glyph, points down in both directions */
     border-bottom: 1.5px solid currentColor;
     transform: translateY(-2px) rotate(45deg);
   }

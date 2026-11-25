@@ -47,7 +47,7 @@
     flex-shrink: 0;
     width: 6px;
     height: 6px;
-    border-right: 1.5px solid var(--sv-ink-soft);
+    border-right: 1.5px solid var(--sv-ink-soft); /* rule 21: chevron glyph, turned under :dir(rtl) */
     border-bottom: 1.5px solid var(--sv-ink-soft);
     transform: rotate(-45deg);
     transition: transform var(--sv-t-fast);

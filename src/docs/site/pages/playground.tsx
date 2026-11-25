@@ -204,7 +204,9 @@ function ReceiptScreen({ locale }: { locale: ShippedLocale }) {
       <div className="sv-band">
         <PageHero headingLevel={2} title={c.title} context={c.context} />
       </div>
-      <Sheet aria-label={c.title}>
+      {/* Not <Sheet>: Sheet IS the page's <main id="sv-content">, and a
+          preview inside a page is not a second main landmark. */}
+      <div className="sv-sheet" role="region" aria-label={c.title}>
         <Row overlap split="stats">
           <StatS1
             label={c.statLines}
@@ -297,7 +299,7 @@ function ReceiptScreen({ locale }: { locale: ShippedLocale }) {
             </Card>
           </Row>
         </TabPanel>
-      </Sheet>
+      </div>
     </>
   );
 }

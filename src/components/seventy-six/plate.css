@@ -46,7 +46,7 @@
   }
 
   .sv-plate__wordmark-deg {
-    margin-left: -0.14em;
+    margin-left: -0.14em; /* rule 21: optical kern of the Latin wordmark */
     color: var(--sv-ink-soft);
   }
 
