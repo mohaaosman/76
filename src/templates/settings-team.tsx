@@ -141,8 +141,10 @@ const PERMISSIONS: { key: string; header: string; roles: Role[] }[] = [
 const ROLES: Role[] = ['owner', 'admin', 'member', 'viewer'];
 
 const nameCell = { display: 'flex', alignItems: 'center', gap: 'var(--sv-s3)' } as const;
-const stack = { display: 'grid', gap: 'var(--sv-s3)', alignContent: 'start' } as const;
-const column = { display: 'grid', gap: '14px', alignContent: 'start' } as const;
+/* One explicit minmax(0, 1fr) track: an implicit grid track sizes to its
+   min-content, and a table's min-content pushed the card past 320px (C7). */
+const stack = { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 'var(--sv-s3)', alignContent: 'start' } as const;
+const column = { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: '14px', alignContent: 'start' } as const;
 
 const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
 

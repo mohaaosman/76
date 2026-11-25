@@ -164,8 +164,8 @@ function TreeTableControlled() {
   const [expanded, setExpanded] = useState<Set<string>>(new Set(['6000']));
   const [opened, setOpened] = useState<string>();
   return (
-    <div style={{ display: 'grid', gap: 12 }}>
-      <div style={{ display: 'flex', gap: 8 }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 12 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
         <Button variant="ghost" onClick={() => setExpanded(new Set(ALL_PARENTS))}>
           Expand all accounts
         </Button>

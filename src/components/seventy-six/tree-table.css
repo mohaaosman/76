@@ -4,6 +4,10 @@
 @layer sv-components {
   .sv-ttable__scroll {
     overflow-x: auto;
+    /* A scroll container must be POSITIONED, or an absolutely placed
+       descendant (a visually-hidden label, a select's chevron) escapes its
+       clip and pushes the page wide — found by the v0.10 320px sweep. */
+    position: relative;
   }
 
   .sv-ttable__table {

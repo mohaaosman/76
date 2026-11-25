@@ -37,6 +37,10 @@
     margin: 0;
     /* auto, never hidden: C7 forbids silently truncating a command. */
     overflow-x: auto;
+    /* A scroll container must be POSITIONED, or an absolutely placed
+       descendant (a visually-hidden label, a select's chevron) escapes its
+       clip and pushes the page wide — found by the v0.10 320px sweep. */
+    position: relative;
     font-family: var(--sv-font-mono);
     font-size: 12px;
     line-height: var(--sv-code-line);

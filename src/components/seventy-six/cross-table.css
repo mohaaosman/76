@@ -7,6 +7,10 @@
      row header stays put so they never lose which row they are on. */
   .sv-cross {
     overflow-x: auto;
+    /* A scroll container must be POSITIONED, or an absolutely placed
+       descendant (a visually-hidden label, a select's chevron) escapes its
+       clip and pushes the page wide — found by the v0.10 320px sweep. */
+    position: relative;
   }
 
   .sv-cross:focus-visible {

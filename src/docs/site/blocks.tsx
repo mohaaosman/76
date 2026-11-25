@@ -88,6 +88,7 @@ export function PropsCard({ groups }: { groups: DocEntry['props'] }) {
       {groups.map((group) => (
         <div key={group.component}>
           <p className="sv-mono site-props-group">{group.component}</p>
+          <div className="site-props__scroll" role="region" aria-label={`${group.component} props`} tabIndex={0}>
           <table className="site-props">
             <thead>
               <tr>
@@ -110,6 +111,7 @@ export function PropsCard({ groups }: { groups: DocEntry['props'] }) {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       ))}
     </Card>
@@ -121,6 +123,7 @@ export function A11yCard({ a11y }: { a11y: DocEntry['a11y'] }) {
     <Card>
       <CardHead title="Accessibility" subtitle="The Part C contract this component ships with" />
       {a11y.keyboard && a11y.keyboard.length > 0 && (
+        <div className="site-props__scroll">
         <table className="site-props site-keys">
           <thead>
             <tr>
@@ -137,6 +140,7 @@ export function A11yCard({ a11y }: { a11y: DocEntry['a11y'] }) {
             ))}
           </tbody>
         </table>
+        </div>
       )}
       <div className="site-prose">
         {a11y.notes.map((note) => (

@@ -132,6 +132,14 @@
 
   /* ---- Props table (reuses table voice) ---- */
 
+  /* C7, on the docs' own tables: a table scrolls inside its card, never
+     the page. The props table pushed every component page to ~400–650px
+     wide at 320 until the v0.10 sweep found it. */
+  .site-props__scroll {
+    position: relative;
+    overflow-x: auto;
+  }
+
   .site-props {
     width: 100%;
     border-collapse: collapse;

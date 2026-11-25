@@ -89,7 +89,7 @@ honest `polarity` for inverse metrics.
 - **0.7 – 0.9 shipped:** `EntryTable` (B53), `ScanField` (B54), `JobList` (B58), `TreeTable` (B59), `CrossTable` (B60), `FunnelList` (B61), `MessageThread` (B62), `SettingList` (B63); DataTable `rowSync`, FilterLine `savedView`, Delta `against`; the `crm-deal` and `settings-team` templates.
 - **Translation:** `LocaleProvider` + `useStrings()` carry every built-in word in English, French, Arabic and Somali; `useFormat()` gives callers Intl-formatted figures (components still never format, C9).
 - **RTL:** logical properties throughout, direction-aware arrow keys, `Drawer side="start" | "end"`, and a script layer that keeps Arabic letters joined.
-- **Gates & reach:** firewall rule 21 (logical properties only), `npm run test:interaction` (68 browser assertions), DataTable pointer selection, and `seventy-six-mcp` — a zero-dependency registry MCP server.
+- **Gates & reach:** firewall rule 21 (logical properties only), `npm run test:interaction` (69 browser assertions, including a 320px sweep of every page), DataTable pointer selection, and `seventy-six-mcp` — a zero-dependency registry MCP server.
 - **Postures:** `data-density="compact | regular | touch"` joins seed, mode and motion; the **Iris** health seed; a live **playground** at `/playground`.
 
 ```tsx

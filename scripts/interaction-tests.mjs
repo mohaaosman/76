@@ -293,6 +293,33 @@ for (const slug of ['crm-deal', 'settings-team']) {
   await page.close();
 }
 
+/* ------------------------------------------------- The 320px floor, swept */
+{
+  const page = await browser.newPage({ viewport: { width: 320, height: 800 } });
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  const slugs = await (async () => {
+    await page.goto(BASE + '/components', { waitUntil: 'networkidle' });
+    return page.evaluate(() =>
+      [...new Set([...document.querySelectorAll('a[href^="/components/"]')].map((a) => a.getAttribute('href')))],
+    );
+  })();
+  const templates = ['crm-deal', 'settings-team', 'erp-purchase-order', 'analytics-overview'].map((t) => `/templates/${t}`);
+  const wide = [];
+  for (const url of [...slugs, ...templates, '/playground']) {
+    errors.length = 0;
+    await page.goto(BASE + url, { waitUntil: 'networkidle' });
+    /* Let fonts and the code-split route settle before measuring. */
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(250);
+    const w = await page.evaluate(() => document.documentElement.scrollWidth);
+    if (w > 320) wide.push(`${url} (${w}px)`);
+    if (errors.length) wide.push(`${url} threw: ${errors[0]}`);
+  }
+  check(`320px floor: ${slugs.length} component pages + templates, no horizontal scroll or runtime error`, wide.length === 0, wide.join(', '));
+  await page.close();
+}
+
 await browser.close();
 
 if (failures.length) {
