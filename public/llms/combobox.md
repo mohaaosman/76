@@ -102,7 +102,8 @@ const [picked, setPicked] = useState<string[]>(['c-127', 'c-152']);
 | `multiple` | `boolean` | — | Switches the props to the multi union: value becomes string[] and onChange receives (values, options). |
 | `value` | `string | null | string[]` | — | Controlled selection. string | null in single mode, string[] in pick order when multiple. |
 | `onChange` | `(value, option) => void` | — | Single: fires on commit and on clear (null). Multi: fires on every toggle with the full array. |
-| `noun` | `string` | `'selected'` | Multi only. The singular noun the selection line counts: "account" reads "3 ACCOUNTS". |
+| `noun` | `string` | `'selected'` | Multi only. The singular noun the selection line counts: "account". |
+| `nounPlural` | `string` | `noun + "s" (English only)` | Multi only. The plural form: "accounts" reads "3 ACCOUNTS". Chosen by the locale's plural rules. |
 | `error / hint / required` | `string / string / boolean` | — | B11 field chrome; error sets aria-invalid + describedby. |
 | `emptyText` | `string` | `'No matching options.'` | No-match copy — state what, like every 76° empty state. |
 

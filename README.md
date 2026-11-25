@@ -89,6 +89,7 @@ honest `polarity` for inverse metrics.
 - **0.7 – 0.9 shipped:** `EntryTable` (B53), `ScanField` (B54), `JobList` (B58), `TreeTable` (B59), `CrossTable` (B60), `FunnelList` (B61), `MessageThread` (B62), `SettingList` (B63); DataTable `rowSync`, FilterLine `savedView`, Delta `against`; the `crm-deal` and `settings-team` templates.
 - **Translation:** `LocaleProvider` + `useStrings()` carry every built-in word in English, French, Arabic and Somali; `useFormat()` gives callers Intl-formatted figures (components still never format, C9).
 - **RTL:** logical properties throughout, direction-aware arrow keys, `Drawer side="start" | "end"`, and a script layer that keeps Arabic letters joined.
+- **Gates & reach:** firewall rule 21 (logical properties only), `npm run test:interaction` (68 browser assertions), DataTable pointer selection, and `seventy-six-mcp` — a zero-dependency registry MCP server.
 - **Postures:** `data-density="compact | regular | touch"` joins seed, mode and motion; the **Iris** health seed; a live **playground** at `/playground`.
 
 ```tsx
@@ -120,6 +121,8 @@ npm run firewall     # Slop Firewall (Part A1) — zero hits or non-zero exit
 npm run registry     # rebuild public/r/*.json only
 npm run llms         # rebuild public/llms.txt + public/llms/*.md only
 npm run check:sync   # fails if the skill's mirrored copies drift from source
+npm run test:interaction  # browser gate — run `npm run preview` first
+npm run mcp          # the registry MCP server over stdio (bin: seventy-six-mcp)
 REGISTRY_BASE=https://76.zifala.com npm run build   # default host, already baked; override to change it
 ```
 

@@ -26,6 +26,7 @@ The machine-checkable banned-CSS/pattern list (A1–A4), the registered exceptio
 | 14 | **image motion on hover** | `:hover` selector targeting `img`, or Tailwind `group-hover:scale/rotate/translate` | The image isn't the action target; animated images "perform" | Hover feedback goes to the row/card: seed-tint background or border shift per spec |
 | 15 | **bounce/overshoot easing** | `cubic-bezier()` with a y-component outside [0, 1] | Bounce is celebration; 76° motion informs | Plain ease-out curves; both durations collapse to 0ms under reduced motion anyway |
 | 16 | **paper-as-text** | `color: var(--sv-paper)` in any file but `tokens.css` | `--sv-paper` is the CARD SURFACE; it inverts to #1B1F26 on dark, so a mark painted with it collapses to 1.15:1 on the band and 2.90:1 on the seed | `var(--sv-on-dark)` for marks on the band or on a seed fill (white in both modes); `var(--sv-on-bad)` for the mark on a `--sv-bad` fill |
+| 21 | **physical direction property** | in a `.css` file: `margin-/padding-/border-left|right`, `left:`/`right:` (except `left: 50%` centring), `text-align: left\|right`, or a physical corner radius — unless the line carries a `rule 21:` comment; `trend.css` is registered whole | A physical box does not mirror, and since v0.10 every 76° screen may be read right to left | The logical property: `margin-inline-start`, `padding-inline-end`, `border-inline-start`, `inset-inline-start`, `text-align: start\|end`, `border-start-end-radius`; a glyph turns under `:dir(rtl)` |
 
 ---
 

@@ -18,7 +18,7 @@ in the open, with its reasons.
 - **The record and the console (0.9).** `MessageThread` (B62), `SettingList` (B63), and the `crm-deal` and `settings-team` templates.
 - **The language layer.** `LocaleProvider`, `useStrings`, `useDirection`, `useFormat`. Every built-in word the components speak, in English (source), French, Arabic and Somali, with CLDR plural rules for Arabic. No provider, no change. `useFormat()` gives the *caller* Intl-backed strings; C9 stands and no component formats a figure.
 - **RTL.** The LTR boundary is repealed (see below).
-- **From Exploring.** The **Iris** health seed (6.35:1 both ways; dark text #A98CF0 at 6.06:1), the **theming playground** at `/playground`, and `Checkbox indeterminate`.
+- **From Exploring.** The registry **MCP server** (`seventy-six-mcp`), the **Iris** health seed (6.35:1 both ways; dark text #A98CF0 at 6.06:1), the **theming playground** at `/playground`, and `Checkbox indeterminate`.
 - **Fixed.** Input placeholders were `--sv-ink-faint` (2.6:1), against C2 — now `--sv-ink-soft`. `Field` and `Select` overwrote a caller's `aria-describedby`. Doc prose written with `<i>` printed its tags.
 
 **Numbering.** B56 and B57 went to `IndexRow` and `CaptionRow` in 0.8's cover, so the 0.7–0.9 widgets renumber: JobList B58, TreeTable B59, CrossTable B60, FunnelList B61, MessageThread B62, SettingList B63. The saved-view line ships as a B7 amendment on `FilterLine` rather than a new number, because the drift IS a statement about the filters.
@@ -354,18 +354,19 @@ sub-taxonomy, it is a screen composed of 76° parts — not a component.**
 
 - **Native-speaker review of the catalogs** — French, Arabic and Somali ship machine-drafted from the English source. Each needs a native reviewer before a product ships it. Hebrew and Persian are the next RTL catalogs.
 - **Arabic in the faces** — Hanken Grotesk and Fragment Mono carry no Arabic, so the script falls through to the platform face. A registered Arabic companion face would make that voice the system's own.
-- **Registry MCP server** — search components, blocks, and templates by metadata from any assistant.
 - **8-state preview files** — the fundamentals state contract shipped as a preview per component.
 - **Full type tokenization** — a complete `--sv-text-*` scale. Density already moved `--sv-body-size` into the token layer, which makes the rest cheaper.
 - **More templates** — billing, onboarding and the inbox (now unblocked by `MessageThread`).
 - **Token sync** — a Figma ⇄ `tokens.css` bridge so design and code share one source.
-- ~~**Health seed**~~ — shipped in v0.10 as Iris. ~~**Theming playground**~~ — shipped in v0.10 at `/playground`.
+- ~~**Health seed**~~ — shipped in v0.10 as Iris. ~~**Theming playground**~~ — shipped at `/playground`. ~~**Registry MCP server**~~ — shipped as `seventy-six-mcp`.
 
 ## Quality gates — every item, every phase
 
 Native element first · zero runtime dependencies · the 8-state + 4-lifecycle
-contract · AA on **both** surfaces · registry item + llms doc + demo in the
-same change · `firewall`, `tsc -b`, `build`, and `check-sync` green.
+contract · AA on **both** surfaces and in **both** directions · every built-in
+word through the catalog · registry item + llms doc + demo in the same change ·
+`firewall` (now including rule 21), `tsc -b`, `build`, `check-sync` and
+`test:interaction` green.
 
 ---
 

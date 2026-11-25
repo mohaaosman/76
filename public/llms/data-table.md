@@ -201,13 +201,17 @@ const active = query !== '' || status !== 'all';
 | `page` | `{ from, to, of, onPrev?, onNext? }` | — | Mono "1–50 OF 248" + ghost prev/next. No numbered pill walk. |
 | `totals` | `TotalsRow[]` | — | v0.6 · a real <code>&lt;tfoot&gt;</code>: { label, cells (keyed by column key), strong? }. Outside the row, focus, selection and pagination models. |
 | `leadHold` | `boolean` | — | v0.6 · holds the first column while the rest scrolls. IGNORED unless that column is <code>kind: "id"</code>. |
+| `rowSync` | `(row) => 'unsaved' | 'saving' | 'failed' | undefined` | — | v0.10 · states that a row's change has not landed, as a mono word + 6px dot under its identity. Undefined says nothing. |
+| `rowLabel` | `(row) => string` | `rowKey` | v0.10 · names each row's selection box: "Select INV-2291". |
+| `isRowSelectable` | `(row) => boolean` | — | v0.10 · rows that may not be selected (the workspace owner); their box is disabled and ⇧-ranges skip them. |
 
 ### SelectionHead
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `count` | `number` | — | Selected rows. Rendered mono and tabular. |
-| `noun` | `string` | — | The object, singular ("invoice") — pluralised for the count. |
+| `noun` | `string` | — | The object, singular ("invoice"). |
+| `nounPlural` | `string` | `noun + "s" (English only)` | v0.10 · the plural form ("invoices", "statuses"). The form is chosen by the locale's plural rules, never by appending "s". |
 | `onClear` | `() => void` | — | Backs the always-present "Clear" action. |
 | `actions` | `ReactNode` | — | The verbs, as Buttons. Keep to three; the fourth belongs in a Menu (B20). |
 
@@ -218,6 +222,7 @@ const active = query !== '' || status !== 'all';
 | `filters` | `ActiveFilter[]` | — | { label, value } pairs, rendered as running mono text. |
 | `onClearAll` | `() => void` | — | The single clear affordance — filters are not individually dismissible. |
 | `count` | `string` | — | Optional lead, e.g. "12 of 248". Rendered first, tabular. |
+| `savedView` | `SavedView` | — | v0.10 · { name, drifted, onSave?, onReset? } — states drift from a saved view in the same live line, with Reset and Save view. |
 
 ### FilterBar
 

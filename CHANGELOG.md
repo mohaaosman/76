@@ -49,7 +49,18 @@ omission. It is neither now.**
 - **The theming playground** (`/playground`) — seed, mode, density, motion and language applied live to a real goods receipt, declared on a wrapper and never on `<html>`.
 - **`Checkbox indeterminate`** (B11 amendment) — the mixed state, set as the DOM property so the browser reports `aria-checked="mixed"`.
 
+### Added — the gates and the reach
+- **The interaction gate** — `npm run test:interaction` drives the built site in a real browser: EntryTable's typist keys and bounds, ScanField's clear-and-keep-focus, TreeTable's keyboard model in LTR and RTL, CrossTable's scoped headers, SettingList's consequence sentence, MessageThread's `<time>`s and Arabic direction words, RTL tab arrows, the nav drawer's start edge in both directions, DataTable's pointer selection, templates in their authoring direction, and duplicate ids. 68 assertions. The firewall reads source; this reads behaviour.
+- **Firewall rule 21 — logical properties only.** A physical `left`/`right` in a stylesheet is a box that will not mirror. The six legitimate exceptions (two-border chevron glyphs, the wordmark's optical kern) carry a `rule 21:` comment on their own line; `trend.css` is registered whole for its left-to-right time axis.
+- **DataTable pointer selection (B7 amendment).** A selectable table could only be selected from the keyboard. It now draws a leading column of B11 Checkboxes with a select-all box that is indeterminate while part of the set is selected, and ⇧-click ranges like ⇧-Space. The boxes are outside the tab order, so the keyboard model is unchanged. `rowLabel` names each box; `isRowSelectable` disables one.
+- **The registry MCP server** — `seventy-six-mcp`, zero dependencies, over the registry and markdown the build emits: `search_components`, `get_component`, `list_templates`, `get_foundations`.
+- **`useNounFor()`** — picks a noun's form through `Intl.PluralRules`; `SelectionHead` and `Combobox` take `nounPlural`.
+
 ### Fixed
+- **Plurals were `noun + "s"`.** Combobox's own documented example ("status" → "3 STATUSES") printed "STATUSS", and every language got an English plural. "selected", "+N more" and Combobox's "Clear" now come from the catalogs.
+- **A row's keys fired twice from controls inside it.** DataTable's row handler took ↑/↓/Space/Enter from a role Select or a clicked checkbox in its cells; it now handles only keystrokes aimed at the row, which removes the `stopPropagation` every caller needed.
+- **Disabling a focused control dropped focus to `<body>`** in `settings-team` while a role change saved. The control stays enabled and a second change waits for the first.
+- **The playground nested a second `<main id="sv-content">`.**
 - **Placeholders failed C2.** `.sv-field__input::placeholder` and the command palette's used `--sv-ink-faint` (2.6:1). Both are `--sv-ink-soft`.
 - **`Field` and `Select` dropped a caller's `aria-describedby`** — the spread was overwritten by the component's own. They merge now.
 - **Doc prose with `<i>` printed its tags** on six pages; the renderer and the markdown export both handle it.
