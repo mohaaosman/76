@@ -516,6 +516,12 @@ export const widgets: DocEntry[] = [
 />`,
       },
       {
+        title: 'A long table in a dashboard card',
+        description: 'v0.11 · maxHeight: the body scrolls inside the card and the header holds, so row forty still says which column is which.',
+        demoKey: 'table-capped',
+        code: `<DataTable caption="Order queue" columns={columns} rows={orders} rowKey={(o) => o.id} maxHeight={280} />`,
+      },
+      {
         title: 'Orders table with selection and keyboard nav',
         description: 'Click a row, then drive it entirely from the keyboard: ↑/↓ to move, Space to select, ⇧↓ to range-select, Enter to open.',
         demoKey: 'table-full',
@@ -660,6 +666,7 @@ const active = query !== '' || status !== 'all';
           { name: 'leadHold', type: 'boolean', description: 'v0.6 · holds the first column while the rest scrolls. IGNORED unless that column is <code>kind: "id"</code>.' },
           { name: 'rowSync', type: "(row) => 'unsaved' | 'saving' | 'failed' | undefined", description: 'v0.10 · states that a row\'s change has not landed, as a mono word + 6px dot under its identity. Undefined says nothing.' },
           { name: 'rowLabel', type: '(row) => string', defaultValue: 'rowKey', description: 'v0.10 · names each row\'s selection box: "Select INV-2291".' },
+          { name: 'maxHeight', type: 'number | string', description: 'v0.11 · the body scrolls inside this height and the header holds at its top.' },
           { name: 'isRowSelectable', type: '(row) => boolean', description: 'v0.10 · rows that may not be selected (the workspace owner); their box is disabled and ⇧-ranges skip them.' },
         ],
       },

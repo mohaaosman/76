@@ -15,6 +15,7 @@ import { crossTableEntry } from './entries/cross-table';
 import { funnelListEntry } from './entries/funnel-list';
 import { messageThreadEntry } from './entries/message-thread';
 import { settingListEntry } from './entries/setting-list';
+import { dataStateEntry } from './entries/data-state';
 
 export { categories } from './categories';
 
@@ -37,6 +38,7 @@ export const entries: DocEntry[] = [
   funnelListEntry,
   messageThreadEntry,
   settingListEntry,
+  dataStateEntry,
 ];
 
 export type { DocEntry } from './types';

@@ -1,0 +1,38 @@
+/* B64 · DataState — the four lifecycle states of one data region.
+   Full-bleed when ready (it renders its children as given); its own
+   loading and error states carry the card's 18px inline inset. EmptyState
+   pads itself (B15). */
+
+@layer sv-components {
+  .sv-datastate {
+    min-width: 0;
+  }
+
+  .sv-datastate__pad {
+    padding: var(--sv-s4) 18px 18px;
+  }
+
+  .sv-datastate__rows {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Skeleton rows take the table's own rhythm — hairline, row inset — so
+     the region the data lands in is the region the skeleton drew. */
+  .sv-datastate__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2.4fr) minmax(0, 1fr);
+    gap: var(--sv-s4);
+    align-items: center;
+    padding-block: var(--sv-row-y);
+    border-bottom: 1px solid var(--sv-line);
+  }
+
+  .sv-datastate__row:last-child {
+    border-bottom: 0;
+  }
+
+  .sv-datastate__row > :last-child {
+    justify-self: end;
+  }
+}

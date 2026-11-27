@@ -61,6 +61,7 @@ const CARD_DIRECT_CHILD_FULL_BLEED = new Set([
   'EntryTable',      /* B53 · B7's cells, its 18px inline inset included */
   'TreeTable',       /* B59 · treegrid rows, edge to edge */
   'CrossTable',      /* B60 · a matrix with B7's cell inset */
+  'DataState',       /* B64 · renders its children as given; its own states pad */
 ]);
 
 /* SELF-PADDED is a claim about a DECLARATION — "this component carries its own

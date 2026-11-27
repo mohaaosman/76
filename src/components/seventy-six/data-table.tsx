@@ -89,6 +89,14 @@ export interface DataTableProps<Row> {
   rowLabel?: (row: Row) => string;
   /** Rows that may not be selected (the workspace owner). Their box is disabled. */
   isRowSelectable?: (row: Row) => boolean;
+  /**
+   * v0.11 · a long table inside a dashboard card. The body scrolls inside
+   * this height and the header holds at the top of it, so a reader forty
+   * rows down still knows which column is which. Page-level scrolling
+   * cannot do this: the table's horizontal scroll region would trap a
+   * sticky header, so the region scrolls on both axes instead.
+   */
+  maxHeight?: number | string;
   /** Closing figures, rendered as a real `<tfoot>`. Never records. */
   totals?: TotalsRow[];
   /** Holds the first column in place while the rest scrolls. Ignored unless
@@ -295,6 +303,7 @@ export function DataTable<Row>({
   rowSync,
   rowLabel,
   isRowSelectable,
+  maxHeight,
   className,
 }: DataTableProps<Row>) {
   const tr = useStrings();
@@ -390,7 +399,14 @@ export function DataTable<Row>({
 
   return (
     <div className={cx('sv-table', boxes && 'sv-table--checks', className)}>
-      <div className="sv-table__scroll">
+      <div
+        className={cx('sv-table__scroll', maxHeight !== undefined && 'sv-table__scroll--capped')}
+        style={maxHeight !== undefined ? { maxBlockSize: maxHeight } : undefined}
+        /* A capped region scrolls vertically, so it must be reachable by the
+           keyboard as a region too (2.1.1) — rows are focusable, but a reader
+           tabbing past the table still needs to scroll it. */
+        {...(maxHeight !== undefined ? { role: 'region', 'aria-label': caption, tabIndex: -1 } : {})}
+      >
         <table className="sv-table__table">
           <caption className="sv-visually-hidden">{caption}</caption>
           <thead>

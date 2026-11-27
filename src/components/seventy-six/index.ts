@@ -145,6 +145,10 @@ export type { MessageThreadProps, ThreadMessage, ThreadAttachment, MessageDirect
 export { SettingList } from './setting-list';
 export type { SettingListProps, SettingRow, SettingControl } from './setting-list';
 
+/* v0.11 · the four lifecycle states, assembled once around any widget. */
+export { DataState } from './data-state';
+export type { DataStateProps, DataStatus } from './data-state';
+
 /* v0.10 · the language layer. Every built-in word, every direction. */
 export {
   LocaleProvider,

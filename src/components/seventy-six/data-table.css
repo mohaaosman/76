@@ -340,4 +340,28 @@
   .sv-table__sync--failed {
     color: var(--sv-bad);
   }
+
+  /* v0.11 · maxHeight. The region scrolls on both axes and the header
+     holds at its top. The header cell owes a surface (the rows scroll
+     UNDER it) and keeps its hairline as a box-shadow, because a sticky
+     cell's border scrolls away with the collapsed-border table. */
+  .sv-table__scroll--capped {
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  .sv-table__scroll--capped .sv-table__th {
+    position: sticky;
+    top: 0;
+    z-index: var(--sv-z-sticky);
+    background-color: var(--sv-paper);
+    box-shadow: inset 0 -1px 0 var(--sv-line);
+  }
+
+  /* The held identity column AND the sticky header meet in one corner
+     cell, which must sit above both. */
+  .sv-table__scroll--capped .sv-table__th.sv-table__cell--held,
+  .sv-table__scroll--capped .sv-table__th.sv-table__cell--heldcheck {
+    z-index: calc(var(--sv-z-sticky) + 1);
+  }
 }

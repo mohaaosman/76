@@ -87,6 +87,7 @@ import { crossTableDemos } from './demos/cross-table';
 import { funnelListDemos } from './demos/funnel-list';
 import { messageThreadDemos } from './demos/message-thread';
 import { settingListDemos } from './demos/setting-list';
+import { dataStateDemos } from './demos/data-state';
 
 /* Shared demo icons — 16px stroke, seed color comes from the tile. */
 const IconCoins = (
@@ -2613,4 +2614,5 @@ export const demos: Record<string, ComponentType> = {
   ...funnelListDemos,
   ...messageThreadDemos,
   ...settingListDemos,
+  ...dataStateDemos,
 };
