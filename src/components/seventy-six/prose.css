@@ -249,7 +249,7 @@
 
   /* Inline code is a printed token, so it takes the Kbd cap treatment: the
      wall inside a hairline at the registered 3px radius — bars and caps. 0.86em
-     because Fragment Mono runs large next to Hanken at the same nominal size. */
+     because a mono face runs large next to the UI face at the same nominal size. */
   .sv-prose code {
     padding: 1px 4px;
     border: 1px solid var(--sv-line);

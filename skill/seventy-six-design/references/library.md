@@ -264,4 +264,4 @@ This is what stamps `https://76.zifala.com/r/tokens.json` into each item's `regi
 - **Don't add a component without registering it** in `components/seventy-six/index.ts` **and** the registry (a doc `content/` entry → `public/r/<slug>.json`). An unbarreled, unregistered component is invisible to consumers and to the AI layer.
 - **Don't use `--sv-display-1|2|3` outside `tokens.css`, `masthead.css`, `cta.css` and `proof-row.css`** — firewall rule 17. The product ramp tops out at 27px; a dashboard that grows a 64px number has left the system.
 - **Don't hardcode color literals** in a component — every color comes from `tokens.css` seeds.
-- **Don't import fonts other than Hanken Grotesk / Fragment Mono** (`@fontsource-variable/hanken-grotesk`, `@fontsource/fragment-mono`). Mono is the `sv-mono` voice; tabular numbers are `sv-num`.
+- **Don't import fonts other than IBM Plex Sans / IBM Plex Mono** (`@fontsource-variable/hanken-grotesk`, `@fontsource/fragment-mono`). Mono is the `sv-mono` voice; tabular numbers are `sv-num`.

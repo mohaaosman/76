@@ -36,7 +36,7 @@ improvise over an established setup:
 1. **Framework** — Next/Vite/Laravel-Inertia/Astro/vanilla (deps or config).
 2. **76° presence** — `tokens.css`, `data-seed` attribute, `seventy-six-ui`
    imports, existing `/* 76° · … */` stamps.
-3. **Fonts** — how Hanken Grotesk / Fragment Mono are loaded (or missing).
+3. **Fonts** — how IBM Plex Sans / IBM Plex Mono are loaded (or missing).
 4. **Entry stylesheet** — the global CSS file and its framework directives.
 5. **Seed** — which registered seed the product uses, if any.
 
@@ -163,7 +163,7 @@ reduced motion. These are the laws of what little motion exists:
 
 - **No italic headings or display type — ever.** Emphasis in headings is
   carried by weight, the seed color, or the band-soft secondary-word
-  pattern; italics survive only inside running body copy. (Fragment Mono
+  pattern; italics survive only inside running body copy. (IBM Plex Mono
   has no italic; don't synthesize one.)
 - Tracking floor: never tighter than −0.04em (the system's tightest
   registered value is −0.025em on stat values).

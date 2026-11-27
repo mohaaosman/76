@@ -19,8 +19,8 @@ The machine-checkable banned-CSS/pattern list (A1–A4), the registered exceptio
 | 7 | **unregistered border-radius** | any token in the `border-radius:` value not in the legal set | One corner radius keeps the geometry coherent | Legal set only: **`var(--sv-r)` (4px), `50%`, `0`, `2px`, `3px`**. |
 | 8 | **animation > 200ms** | `animation: … <N>ms` where `N > 200`, unless the line contains `sv-rotate` | Long motion performs; 76° motion is functional and brief | Keep ≤200ms; use `var(--sv-t)` (160ms) / `var(--sv-t-fast)` (120ms), both of which collapse to 0ms under `prefers-reduced-motion` |
 | 9 | **transition on layout property** | a `transition:` line naming `width` \| `height` \| `top` \| `left` \| `margin` \| `padding`, unless it's a `width` transition in `progress.css` or `meter-list.css` | Animating layout causes reflow and jank; fades are opacity/color only | Transition `opacity`/`color`/`background` only. Layout is instant |
-| 10 | **unregistered font-family** | a `font-family:` line without `var(--sv-font-ui)`, `var(--sv-font-mono)`, or `inherit` | Two typefaces, no more: one UI, one mono | `var(--sv-font-ui)` (Hanken Grotesk), `var(--sv-font-mono)` (Fragment Mono), or `inherit` |
-| 11 | **italic** | `font-style: italic` | Italic headings/display are a reliable AI tell; Fragment Mono has no italic | Emphasis via weight, the seed, or the band-soft secondary word. Italic survives only inside running body copy |
+| 10 | **unregistered font-family** | a `font-family:` line without `var(--sv-font-ui)`, `var(--sv-font-mono)`, or `inherit` | Two typefaces, no more: one UI, one mono | `var(--sv-font-ui)` (IBM Plex Sans), `var(--sv-font-mono)` (IBM Plex Mono), or `inherit` |
+| 11 | **italic** | `font-style: italic` | Italic headings/display are a reliable AI tell; IBM Plex Mono has no italic | Emphasis via weight, the seed, or the band-soft secondary word. Italic survives only inside running body copy |
 | 12 | **arbitrary z-index** | `z-index:` with a 3+-digit literal | `999` wars mean nobody owns the stacking order | The `--sv-z-*` ladder (band 10 · sticky 20 · scrim 30 · dialog 40 · toast 50 · tip 60 · skip 70) — or the browser top layer via native `<dialog>`/`popover`, which needs none |
 | 13 | **overflow-x hidden** | `overflow-x: hidden` | `hidden` silently kills sticky positioning and programmatic scroll | `overflow-x: clip` to clip; `auto`/`scroll` for real scroll regions (B7 tables) |
 | 14 | **image motion on hover** | `:hover` selector targeting `img`, or Tailwind `group-hover:scale/rotate/translate` | The image isn't the action target; animated images "perform" | Hover feedback goes to the row/card: seed-tint background or border shift per spec |
@@ -56,7 +56,7 @@ These are the 76° laws that a line-by-line lint can't catch — enforced by eye
 - No multi-purpose mystery components. A thing that shows status, a thing that takes input, a thing that navigates — separate, named, registered.
 
 ### A4 · Layout & typography discipline
-- **Mono speaks metadata.** `.sv-mono` (Fragment Mono, 10px, 0.13em, uppercase) is the voice of timestamps, IDs, codes, labels — machine facts. Prose and content are `--sv-font-ui`.
+- **Mono speaks metadata.** `.sv-mono` (IBM Plex Mono, 10px, 0.13em, uppercase) is the voice of timestamps, IDs, codes, labels — machine facts. Prose and content are `--sv-font-ui`.
 - **Numbers are tabular instrumentation.** Any number that can change wears `.sv-num` (`font-variant-numeric: tabular-nums`) so digits align like an instrument readout.
 - **The band is the chrome.** Primary navigation is the horizontal ink band (`--sv-band`, header). A sidebar used as the primary nav is a defect — the band is the chrome, the sidebar is not a substitute for it.
 

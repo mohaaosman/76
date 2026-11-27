@@ -19,7 +19,7 @@ These rules are written to be lintable. Grep the codebase; any hit is a violatio
 - `color: var(--sv-paper)` — paper is the card surface, not a mark. Use `--sv-on-dark`.
 - `animation` durations > 200ms; any `transition` on layout properties (width/height/top/left/margin); keyframe bounces/springs. **One registered amendment: `--sv-t-count` is 640ms** — see "The motion posture" in Part B. It is the only duration in the system over the ceiling, it is off by default, and the ceiling stands for everything else.
 - `!important` — a component that needs it is mis-structured.
-- Font families other than Hanken Grotesk / Fragment Mono / **Archivo Variable** (system stack fallbacks only). The third name is an amendment, and it is fenced: **rule 20** rejects `var(--sv-font-display)` outside `tokens.css`, `masthead.css` and `index-row.css`. It exists so a landing page can set a poster title, not so a dashboard can pick a different voice for its table headers. Archivo carries a WIDTH axis as well as a weight one, which is why it is a variable face and not a second static file: the same font sets a condensed, heavy title at 1440px and relaxes to a readable one at 320px.
+- Font families other than IBM Plex Sans / IBM Plex Mono / **Archivo Variable** (system stack fallbacks only). The third name is an amendment, and it is fenced: **rule 20** rejects `var(--sv-font-display)` outside `tokens.css`, `masthead.css` and `index-row.css`. It exists so a landing page can set a poster title, not so a dashboard can pick a different voice for its table headers. Archivo carries a WIDTH axis as well as a weight one, which is why it is a variable face and not a second static file: the same font sets a condensed, heavy title at 1440px and relaxes to a readable one at 320px.
 - **Rule 21 (v0.10) · physical direction properties.** `margin-left`, `padding-right`, `border-left`, `left:`/`right:`, `text-align: left|right` and the physical corner radii are defects in a stylesheet: they are boxes that will not mirror (C10). A chevron drawn from two borders is a glyph, not a layout, and an optical kern belongs to the Latin wordmark; each such line carries a `rule 21:` comment stating why. `trend.css` is registered whole for its left-to-right time axis.
 - **Rule 18 — nothing touches the paper's edge by accident.** `.sv-card` carries no padding *by design*: a DataTable's rows are hairline-ruled edge to edge and a CardHead owns its own row, so a card that padded everything would have to un-pad them again. The cost is that a widget with no inset of its own — a `MeterList`, a `Trend`, a `Field`, a `Prose`, a `Timeline` — dropped straight into a `<Card>` renders flush against the corners. It has happened more than once, it is invisible in a diff, and until now the only thing standing between the system and it was a comment. A capitalised component that is a **direct child of `<Card>`** must either be full-bleed by specification or self-padded (both lists are registered in `slop-firewall.mjs`), or sit inside `<div className="sv-card__body">`. This is the one firewall rule that reads structure rather than lines, because the defect is a parent/child relationship. Adding a name to the allowlist is a Book change — it is a claim that the component draws to the card's edge on purpose.
 - **Rule 17 —** `var(--sv-display-1|2|3)` anywhere but `tokens.css` and the three marketing components that set display type (`masthead.css`, `cta.css`, `proof-row.css`). The product ramp tops out at 27px; a dashboard that grows a 64px number has left the system. B48 `FeatureList` and B51 `SiteFooter` are marketing too and are deliberately NOT on that list — an allowance nobody uses is an allowance somebody will.
@@ -50,7 +50,7 @@ These rules are written to be lintable. Grep the codebase; any hit is a violatio
 **A4 · Required (presence-checkable):**
 
 - `font-variant-numeric: tabular-nums` on every element that renders a number that can change.
-- Every `<table>` numeric column right-aligned; every ID cell in Fragment Mono.
+- Every `<table>` numeric column right-aligned; every ID cell in IBM Plex Mono.
 - Every card: exactly one `--sv-shadow`, radius `--sv-r`, background `--sv-paper`, zero border.
 - Every screen: one `<h1>`, heading levels unskipped, one `<main>`, band nav in `<nav aria-label="Primary">`, sub-tabs in `<nav aria-label="Section">`.
 - Every interactive element: visible focus state (spec in Part C). Every icon: `aria-hidden="true"` with an adjacent text label, or an `aria-label` if genuinely alone (allowed only in the topbar utility cluster).
@@ -70,7 +70,7 @@ Naming: React components in `resources/js/components/seventy-six/`, prefix-free 
 - Below 1000px: `BandNav` leaves the band and moves into a left Drawer (B21, `side="left"`, `size="sm"`), opened by a ghost "Menu" button with a glyph beside it — the topbar keeps wordmark, app name, and the right cluster. The nav never becomes a horizontal scroller (A2).
 - A11y: `<nav aria-label="Primary">`; active link `aria-current="page"`; underline is supplementary — active state is also carried by text color/weight (non-color cue: `aria-current` + weight 700). The drawer's nav keeps the same landmark and `aria-current`; the "Menu" button carries `aria-expanded`.
 
-**`BandSubTabs`** — children of the active nav item, Fragment Mono 10.5 uppercase, tracking .13em. Same underline behavior. Collapses (renders nothing) when the section has no children. Never nests deeper — a third level becomes in-card tabs (B8) or a page.
+**`BandSubTabs`** — children of the active nav item, IBM Plex Mono 10.5 uppercase, tracking .13em. Same underline behavior. Collapses (renders nothing) when the section has no children. Never nests deeper — a third level becomes in-card tabs (B8) or a page.
 - Below 1000px: the sub-tab row leaves the band and nests inside the drawer, indented one step under its parent nav item — same mono type, no underline, still links. It never becomes a horizontal scroller.
 - A11y: `<nav aria-label="Section">`, `aria-current="page"` on active. These are links, not ARIA tabs — they navigate.
 
@@ -111,7 +111,7 @@ Rows of: label 12.5/500 soft + value 12.5/700 tabular right → 3px bar → fain
 
 ### B7 · `DataTable`
 
-Head (universal card head) → optional `CardTabs` filter row → table. Columns: header Fragment Mono 9.5 uppercase `--sv-ink-soft`; cells 13/500, 10.5px vertical padding, 18px horizontal; IDs `Mono 11 --sv-ink-soft`; numbers right/tabular/600; row hover `--sv-seed-tint`; row hairlines `--sv-line`; last row unruled. Selected row: seed-tint bg + 2px seed left rule (the only left-rule use).
+Head (universal card head) → optional `CardTabs` filter row → table. Columns: header IBM Plex Mono 9.5 uppercase `--sv-ink-soft`; cells 13/500, 10.5px vertical padding, 18px horizontal; IDs `Mono 11 --sv-ink-soft`; numbers right/tabular/600; row hover `--sv-seed-tint`; row hairlines `--sv-line`; last row unruled. Selected row: seed-tint bg + 2px seed left rule (the only left-rule use).
 - Keyboard (ERP contract): table focusable; ↑/↓ move row focus, Enter opens, Space selects, ⇧ range-selects, Home/End jump. Focused row = same visual as hover + focus ring on the row.
 - A11y: `<th scope="col">`; sortable headers are `<button>`s inside `th` with `aria-sort`; row count + filter state announced via `aria-live="polite"` region on change; never remove header row on mobile — tables scroll horizontally in a card, they do not reflow into blobs.
 - Pagination: mono "1–50 OF 248" left, ghost prev/next right. No numbered pill walk.
@@ -202,7 +202,7 @@ The band-less page type. Wall background edge to edge; one centred card, max 400
 
 ### B25 · `PinField` (v0.3.0)
 
-The OTP / verification-code input: a row of fixed single-character boxes, 4–8 (default 6), B11 field chrome per box — white bg, 1px `--sv-field-line-strong`, radius 4 (NOT the ordinary `--sv-field-line`: an empty box carries no label, value or fill, so its border is the sole affordance and owes the 3:1 non-text bar, C1) — with the character in Fragment Mono 18, centred, box 40×46, 8px gaps. Label above per B11; hint below names the delivery and the window ("Sent to ···4192 · valid 10 minutes"). Typing advances, Backspace retreats, one paste fills every box. One job: enter a short fixed-length code.
+The OTP / verification-code input: a row of fixed single-character boxes, 4–8 (default 6), B11 field chrome per box — white bg, 1px `--sv-field-line-strong`, radius 4 (NOT the ordinary `--sv-field-line`: an empty box carries no label, value or fill, so its border is the sole affordance and owes the 3:1 non-text bar, C1) — with the character in IBM Plex Mono 18, centred, box 40×46, 8px gaps. Label above per B11; hint below names the delivery and the window ("Sent to ···4192 · valid 10 minutes"). Typing advances, Backspace retreats, one paste fills every box. One job: enter a short fixed-length code.
 - States: default · focus — the active box takes the 1.5px seed border, no glow · filled · error — every box borders `--sv-bad` (the code is wrong as a unit, never per character) with 11.5 bad text stating what and how ("That code has expired. Request a new one.") · disabled (wall bg) · verifying — boxes lock, the primary reads "Verifying…" at locked width (B10).
 - A11y: ONE input semantically — `inputmode="numeric"`, `autocomplete="one-time-code"`, `aria-label` naming the code; boxes are presentation and `aria-hidden` where they duplicate. Error wired through `aria-describedby` + `aria-invalid="true"`, announced politely. Tab enters and leaves the field as a unit — never a keyboard trap.
 - Don't: no auto-submit without a visible primary; no masking (a code is not a password); no countdown that hides the resend action; never used for a variable-length secret — that is a B11 Field.
@@ -224,7 +224,7 @@ Native `<details>`/`<summary>` sections, hairline-ruled, with a mono uppercase m
 
 ### B28 · `DescriptionList` (v0.4.0)
 
-The record readout: a real `<dl>` where terms speak Fragment Mono 9.5 uppercase `--sv-ink-soft` (the table-header voice) and values carry the information at 13/500 ink, each pair on a `--sv-line` hairline, last row unruled. Value `kind` inherits the table's type discipline — `id` goes mono 11 soft, `num` goes tabular 600 and right-aligned. Grid is `minmax(110px,168px) 1fr`, collapsing to one column below 520px (C7). One job: state a set of labelled facts about ONE record.
+The record readout: a real `<dl>` where terms speak IBM Plex Mono 9.5 uppercase `--sv-ink-soft` (the table-header voice) and values carry the information at 13/500 ink, each pair on a `--sv-line` hairline, last row unruled. Value `kind` inherits the table's type discipline — `id` goes mono 11 soft, `num` goes tabular 600 and right-aligned. Grid is `minmax(110px,168px) 1fr`, collapsing to one column below 520px (C7). One job: state a set of labelled facts about ONE record.
 - States: none interactive. A fact with no value is omitted or stated ("None recorded") — never an empty row.
 - A11y: real `<dl>/<dt>/<dd>`, so each term is announced with its value as one pair. Numeric values carry `tabular-nums` (A4).
 - Don't: never compares two records side by side (that is B7); never holds editing controls (that is a Drawer with a form); never sentence-case terms.
@@ -252,7 +252,7 @@ Initials derived from the name, 700 weight on `--sv-wall`, at 24/32/44px, radius
 
 ### B32 · `Kbd` (v0.4.0)
 
-A key, printed: real `<kbd>` elements in Fragment Mono 10.5 on a `--sv-wall` cap with a hairline border, a 2px bottom border, and the registered 3px radius — the one skeuomorphic gesture in 76°, earned because a key cap is a physical object. On the band the cap goes transparent and takes band tokens. A `separator` ("then") turns a chord into a sequence. One job: print the key that triggers something.
+A key, printed: real `<kbd>` elements in IBM Plex Mono 10.5 on a `--sv-wall` cap with a hairline border, a 2px bottom border, and the registered 3px radius — the one skeuomorphic gesture in 76°, earned because a key cap is a physical object. On the band the cap goes transparent and takes band tokens. A `separator` ("then") turns a chord into a sequence. One job: print the key that triggers something.
 - A11y: real `<kbd>` semantics; glyph keys are characters, not images, so they scale and translate. A printed shortcut never replaces a visible control (C4) — it labels one that already exists.
 - Don't: never prints a shortcut the app does not bind; never clickable; never a pill; never longer than three caps.
 
@@ -332,7 +332,7 @@ The non-modal panel that holds a FEW CONTROLS beside the control that asked for 
 
 ### B43 · `CodeBlock` (v0.4.0)
 
-Code or a command, printed exactly as it must be typed. `--sv-wall` inside a 1px `--sv-line` border — the one place in the system a bordered inset panel is right, because the code is a quotation and not a card. An optional mono head naming the file or language, a copy control, and `<pre><code>` in Fragment Mono 12/1.6 with `overflow-x: auto` (never `hidden` — the firewall rejects it and C7 forbids silent truncation). `numbered` puts the gutter OUTSIDE the `<code>`, `aria-hidden` and unselectable, sticky so the numbers hold while the code scrolls under them. One job: print code exactly.
+Code or a command, printed exactly as it must be typed. `--sv-wall` inside a 1px `--sv-line` border — the one place in the system a bordered inset panel is right, because the code is a quotation and not a card. An optional mono head naming the file or language, a copy control, and `<pre><code>` in IBM Plex Mono 12/1.6 with `overflow-x: auto` (never `hidden` — the firewall rejects it and C7 forbids silent truncation). `numbered` puts the gutter OUTSIDE the `<code>`, `aria-hidden` and unselectable, sticky so the numbers hold while the code scrolls under them. One job: print code exactly.
 - **No syntax highlighting, ever.** Highlighting is six to nine colours on one surface; Ship Gate point 2 counts the colours on a screen and Law 2 allows neutrals plus one seed. A reader who needs colour to parse a snippet has been handed a snippet that is too long. A product that overrides this owns the gate consequence and declares it in its own overrides, exactly as B26 permits for provider brand marks.
 - The copy control reads "Copy", becomes "Copied" for two seconds at a locked minimum width (B10: buttons never resize on state change), announces through a visually-hidden polite region rather than through the label alone, and is NOT RENDERED when `navigator.clipboard` is absent — a control that cannot work is not shown.
 - A11y: `role="region"` and `tabIndex={0}` are applied only when the block actually scrolls, measured at runtime. A keyboard user must be able to scroll it; an unnecessary tab stop on a block that does not scroll is its own defect.
@@ -493,6 +493,25 @@ The cover treatment. The title takes `--sv-font-display` at `--sv-display-1`, **
 - **It never computes.** Every amount is a pre-formatted string the caller supplies (C9, A4), the currency symbol and the minus sign on a discount included. A component that adds up the numbers it was handed can disagree with the invoice, and the invoice is the document of record.
 - It carries no inset of its own — inside a `<Card>` it takes `sv-card__body` (rule 18), like B6 and B41.
 - Don't: never computes a sum; never a currency symbol the caller did not supply; never a minus the component invented; never more rows than a reader can check by eye; never inside a table — that is B7 `totals`.
+
+### The type and weight amendment — v0.11
+
+**Implementations read too thin, and the owner said so.** Two causes, both in the token layer. The mono voice was Fragment Mono, which ships ONE weight: every 10px label, column header, ID and timestamp was a 400-weight hairline in soft ink. And the ink ladder was pale — `--sv-ink-soft` measured 4.39:1 on the wall, an AA failure wherever it sat there, and card subtitles and timestamps used `--sv-ink-faint` at 2.61:1.
+
+- **IBM Plex** replaces both faces: Plex Sans for content, Plex Mono for metadata at **weight 500**, and **Plex Sans Arabic** second in both stacks, so Arabic letters keep the system's voice instead of the operating system's. Weight 800 maps to Plex's 700. Nothing in the system sets type below **10px**.
+- **The ladder**: ink-soft #525B69 (6.86:1 paper, 6.01:1 wall), ink-faint #7A8391 (3.83:1), firmer hairlines and field lines, a step-deeper wall, the one shadow at .08. Ok/bad deepen to stay AA on the wall.
+- **Faint is for disabled and decorative only.** Card subtitles, activity and timeline times, timeline actors and progress context are read, so they are soft.
+- **`--sv-bar`**: B4, B6 and B61 bars are 4px (compact 3, touch 6). Chart strokes 2.5, sparklines 1.75.
+- **The closing-figure label** in B7 `totals` and B55 takes Plex Mono's 600 — the emphasis Fragment Mono could only fake in colour.
+
+### B64 · `DataState` (v0.11)
+
+One job: **state which of the four lifecycle states a data region is in, and draw the right one.** The Craft Floor required all four on every data region and every screen assembled them by hand; this assembles them once around any widget. It holds no state — the caller passes `status`. Loading paints nothing for 300ms, then skeleton rows, with the region `aria-busy` and a named status line, and `minHeight` reserved so the card does not jump. Empty is B15; error is B22 inline with a retry the caller names; ready renders the children as given. Full-bleed in a Card; its own states carry the inset.
+- Don't: never a spinner as first paint; never an error without what to do; never "No data"; never a toast for a failed region.
+
+### B7 · `DataTable` — v0.11 amendment · `maxHeight`
+
+A long table inside a dashboard card scrolls inside `maxHeight` and its header holds at the top of the region. Page-level stickiness cannot work — the table's horizontal scroll region traps a sticky header — so the capped region scrolls on both axes and is a named region. The corner cell sits above a held identity column.
 
 ### B53 · `EntryTable` (v0.10 · the 0.7 surface)
 

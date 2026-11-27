@@ -6,20 +6,21 @@ const NEUTRALS = [
   { name: '--sv-band', hex: '#1B1F26', note: 'ink band' },
   { name: '--sv-band-line', hex: '#2C323B', note: 'band hairlines' },
   { name: '--sv-band-soft', hex: '#8A93A2', note: 'band secondary · 5.32:1' },
-  { name: '--sv-wall', hex: '#F2F3F5', note: 'platinum wall' },
+  { name: '--sv-wall', hex: '#EEF0F3', note: 'platinum wall' },
   { name: '--sv-paper', hex: '#FFFFFF', note: 'card surface' },
   { name: '--sv-ink', hex: '#1C2026', note: 'primary text · 15.7:1' },
-  { name: '--sv-ink-soft', hex: '#667080', note: 'secondary · 4.99:1 AA' },
-  { name: '--sv-ink-faint', hex: '#99A1AD', note: 'hints · never sole carrier' },
-  { name: '--sv-line', hex: '#E9EBEE', note: 'internal hairlines' },
+  { name: '--sv-ink-soft', hex: '#525B69', note: 'secondary · 6.86:1 AA' },
+  { name: '--sv-ink-faint', hex: '#7A8391', note: 'disabled · decorative · 3.83:1' },
+  { name: '--sv-line', hex: '#E3E6EA', note: 'internal hairlines' },
 ];
 
 const SEEDS = [
   { name: 'Cobalt · ERP', hex: '#2C5BE0', note: '5.70:1 both ways' },
   { name: 'Verdigris · CRM', hex: '#12836F', note: '5.0:1 both ways' },
   { name: 'Signal · POS', hex: '#D9531E', note: 'fills only · text #C24413' },
-  { name: '--sv-ok', hex: '#14804A', note: 'words + dots · 4.98:1' },
-  { name: '--sv-bad', hex: '#C43D2E', note: 'words + dots · 5.18:1' },
+  { name: 'Iris · HEALTH', hex: '#6A45C9', note: '6.35:1 both ways' },
+  { name: '--sv-ok', hex: '#107543', note: 'words + dots · 5.76:1' },
+  { name: '--sv-bad', hex: '#B9382A', note: 'words + dots · 5.73:1' },
 ];
 
 export function FoundationsPage() {
@@ -68,13 +69,13 @@ export function FoundationsPage() {
         </Row>
         <Row split="main">
           <Card>
-            <CardHead title="Typography" subtitle="Hanken Grotesk speaks content · Fragment Mono speaks metadata" />
+            <CardHead title="Typography" subtitle="IBM Plex Sans speaks content · IBM Plex Mono speaks metadata" />
             <div className="site-type-specimen">
               <div>
                 <p style={{ fontSize: 27, fontWeight: 800, lineHeight: 1.2 }}>
                   Good morning, <span style={{ color: 'var(--sv-ink-faint)' }}>Warehouse</span>
                 </p>
-                <p className="site-swatch__hex">H1 greeting · Hanken 27/1.2 · 800</p>
+                <p className="site-swatch__hex">H1 greeting · Plex Sans 27/1.2 · 700</p>
               </div>
               <div>
                 <p className="sv-num" style={{ fontSize: 24, fontWeight: 800, letterSpacing: '-0.025em' }}>
@@ -84,17 +85,17 @@ export function FoundationsPage() {
               </div>
               <div>
                 <p style={{ fontSize: 13 }}>Body and table cells set at 13/1.5 in weight 500; numeric cells step up to 600.</p>
-                <p className="site-swatch__hex">Body · Hanken 13/1.5 · 500</p>
+                <p className="site-swatch__hex">Body · Plex Sans 13/1.5 · 500</p>
               </div>
               <div>
                 <p className="sv-mono" style={{ color: 'var(--sv-ink-soft)' }}>REVENUE · MONTH TO DATE</p>
-                <p className="site-swatch__hex">Micro label · Fragment Mono 10 · UPPERCASE · tracking .13em</p>
+                <p className="site-swatch__hex">Micro label · IBM Plex Mono 10 · 500 · UPPERCASE · tracking .13em</p>
               </div>
               <div>
                 <p style={{ fontFamily: 'var(--sv-font-mono)', fontSize: 11.5, color: 'var(--sv-ink-soft)' }}>
                   ORD-10482 · 14:32
                 </p>
-                <p className="site-swatch__hex">IDs & timestamps · Fragment Mono 10–11.5</p>
+                <p className="site-swatch__hex">IDs & timestamps · IBM Plex Mono 10–11.5</p>
               </div>
             </div>
           </Card>

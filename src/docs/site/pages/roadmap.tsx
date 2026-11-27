@@ -90,7 +90,6 @@ const ROADMAP: Phase[] = [
     items: [
       { t: 'Native-speaker review of the catalogs', d: 'French, Arabic and Somali ship machine-drafted and English-sourced. Each needs a native reviewer before a product ships it, and Hebrew and Persian are the next RTL catalogs.' },
       { t: 'Full type tokenization', d: 'A complete <code>--sv-text-*</code> scale replacing the literals across every component — now cheaper, because density already moved <code>--sv-body-size</code> into the token layer.' },
-      { t: 'Arabic in the faces', d: 'Hanken Grotesk and Fragment Mono carry no Arabic, so the script falls to the platform face. A registered Arabic companion face would make the voice the system’s rather than the operating system’s.' },
       { t: '8-state preview files · token sync', d: 'The fundamentals state contract as a preview per component, and a Figma ⇄ <code>tokens.css</code> bridge.' },
     ],
   },

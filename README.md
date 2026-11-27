@@ -126,6 +126,22 @@ npm run mcp          # the registry MCP server over stdio (bin: seventy-six-mcp)
 REGISTRY_BASE=https://76.zifala.com npm run build   # default host, already baked; override to change it
 ```
 
+## Fonts (v0.11 · IBM Plex)
+
+`tokens.css` names three families and loads none of them — a product ships
+fonts its own way. Either link them:
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" />
+```
+
+or self-host them with `@fontsource-variable/ibm-plex-sans`,
+`@fontsource/ibm-plex-mono` and `@fontsource/ibm-plex-sans-arabic`. The
+public surface's display face is still Archivo (`@fontsource-variable/archivo/wdth.css`).
+Without the fonts the stacks fall back to the platform face and nothing breaks.
+
 ## Consuming the library (shadcn model)
 
 Deploy `dist/` anywhere static. Then, in any React project with a

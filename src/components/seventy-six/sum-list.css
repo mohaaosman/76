@@ -68,8 +68,8 @@
 
   /* The closing figure. The rule above it is B7's `totals` rule verbatim —
      1px --sv-field-line-strong, the step that is still a visible line on
-     paper and after a photocopy — and the label goes ink beside it, because
-     Fragment Mono ships one weight and a synthetic bold is not a weight.
+     paper and after a photocopy — and the label goes ink at 600 beside it
+     (v0.11: Plex Mono has a real semibold; Fragment Mono had none).
      F14: the figure is INK. The seed on this card belongs to the button. */
   .sv-sum__row--strong {
     margin-top: 2px;
@@ -80,6 +80,7 @@
 
   .sv-sum__row--strong .sv-sum__label {
     color: var(--sv-ink);
+    font-weight: 600;
   }
 
   .sv-sum__row--strong .sv-sum__amount {

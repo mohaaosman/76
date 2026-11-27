@@ -20,10 +20,10 @@ Explicitly rejected — never propose again: gradients of any kind, layered/deco
 
 ## 2 · THE SIX LAWS
 
-1. **Paper on a wall.** White cards on the platinum wall, separated by contrast alone: no borders, one 1px breath of shadow (`0 1px 2px rgba(16,20,28,.05)`), radius 4px. Never blended, never floating.
+1. **Paper on a wall.** White cards on the platinum wall, separated by contrast alone: no borders, one 1px breath of shadow (`0 1px 2px rgba(16,20,28,.08)`), radius 4px. Never blended, never floating.
 2. **Three colors, total.** Ink (+ its soft/faint steps), the product seed, and functional green/red — which may only color *words and 6px dots*, never surfaces.
 3. **Every widget has a type and one job.** No hybrids. If a widget needs two jobs, it is two widgets.
-4. **Mono speaks metadata.** Labels, IDs, timestamps, column headers, sub-tabs, date ranges — always Fragment Mono, small caps tracking. Content speaks Hanken Grotesk.
+4. **Mono speaks metadata.** Labels, IDs, timestamps, column headers, sub-tabs, date ranges — always IBM Plex Mono, small caps tracking. Content speaks IBM Plex Sans.
 5. **The band is the chrome.** All navigation and page context live in the ink band; the paper below is 100% work.
 6. **Numbers are instrumentation.** Tabular numerals everywhere data lives; values bold; units and context soft; last period always drawn in line-gray next to this period's seed color.
 
@@ -35,12 +35,12 @@ Explicitly rejected — never propose again: gradients of any kind, layered/deco
   --sv-band:       #1B1F26;   /* ink band (header) */
   --sv-band-line:  #2C323B;   /* hairlines on band */
   --sv-band-soft:  #8A93A2;   /* soft text on band */
-  --sv-wall:       #F2F3F5;   /* platinum background */
+  --sv-wall:       #EEF0F3;   /* platinum background */
   --sv-paper:      #FFFFFF;   /* card surface */
   --sv-ink:        #1C2026;   /* primary text */
-  --sv-ink-soft:   #667080;   /* secondary text */
-  --sv-ink-faint:  #99A1AD;   /* labels, hints */
-  --sv-line:       #E9EBEE;   /* internal hairlines */
+  --sv-ink-soft:   #525B69;   /* secondary text */
+  --sv-ink-faint:  #7A8391;   /* labels, hints */
+  --sv-line:       #E3E6EA;   /* internal hairlines */
 
   /* seed — Layer 3, per product (default: Cobalt) */
   --sv-seed:       #2C5BE0;
@@ -53,7 +53,7 @@ Explicitly rejected — never propose again: gradients of any kind, layered/deco
 
   /* geometry & elevation */
   --sv-r:          4px;       /* the only radius (avatars: 50%) */
-  --sv-shadow:     0 1px 2px rgba(16,20,28,.05);   /* the only shadow */
+  --sv-shadow:     0 1px 2px rgba(16,20,28,.08);   /* the only shadow */
 
   /* spacing scale (4px base) */
   --sv-s1: 4px; --sv-s2: 8px; --sv-s3: 12px; --sv-s4: 16px;
@@ -72,19 +72,19 @@ Explicitly rejected — never propose again: gradients of any kind, layered/deco
 
 ## 4 · TYPOGRAPHY
 
-**Faces:** Hanken Grotesk (UI + content) · Fragment Mono (metadata). No other fonts in-product. Marketing sites may add a display face later (separate decision, Atlassian's brand/product split).
+**Faces:** IBM Plex Sans (UI + content) · IBM Plex Mono (metadata). No other fonts in-product. Marketing sites may add a display face later (separate decision, Atlassian's brand/product split).
 
 | Role | Face | Size/LH | Weight | Notes |
 |---|---|---|---|---|
-| Page greeting/H1 | Hanken | 27/1.2 | 800 | On band; secondary word in --sv-band-soft |
-| Card title | Hanken | 13.5 | 700 | With soft subtitle 11.5 faint below |
-| Stat value | Hanken | 24/1.1 | 800 | tabular-nums, letter-spacing -.025em |
-| Body / table cell | Hanken | 13/1.5 | 500 | 600 for numeric cells |
-| Soft subtitle / footnote | Hanken | 11.5 | 400–500 | --sv-ink-soft or faint |
-| Micro label (widget) | Fragment Mono | 10 | 400 | UPPERCASE, tracking .13em, faint |
-| Column header | Fragment Mono | 9.5 | 400 | UPPERCASE, tracking .1em |
-| Sub-tabs / ranges | Fragment Mono | 10–10.5 | 400 | UPPERCASE, tracking .13em |
-| IDs & timestamps | Fragment Mono | 10–11.5 | 400 | ORD-10482, 14:32 |
+| Page greeting/H1 | Plex Sans | 27/1.2 | 800 | On band; secondary word in --sv-band-soft |
+| Card title | Plex Sans | 13.5 | 700 | With soft subtitle 11.5 faint below |
+| Stat value | Plex Sans | 24/1.1 | 800 | tabular-nums, letter-spacing -.025em |
+| Body / table cell | Plex Sans | 13/1.5 | 500 | 600 for numeric cells |
+| Soft subtitle / footnote | Plex Sans | 11.5 | 400–500 | --sv-ink-soft or faint |
+| Micro label (widget) | IBM Plex Mono | 10 | 400 | UPPERCASE, tracking .13em, faint |
+| Column header | IBM Plex Mono | 9.5 | 400 | UPPERCASE, tracking .1em |
+| Sub-tabs / ranges | IBM Plex Mono | 10–10.5 | 400 | UPPERCASE, tracking .13em |
+| IDs & timestamps | IBM Plex Mono | 10–11.5 | 400 | ORD-10482, 14:32 |
 
 POS surfaces scale up: body 16–18, values 28–40, touch targets ≥48px — same faces, same laws.
 
@@ -125,7 +125,7 @@ Card head is universal: bold title + faint subtitle left, one seed text-link act
 ## 8 · STACK MAPPING (Laravel + Inertia + React + Tailwind)
 
 - Tokens ship as CSS variables in `@layer base` (`:root` + `[data-seed="..."]` per product); Tailwind reads them via `theme.extend.colors` → `seed: 'var(--sv-seed)'` etc. Dark band values are literal, not a dark mode.
-- Fonts: self-host Hanken Grotesk + Fragment Mono (variable where available) via `@font-face`; preload both.
+- Fonts: self-host IBM Plex Sans + IBM Plex Mono (variable where available) via `@font-face`; preload both.
 - Components live in `resources/js/components/seventy-six/`: `Band`, `BandNav`, `BandSubTabs`, `PageHero`, `Sheet`, `StatS1`, `Progress`, `Trend`, `MeterList`, `DataTable`, `ActivityList`, `Button`, `StatusWord`, `Field`. One component per widget type — the taxonomy is the component API.
 - Each product app sets `<html data-seed="cobalt">` (or its own registered seed). Nothing else may change per product.
 - `font-variant-numeric: tabular-nums` is a utility applied to every numeric cell/value by default in `StatS1`/`DataTable`.

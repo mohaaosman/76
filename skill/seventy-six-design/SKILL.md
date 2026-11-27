@@ -39,15 +39,15 @@ Build from this skill in this order:
 
 1. **Paper on a wall.** White cards on the platinum wall, separated by
    contrast alone: no borders, one 1px-breath shadow
-   (`0 1px 2px rgba(16,20,28,.05)`), radius 4px. Nothing floats, nothing glows.
+   (`0 1px 2px rgba(16,20,28,.08)`), radius 4px. Nothing floats, nothing glows.
 2. **Three colors, total.** Ink (+ soft/faint steps), the product seed, and
    functional green/red — which may only color *words and 6px dots*, never
    surfaces.
 3. **Every widget has a type and one job.** If a widget needs two jobs, it is
    two widgets.
 4. **Mono speaks metadata.** Labels, IDs, timestamps, column headers,
-   sub-tabs — Fragment Mono, uppercase, tracked. Content speaks
-   Hanken Grotesk. No other fonts in-product.
+   sub-tabs — IBM Plex Mono, uppercase, tracked. Content speaks
+   IBM Plex Sans. No other fonts in-product.
 5. **The band is the chrome.** All navigation and page context live in the ink
    band; the paper below is 100% work. Nav is horizontal — a sidebar as
    primary nav is a defect.
@@ -63,14 +63,14 @@ projects; it is the ONLY file allowed to contain color literals. The core:
 | Token | Value | Role |
 |---|---|---|
 | `--sv-band` / `--sv-band-line` / `--sv-band-soft` | #1B1F26 / #2C323B / #8A93A2 | ink band, its hairlines, its soft text |
-| `--sv-wall` / `--sv-paper` | #F2F3F5 / #FFFFFF | platinum background / card surface (surface ONLY — never a mark) |
+| `--sv-wall` / `--sv-paper` | #EEF0F3 / #FFFFFF | platinum background / card surface (surface ONLY — never a mark) |
 | `--sv-on-dark` | #FFFFFF, both modes | the mark on the band or on a seed fill: band text, on-band focus, primary button label, check mark |
-| `--sv-ink` / `--sv-ink-soft` / `--sv-ink-faint` | #1C2026 / #667080 / #99A1AD | text ladder (faint never carries required info) |
-| `--sv-line` / `--sv-field-line` | #E9EBEE / #D8DCE1 | hairlines / field borders |
+| `--sv-ink` / `--sv-ink-soft` / `--sv-ink-faint` | #1C2026 / #525B69 / #7A8391 | text ladder (faint never carries required info) |
+| `--sv-line` / `--sv-field-line` | #E3E6EA / #C9CED6 | hairlines / field borders |
 | `--sv-seed` / `--sv-seed-deep` / `--sv-seed-tint` | per product | THE accent (default Cobalt #2C5BE0 / #1E44B4 / #EEF3FE) |
-| `--sv-ok` / `--sv-bad` | #14804A / #C43D2E | words + 6px dots only, AA-verified |
+| `--sv-ok` / `--sv-bad` | #107543 / #B9382A | words + 6px dots only, AA-verified |
 | `--sv-on-bad` | #FFFFFF light / #1B1F26 dark | the mark on a `--sv-bad` fill (a dialog's final confirm) — flips, because `--sv-bad` brightens on dark |
-| `--sv-r` / `--sv-shadow` | 4px / 0 1px 2px rgba(16,20,28,.05) | the only radius (50% avatars, 2–3px bars) and only shadow |
+| `--sv-r` / `--sv-shadow` | 4px / 0 1px 2px rgba(16,20,28,.08) | the only radius (50% avatars, 2–3px bars) and only shadow |
 | `--sv-s1…s8` | 4→40px | 4px-base spacing scale |
 | `--sv-t-fast` / `--sv-t` | 120ms / 160ms | the only durations; collapse to 0 under reduced motion |
 
@@ -89,12 +89,15 @@ arrow keys. Code, PIN codes and chart time axes stay LTR.
 
 ## Typography
 
-Hanken Grotesk (UI/content) + Fragment Mono (metadata). Never raw Inter,
-Roboto, or system UI as the designed choice. Key sizes: H1 greeting 27/800 on
-band; card title 13.5/700 + faint 11.5 subtitle; stat value 24/800 tabular,
-tracking −.025em; body/table 13/500 (numeric cells 600); micro labels Mono
-10/400 UPPERCASE tracking .13em; column headers Mono 9.5; IDs/timestamps Mono
-10–11.5. POS scales up: body 16–18, values 28–40, targets ≥48px. The product
+IBM Plex Sans (UI/content) + IBM Plex Mono (metadata) + IBM Plex Sans Arabic
+(the Arabic companion, second in both stacks). Never raw Inter, Roboto, or
+system UI as the designed choice. Key sizes: H1 greeting 27/700 on band; card
+title 13.5/700 + SOFT 11.5 subtitle; stat value 24/700 tabular, tracking
+−.025em; body/table 13/500 (numeric cells 600); micro labels Mono 10/500
+UPPERCASE tracking .13em; column headers Mono 10; IDs/timestamps Mono 10–11.5.
+Nothing below 10px. Information the reader must read is `--sv-ink-soft` or
+darker — faint is for disabled and decorative only (v0.11: the dashboard read
+too thin with faint subtitles and a single-weight 10px mono). POS scales up: body 16–18, values 28–40, targets ≥48px. The product
 ramp tops out at 27px; `--sv-display-1|2|3` (display-1 clamps 64px → 34px at
 320px) is fenced by firewall rule 17 to `tokens.css` and the three marketing
 components that set display type — `masthead.css`, `cta.css`, `proof-row.css`.

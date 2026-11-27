@@ -201,8 +201,8 @@
   }
 
   /* The closing figure of the set — the one line the reader came for — takes
-     a stronger rule above it. Fragment Mono ships a single weight, so the
-     label states its emphasis in ink rather than a synthetic bold and the
+     a stronger rule above it. The label goes ink at Plex Mono's 600 (v0.11 —
+     Fragment Mono had one weight, so it could only change colour) and the
      figures carry the 700. */
   .sv-table__footrow--strong > .sv-table__td,
   .sv-table__footrow--strong > .sv-table__footlabel {
@@ -215,6 +215,7 @@
 
   .sv-table__footrow--strong > .sv-table__footlabel {
     color: var(--sv-ink);
+    font-weight: 600;
   }
 
   /* ---- v0.6 · the held identity column (B7 amendment) ---- */

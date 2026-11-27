@@ -5,24 +5,27 @@ import { cx } from '@/lib/cx';
 import type { DocEntry, DocExample, PropRow, KeyRow } from '../content/types';
 import { decodeEntities } from '../content/markdown';
 
-/** Tiny renderer for <b> / <code> markup inside prose strings. */
+/**
+ * Tiny renderer for <b> / <i> / <code> markup inside prose strings.
+ * Recursive, because entries nest them — "<b><code>CardTabs</code> switches
+ * presets</b>" — and a flat split printed the inner tags as text.
+ * <i> renders as <em>: stress in running prose, never on a heading (A3).
+ */
+function renderRich(text: string, keyBase: string): ReactNode[] {
+  const parts = text.split(/(<b>[\s\S]*?<\/b>|<code>[\s\S]*?<\/code>|<i>[\s\S]*?<\/i>)/g);
+  return parts.map((part, i) => {
+    const key = `${keyBase}-${i}`;
+    /* React escapes its children, so entities must be decoded here or the
+       page prints "&lt;select&gt;" verbatim. Code is a leaf: never parsed. */
+    if (part.startsWith('<code>')) return <code key={key}>{decodeEntities(part.slice(6, -7))}</code>;
+    if (part.startsWith('<b>')) return <b key={key}>{renderRich(part.slice(3, -4), key)}</b>;
+    if (part.startsWith('<i>')) return <em key={key}>{renderRich(part.slice(3, -4), key)}</em>;
+    return decodeEntities(part);
+  });
+}
+
 export function RichText({ text }: { text: string }) {
-  /* <i> was written into entries from v0.6 on and never parsed, so the
-     page printed the tags. It renders as <em>: stress in running prose,
-     never on a heading (A3 forbids italic headings, not emphasis). */
-  const parts = text.split(/(<b>.*?<\/b>|<code>.*?<\/code>|<i>.*?<\/i>)/g);
-  return (
-    <>
-      {parts.map((part, i) => {
-        /* React escapes its children, so entities must be decoded here or
-           the page prints "&lt;select&gt;" verbatim. */
-        if (part.startsWith('<b>')) return <b key={i}>{decodeEntities(part.slice(3, -4))}</b>;
-        if (part.startsWith('<i>')) return <em key={i}>{decodeEntities(part.slice(3, -4))}</em>;
-        if (part.startsWith('<code>')) return <code key={i}>{decodeEntities(part.slice(6, -7))}</code>;
-        return decodeEntities(part);
-      })}
-    </>
-  );
+  return <>{renderRich(text, 'r')}</>;
 }
 
 /** Preview / Code pair — the heart of every variation block. */

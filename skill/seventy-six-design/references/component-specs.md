@@ -292,7 +292,7 @@ The band-less page type: wall edge to edge, one centred card ≤400px, mono `76�
 
 ## B25 · PinField (v0.3.0)
 
-The OTP input: 4–8 fixed single-character boxes (default 6), 40×46, 8px gaps, Fragment Mono 18 centred, bordered `--sv-field-line-strong` (an empty box has no label, value or fill, so its border owes the 3:1 non-text bar, C1). Typing advances, Backspace retreats, one paste fills every box. Semantically ONE input: `inputmode="numeric"`, `autocomplete="one-time-code"`, error announced once for the whole code. **Don't** — no masking, no auto-submit without a visible primary, no keyboard trap.
+The OTP input: 4–8 fixed single-character boxes (default 6), 40×46, 8px gaps, IBM Plex Mono 18 centred, bordered `--sv-field-line-strong` (an empty box has no label, value or fill, so its border owes the 3:1 non-text bar, C1). Typing advances, Backspace retreats, one paste fills every box. Semantically ONE input: `inputmode="numeric"`, `autocomplete="one-time-code"`, error announced once for the whole code. **Don't** — no masking, no auto-submit without a visible primary, no keyboard trap.
 
 ## B26 · SocialButton (v0.3.0)
 
@@ -320,7 +320,7 @@ Initials from the name on `--sv-wall` at 24/32/44px, radius 50%; a photo only wh
 
 ## B32 · Kbd (v0.4.0)
 
-Real `<kbd>` in Fragment Mono 10.5 on a wall cap, hairline border with a 2px bottom, 3px radius; transparent with band tokens on the band. A `separator` turns a chord into a sequence. **Don't** — never prints an unbound shortcut, never clickable, never replaces a visible control (C4), never more than three caps.
+Real `<kbd>` in IBM Plex Mono 10.5 on a wall cap, hairline border with a 2px bottom, 3px radius; transparent with band tokens on the band. A `separator` turns a chord into a sequence. **Don't** — never prints an unbound shortcut, never clickable, never replaces a visible control (C4), never more than three caps.
 
 ## B33 · NumberField (v0.4.0)
 
@@ -364,7 +364,7 @@ The non-modal panel holding a FEW CONTROLS beside the control that asked for it 
 
 ## B43 · CodeBlock (v0.4.0)
 
-Code or a command, printed exactly as it must be typed: `--sv-wall` inside a 1px `--sv-line` border — the one place a bordered inset panel is right, because the code is a quotation and not a card — with an optional mono head naming the file or language, a copy control, and `<pre><code>` in Fragment Mono 12/1.6 at `overflow-x: auto` (never `hidden`, C7). `numbered` puts the gutter OUTSIDE the `<code>`, `aria-hidden`, unselectable and sticky. **No syntax highlighting, ever** — that is six to nine colours on one surface and Law 2 allows neutrals plus one seed; a snippet needing colour to parse is too long. The copy control reads "Copy", becomes "Copied" for two seconds at a locked minimum width (B10), announces through a visually-hidden polite region, and is NOT RENDERED when `navigator.clipboard` is absent. `role="region"` + `tabIndex={0}` apply only when the block actually scrolls, measured at runtime. **Don't** — no highlighting, no inline `<code>` use (that is B45 `Prose`), no code as an image, no tab row of filenames (that is B38 holding several CodeBlocks).
+Code or a command, printed exactly as it must be typed: `--sv-wall` inside a 1px `--sv-line` border — the one place a bordered inset panel is right, because the code is a quotation and not a card — with an optional mono head naming the file or language, a copy control, and `<pre><code>` in IBM Plex Mono 12/1.6 at `overflow-x: auto` (never `hidden`, C7). `numbered` puts the gutter OUTSIDE the `<code>`, `aria-hidden`, unselectable and sticky. **No syntax highlighting, ever** — that is six to nine colours on one surface and Law 2 allows neutrals plus one seed; a snippet needing colour to parse is too long. The copy control reads "Copy", becomes "Copied" for two seconds at a locked minimum width (B10), announces through a visually-hidden polite region, and is NOT RENDERED when `navigator.clipboard` is absent. `role="region"` + `tabIndex={0}` apply only when the block actually scrolls, measured at runtime. **Don't** — no highlighting, no inline `<code>` use (that is B45 `Prose`), no code as an image, no tab row of filenames (that is B38 holding several CodeBlocks).
 
 ## B44 · DistributionStrip (v0.4.0)
 

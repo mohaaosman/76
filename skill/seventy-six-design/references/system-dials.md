@@ -6,7 +6,7 @@ Read this when starting a NEW 76° product or choosing a seed. Every 76° produc
 
 76° is one system rendered many times. It stacks in three layers, and only the top one is a per-product variable.
 
-**Layer 1 — the invariant system.** The laws, the widget taxonomy, the band-and-sheet layout, and the a11y contract. Paper on a wall: white cards on the platinum wall, separated by contrast plus one 1px shadow, no borders. Three colors total (ink + one seed + functional green/red on words and 6px dots only). Mono speaks metadata, Hanken Grotesk speaks content. Navigation lives horizontally in the ink band. Numbers are tabular instrumentation. The widget set (DataTable, StatS1, MeterList, ActivityList, Progress, Trend, and the rest of the Book, B1–B35) and the C1–C7 accessibility contract are fixed. **This layer never changes per product.**
+**Layer 1 — the invariant system.** The laws, the widget taxonomy, the band-and-sheet layout, and the a11y contract. Paper on a wall: white cards on the platinum wall, separated by contrast plus one 1px shadow, no borders. Three colors total (ink + one seed + functional green/red on words and 6px dots only). Mono speaks metadata, IBM Plex Sans speaks content. Navigation lives horizontally in the ink band. Numbers are tabular instrumentation. The widget set (DataTable, StatS1, MeterList, ActivityList, Progress, Trend, and the rest of the Book, B1–B35) and the C1–C7 accessibility contract are fixed. **This layer never changes per product.**
 
 **Layer 2 — the shared neutrals, geometry, and motion.** The wall (`--sv-wall`), the ink ladder (`--sv-ink` / `--sv-ink-soft` / `--sv-ink-faint`), the band and its hairlines, the internal hairlines and field lines, the one radius (`--sv-r`, 4px), the one shadow (`--sv-shadow`, `0 1px 2px`), and the two motion durations (`--sv-t-fast` 120ms / `--sv-t` 160ms, opacity/color only, collapsing to 0ms under reduced motion). These are tokens, and they are identical in every product. **This layer never changes per product.**
 
@@ -79,7 +79,7 @@ Posture tunes size and spacing only. Radius, shadow, motion, color roles, and th
 
 ## Don't
 
-- **Don't invent a per-product font.** Hanken Grotesk for content, Fragment Mono for metadata — in every product.
+- **Don't invent a per-product font.** IBM Plex Sans for content, IBM Plex Mono for metadata — in every product.
 - **Don't add a second accent.** One seed, plus functional green/red on words and dots. Two accents is a Layer-1 violation.
 - **Don't change the radius, shadow, or motion per product.** 4px, the one 1px shadow, 120/160ms — Layer 2, invariant.
 - **Don't ship a seed that fails the contrast gate.** Both directions ≥4.5:1 on white, or it does not exist. No wall-darkening workarounds.

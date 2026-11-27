@@ -236,7 +236,7 @@ export function HomePage() {
             <li>Paper on a wall: contrast separates, nothing floats.</li>
             <li>Three colors, total: ink, seed, functional words and dots.</li>
             <li>Every widget has a type and one job. No hybrids.</li>
-            <li>Mono speaks metadata; Hanken speaks content.</li>
+            <li>Mono speaks metadata; Plex Sans speaks content.</li>
             <li>The band is the chrome; the paper is 100% work.</li>
             <li>Numbers are instrumentation: tabular, bold, contextual.</li>
           </ul>

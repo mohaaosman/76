@@ -6,6 +6,50 @@ project uses [semantic versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.11.0-alpha.1] — 2026-11-27
+
+**Sturdier, and every component reaches every use.** The owner built on
+v0.10 and found it too thin. Both causes were in the token layer, so the fix
+is too — every component moves together, and no component branches.
+
+### Changed — the type
+- **IBM Plex replaces Hanken Grotesk and Fragment Mono.** Fragment Mono
+  ships ONE weight, so every 10px label, column header, ID and timestamp on
+  a dashboard was a 400-weight hairline in soft ink. Plex Sans is the
+  content face; Plex Mono carries metadata at **weight 500**; and **Plex Sans
+  Arabic** is second in both stacks, so an Arabic screen keeps the system's
+  voice — the companion face v0.10 left on the Exploring list. Weight 800
+  maps to Plex's 700, and nothing in the system sets type below 10px.
+- **Fonts load as files, not code.** `tokens.css` names the families; the
+  docs site links them from Google Fonts with `display=swap`, and a product
+  may self-host the `@fontsource` packages instead. (The package install
+  was not permitted in this environment; the README states both routes.)
+
+### Changed — the weight
+- **The ink ladder.** `--sv-ink-soft` #667080 → #525B69 (6.86:1 on paper,
+  6.01:1 on the wall — the old step measured 4.39:1 on the wall and FAILED
+  AA there). `--sv-ink-faint` 2.61 → 3.83:1. Firmer `--sv-line` and
+  `--sv-field-line`, a step-deeper wall, the one shadow at .08, and ok/bad
+  deepened to stay AA on the wall. Dark and print restate the same steps.
+- **Faint is for disabled and decorative only.** Card subtitles, activity and
+  timeline times, timeline actors and progress context move to ink-soft.
+- **`--sv-bar`**: B4, B6 and B61 bars are 4px (compact 3, touch 6); chart
+  strokes 2.5 and sparklines 1.75.
+- **Closing-figure labels** in DataTable `totals` and SumList take Plex
+  Mono's 600.
+- **The POS terminal declares `data-density="touch"`.**
+
+### Added
+- **`DataState` (B64)** — the four lifecycle states (skeleton after a 300ms
+  gate, empty, inline error with a named retry, ready) assembled once around
+  any widget, holding no state of its own.
+- **`DataTable maxHeight`** — a long table scrolls inside its card with its
+  header held at the top.
+
+### Fixed
+- **Doc prose nesting `<code>` inside `<b>` printed the inner tags.** The
+  renderer is recursive.
+
 ## [0.10.0-alpha.1] — 2026-11-25
 
 **The roadmap, finished — and every language.** 0.7, 0.8 and 0.9 land
