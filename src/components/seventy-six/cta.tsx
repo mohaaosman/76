@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import './cta.css';
 
@@ -22,7 +22,7 @@ import './cta.css';
  * that pressures the reader is the opposite of that. There is no `form`
  * slot either — a form is a page, or a B24 Plate.
  */
-export interface CallToActionProps {
+export interface CallToActionProps extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
   /** The ask, at display size. Not a slogan — name the act's object (A3). */
   title: string;
   /** ONE sentence: what happens after the click, or what it costs. */
@@ -43,6 +43,7 @@ export function CallToAction({
   tone = 'paper',
   headingLevel = 2,
   className,
+  ...rest
 }: CallToActionProps) {
   const Heading = headingLevel === 3 ? 'h3' : 'h2';
 
@@ -55,7 +56,7 @@ export function CallToAction({
        A real <section> carries the row, with the heading inside it and no
        aria-label beside it: the heading is the name already, and a second one
        would only give one row two. */
-    <section className={cx('sv-cta', `sv-cta--${tone}`, tone === 'band' && 'sv-band', className)}>
+    <section {...rest} className={cx('sv-cta', `sv-cta--${tone}`, tone === 'band' && 'sv-band', className)}>
       <div className="sv-cta__text">
         <Heading className="sv-cta__title">{title}</Heading>
         {statement && <p className="sv-cta__statement">{statement}</p>}

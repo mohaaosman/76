@@ -1,5 +1,5 @@
 import { useId } from 'react';
-import type { ReactNode } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import './site-footer.css';
@@ -40,7 +40,7 @@ export interface FooterGroup {
     for the band and the footer alike. */
 type RenderLink = (link: FooterLink, className: string) => ReactNode;
 
-export interface SiteFooterProps {
+export interface SiteFooterProps extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
   /** At most FOUR. A fifth group is a sitemap page, not a wider footer. */
   groups: FooterGroup[];
   /** One soft sentence beside the wordmark: what the product is, in a line. */
@@ -91,6 +91,7 @@ export function SiteFooter({
   secondary,
   renderLink,
   className,
+  ...rest
 }: SiteFooterProps) {
   const tr = useStrings();
   /* ONE base id, suffixed per group index. A random id per render breaks
@@ -102,7 +103,7 @@ export function SiteFooter({
     /* A real <footer>, and no role: at the top of the document it already
        IS the contentinfo landmark, and restating the implicit role is how a
        second, conflicting one gets shipped later. */
-    <footer className={cx('sv-site-footer', className)}>
+    <footer {...rest} className={cx('sv-site-footer', className)}>
       <div className="sv-site-footer__inner">
         {/* ONE nav for the whole link region, labelled once. A footer that
             wraps each column in its own <nav> hands a screen reader four

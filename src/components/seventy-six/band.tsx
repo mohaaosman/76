@@ -61,7 +61,7 @@ export function Band({ className, children, ...rest }: HTMLAttributes<HTMLElemen
 
 /* ---------- Topbar ---------- */
 
-export interface BandTopbarProps {
+export interface BandTopbarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   /** App name shown after the wordmark hairline, e.g. "Warehouse".
       Omitted on the PUBLIC surface (v0.5): a marketing page is not an app,
       so the wordmark stands alone and the hairline has nothing to divide. */
@@ -80,9 +80,9 @@ export interface BandTopbarProps {
   navAlign?: 'start' | 'center';
 }
 
-export function BandTopbar({ app, nav, utilities, navAlign = 'start' }: BandTopbarProps) {
+export function BandTopbar({ app, nav, utilities, navAlign = 'start', className, ...rest }: BandTopbarProps) {
   return (
-    <div className="sv-band__topbar">
+    <div {...rest} className={cx('sv-band__topbar', className)}>
       <div
         className={cx(
           'sv-band__container sv-band__topbar-inner',
@@ -134,7 +134,13 @@ function toLink(item: BandNavItem, className: string, renderLink?: RenderLink) {
     : fallbackLink(item, className);
 }
 
-export function BandNav({ items, renderLink }: { items: BandNavItem[]; renderLink?: RenderLink }) {
+export interface BandNavProps extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
+  items: BandNavItem[];
+  renderLink?: RenderLink;
+}
+
+/** `className` and native attributes apply to the horizontal <nav>. */
+export function BandNav({ items, renderLink, className, ...rest }: BandNavProps) {
   const tr = useStrings();
   const subtabs = useContext(BandContext)?.subtabs ?? NO_SUBTABS;
   const [open, setOpen] = useState(false);
@@ -163,7 +169,7 @@ export function BandNav({ items, renderLink }: { items: BandNavItem[]; renderLin
 
   return (
     <>
-      <nav className="sv-band__nav" aria-label={tr.primaryNav}>
+      <nav {...rest} className={cx('sv-band__nav', className)} aria-label={rest['aria-label'] ?? tr.primaryNav}>
         <ul className="sv-band__navlist">
           {items.map((item) => (
             <li key={item.label}>
@@ -233,7 +239,9 @@ export function BandNav({ items, renderLink }: { items: BandNavItem[]; renderLin
 
 /* ---------- SubTabs ---------- */
 
-export function BandSubTabs({ items, renderLink }: { items: BandNavItem[]; renderLink?: RenderLink }) {
+export type BandSubTabsProps = BandNavProps;
+
+export function BandSubTabs({ items, renderLink, className, ...rest }: BandSubTabsProps) {
   const tr = useStrings();
   const register = useContext(BandContext)?.register;
   const latest = useRef<SubTabsSlot>({ items, renderLink });
@@ -258,7 +266,7 @@ export function BandSubTabs({ items, renderLink }: { items: BandNavItem[]; rende
 
   if (items.length === 0) return null; // collapses when the section has no children
   return (
-    <nav className="sv-band__subtabs" aria-label={tr.sectionNav}>
+    <nav {...rest} className={cx('sv-band__subtabs', className)} aria-label={rest['aria-label'] ?? tr.sectionNav}>
       <ul className="sv-band__container sv-band__subtablist">
         {items.map((item) => (
           <li key={item.label}>
@@ -276,7 +284,7 @@ export function BandSubTabs({ items, renderLink }: { items: BandNavItem[]; rende
 
 /* ---------- PageHero ---------- */
 
-export interface PageHeroProps {
+export interface PageHeroProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title' | 'children'> {
   /** The h1. Pass the secondary word via titleSoft. */
   title: string;
   titleSoft?: string;
@@ -289,10 +297,10 @@ export interface PageHeroProps {
   headingLevel?: 1 | 2;
 }
 
-export function PageHero({ title, titleSoft, context, actions, headingLevel = 1 }: PageHeroProps) {
+export function PageHero({ title, titleSoft, context, actions, headingLevel = 1, className, ...rest }: PageHeroProps) {
   const Heading = headingLevel === 1 ? 'h1' : 'h2';
   return (
-    <div className="sv-band__container sv-band__hero">
+    <div {...rest} className={cx('sv-band__container sv-band__hero', className)}>
       <div>
         <Heading className="sv-band__title">
           {title}

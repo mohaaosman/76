@@ -1,4 +1,5 @@
-import type { ReactNode } from 'react';
+import { forwardRef } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import './feature-list.css';
 
@@ -24,7 +25,7 @@ export interface FeatureItem {
   meta?: string;
 }
 
-export interface FeatureListProps {
+export interface FeatureListProps extends Omit<HTMLAttributes<HTMLUListElement>, 'children'> {
   items: FeatureItem[];
   /** 2 or 3 across at full width. Default 3. */
   columns?: 2 | 3;
@@ -41,18 +42,19 @@ export interface FeatureListProps {
    ceiling the two digits assume — a tenth feature is a page, not a list. */
 const ordinal = (index: number) => String(index + 1).padStart(2, '0');
 
-export function FeatureList({
+export const FeatureList = forwardRef<HTMLUListElement, FeatureListProps>(function FeatureList({
   items,
   columns = 3,
   numbered = true,
   ariaLabel,
   className,
-}: FeatureListProps) {
+  ...rest
+}, ref) {
   return (
     /* A real <ul> so the count is announced, and the column count travels
        as data — a literal in an inline style would put layout back in the
        component and out of the stylesheet's reach. */
-    <ul className={cx('sv-features', className)} data-columns={columns} aria-label={ariaLabel}>
+    <ul {...rest} ref={ref} className={cx('sv-features', className)} data-columns={columns} aria-label={ariaLabel ?? rest['aria-label']}>
       {items.map((item, index) => (
         <li key={item.id} className="sv-features__item">
           {numbered && (
@@ -74,4 +76,4 @@ export function FeatureList({
       ))}
     </ul>
   );
-}
+});

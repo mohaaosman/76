@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import type { HTMLAttributes } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import './code-block.css';
@@ -13,7 +14,7 @@ import './code-block.css';
  * The block is a quotation, not a card: an inset panel on --sv-wall, the one
  * place paper carries a bordered inset.
  */
-export interface CodeBlockProps {
+export interface CodeBlockProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   code: string;
   /** Filename or language, mono, in the head. */
   label?: string;
@@ -32,6 +33,7 @@ export function CodeBlock({
   copyable = true,
   ariaLabel,
   className,
+  ...rest
 }: CodeBlockProps) {
   const tr = useStrings();
   const preRef = useRef<HTMLPreElement>(null);
@@ -71,7 +73,7 @@ export function CodeBlock({
   }
 
   return (
-    <div className={cx('sv-code', className)}>
+    <div {...rest} className={cx('sv-code', className)}>
       {(label || canCopy) && (
         <div className="sv-code__head">
           {label && <span className="sv-code__label sv-mono">{label}</span>}

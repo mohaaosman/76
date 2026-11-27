@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useId, useMemo, useRef, useState } from 'react';
-import type { KeyboardEvent, ReactNode } from 'react';
+import type { InputHTMLAttributes, KeyboardEvent, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import { useLocale, useNounFor, useStrings } from '@/lib/i18n';
 import './combobox.css';
@@ -30,7 +30,23 @@ export interface ComboOption {
   disabled?: boolean;
 }
 
-export interface ComboboxBase {
+/** Native input attributes the component does not own (name, autoFocus, onBlur, data-*, aria-*…). */
+type ComboboxInputAttrs = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  | 'value'
+  | 'defaultValue'
+  | 'onChange'
+  | 'type'
+  | 'multiple'
+  | 'children'
+  | 'role'
+  | 'aria-expanded'
+  | 'aria-controls'
+  | 'aria-autocomplete'
+  | 'aria-activedescendant'
+>;
+
+export interface ComboboxBase extends ComboboxInputAttrs {
   label: string;
   options: ComboOption[];
   hint?: string;
@@ -46,16 +62,20 @@ export interface ComboboxBase {
 
 export interface ComboboxSingle {
   multiple?: false;
-  /** Controlled selected value. */
-  value: string | null;
-  onChange: (value: string | null, option: ComboOption | null) => void;
+  /** Controlled selected value (`null` = nothing chosen). When passed it wins over internal state. */
+  value?: string | null;
+  /** Uncontrolled: the selection on first render. */
+  defaultValue?: string | null;
+  onChange?: (value: string | null, option: ComboOption | null) => void;
 }
 
 export interface ComboboxMulti {
   multiple: true;
-  /** Controlled selection, in pick order. */
-  value: string[];
-  onChange: (values: string[], options: ComboOption[]) => void;
+  /** Controlled selection, in pick order. When passed it wins over internal state. */
+  value?: string[];
+  /** Uncontrolled: the selection on first render. */
+  defaultValue?: string[];
+  onChange?: (values: string[], options: ComboOption[]) => void;
   /** Singular noun for the selection line: "status". */
   noun?: string;
   /** Its plural: "statuses" → "3 STATUSES". English falls back to noun + "s". */
@@ -86,7 +106,19 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
     disabled,
     id: explicitId,
     className,
-  } = props;
+    /* Mode props, read through `single` / `multi` below — pulled out here
+       only so they never reach the native input. */
+    multiple: _multiple,
+    value: _value,
+    defaultValue: _defaultValue,
+    onChange: _onChange,
+    noun: _noun,
+    nounPlural: _nounPlural,
+    name,
+    onKeyDown: onKeyDownProp,
+    onClick: onClickProp,
+    ...rest
+  } = props as ComboboxBase & Partial<ComboboxMulti>;
   const placeholder = placeholderProp ?? tr.typeToSearch;
   const emptyText = emptyTextProp ?? tr.noMatches;
   const { locale } = useLocale();
@@ -102,8 +134,12 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
   const hintId = `${id}-hint`;
   const errorId = `${id}-error`;
 
-  const value = single ? single.value : null;
-  const values = multi ? multi.value : NO_VALUES;
+  /* Uncontrolled mode: internal state seeded from defaultValue, used only
+     while the matching controlled `value` is undefined. */
+  const [ownValue, setOwnValue] = useState<string | null>(single?.defaultValue ?? null);
+  const [ownValues, setOwnValues] = useState<string[]>(multi?.defaultValue ?? NO_VALUES);
+  const value = single ? (single.value !== undefined ? single.value : ownValue) : null;
+  const values = multi ? (multi.value ?? ownValues) : NO_VALUES;
 
   const selected = useMemo(() => options.find((o) => o.value === value) ?? null, [options, value]);
   const chosen = useMemo(() => new Set(values), [values]);
@@ -141,7 +177,8 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
 
   function commit(option: ComboOption | null) {
     if (option?.disabled) return;
-    single?.onChange(option ? option.value : null, option);
+    if (single && single.value === undefined) setOwnValue(option ? option.value : null);
+    single?.onChange?.(option ? option.value : null, option);
     setOpen(false);
     setQuery('');
     inputRef.current?.focus();
@@ -149,7 +186,8 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
 
   function emit(next: string[]) {
     const byValue = new Map(options.map((o) => [o.value, o]));
-    multi?.onChange(
+    if (multi && multi.value === undefined) setOwnValues(next);
+    multi?.onChange?.(
       next,
       next.map((v) => byValue.get(v)).filter((o): o is ComboOption => o !== undefined),
     );
@@ -196,6 +234,8 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
   }, [active, open]);
 
   function onKeyDown(e: KeyboardEvent<HTMLInputElement>) {
+    onKeyDownProp?.(e);
+    if (e.defaultPrevented) return;
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
@@ -250,8 +290,9 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
     }
   }
 
+  /* A caller's own aria-describedby is MERGED, never replaced. */
   const describedBy =
-    [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(' ') || undefined;
+    [hint ? hintId : null, error ? errorId : null, rest['aria-describedby']].filter(Boolean).join(' ') || undefined;
   const activeId = open && filtered[active] ? `${id}-opt-${filtered[active].value}` : undefined;
 
   const noun = multi?.noun;
@@ -286,6 +327,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
       )}
       <div className="sv-combo__anchor">
         <input
+          {...rest}
           ref={(node) => {
             inputRef.current = node;
             if (typeof ref === 'function') ref(node);
@@ -314,9 +356,21 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
             setQuery(e.target.value);
             setActive(0);
           }}
-          onClick={() => !open && openList()}
+          onClick={(e) => {
+            onClickProp?.(e);
+            if (!open) openList();
+          }}
           onKeyDown={onKeyDown}
         />
+        {/* The visible input holds a LABEL; a form needs the VALUE. With a
+            `name`, the selection is submitted as hidden inputs — one per
+            value in multi mode, as a native <select multiple> would. */}
+        {name &&
+          (multi ? (
+            values.map((v) => <input key={v} type="hidden" name={name} value={v} />)
+          ) : (
+            <input type="hidden" name={name} value={value ?? ''} />
+          ))}
         <span className="sv-field__chevron" aria-hidden="true" />
         <ul
           ref={listRef}

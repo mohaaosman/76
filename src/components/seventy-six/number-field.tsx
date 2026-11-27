@@ -11,10 +11,14 @@ import './number-field.css';
  * bounds are enforced in the component, not just announced.
  */
 export interface NumberFieldProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'value' | 'onChange' | 'min' | 'max' | 'step'> {
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'value' | 'defaultValue' | 'onChange' | 'min' | 'max' | 'step'> {
   label: string;
-  value: number;
-  onValueChange: (value: number) => void;
+  /** Controlled value. When passed it wins over internal state. */
+  value?: number;
+  /** Uncontrolled: the starting value. Defaults to `min` (0). */
+  defaultValue?: number;
+  /** Called with every committed number — in both modes. */
+  onValueChange?: (value: number) => void;
   hint?: string;
   /** What went wrong AND how to fix it (B11). */
   error?: string;
@@ -31,8 +35,9 @@ const clamp = (value: number, min: number, max: number) => Math.min(max, Math.ma
 export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(function NumberField(
   {
     label,
-    value,
-    onValueChange,
+    value: valueProp,
+    defaultValue,
+    onValueChange: onValueChangeProp,
     hint,
     error,
     required,
@@ -52,7 +57,15 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
   const id = explicitId ?? auto;
   const hintId = `${id}-hint`;
   const errorId = `${id}-error`;
-  const describedBy = [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(' ') || undefined;
+  /* A caller's own aria-describedby is MERGED, never replaced. */
+  const describedBy =
+    [hint ? hintId : null, error ? errorId : null, rest['aria-describedby']].filter(Boolean).join(' ') || undefined;
+  const [own, setOwn] = useState(() => defaultValue ?? clamp(0, min, max));
+  const value = valueProp ?? own;
+  const onValueChange = (next: number) => {
+    if (valueProp === undefined) setOwn(next);
+    onValueChangeProp?.(next);
+  };
   const nudge = (by: number) => {
     setDraft(null);
     onValueChange(clamp(value + by, min, max));

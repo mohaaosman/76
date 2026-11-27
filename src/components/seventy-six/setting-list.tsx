@@ -1,4 +1,5 @@
-import { useId } from 'react';
+import type { HTMLAttributes } from 'react';
+import { forwardRef, useId } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import { Checkbox, Toggle } from './field';
@@ -64,7 +65,7 @@ export interface SettingRow {
   lockedReason?: string;
 }
 
-export interface SettingListProps {
+export interface SettingListProps extends Omit<HTMLAttributes<HTMLUListElement>, 'children'> {
   rows: SettingRow[];
   /** Names the group for assistive tech: "Workspace access". */
   label?: string;
@@ -161,12 +162,12 @@ function Setting({ row }: { row: SettingRow }) {
   );
 }
 
-export function SettingList({ rows, label, className }: SettingListProps) {
+export const SettingList = forwardRef<HTMLUListElement, SettingListProps>(function SettingList({ rows, label, className, ...rest }, ref) {
   return (
-    <ul className={cx('sv-settings', className)} aria-label={label}>
+    <ul {...rest} ref={ref} className={cx('sv-settings', className)} aria-label={label ?? rest['aria-label']}>
       {rows.map((row) => (
         <Setting key={row.id} row={row} />
       ))}
     </ul>
   );
-}
+});

@@ -59,16 +59,16 @@ export function Plate({
  * context. Names the task or the condition ("Sign in", "Page not found"),
  * never the app.
  */
-export interface PlateHeadProps {
+export interface PlateHeadProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
   title: string;
   /** One sentence: what this screen wants, or what went wrong and what's next. */
   context?: string;
   className?: string;
 }
 
-export function PlateHead({ title, context, className }: PlateHeadProps) {
+export function PlateHead({ title, context, className, ...rest }: PlateHeadProps) {
   return (
-    <header className={cx('sv-plate__head', className)}>
+    <header {...rest} className={cx('sv-plate__head', className)}>
       <h1 className="sv-plate__title">{title}</h1>
       {context && <p className="sv-plate__context">{context}</p>}
     </header>

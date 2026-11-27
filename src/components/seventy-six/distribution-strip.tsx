@@ -1,3 +1,5 @@
+import { forwardRef } from 'react';
+import type { HTMLAttributes } from 'react';
 import { cx } from '@/lib/cx';
 import './distribution-strip.css';
 
@@ -22,7 +24,7 @@ export interface DistributionPart {
   value: number;
 }
 
-export interface DistributionStripProps {
+export interface DistributionStripProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   /** REQUIRED takeaway, e.g. "Devices accessed, 128,953 total: mobile 46%, desktop 31%, tablet 15%, other 8%". */
   ariaLabel: string;
   /** Mono uppercase label for the total, e.g. "DEVICES ACCESSED". */
@@ -42,21 +44,22 @@ const TONES = ['seed', 'compare', 'faint', 'edge'] as const;
    time freezes whatever locale the module happened to load under. */
 const groupedInteger = (value: number) => value.toLocaleString();
 
-export function DistributionStrip({
+export const DistributionStrip = forwardRef<HTMLDivElement, DistributionStripProps>(function DistributionStrip({
   ariaLabel,
   label,
   parts,
   total,
   format = groupedInteger,
   className,
-}: DistributionStripProps) {
+  ...rest
+}, ref) {
   const sum = parts.reduce((acc, part) => acc + part.value, 0);
   const denominator = total ?? sum;
   const share = (value: number) => (denominator > 0 ? (value / denominator) * 100 : 0);
   const tone = (i: number) => TONES[Math.min(i, TONES.length - 1)];
 
   return (
-    <div className={cx('sv-dist', className)}>
+    <div {...rest} ref={ref} className={cx('sv-dist', className)}>
       <div className="sv-dist__line">
         <span className="sv-dist__label sv-mono">{label}</span>
         <span className="sv-dist__total sv-num">{format(denominator)}</span>
@@ -84,4 +87,4 @@ export function DistributionStrip({
       </ul>
     </div>
   );
-}
+});

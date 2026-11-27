@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
-import type { ReactNode } from 'react';
+import { forwardRef, useCallback, useEffect, useId, useRef, useState } from 'react';
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import { Button } from './button';
 import './popover.css';
 import { useStrings } from '@/lib/i18n';
@@ -86,7 +86,18 @@ export type PopoverProps = PopoverLabel & {
   children: ReactNode;
   /** Applied to the trigger — the panel is top-layer and owns its own box. */
   className?: string;
-};
+  /** Controlled open state. When passed, the panel is shown or hidden to match. */
+  open?: boolean;
+  /** Uncontrolled: open on first render. */
+  defaultOpen?: boolean;
+  /** Called whenever the panel opens or closes, by any route (click, Esc, light dismiss). */
+  onOpenChange?: (open: boolean) => void;
+  /** Applied to the panel (the trigger takes `className`). */
+  panelClassName?: string;
+} & Omit<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    'title' | 'children' | 'popoverTarget' | 'popoverTargetAction' | 'aria-controls' | 'aria-expanded' | 'aria-haspopup'
+  >;
 
 /**
  * The component owns its trigger, exactly like MenuButton, so aria-expanded
@@ -98,7 +109,7 @@ export type PopoverProps = PopoverLabel & {
  * another popover. Never an error — an error goes inline at its source, in
  * a B22 Banner. Wider than 320px is not a Popover, it is a Drawer.
  */
-export function Popover({
+export const Popover = forwardRef<HTMLButtonElement, PopoverProps>(function Popover({
   label,
   title,
   ariaLabel,
@@ -107,19 +118,40 @@ export function Popover({
   disabled,
   children,
   className,
-}: PopoverProps) {
+  open: openProp,
+  defaultOpen = false,
+  onOpenChange,
+  panelClassName,
+  id: explicitId,
+  ...rest
+}, forwarded) {
   const tr = useStrings();
-  const id = useId();
+  const autoId = useId();
+  const id = autoId;
   const panelId = `${id}-panel`;
-  const btnId = `${id}-btn`;
+  const btnId = explicitId ?? `${id}-btn`;
   const titleId = `${id}-title`;
   const [open, setOpen] = useState(false);
   /* The browser owns the open state, so aria-expanded is read off the
      panel's own toggle event rather than guessed alongside it. */
   const { triggerRef, panelRef } = usePopoverAnchor(align, (isOpen, panel) => {
     setOpen(isOpen);
+    onOpenChange?.(isOpen);
     if (isOpen) (panel.querySelector<HTMLElement>(FOCUSABLE) ?? panel).focus();
   });
+
+  /* Controlled and default-open: the prop drives the native popover, and the
+     native toggle event above reports back — so `open` and the panel never
+     disagree for longer than one event. */
+  const wanted = openProp ?? (defaultOpen ? true : undefined);
+  useEffect(() => {
+    const panel = panelRef.current;
+    if (!panel || wanted === undefined || disabled) return;
+    const isOpen = panel.matches(':popover-open');
+    if (wanted && !isOpen) panel.showPopover();
+    if (!wanted && isOpen) panel.hidePopover();
+    /* defaultOpen applies once, on mount; openProp on every change. */
+  }, [openProp]);
 
   /* Non-modal means focus is never trapped, and a panel left open behind
      the focus ring is a panel nobody can see they are outside of. Tabbing
@@ -134,8 +166,13 @@ export function Popover({
   return (
     <>
       <Button
+        {...rest}
         id={btnId}
-        ref={triggerRef as React.Ref<HTMLButtonElement>}
+        ref={(node) => {
+          triggerRef.current = node;
+          if (typeof forwarded === 'function') forwarded(node);
+          else if (forwarded) forwarded.current = node;
+        }}
         variant={variant}
         disabled={disabled}
         className={className}
@@ -154,7 +191,7 @@ export function Popover({
         tabIndex={-1}
         aria-labelledby={title ? titleId : undefined}
         aria-label={title ? undefined : ariaLabel}
-        className="sv-popover"
+        className={panelClassName ? `sv-popover ${panelClassName}` : 'sv-popover'}
         onBlur={onFocusOut}
       >
         {title && (
@@ -176,4 +213,4 @@ export function Popover({
       </div>
     </>
   );
-}
+});

@@ -1,5 +1,5 @@
-import { Fragment, useId } from 'react';
-import type { ReactNode } from 'react';
+import { Fragment, forwardRef, useId } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import { Avatar } from './avatar';
@@ -71,7 +71,7 @@ export interface ThreadMessage {
   day?: string;
 }
 
-export interface MessageThreadProps {
+export interface MessageThreadProps extends Omit<HTMLAttributes<HTMLOListElement>, 'children'> {
   messages: ThreadMessage[];
   /** Names the conversation for assistive tech: "Conversation with Halden Logistics". */
   label: string;
@@ -98,14 +98,15 @@ function Body({ body }: { body: ThreadMessage['body'] }) {
   return <>{body}</>;
 }
 
-export function MessageThread({
+export const MessageThread = forwardRef<HTMLOListElement, MessageThreadProps>(function MessageThread({
   messages,
   label,
   avatars = false,
   sendingWord: sendingProp,
   failedWord: failedProp,
   className,
-}: MessageThreadProps) {
+  ...rest
+}, ref) {
   const t = useStrings();
   const sendingWord = sendingProp ?? t.messageSending;
   const failedWord = failedProp ?? t.messageFailed;
@@ -117,7 +118,7 @@ export function MessageThread({
   };
 
   return (
-    <ol className={cx('sv-thread', avatars && 'sv-thread--avatars', className)} aria-label={label}>
+    <ol {...rest} ref={ref} className={cx('sv-thread', avatars && 'sv-thread--avatars', className)} aria-label={label}>
       {messages.map((m) => {
         const id = `${base}-${m.id}`;
         return (
@@ -189,4 +190,4 @@ export function MessageThread({
       })}
     </ol>
   );
-}
+});

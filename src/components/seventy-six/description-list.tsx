@@ -1,4 +1,5 @@
-import type { ReactNode } from 'react';
+import { forwardRef } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import './description-list.css';
 
@@ -15,7 +16,7 @@ export interface DescriptionRow {
   kind?: 'text' | 'id' | 'num';
 }
 
-export interface DescriptionListProps {
+export interface DescriptionListProps extends Omit<HTMLAttributes<HTMLDListElement>, 'children'> {
   rows: DescriptionRow[];
   /** columns (default) pairs term and value side by side; stacked puts the
       value under its term — the 320px floor falls back to stacked on its own. */
@@ -23,9 +24,9 @@ export interface DescriptionListProps {
   className?: string;
 }
 
-export function DescriptionList({ rows, layout = 'columns', className }: DescriptionListProps) {
+export const DescriptionList = forwardRef<HTMLDListElement, DescriptionListProps>(function DescriptionList({ rows, layout = 'columns', className, ...rest }, ref) {
   return (
-    <dl className={cx('sv-dl', layout === 'stacked' && 'sv-dl--stacked', className)}>
+    <dl {...rest} ref={ref} className={cx('sv-dl', layout === 'stacked' && 'sv-dl--stacked', className)}>
       {rows.map((row) => (
         <div className="sv-dl__row" key={row.term}>
           <dt className="sv-dl__term sv-mono">{row.term}</dt>
@@ -42,4 +43,4 @@ export function DescriptionList({ rows, layout = 'columns', className }: Descrip
       ))}
     </dl>
   );
-}
+});

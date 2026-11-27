@@ -1,3 +1,5 @@
+import { forwardRef } from 'react';
+import type { HTMLAttributes } from 'react';
 import { cx } from '@/lib/cx';
 import './sum-list.css';
 
@@ -62,17 +64,17 @@ export interface SumRow {
   strong?: boolean;
 }
 
-export interface SumListProps {
+export interface SumListProps extends Omit<HTMLAttributes<HTMLDListElement>, 'children'> {
   rows: SumRow[];
   className?: string;
 }
 
-export function SumList({ rows, className }: SumListProps) {
+export const SumList = forwardRef<HTMLDListElement, SumListProps>(function SumList({ rows, className, ...rest }, ref) {
   return (
     /* A real <dl>, exactly as B28: each label is announced with its own
        amount as one pair, and the note is read with the label it qualifies
        rather than floating between two rows. */
-    <dl className={cx('sv-sum', className)}>
+    <dl {...rest} ref={ref} className={cx('sv-sum', className)}>
       {rows.map((row) => (
         <div
           key={row.label}
@@ -90,4 +92,4 @@ export function SumList({ rows, className }: SumListProps) {
       ))}
     </dl>
   );
-}
+});

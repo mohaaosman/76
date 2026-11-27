@@ -1,3 +1,5 @@
+import { forwardRef } from 'react';
+import type { HTMLAttributes } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import './cross-table.css';
@@ -36,7 +38,7 @@ export interface CrossAxisItem {
   code?: string;
 }
 
-export interface CrossTableProps {
+export interface CrossTableProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   /** Accessible caption, e.g. "Revenue by region and quarter, FY2026, $ thousands". */
   caption: string;
   /** The row dimension's name: "REGION". */
@@ -78,7 +80,7 @@ function Cell({ value, noValueLabel }: { value: string | null | undefined; noVal
   return <>{value}</>;
 }
 
-export function CrossTable({
+export const CrossTable = forwardRef<HTMLDivElement, CrossTableProps>(function CrossTable({
   caption,
   rowDimension,
   colDimension,
@@ -93,14 +95,15 @@ export function CrossTable({
   totalLabel: totalProp,
   noValueLabel: noValueProp,
   className,
-}: CrossTableProps) {
+  ...rest
+}, ref) {
   const t = useStrings();
   const totalLabel = totalProp ?? t.total;
   const noValueLabel = noValueProp ?? t.noValue;
   const hasRowTotals = rowTotals !== undefined;
   return (
     /* The scroll region is focusable so a keyboard can scroll it (2.1.1). */
-    <div className={cx('sv-cross', className)} role="region" aria-label={caption} tabIndex={0}>
+    <div {...rest} ref={ref} className={cx('sv-cross', className)} role="region" aria-label={caption} tabIndex={0}>
       <table className="sv-cross__table">
         <caption className="sv-visually-hidden">{caption}</caption>
         <thead>
@@ -171,4 +174,4 @@ export function CrossTable({
       </table>
     </div>
   );
-}
+});

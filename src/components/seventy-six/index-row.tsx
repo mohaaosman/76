@@ -1,4 +1,5 @@
-import type { ReactNode } from 'react';
+import { forwardRef } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import './index-row.css';
 
@@ -45,7 +46,7 @@ export interface IndexItem {
     band, the footer and the contents strip alike. */
 type RenderLink = (item: IndexItem, className: string) => ReactNode;
 
-export interface IndexRowProps {
+export interface IndexRowProps extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
   /** Two to eight. A ninth section is a sitemap, not a contents strip. */
   items: IndexItem[];
   /** REQUIRED, not optional as it is on B48 and B50. Those are statements
@@ -78,12 +79,12 @@ function toLink(item: IndexItem, className: string, renderLink?: RenderLink) {
   return renderLink ? renderLink(item, className) : fallbackLink(item, className);
 }
 
-export function IndexRow({ items, ariaLabel, renderLink, className }: IndexRowProps) {
+export const IndexRow = forwardRef<HTMLElement, IndexRowProps>(function IndexRow({ items, ariaLabel, renderLink, className, ...rest }, ref) {
   return (
     /* A real <nav>, named. The `ol` inside it is ORDERED because the
        ordinals are the point: 03 is the third section, not a decorative
        numeral beside it, and a <ul> would leave the count to the eye. */
-    <nav className={cx('sv-index', className)} aria-label={ariaLabel}>
+    <nav {...rest} ref={ref} className={cx('sv-index', className)} aria-label={ariaLabel}>
       {/* `role="list"` is not a restated implicit role for its own sake:
           `list-style: none` is what strips the list semantics in WebKit,
           and this is the one list in the system whose COUNT and ORDER are
@@ -121,4 +122,4 @@ export function IndexRow({ items, ariaLabel, renderLink, className }: IndexRowPr
       </ol>
     </nav>
   );
-}
+});

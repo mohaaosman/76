@@ -1,3 +1,5 @@
+import { forwardRef } from 'react';
+import type { HTMLAttributes } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import './stepper.css';
@@ -16,9 +18,11 @@ export interface Step {
   label: string;
   /** One line under the label, e.g. "Signed 14 Jul". */
   note?: string;
+  /** A completed step that cannot be revisited stays a statement, not a button. */
+  disabled?: boolean;
 }
 
-export interface StepperProps {
+export interface StepperProps extends Omit<HTMLAttributes<HTMLOListElement>, 'children'> {
   steps: Step[];
   /** Index of the current step, 0-based. Everything before it is done. */
   current: number;
@@ -31,10 +35,10 @@ export interface StepperProps {
 
 const STATE_KEY = { done: 'stepDone', current: 'stepCurrent', upcoming: 'stepUpcoming' } as const;
 
-export function Stepper({ steps, current, onStepSelect, label, className }: StepperProps) {
+export const Stepper = forwardRef<HTMLOListElement, StepperProps>(function Stepper({ steps, current, onStepSelect, label, className, ...rest }, ref) {
   const tr = useStrings();
   return (
-    <ol className={cx('sv-stepper', className)} aria-label={label}>
+    <ol {...rest} ref={ref} className={cx('sv-stepper', className)} aria-label={label}>
       {steps.map((step, i) => {
         const state = i < current ? 'done' : i === current ? 'current' : 'upcoming';
         const body = (
@@ -74,7 +78,7 @@ export function Stepper({ steps, current, onStepSelect, label, className }: Step
             className={cx('sv-stepper__step', `sv-stepper__step--${state}`)}
             aria-current={state === 'current' ? 'step' : undefined}
           >
-            {state === 'done' && onStepSelect ? (
+            {state === 'done' && onStepSelect && !step.disabled ? (
               <button
                 type="button"
                 className="sv-stepper__hit sv-stepper__hit--button"
@@ -90,4 +94,4 @@ export function Stepper({ steps, current, onStepSelect, label, className }: Step
       })}
     </ol>
   );
-}
+});

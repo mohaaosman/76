@@ -1,4 +1,4 @@
-import { useRef, type ReactNode } from 'react';
+import { forwardRef, useRef, type HTMLAttributes, type ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import { Card } from './card';
@@ -64,7 +64,7 @@ type StatS1Count =
       format: (n: number) => string;
     };
 
-export type StatS1Props = StatS1Base & StatS1Count;
+export type StatS1Props = StatS1Base & StatS1Count & Omit<HTMLAttributes<HTMLElement>, 'children'>;
 
 /**
  * B3 amendment (v0.4.0) · Delta — the arrow-and-figure chip, extracted so
@@ -72,7 +72,7 @@ export type StatS1Props = StatS1Base & StatS1Count;
  * exactly the voice the S1 card does. Direction is NEVER colour-only:
  * the arrow glyph and the word are the non-colour cue (C5).
  */
-export interface DeltaProps {
+export interface DeltaProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'children'> {
   /** Signed change. +12.4 renders "▲ 12.4%". */
   value: number;
   /** Appended to the figure; default "%". */
@@ -89,12 +89,12 @@ export interface DeltaProps {
   className?: string;
 }
 
-export function Delta({ value, suffix = '%', polarity = 'up-good', against, className }: DeltaProps) {
+export function Delta({ value, suffix = '%', polarity = 'up-good', against, className, ...rest }: DeltaProps) {
   const tr = useStrings();
   const up = value >= 0;
   const good = polarity === 'up-good' ? up : !up;
   return (
-    <span className={cx('sv-delta sv-num', good ? 'sv-delta--ok' : 'sv-delta--bad', className)}>
+    <span {...rest} className={cx('sv-delta sv-num', good ? 'sv-delta--ok' : 'sv-delta--bad', className)}>
       <span aria-hidden="true">{up ? '▲' : '▼'}</span>
       <span className="sv-visually-hidden">{up ? tr.up : tr.down} </span>
       {Math.abs(value)}
@@ -104,7 +104,7 @@ export function Delta({ value, suffix = '%', polarity = 'up-good', against, clas
   );
 }
 
-export function StatS1({
+export const StatS1 = forwardRef<HTMLElement, StatS1Props>(function StatS1({
   label,
   value,
   unit,
@@ -118,7 +118,8 @@ export function StatS1({
   countTo,
   format,
   className,
-}: StatS1Props) {
+  ...rest
+}, ref) {
   const tr = useStrings();
   const deltaText =
     delta === undefined
@@ -151,7 +152,7 @@ export function StatS1({
   const printed = countTo !== undefined && format ? format(counted) : value;
 
   return (
-    <Card className={cx('sv-stat', className)} aria-label={ariaLabel} role="group">
+    <Card {...rest} ref={ref} className={cx('sv-stat', className)} aria-label={ariaLabel} role="group">
       <div aria-hidden="true">
         <div className="sv-stat__top">
           <span className="sv-stat__label sv-mono">{label}</span>
@@ -171,4 +172,4 @@ export function StatS1({
       </div>
     </Card>
   );
-}
+});

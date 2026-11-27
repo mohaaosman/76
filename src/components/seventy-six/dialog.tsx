@@ -1,5 +1,5 @@
-import { useEffect, useId, useRef } from 'react';
-import type { ReactNode, MouseEvent } from 'react';
+import { forwardRef, useEffect, useId, useRef } from 'react';
+import type { DialogHTMLAttributes, ReactNode, MouseEvent } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import './dialog.css';
@@ -9,7 +9,8 @@ import './dialog.css';
  * focus trapping, Esc, ::backdrop and top-layer for free). Paper card on a
  * flat scrim, no blur. Footer: ghost cancel + ONE primary/danger.
  */
-export interface DialogProps {
+export interface DialogProps
+  extends Omit<DialogHTMLAttributes<HTMLDialogElement>, 'open' | 'onClose' | 'title' | 'children'> {
   open: boolean;
   onClose: () => void;
   title: string;
@@ -29,7 +30,7 @@ export interface DialogProps {
   footer?: ReactNode;
 }
 
-export function Dialog({
+export const Dialog = forwardRef<HTMLDialogElement, DialogProps>(function Dialog({
   open,
   onClose,
   title,
@@ -39,9 +40,13 @@ export function Dialog({
   preventEscape = false,
   children,
   footer,
-}: DialogProps) {
+  className,
+  onCancel,
+  onClick,
+  ...rest
+}, forwarded) {
   const tr = useStrings();
-  const ref = useRef<HTMLDialogElement>(null);
+  const ref = useRef<HTMLDialogElement | null>(null);
   const titleId = useId();
   const resolved = size ?? (wide ? 'wide' : 'default');
 
@@ -53,6 +58,7 @@ export function Dialog({
   }, [open]);
 
   function handleCancel(e: React.SyntheticEvent<HTMLDialogElement>) {
+    onCancel?.(e);
     if (preventEscape) {
       e.preventDefault();
       return;
@@ -63,17 +69,24 @@ export function Dialog({
 
   /* Scrim click closes non-destructive, non-full dialogs only. */
   function handleClick(e: MouseEvent<HTMLDialogElement>) {
+    onClick?.(e);
     if (destructive || resolved === 'full') return;
     if (e.target === ref.current) onClose();
   }
 
   return (
     <dialog
-      ref={ref}
+      {...rest}
+      ref={(node) => {
+        ref.current = node;
+        if (typeof forwarded === 'function') forwarded(node);
+        else if (forwarded) forwarded.current = node;
+      }}
       className={cx(
         'sv-dialog',
         resolved === 'wide' && 'sv-dialog--wide',
         resolved === 'full' && 'sv-dialog--full',
+        className,
       )}
       aria-labelledby={titleId}
       onCancel={handleCancel}
@@ -103,4 +116,4 @@ export function Dialog({
       </div>
     </dialog>
   );
-}
+});

@@ -1,5 +1,5 @@
-import { useEffect, useId, useRef } from 'react';
-import type { MouseEvent, ReactNode } from 'react';
+import { forwardRef, useEffect, useId, useRef } from 'react';
+import type { DialogHTMLAttributes, MouseEvent, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import './drawer.css';
@@ -11,7 +11,8 @@ import './drawer.css';
  * <dialog>.showModal(): focus trap, Esc, ::backdrop, top layer for free.
  * Anything that replaces the whole task is a full-screen Dialog instead.
  */
-export interface DrawerProps {
+export interface DrawerProps
+  extends Omit<DialogHTMLAttributes<HTMLDialogElement>, 'open' | 'onClose' | 'title' | 'children'> {
   open: boolean;
   onClose: () => void;
   title: string;
@@ -32,7 +33,7 @@ export interface DrawerProps {
   children: ReactNode;
 }
 
-export function Drawer({
+export const Drawer = forwardRef<HTMLDialogElement, DrawerProps>(function Drawer({
   open,
   onClose,
   title,
@@ -42,9 +43,13 @@ export function Drawer({
   footer,
   dismissible = true,
   children,
-}: DrawerProps) {
+  className,
+  onCancel,
+  onClick,
+  ...rest
+}, forwarded) {
   const tr = useStrings();
-  const ref = useRef<HTMLDialogElement>(null);
+  const ref = useRef<HTMLDialogElement | null>(null);
   const titleId = useId();
 
   useEffect(() => {
@@ -55,16 +60,23 @@ export function Drawer({
   }, [open]);
 
   function handleClick(e: MouseEvent<HTMLDialogElement>) {
+    onClick?.(e);
     if (!dismissible) return;
     if (e.target === ref.current) onClose();
   }
 
   return (
     <dialog
-      ref={ref}
-      className={cx('sv-drawer', `sv-drawer--${side}`, `sv-drawer--${size}`)}
+      {...rest}
+      ref={(node) => {
+        ref.current = node;
+        if (typeof forwarded === 'function') forwarded(node);
+        else if (forwarded) forwarded.current = node;
+      }}
+      className={cx('sv-drawer', `sv-drawer--${side}`, `sv-drawer--${size}`, className)}
       aria-labelledby={titleId}
       onCancel={(e) => {
+        onCancel?.(e);
         e.preventDefault();
         onClose();
       }}
@@ -100,4 +112,4 @@ export function Drawer({
       </div>
     </dialog>
   );
-}
+});

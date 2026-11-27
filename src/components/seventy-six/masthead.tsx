@@ -31,7 +31,7 @@
  * the Masthead (a number on the public surface is B50 ProofRow); no breadcrumb
  * anywhere near it (F13).
  */
-import type { ReactNode } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import './masthead.css';
 
@@ -41,7 +41,7 @@ import './masthead.css';
  * and F12 refuses both by name — see the Don't list above. A slot that exists
  * is a slot that gets filled, so the refusal is the absent prop.
  */
-export interface MastheadProps {
+export interface MastheadProps extends Omit<HTMLAttributes<HTMLElement>, 'title' | 'children'> {
   /** The claim. Becomes the page's h1. */
   title: string;
   /** The claim's second half, receded — exactly PageHero's move. */
@@ -88,6 +88,7 @@ export function Masthead({
   scale = 'default',
   headingLevel = 1,
   className,
+  ...rest
 }: MastheadProps) {
   /* One h1 per page (A4). Level 2 exists for the docs demo, where the page
      already owns its h1 and a second one would break the outline. */
@@ -97,6 +98,7 @@ export function Masthead({
     /* start is the default because left-aligned type is how the rest of the
        system sets everything; centring is the exception a page asks for. */
     <header
+      {...rest}
       className={cx(
         'sv-masthead',
         align === 'center' && 'sv-masthead--center',

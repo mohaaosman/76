@@ -281,6 +281,44 @@ for (const locale of ['en', 'ar']) {
   await page.close();
 }
 
+/* --------------------------------------------- DataState · maxHeight · type */
+{
+  const page = await open('/components/data-state');
+  const region = page.locator('.sv-datastate').first();
+  check('DataState: loading is aria-busy', (await region.getAttribute('aria-busy')) === 'true');
+  const status = await region.locator('[role=status]').first().textContent();
+  check('DataState: loading names what is loading', (status ?? '').includes('Loading orders'), status ?? '');
+  check('DataState: the skeleton appears after the gate', (await region.locator('.sv-skeleton').count()) > 0);
+  const card = region.locator('xpath=ancestor::section[1]');
+  await card.getByRole('button', { name: 'Error' }).click();
+  check('DataState: the error is an inline alert', (await card.locator('[role=alert]').count()) === 1);
+  await card.getByRole('button', { name: 'Ready' }).click();
+  check('DataState: ready renders the widget', (await card.locator('table').count()) === 1);
+  await page.close();
+}
+{
+  const page = await open('/components/data-table');
+  const cap = page.locator('.sv-table__scroll--capped').first();
+  const th = cap.locator('th').first();
+  const before = (await th.boundingBox())?.y ?? 0;
+  await cap.evaluate((el) => (el.scrollTop = 300));
+  await page.waitForTimeout(100);
+  const after = (await th.boundingBox())?.y ?? -1;
+  check('DataTable maxHeight: the header holds while the body scrolls', Math.abs(after - before) < 1, `${before} → ${after}`);
+  await page.close();
+}
+{
+  /* v0.11 · the "too thin" floor: no mono text under 10px or under 500. */
+  const page = await open('/templates/erp-dashboard');
+  const thin = await page.evaluate(() =>
+    [...document.querySelectorAll('.sv-mono')]
+      .map((el) => getComputedStyle(el))
+      .filter((cs) => parseFloat(cs.fontSize) < 10 || Number(cs.fontWeight) < 500).length,
+  );
+  check('Type floor: no mono text under 10px or 500 on the ERP dashboard', thin === 0, `${thin} thin`);
+  await page.close();
+}
+
 /* ------------------------------------------------------- Templates register */
 for (const slug of ['crm-deal', 'settings-team']) {
   const page = await open(`/templates/${slug}`, { locale: 'ar' });

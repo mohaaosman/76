@@ -1,3 +1,5 @@
+import { forwardRef } from 'react';
+import type { HTMLAttributes } from 'react';
 import { cx } from '@/lib/cx';
 import './meter-list.css';
 
@@ -16,14 +18,14 @@ export interface MeterItem {
   subtitle: string;
 }
 
-export interface MeterListProps {
+export interface MeterListProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   items: MeterItem[];
   className?: string;
 }
 
-export function MeterList({ items, className }: MeterListProps) {
+export const MeterList = forwardRef<HTMLDivElement, MeterListProps>(function MeterList({ items, className, ...rest }, ref) {
   return (
-    <div className={cx('sv-meters', className)}>
+    <div {...rest} ref={ref} className={cx('sv-meters', className)}>
       {items.map((item) => (
         <div
           key={item.label}
@@ -49,4 +51,4 @@ export function MeterList({ items, className }: MeterListProps) {
       ))}
     </div>
   );
-}
+});

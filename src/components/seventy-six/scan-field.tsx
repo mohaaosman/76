@@ -94,7 +94,7 @@ export const ScanField = forwardRef<HTMLInputElement, ScanFieldProps>(function S
         autoCorrect="off"
         spellCheck={false}
         enterKeyHint="done"
-        aria-describedby={[hint ? hintId : null, resultId].filter(Boolean).join(' ')}
+        aria-describedby={[hint ? hintId : null, resultId, rest['aria-describedby']].filter(Boolean).join(' ')}
         onChange={(e) => setDraft(e.target.value)}
         onKeyDown={(e) => {
           onKeyDown?.(e);

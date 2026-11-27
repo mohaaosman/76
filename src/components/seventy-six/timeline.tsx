@@ -1,5 +1,5 @@
-import { Fragment } from 'react';
-import type { ReactNode } from 'react';
+import { Fragment, forwardRef } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import './timeline.css';
@@ -31,7 +31,7 @@ export interface TimelineItem {
   group?: string;
 }
 
-export interface TimelineProps {
+export interface TimelineProps extends Omit<HTMLAttributes<HTMLOListElement>, 'children'> {
   items: TimelineItem[];
   className?: string;
 }
@@ -41,10 +41,10 @@ export interface TimelineProps {
    the rail sees the marker before the text. */
 const TONE_KEY = { done: 'toneDone', pending: 'tonePending', bad: 'toneBad' } as const satisfies Record<TimelineTone, string>;
 
-export function Timeline({ items, className }: TimelineProps) {
+export const Timeline = forwardRef<HTMLOListElement, TimelineProps>(function Timeline({ items, className, ...rest }, ref) {
   const tr = useStrings();
   return (
-    <ol className={cx('sv-timeline', className)}>
+    <ol {...rest} ref={ref} className={cx('sv-timeline', className)}>
       {items.map((item) => {
         const tone = item.tone ?? 'done';
         return (
@@ -80,4 +80,4 @@ export function Timeline({ items, className }: TimelineProps) {
       })}
     </ol>
   );
-}
+});

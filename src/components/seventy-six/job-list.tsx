@@ -1,4 +1,5 @@
-import { useId } from 'react';
+import type { HTMLAttributes } from 'react';
+import { forwardRef, useId } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import { Spinner } from './spinner';
@@ -54,14 +55,14 @@ export interface Job {
   error?: string;
 }
 
-export interface JobListProps {
+export interface JobListProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   jobs: Job[];
   /** Polite announcement of the latest change: "Post goods receipt PO-2291 finished". */
   announcement?: string;
   className?: string;
 }
 
-export function JobList({ jobs, announcement, className }: JobListProps) {
+export const JobList = forwardRef<HTMLDivElement, JobListProps>(function JobList({ jobs, announcement, className, ...rest }, ref) {
   const t = useStrings();
   const base = useId();
   const word: Record<JobState, string> = {
@@ -72,7 +73,7 @@ export function JobList({ jobs, announcement, className }: JobListProps) {
   };
 
   return (
-    <div className={cx('sv-jobs', className)}>
+    <div {...rest} ref={ref} className={cx('sv-jobs', className)}>
       <ul className="sv-jobs__list">
         {jobs.map((job, idx) => {
           const titleId = `${base}-${idx}-title`;
@@ -129,4 +130,4 @@ export function JobList({ jobs, announcement, className }: JobListProps) {
       </p>
     </div>
   );
-}
+});

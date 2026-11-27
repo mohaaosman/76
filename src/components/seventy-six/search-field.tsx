@@ -1,4 +1,4 @@
-import { forwardRef, useId, useRef } from 'react';
+import { forwardRef, useId, useRef, useState } from 'react';
 import type { ForwardedRef, InputHTMLAttributes, KeyboardEvent } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
@@ -15,11 +15,15 @@ import './search-field.css';
  * by a named button that hands focus back where it found it.
  */
 export interface SearchFieldProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'value' | 'onChange'> {
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'value' | 'defaultValue' | 'onChange'> {
   /** Names the set being filtered: "Search orders", not "Search". */
   label: string;
-  value: string;
-  onValueChange: (value: string) => void;
+  /** Controlled query. When passed it wins over internal state. */
+  value?: string;
+  /** Uncontrolled: the starting query. Defaults to empty. */
+  defaultValue?: string;
+  /** Called on every keystroke, clear and Esc — in both modes. */
+  onValueChange?: (value: string) => void;
   /** States the scope. Never the label — it vanishes on the first keystroke. */
   placeholder?: string;
   /**
@@ -39,8 +43,9 @@ export interface SearchFieldProps
 export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(function SearchField(
   {
     label,
-    value,
-    onValueChange,
+    value: valueProp,
+    defaultValue = '',
+    onValueChange: onValueChangeProp,
     placeholder: placeholderProp,
     labelHidden,
     hint,
@@ -62,7 +67,14 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
   const resultId = `${id}-result`;
   /* The result line is announced by its own live region; naming it in
      aria-describedby too would read the count twice on every focus. */
-  const describedBy = [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(' ') || undefined;
+  const describedBy =
+    [hint ? hintId : null, error ? errorId : null, rest['aria-describedby']].filter(Boolean).join(' ') || undefined;
+  const [own, setOwn] = useState(defaultValue);
+  const value = valueProp ?? own;
+  const onValueChange = (next: string) => {
+    if (valueProp === undefined) setOwn(next);
+    onValueChangeProp?.(next);
+  };
 
   const inner = useRef<HTMLInputElement | null>(null);
   const attach = (node: HTMLInputElement | null) => {

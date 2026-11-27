@@ -1,4 +1,5 @@
-import type { CSSProperties } from 'react';
+import { forwardRef } from 'react';
+import type { CSSProperties, HTMLAttributes } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import './funnel-list.css';
@@ -39,7 +40,7 @@ export interface FunnelStep {
   conversion?: string;
 }
 
-export interface FunnelListProps {
+export interface FunnelListProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   /** Accessible name for the list, e.g. "Checkout funnel, July 2026". */
   label: string;
   steps: FunnelStep[];
@@ -50,10 +51,10 @@ export interface FunnelListProps {
 
 const clamp = (n: number) => (Number.isFinite(n) ? Math.min(1, Math.max(0, n)) : 0);
 
-export function FunnelList({ label, steps, baseline, className }: FunnelListProps) {
+export const FunnelList = forwardRef<HTMLDivElement, FunnelListProps>(function FunnelList({ label, steps, baseline, className, ...rest }, ref) {
   const t = useStrings();
   return (
-    <div className={cx('sv-funnel', className)}>
+    <div {...rest} ref={ref} className={cx('sv-funnel', className)}>
       {baseline && <p className="sv-funnel__baseline sv-mono">{t.against(baseline)}</p>}
       <ol className="sv-funnel__list" aria-label={label}>
         {steps.map((step, i) => (
@@ -81,4 +82,4 @@ export function FunnelList({ label, steps, baseline, className }: FunnelListProp
       </ol>
     </div>
   );
-}
+});

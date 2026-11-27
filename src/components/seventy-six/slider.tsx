@@ -1,4 +1,4 @@
-import { forwardRef, useId } from 'react';
+import { forwardRef, useId, useState } from 'react';
 import type { InputHTMLAttributes } from 'react';
 import { cx } from '@/lib/cx';
 import './slider.css';
@@ -10,10 +10,14 @@ import './slider.css';
  * beside the label: the bar illustrates, the figure informs (B4).
  */
 export interface SliderProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'value' | 'onChange' | 'min' | 'max' | 'step'> {
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'value' | 'defaultValue' | 'onChange' | 'min' | 'max' | 'step'> {
   label: string;
-  value: number;
-  onValueChange: (value: number) => void;
+  /** Controlled value. When passed it wins over internal state. */
+  value?: number;
+  /** Uncontrolled: the starting value. Defaults to `min`. */
+  defaultValue?: number;
+  /** Called on every change — in both modes. */
+  onValueChange?: (value: number) => void;
   min?: number;
   max?: number;
   step?: number;
@@ -23,12 +27,27 @@ export interface SliderProps
 }
 
 export const Slider = forwardRef<HTMLInputElement, SliderProps>(function Slider(
-  { label, value, onValueChange, min = 0, max = 100, step = 1, hint, format, id: explicitId, className, ...rest },
+  {
+    label,
+    value: valueProp,
+    defaultValue,
+    onValueChange,
+    min = 0,
+    max = 100,
+    step = 1,
+    hint,
+    format,
+    id: explicitId,
+    className,
+    ...rest
+  },
   ref,
 ) {
   const auto = useId();
   const id = explicitId ?? auto;
   const hintId = `${id}-hint`;
+  const [own, setOwn] = useState(() => defaultValue ?? min);
+  const value = valueProp ?? own;
   const readout = format ? format(value) : String(value);
 
   return (
@@ -51,8 +70,13 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(function Slider(
         min={min}
         max={max}
         step={step}
-        onChange={(e) => onValueChange(Number(e.target.value))}
-        aria-describedby={hint ? hintId : undefined}
+        onChange={(e) => {
+          const next = Number(e.target.value);
+          if (valueProp === undefined) setOwn(next);
+          onValueChange?.(next);
+        }}
+        /* A caller's own aria-describedby is MERGED, never replaced. */
+        aria-describedby={[hint ? hintId : null, rest['aria-describedby']].filter(Boolean).join(' ') || undefined}
         aria-valuetext={format ? readout : undefined}
       />
       {hint && (

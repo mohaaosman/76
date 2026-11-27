@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import './spinner.css';
 
@@ -9,16 +9,16 @@ import './spinner.css';
  * still owns first paint — a spinner is for a region that already has
  * content and is fetching the next of it.
  */
-export interface SpinnerProps {
+export interface SpinnerProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'children'> {
   size?: 12 | 16 | 20;
   /** Announced label. Omit only when an adjacent live region says it. */
   label?: string;
   className?: string;
 }
 
-export function Spinner({ size = 12, label, className }: SpinnerProps) {
+export function Spinner({ size = 12, label, className, ...rest }: SpinnerProps) {
   return (
-    <span className={cx('sv-spin', className)} role={label ? 'status' : undefined}>
+    <span {...rest} className={cx('sv-spin', className)} role={label ? 'status' : undefined}>
       <svg
         className="sv-spin__mark"
         viewBox="0 0 12 12"
@@ -43,7 +43,7 @@ export function Spinner({ size = 12, label, className }: SpinnerProps) {
   );
 }
 
-export interface BusyProps {
+export interface BusyProps extends HTMLAttributes<HTMLDivElement> {
   /** REQUIRED sentence naming what is loading: "Loading July orders…". */
   label: string;
   /** Region height while empty. Match the component it replaces. */
@@ -53,11 +53,12 @@ export interface BusyProps {
   className?: string;
 }
 
-export function Busy({ label, minHeight = 160, children, className }: BusyProps) {
+export function Busy({ label, minHeight = 160, children, className, style, ...rest }: BusyProps) {
   return (
     <div
+      {...rest}
       className={cx('sv-busy', children != null && 'sv-busy--over', className)}
-      style={{ minHeight }}
+      style={{ minHeight, ...style }}
       aria-busy="true"
       aria-live="polite"
     >

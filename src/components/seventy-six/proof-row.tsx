@@ -1,3 +1,4 @@
+import type { HTMLAttributes } from 'react';
 import { useRef } from 'react';
 import { cx } from '@/lib/cx';
 import { useCountUp } from './count-up';
@@ -71,7 +72,7 @@ type ProofItemCount =
 
 export type ProofItem = ProofItemBase & ProofItemCount;
 
-export interface ProofRowProps {
+export interface ProofRowProps extends Omit<HTMLAttributes<HTMLDListElement>, 'children'> {
   /** Two to four. A fifth figure is a table (B7). */
   items: ProofItem[];
   /** Names the row for a screen reader when the section heading is elsewhere. */
@@ -119,14 +120,14 @@ function CountedFigure({
   );
 }
 
-export function ProofRow({ items, ariaLabel, className }: ProofRowProps) {
+export function ProofRow({ items, ariaLabel, className, ...rest }: ProofRowProps) {
   return (
     /* A real <dl>: each figure is the description of the thing its label
        names, so the pair is announced together instead of as two loose runs
        of text. The wrapper <div> is what lets a pair keep its own column and
        its own hairline — dl > div > (dt, dd) is the structure HTML gives for
        exactly this, so no ARIA is needed to hold the pairing. */
-    <dl className={cx('sv-proof', className)} aria-label={ariaLabel}>
+    <dl {...rest} className={cx('sv-proof', className)} aria-label={ariaLabel ?? rest['aria-label']}>
       {items.map((item) => (
         /* Reading order and visual order are BOTH honest, and they differ.
            In the DOM the <dt> comes first, because the term owns the pair and

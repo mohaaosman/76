@@ -1,4 +1,5 @@
-import { useEffect, useId, useRef } from 'react';
+import { forwardRef, useEffect, useId, useRef } from 'react';
+import type { HTMLAttributes } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import './error-summary.css';
@@ -38,7 +39,7 @@ export interface FieldError {
   message: string;
 }
 
-export interface ErrorSummaryProps {
+export interface ErrorSummaryProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title' | 'children'> {
   errors: FieldError[];
   /** Overrides the generated count sentence. Rarely needed. */
   title?: string;
@@ -47,14 +48,17 @@ export interface ErrorSummaryProps {
   className?: string;
 }
 
-export function ErrorSummary({ errors, title, autoFocus = true, className }: ErrorSummaryProps) {
+export const ErrorSummary = forwardRef<HTMLDivElement, ErrorSummaryProps>(function ErrorSummary(
+  { errors, title, autoFocus = true, className, ...rest },
+  forwarded,
+) {
   const tr = useStrings();
   /* One base id, suffixed — never a random one. The title has to be nameable
      from the container, and a name that changes between renders unhooks the
      reference the moment React re-renders under it. */
   const base = useId();
   const titleId = `${base}-title`;
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
 
   /* Focus moves on every new SET of errors, not only on the first appearance:
      a second failed submit that names different fields is a second event, and
@@ -85,7 +89,12 @@ export function ErrorSummary({ errors, title, autoFocus = true, className }: Err
        role="group" and not a bare div: the accessible name below is what
        focus announces, and ARIA prohibits a name on a generic element. */
     <div
-      ref={ref}
+      {...rest}
+      ref={(node) => {
+        ref.current = node;
+        if (typeof forwarded === 'function') forwarded(node);
+        else if (forwarded) forwarded.current = node;
+      }}
       role="group"
       tabIndex={-1}
       aria-labelledby={titleId}
@@ -139,4 +148,4 @@ export function ErrorSummary({ errors, title, autoFocus = true, className }: Err
       </div>
     </div>
   );
-}
+});

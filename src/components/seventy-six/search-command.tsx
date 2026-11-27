@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import type { KeyboardEvent } from 'react';
+import { forwardRef, useEffect, useId, useMemo, useRef, useState } from 'react';
+import type { DialogHTMLAttributes, KeyboardEvent } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import './search-command.css';
@@ -15,9 +15,12 @@ export interface CommandItem {
   /** Mono hint on the right, e.g. an ID or shortcut. */
   hint?: string;
   keywords?: string;
+  /** Listed but not pickable: arrow keys skip it and a click does nothing. */
+  disabled?: boolean;
 }
 
-export interface SearchCommandProps {
+export interface SearchCommandProps
+  extends Omit<DialogHTMLAttributes<HTMLDialogElement>, 'open' | 'onClose' | 'children'> {
   items: CommandItem[];
   onPick: (item: CommandItem) => void;
   placeholder?: string;
@@ -36,7 +39,7 @@ export function useSearchCommand() {
   return { open, show: () => setOpen(true), hide: () => setOpen(false) };
 }
 
-export function SearchCommand({
+export const SearchCommand = forwardRef<HTMLDialogElement, SearchCommandProps & { open: boolean; onClose: () => void }>(function SearchCommand({
   open,
   onClose,
   items,
@@ -44,10 +47,18 @@ export function SearchCommand({
   placeholder: placeholderProp,
   bindShortcut = true,
   onOpen,
-}: SearchCommandProps & { open: boolean; onClose: () => void }) {
+  className,
+  onCancel,
+  onClick,
+  ...rest
+}, forwarded) {
   const tr = useStrings();
   const placeholder = placeholderProp ?? tr.searchEllipsis;
-  const ref = useRef<HTMLDialogElement>(null);
+  /* Per-instance ids: two palettes on one page used to share one listbox id. */
+  const uid = useId();
+  const listId = `${uid}-list`;
+  const optionId = (id: string) => `${uid}-opt-${id}`;
+  const ref = useRef<HTMLDialogElement | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState('');
   const [activeIdx, setActiveIdx] = useState(0);
@@ -96,16 +107,22 @@ export function SearchCommand({
     return [...map.entries()];
   }, [results]);
 
+  /* Steps from `from` toward `dir` to the nearest enabled result; stays put at the edge. */
+  function stepTo(from: number, dir: number) {
+    for (let i = from + dir; i >= 0 && i < results.length; i += dir) if (!results[i].disabled) return i;
+    return from;
+  }
+
   function onKeyDown(e: KeyboardEvent) {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setActiveIdx((i) => Math.min(i + 1, results.length - 1));
+      setActiveIdx((i) => stepTo(i, 1));
     }
     if (e.key === 'ArrowUp') {
       e.preventDefault();
-      setActiveIdx((i) => Math.max(i - 1, 0));
+      setActiveIdx((i) => stepTo(i, -1));
     }
-    if (e.key === 'Enter' && results[activeIdx]) {
+    if (e.key === 'Enter' && results[activeIdx] && !results[activeIdx].disabled) {
       e.preventDefault();
       onPick(results[activeIdx]);
       onClose();
@@ -116,14 +133,21 @@ export function SearchCommand({
 
   return (
     <dialog
-      ref={ref}
-      className="sv-command"
-      aria-label={tr.search}
+      {...rest}
+      ref={(node) => {
+        ref.current = node;
+        if (typeof forwarded === 'function') forwarded(node);
+        else if (forwarded) forwarded.current = node;
+      }}
+      className={cx('sv-command', className)}
+      aria-label={rest['aria-label'] ?? tr.search}
       onCancel={(e) => {
+        onCancel?.(e);
         e.preventDefault();
         onClose();
       }}
       onClick={(e) => {
+        onClick?.(e);
         if (e.target === ref.current) onClose();
       }}
     >
@@ -134,8 +158,8 @@ export function SearchCommand({
           type="text"
           role="combobox"
           aria-expanded="true"
-          aria-controls="sv-command-list"
-          aria-activedescendant={results[activeIdx] ? `sv-cmd-${results[activeIdx].id}` : undefined}
+          aria-controls={listId}
+          aria-activedescendant={results[activeIdx] ? optionId(results[activeIdx].id) : undefined}
           placeholder={placeholder}
           aria-label={placeholder}
           value={query}
@@ -144,7 +168,7 @@ export function SearchCommand({
             setActiveIdx(0);
           }}
         />
-        <ul className="sv-command__list" id="sv-command-list" role="listbox" aria-label={tr.results}>
+        <ul className="sv-command__list" id={listId} role="listbox" aria-label={tr.results}>
           {groups.map(([group, groupItems]) => (
             <li key={group}>
               <p className="sv-command__group sv-mono">{group}</p>
@@ -155,13 +179,15 @@ export function SearchCommand({
                   return (
                     <li
                       key={item.id}
-                      id={`sv-cmd-${item.id}`}
+                      id={optionId(item.id)}
                       role="option"
                       aria-selected={idx === activeIdx}
+                      aria-disabled={item.disabled || undefined}
                       className={cx('sv-command__item', idx === activeIdx && 'sv-command__item--active')}
-                      onMouseEnter={() => setActiveIdx(idx)}
+                      onMouseEnter={() => !item.disabled && setActiveIdx(idx)}
                       onMouseDown={(e) => e.preventDefault()}
                       onClick={() => {
+                        if (item.disabled) return;
                         onPick(item);
                         onClose();
                       }}
@@ -181,4 +207,4 @@ export function SearchCommand({
       </div>
     </dialog>
   );
-}
+});

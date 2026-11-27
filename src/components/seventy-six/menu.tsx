@@ -1,5 +1,5 @@
-import { useId } from 'react';
-import type { KeyboardEvent, ReactNode } from 'react';
+import { forwardRef, useId, useState } from 'react';
+import type { ButtonHTMLAttributes, HTMLAttributes, KeyboardEvent, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import { Button } from './button';
@@ -45,8 +45,13 @@ function MenuPanel({ id, items, labelledBy, onClose, panelRef, align }: MenuPane
     if (!nodes || nodes.length === 0) return;
     const list = Array.from(nodes);
     const current = list.indexOf(document.activeElement as HTMLButtonElement);
-    const next =
-      current === -1
+    /* Home / End pass ±Infinity: jump to the edge. Arithmetic on Infinity
+       gave NaN, so Home and End used to do nothing once an item had focus. */
+    const next = !Number.isFinite(delta)
+      ? delta > 0
+        ? list.length - 1
+        : 0
+      : current === -1
         ? delta > 0
           ? 0
           : list.length - 1
@@ -66,11 +71,11 @@ function MenuPanel({ id, items, labelledBy, onClose, panelRef, align }: MenuPane
         break;
       case 'Home':
         e.preventDefault();
-        focusItem(Number.NEGATIVE_INFINITY as unknown as number);
+        focusItem(Number.NEGATIVE_INFINITY);
         break;
       case 'End':
         e.preventDefault();
-        focusItem(Number.POSITIVE_INFINITY as unknown as number);
+        focusItem(Number.POSITIVE_INFINITY);
         break;
       case 'Tab':
         onClose();
@@ -129,36 +134,56 @@ function focusFirstItem(open: boolean, panel: HTMLDivElement) {
 
 /* ---------- MenuButton — a button whose job is opening the menu ---------- */
 
-export interface MenuButtonProps {
+export interface MenuButtonProps
+  extends Omit<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    'children' | 'popoverTarget' | 'popoverTargetAction' | 'aria-controls' | 'aria-expanded' | 'aria-haspopup'
+  > {
   label: string;
   items: MenuItem[];
   variant?: ButtonVariant;
   align?: 'start' | 'end';
   disabled?: boolean;
   className?: string;
+  /** Called whenever the menu opens or closes. */
+  onOpenChange?: (open: boolean) => void;
 }
 
-export function MenuButton({
+export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(function MenuButton({
   label,
   items,
   variant = 'ghost',
   align = 'start',
   disabled,
   className,
-}: MenuButtonProps) {
+  onOpenChange,
+  id: explicitId,
+  ...rest
+}, forwarded) {
   const id = useId();
   const menuId = `${id}-menu`;
-  const btnId = `${id}-btn`;
-  const { triggerRef, panelRef } = usePopoverAnchor(align, focusFirstItem);
+  const btnId = explicitId ?? `${id}-btn`;
+  const [open, setOpen] = useState(false);
+  const { triggerRef, panelRef } = usePopoverAnchor(align, (isOpen, panel) => {
+    setOpen(isOpen);
+    onOpenChange?.(isOpen);
+    focusFirstItem(isOpen, panel);
+  });
 
   return (
     <>
       <Button
+        {...rest}
         id={btnId}
-        ref={triggerRef as React.Ref<HTMLButtonElement>}
+        ref={(node) => {
+          triggerRef.current = node;
+          if (typeof forwarded === 'function') forwarded(node);
+          else if (forwarded) forwarded.current = node;
+        }}
         variant={variant}
         disabled={disabled}
         className={className}
+        aria-expanded={open}
         aria-haspopup="menu"
         aria-controls={menuId}
         popoverTarget={menuId}
@@ -176,11 +201,11 @@ export function MenuButton({
       />
     </>
   );
-}
+});
 
 /* ---------- SplitButton — one primary action + related actions ---------- */
 
-export interface SplitButtonProps {
+export interface SplitButtonProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'onClick' | 'children'> {
   /** The primary action's label — names its object ("Create order"). */
   label: string;
   onClick: () => void;
@@ -200,7 +225,7 @@ export interface SplitButtonProps {
  * of the same job ("Create order" / "Create draft order"). Unrelated
  * actions belong in their own controls, not behind the chevron.
  */
-export function SplitButton({
+export const SplitButton = forwardRef<HTMLSpanElement, SplitButtonProps>(function SplitButton({
   label,
   onClick,
   items,
@@ -210,16 +235,21 @@ export function SplitButton({
   loadingLabel,
   disabled,
   className,
-}: SplitButtonProps) {
+  ...rest
+}, ref) {
   const tr = useStrings();
   const menuLabel = menuLabelProp ?? tr.moreWaysTo(label);
   const id = useId();
   const menuId = `${id}-menu`;
   const btnId = `${id}-btn`;
-  const { triggerRef, panelRef } = usePopoverAnchor('end', focusFirstItem);
+  const [open, setOpen] = useState(false);
+  const { triggerRef, panelRef } = usePopoverAnchor('end', (isOpen, panel) => {
+    setOpen(isOpen);
+    focusFirstItem(isOpen, panel);
+  });
 
   return (
-    <span className={cx('sv-splitbtn', className)}>
+    <span {...rest} ref={ref} className={cx('sv-splitbtn', className)}>
       <Button
         id={btnId}
         variant={variant}
@@ -237,6 +267,7 @@ export function SplitButton({
         disabled={disabled || isLoading}
         className="sv-splitbtn__toggle"
         aria-label={menuLabel}
+        aria-expanded={open}
         aria-haspopup="menu"
         aria-controls={menuId}
         popoverTarget={menuId}
@@ -253,4 +284,4 @@ export function SplitButton({
       />
     </span>
   );
-}
+});

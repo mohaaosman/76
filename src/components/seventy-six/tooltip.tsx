@@ -1,5 +1,6 @@
 import { cloneElement, useId, useRef } from 'react';
-import type { ReactElement, RefObject } from 'react';
+import type { FocusEvent, KeyboardEvent, MouseEvent, ReactElement, Ref, RefObject } from 'react';
+import { cx } from '@/lib/cx';
 import './tooltip.css';
 
 /**
@@ -13,10 +14,19 @@ export interface TooltipProps {
   /** A single focusable element (button, a). Receives describedby. */
   children: ReactElement<Record<string, unknown>>;
   delay?: number;
+  /** Suppresses the tooltip entirely; the trigger renders untouched. */
+  disabled?: boolean;
+  /** Applied to the tooltip bubble (the trigger keeps its own className). */
+  className?: string;
+  /** Explicit id for the bubble; defaults to a generated one. */
+  id?: string;
 }
 
-export function Tooltip({ content, children, delay = 300 }: TooltipProps) {
-  const id = useId();
+type Handler<E> = ((e: E) => void) | undefined;
+
+export function Tooltip({ content, children, delay = 300, disabled = false, className, id: explicitId }: TooltipProps) {
+  const autoId = useId();
+  const id = explicitId ?? autoId;
   const tipRef: RefObject<HTMLDivElement | null> = useRef(null);
   const triggerRef: RefObject<HTMLElement | null> = useRef(null);
   const timer = useRef<number>(0);
@@ -49,21 +59,54 @@ export function Tooltip({ content, children, delay = 300 }: TooltipProps) {
     tipRef.current?.hidePopover();
   }
 
+  if (disabled) return children;
+
+  /* The child's own props are MERGED, never replaced: its describedby, its
+     ref and its handlers all keep working beside the tooltip's. */
+  const own = children.props as {
+    'aria-describedby'?: string;
+    ref?: Ref<HTMLElement>;
+    onMouseEnter?: Handler<MouseEvent<HTMLElement>>;
+    onMouseLeave?: Handler<MouseEvent<HTMLElement>>;
+    onFocus?: Handler<FocusEvent<HTMLElement>>;
+    onBlur?: Handler<FocusEvent<HTMLElement>>;
+    onKeyDown?: Handler<KeyboardEvent<HTMLElement>>;
+  };
   const trigger = cloneElement(children, {
-    'aria-describedby': id,
+    'aria-describedby': [own['aria-describedby'], id].filter(Boolean).join(' '),
     ref: (node: HTMLElement | null) => {
       triggerRef.current = node;
+      const childRef = own.ref;
+      if (typeof childRef === 'function') childRef(node);
+      else if (childRef) childRef.current = node;
     },
-    onMouseEnter: show,
-    onMouseLeave: hide,
-    onFocus: showNow,
-    onBlur: hide,
+    onMouseEnter: (e: MouseEvent<HTMLElement>) => {
+      own.onMouseEnter?.(e);
+      show();
+    },
+    onMouseLeave: (e: MouseEvent<HTMLElement>) => {
+      own.onMouseLeave?.(e);
+      hide();
+    },
+    onFocus: (e: FocusEvent<HTMLElement>) => {
+      own.onFocus?.(e);
+      showNow();
+    },
+    onBlur: (e: FocusEvent<HTMLElement>) => {
+      own.onBlur?.(e);
+      hide();
+    },
+    /* WCAG 1.4.13: a tooltip can be dismissed without moving focus. */
+    onKeyDown: (e: KeyboardEvent<HTMLElement>) => {
+      own.onKeyDown?.(e);
+      if (e.key === 'Escape') hide();
+    },
   });
 
   return (
     <>
       {trigger}
-      <div ref={tipRef} id={id} className="sv-tooltip" popover="manual" role="tooltip">
+      <div ref={tipRef} id={id} className={cx('sv-tooltip', className)} popover="manual" role="tooltip">
         {content}
       </div>
     </>
