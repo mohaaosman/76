@@ -1,4 +1,5 @@
-import { useId } from 'react';
+import { forwardRef, useId, useState } from 'react';
+import type { FieldsetHTMLAttributes } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import './date-range-field.css';
@@ -18,10 +19,22 @@ export interface DateRange {
 
 export type DateRangePreset = '7D' | '30D' | 'QTD' | 'YTD' | 'CUSTOM';
 
-export interface DateRangeFieldProps {
+export interface DateRangeFieldProps
+  extends Omit<FieldsetHTMLAttributes<HTMLFieldSetElement>, 'children' | 'defaultValue' | 'onChange'> {
   label: string;
-  value: DateRange;
-  onValueChange: (value: DateRange) => void;
+  /** Controlled range. When passed it wins over internal state. */
+  value?: DateRange;
+  /** Uncontrolled: the starting range. Defaults to empty ends. */
+  defaultValue?: DateRange;
+  /** Called on every preset press and every edit of either end — in both modes. */
+  onValueChange?: (value: DateRange) => void;
+  /** Disables presets and both inputs (native fieldset `disabled`). */
+  disabled?: boolean;
+  /** Marks both ends required for native form validation. */
+  required?: boolean;
+  /** Form field names for the two ends, so the range submits with a form. */
+  fromName?: string;
+  toName?: string;
   /** Preset order is fixed; pass a subset to drop any. CUSTOM always last. */
   presets?: DateRangePreset[];
   /** ISO date the presets count back from. Defaults to the current day. */
@@ -71,10 +84,13 @@ export function presetRange(preset: Exclude<DateRangePreset, 'CUSTOM'>, todayIso
   }
 }
 
-export function DateRangeField({
+const EMPTY_RANGE: DateRange = { from: '', to: '' };
+
+export const DateRangeField = forwardRef<HTMLFieldSetElement, DateRangeFieldProps>(function DateRangeField({
   label,
-  value,
-  onValueChange,
+  value: valueProp,
+  defaultValue = EMPTY_RANGE,
+  onValueChange: onValueChangeProp,
   presets = DEFAULT_PRESETS,
   today = new Date().toISOString().slice(0, 10),
   hint,
@@ -83,8 +99,19 @@ export function DateRangeField({
   max,
   context,
   className,
-}: DateRangeFieldProps) {
+  disabled,
+  required,
+  fromName,
+  toName,
+  ...rest
+}, ref) {
   const tr = useStrings();
+  const [own, setOwn] = useState(defaultValue);
+  const value = valueProp ?? own;
+  const onValueChange = (next: DateRange) => {
+    if (valueProp === undefined) setOwn(next);
+    onValueChangeProp?.(next);
+  };
   const id = useId();
   const hintId = `${id}-hint`;
   const errorId = `${id}-error`;
@@ -104,7 +131,7 @@ export function DateRangeField({
   const contextLine = context ?? derived;
 
   return (
-    <fieldset className={cx('sv-field sv-daterange', className)}>
+    <fieldset {...rest} ref={ref} disabled={disabled} className={cx('sv-field sv-daterange', className)}>
       <legend className="sv-field__label">{label}</legend>
       {hint && (
         <p className="sv-field__hint" id={hintId}>
@@ -131,6 +158,8 @@ export function DateRangeField({
           type="date"
           className={cx('sv-field__input sv-daterange__input', shownError && 'sv-field__input--error')}
           value={value.from}
+          name={fromName}
+          required={required}
           min={min}
           max={max}
           aria-label={tr.startDate(label)}
@@ -145,6 +174,8 @@ export function DateRangeField({
           type="date"
           className={cx('sv-field__input sv-daterange__input', shownError && 'sv-field__input--error')}
           value={value.to}
+          name={toName}
+          required={required}
           min={value.from || min}
           max={max}
           aria-label={tr.endDate(label)}
@@ -165,6 +196,6 @@ export function DateRangeField({
       )}
     </fieldset>
   );
-}
+});
 
 const matches = (a: DateRange, b: DateRange) => a.from === b.from && a.to === b.to;
