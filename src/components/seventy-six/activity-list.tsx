@@ -1,4 +1,5 @@
-import type { ReactNode } from 'react';
+import { forwardRef } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import './activity-list.css';
 
@@ -23,14 +24,16 @@ export interface ActivityItem {
   children: ReactNode;
 }
 
-export interface ActivityListProps {
+export interface ActivityListProps extends Omit<HTMLAttributes<HTMLOListElement>, 'children'> {
   items: ActivityItem[];
-  className?: string;
 }
 
-export function ActivityList({ items, className }: ActivityListProps) {
+export const ActivityList = forwardRef<HTMLOListElement, ActivityListProps>(function ActivityList(
+  { items, className, ...rest },
+  ref,
+) {
   return (
-    <ol className={cx('sv-activity', className)}>
+    <ol {...rest} ref={ref} className={cx('sv-activity', className)}>
       {items.map((item, i) => (
         <li key={item.id ?? item.dateTime ?? i} className="sv-activity__row">
           <time className="sv-activity__time sv-mono" dateTime={item.dateTime} title={item.dateTime}>
@@ -41,4 +44,4 @@ export function ActivityList({ items, className }: ActivityListProps) {
       ))}
     </ol>
   );
-}
+});

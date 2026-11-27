@@ -21,7 +21,7 @@
     border: 1px solid transparent;
     border-radius: var(--sv-r);
     background: transparent;
-    font-size: 9.5px;
+    font-size: 10px;
     letter-spacing: 0.13em;
     text-transform: uppercase;
     color: var(--sv-ink-soft);

@@ -1,3 +1,4 @@
+import type { HTMLAttributes } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import './avatar.css';
@@ -7,7 +8,7 @@ import './avatar.css';
  * only when the product genuinely has one. Never decorative, never a
  * generic silhouette, never the sole carrier of the name (A4).
  */
-export interface AvatarProps {
+export interface AvatarProps extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
   /** The full name. Initials and the accessible name both come from it. */
   name: string;
   src?: string;
@@ -25,17 +26,17 @@ function initials(name: string) {
   return (first + last).toUpperCase();
 }
 
-export function Avatar({ name, src, size = 'md', tone = 'neutral', className }: AvatarProps) {
+export function Avatar({ name, src, size = 'md', tone = 'neutral', className, ...rest }: AvatarProps) {
   const cls = cx('sv-avatar', `sv-avatar--${size}`, tone === 'seed' && 'sv-avatar--seed', className);
-  if (src) return <img className={cls} src={src} alt={name} width={32} height={32} />;
+  if (src) return <img {...rest} className={cls} src={src} alt={name} width={32} height={32} />;
   return (
-    <span className={cls} role="img" aria-label={name}>
+    <span {...rest} className={cls} role="img" aria-label={name}>
       <span aria-hidden="true">{initials(name)}</span>
     </span>
   );
 }
 
-export interface AvatarGroupProps {
+export interface AvatarGroupProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'children'> {
   people: { name: string; src?: string }[];
   /** Faces shown before the overflow count. Default 4. */
   max?: number;
@@ -47,12 +48,12 @@ export interface AvatarGroupProps {
  * The overlapped stack, capped. The overflow chip is mono and states the
  * count; the full list belongs in a Drawer or a table, never in a hover.
  */
-export function AvatarGroup({ people, max = 4, size = 'sm', className }: AvatarGroupProps) {
+export function AvatarGroup({ people, max = 4, size = 'sm', className, ...attrs }: AvatarGroupProps) {
   const tr = useStrings();
   const shown = people.slice(0, max);
   const rest = people.length - shown.length;
   return (
-    <span className={cx('sv-avatars', className)}>
+    <span {...attrs} className={cx('sv-avatars', className)}>
       {shown.map((person) => (
         <Avatar key={person.name} name={person.name} src={person.src} size={size} />
       ))}

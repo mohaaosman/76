@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import './banner.css';
@@ -12,7 +12,7 @@ import './banner.css';
  */
 export type BannerTone = 'info' | 'ok' | 'warn' | 'bad';
 
-export interface BannerProps {
+export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title' | 'children'> {
   tone?: BannerTone;
   title: string;
   /** Full sentences: what happened and how to fix it. */
@@ -52,10 +52,11 @@ const TONE_ICONS: Record<BannerTone, ReactNode> = {
   ),
 };
 
-export function Banner({ tone = 'info', title, children, action, onDismiss, className }: BannerProps) {
+export function Banner({ tone = 'info', title, children, action, onDismiss, className, ...rest }: BannerProps) {
   const tr = useStrings();
   return (
     <div
+      {...rest}
       role={tone === 'bad' ? 'alert' : 'status'}
       className={cx('sv-banner', `sv-banner--${tone}`, className)}
     >

@@ -31,7 +31,10 @@
     margin-top: 2px;
     font-size: 11.5px;
     font-weight: 400;
-    color: var(--sv-ink-faint);
+    /* v0.11 · soft, not faint: the subtitle says what the card is OF
+       ("Live queue across all zones"), and a reader who needs it was
+       squinting at 2.6:1. */
+    color: var(--sv-ink-soft);
   }
 
   .sv-card__action {

@@ -28,7 +28,7 @@
     padding-block: var(--sv-s2);
     padding-inline: 18px;
     border-block-end: 1px solid var(--sv-line);
-    font-size: 9.5px;
+    font-size: 10px;
     font-weight: 400;
     letter-spacing: 0.1em;
     color: var(--sv-ink-soft);
@@ -120,7 +120,7 @@
     padding-block: var(--sv-row-y);
     padding-inline: 18px;
     text-align: start;
-    font-size: 9.5px;
+    font-size: 10px;
     font-weight: 400;
     letter-spacing: 0.1em;
     color: var(--sv-ink);

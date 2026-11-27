@@ -1,5 +1,5 @@
-import { useId, useRef } from 'react';
-import type { KeyboardEvent, ReactNode } from 'react';
+import { forwardRef, useId, useLayoutEffect, useRef, useState } from 'react';
+import type { HTMLAttributes, KeyboardEvent, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import { inlineStep, useDirection } from '@/lib/i18n';
 import './tabs.css';
@@ -24,13 +24,19 @@ export interface Tab {
   label: string;
   /** Optional mono tabular count shown after the label. */
   count?: number;
+  /** The tab cannot be chosen; arrow keys step over it. */
+  disabled?: boolean;
 }
 
-export interface TabsProps {
+export interface TabsProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
   /** Cap: five. A sixth section is a band nav item, not a tab. */
   tabs: Tab[];
-  active: string;
-  onChange: (id: string) => void;
+  /** Controlled: the active tab id. When passed it wins over internal state. */
+  active?: string;
+  /** Uncontrolled: the tab active on first render. Defaults to the first enabled tab. */
+  defaultActive?: string;
+  /** Called with the id the user chose — in both modes. */
+  onChange?: (id: string) => void;
   /** Ties each tab to its OWN panel: `${idBase}-tab-${id}` / `${idBase}-panel-${id}`.
       Pass it explicitly whenever TabPanel is used — TabPanel requires the same base. */
   idBase?: string;
@@ -39,26 +45,56 @@ export interface TabsProps {
   className?: string;
 }
 
-export function Tabs({ tabs, active, onChange, idBase, label, className }: TabsProps) {
+export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
+  { tabs, active: activeProp, defaultActive, onChange, idBase, label, className, onKeyDown: onKeyDownProp, ...rest },
+  ref,
+) {
   const dir = useDirection();
   const autoId = useId();
   const base = idBase ?? autoId;
-  const listRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement | null>(null);
+  const [own, setOwn] = useState(() => defaultActive ?? tabs.find((t) => !t.disabled)?.id ?? '');
+  const active = activeProp ?? own;
+
+  function choose(id: string) {
+    if (activeProp === undefined) setOwn(id);
+    onChange?.(id);
+  }
+
+  /* A TabPanel rendered WITHOUT `active` follows this tablist on its own:
+     the uncontrolled pair needs no state in the caller. React never sets
+     `hidden` on such a panel, so writing it here cannot be overwritten. */
+  useLayoutEffect(() => {
+    const doc = listRef.current?.ownerDocument;
+    if (!doc) return;
+    for (const t of tabs) {
+      const panel = doc.getElementById(`${base}-panel-${t.id}`);
+      if (panel && panel.hasAttribute('data-sv-tabpanel-auto')) panel.hidden = t.id !== active;
+    }
+  }, [tabs, base, active]);
 
   /* Automatic activation: arrowing moves focus AND switches the region.
      The panels are already mounted client-side, so there is nothing to
      wait for and no reason to make the user press Enter twice. */
-  function onKeyDown(e: KeyboardEvent) {
+  function onKeyDown(e: KeyboardEvent<HTMLDivElement>) {
+    onKeyDownProp?.(e);
+    if (e.defaultPrevented) return;
     const idx = tabs.findIndex((t) => t.id === active);
+    const n = tabs.length;
+    /* Walks from `from` in `step` direction to the next enabled tab. */
+    const seek = (from: number, step: number) => {
+      for (let k = 0, i = from; k < n; k++, i = (i + step + n) % n) if (!tabs[i].disabled) return i;
+      return -1;
+    };
     let next = -1;
     /* ← and → follow the reading direction: in RTL the next tab is to the left. */
     const step = inlineStep(e.key, dir);
-    if (step !== 0) next = (idx + step + tabs.length) % tabs.length;
-    if (e.key === 'Home') next = 0;
-    if (e.key === 'End') next = tabs.length - 1;
+    if (step !== 0) next = seek((idx + step + n) % n, step);
+    if (e.key === 'Home') next = seek(0, 1);
+    if (e.key === 'End') next = seek(n - 1, -1);
     if (next >= 0) {
       e.preventDefault();
-      onChange(tabs[next].id);
+      choose(tabs[next].id);
       const buttons = listRef.current?.querySelectorAll<HTMLButtonElement>('button');
       buttons?.[next]?.focus();
     }
@@ -66,7 +102,12 @@ export function Tabs({ tabs, active, onChange, idBase, label, className }: TabsP
 
   return (
     <div
-      ref={listRef}
+      {...rest}
+      ref={(node) => {
+        listRef.current = node;
+        if (typeof ref === 'function') ref(node);
+        else if (ref) ref.current = node;
+      }}
       className={cx('sv-tabs', className)}
       role="tablist"
       aria-label={label}
@@ -84,7 +125,8 @@ export function Tabs({ tabs, active, onChange, idBase, label, className }: TabsP
             aria-selected={isActive}
             aria-controls={`${base}-panel-${tab.id}`}
             tabIndex={isActive ? 0 : -1}
-            onClick={() => onChange(tab.id)}
+            disabled={tab.disabled}
+            onClick={() => choose(tab.id)}
           >
             {tab.label}
             {tab.count !== undefined && (
@@ -95,12 +137,16 @@ export function Tabs({ tabs, active, onChange, idBase, label, className }: TabsP
       })}
     </div>
   );
-}
+});
 
-export interface TabPanelProps {
+export interface TabPanelProps extends HTMLAttributes<HTMLDivElement> {
   idBase: string;
   tabId: string;
-  active: boolean;
+  /**
+   * Whether this panel is showing. Omit it to let the Tabs with the same
+   * `idBase` show and hide the panel itself (uncontrolled Tabs).
+   */
+  active?: boolean;
   children: ReactNode;
   className?: string;
 }
@@ -111,13 +157,15 @@ export interface TabPanelProps {
  * of them, and let `hidden` decide: the id contract only holds if the panel
  * the active tab names is in the document.
  */
-export function TabPanel({ idBase, tabId, active, children, className }: TabPanelProps) {
+export function TabPanel({ idBase, tabId, active, children, className, ...rest }: TabPanelProps) {
   return (
     <div
+      {...rest}
       role="tabpanel"
       id={`${idBase}-panel-${tabId}`}
       aria-labelledby={`${idBase}-tab-${tabId}`}
-      hidden={!active}
+      hidden={active === undefined ? undefined : !active}
+      data-sv-tabpanel-auto={active === undefined ? '' : undefined}
       /* A panel of cards holds no focusable content of its own, so it takes
          tabIndex 0 — otherwise the tab key steps straight past the region
          the tabs just switched to. */

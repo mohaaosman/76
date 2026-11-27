@@ -25,7 +25,7 @@
   }
 
   .sv-divider__label {
-    font-size: 9.5px;
+    font-size: 10px;
     letter-spacing: 0.13em;
     text-transform: uppercase;
     color: var(--sv-ink-soft);

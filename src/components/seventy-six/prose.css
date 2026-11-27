@@ -77,14 +77,14 @@
   .sv-prose h1 {
     margin: var(--sv-s8) 0 var(--sv-s4);
     font-size: 27px;
-    font-weight: 800;
+    font-weight: 700;
     letter-spacing: -0.02em;
   }
 
   .sv-prose h2 {
     margin: var(--sv-s7) 0 var(--sv-s3);
     font-size: 21px;
-    font-weight: 800;
+    font-weight: 700;
     letter-spacing: -0.015em;
   }
 
@@ -319,7 +319,7 @@
     padding: var(--sv-s2) var(--sv-s3);
     border-bottom: 1px solid var(--sv-line);
     font-family: var(--sv-font-mono);
-    font-size: 9.5px;
+    font-size: 10px;
     font-weight: 400;
     letter-spacing: 0.13em;
     text-transform: uppercase;

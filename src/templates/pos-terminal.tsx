@@ -47,7 +47,10 @@ const CartIcon = (
 export function PosTerminal() {
   const { toast } = useToast();
   return (
-    <div data-seed="signal">
+    <div data-seed="signal" data-density="touch">
+      {/* v0.11 · the floor posture: 48px controls, 16px body, 6px bars. B10's
+          bespoke POS variant was always this screen's density, stated per
+          component; it is now stated once, on the screen. */}
       <Band>
         <BandTopbar
           app="Register 3"

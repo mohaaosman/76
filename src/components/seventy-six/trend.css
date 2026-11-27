@@ -38,7 +38,7 @@
 
   .sv-trend__line {
     fill: none;
-    stroke-width: 2.25;
+    stroke-width: 2.5;
     stroke-linejoin: round;
     stroke-linecap: round;
   }
@@ -61,7 +61,7 @@
   .sv-spark__line {
     fill: none;
     stroke: var(--sv-seed);
-    stroke-width: 1.5;
+    stroke-width: 1.75;
     stroke-linejoin: round;
     stroke-linecap: round;
   }

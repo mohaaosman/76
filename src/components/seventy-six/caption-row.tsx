@@ -1,3 +1,4 @@
+import type { HTMLAttributes } from 'react';
 import { cx } from '@/lib/cx';
 import './caption-row.css';
 
@@ -25,7 +26,7 @@ import './caption-row.css';
  * caption-row.css); never more than four; never used as a nav; never a
  * caption for something that is not directly above or below it.
  */
-export interface CaptionRowProps {
+export interface CaptionRowProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   /** Two to four short fragments. Each is a PHRASE, not a sentence. */
   captions: string[];
   /** Where the rule sits. 'top' (default) captions the block above. */
@@ -33,14 +34,14 @@ export interface CaptionRowProps {
   className?: string;
 }
 
-export function CaptionRow({ captions, rule = 'top', className }: CaptionRowProps) {
+export function CaptionRow({ captions, rule = 'top', className, ...rest }: CaptionRowProps) {
   return (
     /* A plain <div>, and the plainness is deliberate: this is not a list
        (a list announces a count the reader did not ask for and the row does
        not mean), not a <nav>, and not a landmark. The rule's position
        travels as data — a literal in an inline style would put the border
        back in the component and out of the stylesheet's reach (B48). */
-    <div className={cx('sv-captions', className)} data-rule={rule}>
+    <div {...rest} className={cx('sv-captions', className)} data-rule={rule}>
       {captions.map((caption) => (
         /* A real <p> per caption, so each fragment is announced as its own
            run of text rather than as one comma-less sentence. The caption

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import './prose.css';
 
@@ -18,16 +18,16 @@ import './prose.css';
  * re-ranks it rewrites what a screen reader announces — so this one only sets
  * type on what it is given.
  */
-export interface ProseProps {
+export interface ProseProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   className?: string;
   /** Drops the measure cap for a subtree that is already in a narrow column. */
   measure?: boolean;
 }
 
-export function Prose({ children, className, measure = true }: ProseProps) {
+export function Prose({ children, className, measure = true, ...rest }: ProseProps) {
   /* One div, no wrappers. Anything else would put an element between the
      author's markup and the styles meant for it — and the child selectors
      that carry the rhythm (`> :first-child`) resolve against THIS element. */
-  return <div className={cx('sv-prose', !measure && 'sv-prose--full', className)}>{children}</div>;
+  return <div {...rest} className={cx('sv-prose', !measure && 'sv-prose--full', className)}>{children}</div>;
 }

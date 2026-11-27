@@ -55,10 +55,13 @@
   }
 
   /* Mono metadata voice (Law 4) */
+  /* v0.11 · weight 500. Fragment Mono shipped one weight, and at 10px in
+     soft ink every label, header, ID and timestamp read as a hairline —
+     the "too thin" dashboard. Plex Mono has a real medium. */
   .sv-mono {
     font-family: var(--sv-font-mono);
     font-size: 10px;
-    font-weight: 400;
+    font-weight: 500;
     letter-spacing: 0.13em;
     text-transform: uppercase;
   }
@@ -508,12 +511,9 @@
   :lang(ug),
   :lang(syr) {
     letter-spacing: normal;
-    /* Fragment Mono has no Arabic glyphs, and the generic monospace a
-       browser falls back to sets each joined letter in a fixed-width cell
-       — the same broken word as tracking, by another route. The mono stack
-       keeps Fragment Mono FIRST, so Latin IDs, SKUs and timestamps stay in
-       the metadata voice, and lets the script fall through to the UI face. */
-    --sv-font-mono: 'Fragment Mono', var(--sv-font-ui);
+    /* The mono stack carries IBM Plex Sans Arabic second (tokens.css), so
+       Arabic letters never land in a fixed-width cell: Latin IDs stay in
+       Plex Mono and the script takes the proportional companion face. */
   }
 
   /* The joined scripts need more than 10px to stay legible; the micro

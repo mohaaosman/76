@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import './card.css';
@@ -11,19 +12,22 @@ export interface CardProps extends HTMLAttributes<HTMLElement> {
   as?: 'div' | 'section' | 'article';
 }
 
-export function Card({ as: Tag = 'section', className, children, ...rest }: CardProps) {
+export const Card = forwardRef<HTMLElement, CardProps>(function Card(
+  { as: Tag = 'section', className, children, ...rest },
+  ref,
+) {
   return (
-    <Tag {...rest} className={cx('sv-card', className)}>
+    <Tag {...rest} ref={ref as never} className={cx('sv-card', className)}>
       {children}
     </Tag>
   );
-}
+});
 
 /**
  * The universal card head (Law: bold title + faint subtitle left, one
  * seed text-link action right — never icon-only mystery menus).
  */
-export interface CardHeadProps {
+export interface CardHeadProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
   title: string;
   subtitle?: string;
   /** One action, rendered right. Use ButtonLink or a mono range control. */
@@ -31,9 +35,9 @@ export interface CardHeadProps {
   className?: string;
 }
 
-export function CardHead({ title, subtitle, action, className }: CardHeadProps) {
+export function CardHead({ title, subtitle, action, className, ...rest }: CardHeadProps) {
   return (
-    <header className={cx('sv-card__head', className)}>
+    <header {...rest} className={cx('sv-card__head', className)}>
       <div>
         <h3 className="sv-card__title">{title}</h3>
         {subtitle && <p className="sv-card__subtitle">{subtitle}</p>}

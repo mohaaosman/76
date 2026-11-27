@@ -19,7 +19,7 @@
   }
 
   .sv-progress__track {
-    height: 3px;
+    height: var(--sv-bar);
     border-radius: 2px;
     background: var(--sv-wall);
   }
@@ -34,7 +34,7 @@
 
   .sv-progress__context {
     font-size: 11.5px;
-    color: var(--sv-ink-faint);
+    color: var(--sv-ink-soft);
   }
 
   /* ---- v0.9 · the bar arrives, and it is OFF until the app asks ----

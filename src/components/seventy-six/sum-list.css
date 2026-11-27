@@ -47,7 +47,7 @@
      what the figure beside it measures. 9.5px matches B7's column header
      and B28's term exactly. */
   .sv-sum__label {
-    font-size: 9.5px;
+    font-size: 10px;
     letter-spacing: 0.13em;
     text-transform: uppercase;
     color: var(--sv-ink-soft);

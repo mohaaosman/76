@@ -23,7 +23,7 @@
   }
 
   .sv-table__th .sv-mono {
-    font-size: 9.5px;
+    font-size: 10px;
     letter-spacing: 0.1em;
   }
 
@@ -194,7 +194,7 @@
   .sv-table__footlabel {
     padding: 10.5px 18px;
     text-align: start;
-    font-size: 9.5px;
+    font-size: 10px;
     letter-spacing: 0.1em;
     color: var(--sv-ink-soft);
     font-weight: 400;
@@ -324,7 +324,7 @@
     align-items: center;
     gap: 6px;
     margin-block-start: 2px;
-    font-size: 9.5px;
+    font-size: 10px;
     letter-spacing: 0.13em;
     text-transform: uppercase;
     color: var(--sv-ink-soft);

@@ -17,7 +17,9 @@
     --sv-band:       #1B1F26;   /* ink band (header) */
     --sv-band-line:  #2C323B;   /* hairlines on band */
     --sv-band-soft:  #8A93A2;   /* soft text on band */
-    --sv-wall:       #F2F3F5;   /* platinum background */
+    --sv-wall:       #EEF0F3;   /* platinum background — v0.11: a step deeper,
+                                   so paper separates from wall by contrast
+                                   alone (1.14:1, was 1.11:1) */
     --sv-paper:      #FFFFFF;   /* card surface — and ONLY that */
     --sv-on-dark:    #FFFFFF;   /* the mark on dark chrome or on a seed fill:
                                    band text, on-band focus ring, primary
@@ -25,11 +27,18 @@
                                    overridden per mode — the band and the seed
                                    do not invert, so neither does their mark. */
     --sv-ink:        #1C2026;   /* primary text */
-    --sv-ink-soft:   #667080;   /* secondary text */
-    --sv-ink-faint:  #99A1AD;   /* labels, hints — never sole carrier (C2) */
-    --sv-line:       #E9EBEE;   /* internal hairlines */
-    --sv-field-line: #D8DCE1;   /* form field borders */
-    --sv-field-line-strong: #7E8794; /* 3.63:1 on paper. For controls whose
+    --sv-ink-soft:   #525B69;   /* secondary text — v0.11: 6.86:1 on paper,
+                                   6.01:1 on the wall (was 5.01 / 4.39 — the
+                                   old step FAILED AA wherever it sat on the
+                                   wall, and read thin everywhere else) */
+    --sv-ink-faint:  #7A8391;   /* labels, hints — never sole carrier (C2).
+                                   v0.11: 3.83:1 (was 2.61) — still the quiet
+                                   step, now clear of the 3:1 non-text bar */
+    --sv-line:       #E3E6EA;   /* internal hairlines — v0.11: a hairline
+                                   that survives a laptop panel at 80% */
+    --sv-field-line: #C9CED6;   /* form field borders — v0.11: a field you
+                                   can find before you have read its label */
+    --sv-field-line-strong: #727B88; /* 4.28:1 on paper. For controls whose
                                    BORDER is the ONLY affordance — an empty
                                    PinField box carries no label, no value and
                                    no fill, so the hairline above would leave
@@ -56,8 +65,8 @@
     --sv-seed-tint:  #EEF3FE;   /* icon tiles, selected rows */
 
     /* functional — words and 6px dots ONLY (contrast-verified on paper) */
-    --sv-ok:         #14804A;   /* 4.98:1 on white — AA */
-    --sv-bad:        #C43D2E;   /* 5.18:1 on white — AA */
+    --sv-ok:         #107543;   /* 5.76:1 on white, 5.04:1 on the wall — AA */
+    --sv-bad:        #B9382A;   /* 5.73:1 on white, 5.02:1 on the wall — AA */
     --sv-on-bad:     #FFFFFF;   /* the mark on a --sv-bad FILL (the dialog's
                                    final confirm — the one red fill allowed).
                                    Unlike --sv-on-dark this DOES flip per mode,
@@ -68,15 +77,28 @@
 
     /* geometry & elevation */
     --sv-r:          4px;                              /* the only radius */
-    --sv-shadow:     0 1px 2px rgba(16, 20, 28, 0.05); /* the only shadow */
+    --sv-shadow:     0 1px 2px rgba(16, 20, 28, 0.08); /* the only shadow —
+                                   v0.11: .05 read as no edge at all on most
+                                   panels; still one breath, never a float */
 
     /* spacing scale (4px base) */
     --sv-s1: 4px;  --sv-s2: 8px;  --sv-s3: 12px; --sv-s4: 16px;
     --sv-s5: 20px; --sv-s6: 24px; --sv-s7: 32px; --sv-s8: 40px;
 
     /* type */
-    --sv-font-ui:   'Hanken Grotesk Variable', 'Hanken Grotesk', system-ui, sans-serif;
-    --sv-font-mono: 'Fragment Mono', ui-monospace, monospace;
+    /* v0.11 · IBM Plex, one superfamily for both voices and both scripts.
+       Hanken Grotesk and Fragment Mono read THIN on a dense dashboard:
+       Fragment Mono ships a single 400 weight, so every 10px mono label,
+       column header, ID and timestamp was a hairline in soft ink, and
+       neither face carried a single Arabic glyph. Plex Sans has a sturdier
+       stem at the same size and true tabular figures; Plex Mono has real
+       weights, so metadata can sit at 500; and Plex Sans Arabic is drawn as
+       the same family, so an Arabic screen keeps the system's voice instead
+       of falling to the operating system's. The Arabic face is listed in
+       BOTH stacks: Plex Sans and Plex Mono have no Arabic glyphs, so the
+       browser takes those — and only those — from it, per character. */
+    --sv-font-ui:   'IBM Plex Sans', 'IBM Plex Sans Arabic', system-ui, sans-serif;
+    --sv-font-mono: 'IBM Plex Mono', 'IBM Plex Sans Arabic', ui-monospace, monospace;
     /* The PUBLIC surface's display face, and the third family A1 names.
        Archivo carries a WIDTH axis as well as a weight one, which is the
        whole reason it is this face and not a second static file: the same
@@ -199,9 +221,9 @@
     --sv-wall:       #121519;   /* the wall recedes */
     --sv-paper:      #1B1F26;   /* cards read as raised paper */
     --sv-ink:        #E6E9EE;   /* 13.9:1 on dark paper */
-    --sv-ink-soft:   #A7AFBB;   /* 7.4:1 on dark paper — AA */
-    --sv-ink-faint:  #6E7784;   /* never a sole carrier (C2), same as light */
-    --sv-line:       #272D36;
+    --sv-ink-soft:   #B3BAC5;   /* 8.46:1 on dark paper — AA */
+    --sv-ink-faint:  #858E9B;   /* 4.99:1 — never a sole carrier (C2) */
+    --sv-line:       #2E353F;
     --sv-field-line: #3A414C;
     --sv-field-line-strong: #6E7784; /* 3.65:1 on dark paper */
     --sv-compare:    #3C434E;   /* comparison series on dark grids */
@@ -336,10 +358,10 @@
 
       /* Band secondary text was verified at 5.32:1 ON INK (C1).
          On paper it is 3.10:1 and fails, so it takes --sv-ink-
-         soft's step, which is verified at 4.99:1. This is the
+         soft's step, which is verified at 6.86:1. This is the
          context line, the wordmark's degree mark and every
          inactive nav item. */
-      --sv-band-soft:  #667080;
+      --sv-band-soft:  #525B69;
 
       /* ---- Hairlines, sized for toner rather than for a panel --
          #E9EBEE is ~9% ink. A 1px rule at 9% renders as a sparse
@@ -358,20 +380,20 @@
          fills in by hand. So the ordinary field line takes the
          strong step (3.63:1), which is B25's reasoning for an
          empty PinField box arriving one surface later. */
-      --sv-field-line: #7E8794;
-      --sv-field-line-strong: #7E8794;
+      --sv-field-line: #727B88;
+      --sv-field-line-strong: #727B88;
 
       /* The light ink ladder, restated: the dark ladder is a
          screen ladder and prints as almost nothing. */
       --sv-ink:        #1C2026;   /* 15.7:1 on paper */
-      --sv-ink-soft:   #667080;   /* 4.99:1 — AA */
-      --sv-ink-faint:  #99A1AD;   /* unchanged. C2 already forbids it
+      --sv-ink-soft:   #525B69;   /* 6.86:1 — AA */
+      --sv-ink-faint:  #7A8391;   /* the light step. C2 already forbids it
                                      carrying anything alone, so a step
                                      that photocopies away costs the
                                      reader nothing it was ever
                                      permitted to hold. */
-      --sv-ok:         #14804A;   /* 4.98:1 on paper — AA */
-      --sv-bad:        #C43D2E;   /* 5.18:1 on paper — AA */
+      --sv-ok:         #107543;   /* 5.76:1 on paper — AA */
+      --sv-bad:        #B9382A;   /* 5.73:1 on paper — AA */
 
       /* --sv-on-bad flips for the same reason --sv-on-dark does,
          and it is the token that always said it would: its one
@@ -385,7 +407,7 @@
          so it prints whatever the reader chose. It takes the faint
          step: still visibly the second series beside a seed line,
          now actually on the page. */
-      --sv-compare:    #99A1AD;
+      --sv-compare:    #7A8391;
 
       /* ---- The seed -------------------------------------------
          The seed is UNCHANGED and needs no printed variant. It
@@ -643,6 +665,7 @@
     --sv-button-y: var(--sv-s2);
     --sv-control-min: 0px;   /* no floor: the padding sets the height */
     --sv-body-size: 13px;    /* table body + field value */
+    --sv-bar: 4px;           /* B4/B6/B61 bar thickness — v0.11, was 3px */
   }
 
   [data-density='compact'] {
@@ -651,6 +674,7 @@
     --sv-button-y: 5px;
     --sv-control-min: 0px;
     --sv-body-size: 13px;
+    --sv-bar: 3px;
   }
 
   /* WCAG 2.5.8 asks 24px; a counter asks 48. The floor posture takes
@@ -662,5 +686,6 @@
     --sv-button-y: var(--sv-s3);
     --sv-control-min: 48px;
     --sv-body-size: 16px;
+    --sv-bar: 6px;           /* read from arm's length */
   }
 }

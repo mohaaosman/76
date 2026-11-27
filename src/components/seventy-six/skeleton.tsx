@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, HTMLAttributes } from 'react';
 import { cx } from '@/lib/cx';
 import './skeleton.css';
 
@@ -7,7 +7,7 @@ import './skeleton.css';
  * B17 · Skeleton — static --sv-wall blocks matching the target anatomy.
  * No shimmer, no pulse. Appears only after 300ms of waiting.
  */
-export interface SkeletonProps {
+export interface SkeletonProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'children'> {
   width?: number | string;
   height?: number | string;
   /** Render as a circle (avatar ghosts). */
@@ -16,9 +16,10 @@ export interface SkeletonProps {
   style?: CSSProperties;
 }
 
-export function Skeleton({ width = '100%', height = 12, round = false, className, style }: SkeletonProps) {
+export function Skeleton({ width = '100%', height = 12, round = false, className, style, ...rest }: SkeletonProps) {
   return (
     <span
+      {...rest}
       className={cx('sv-skeleton', round && 'sv-skeleton--round', className)}
       style={{ width, height, ...style }}
       aria-hidden="true"

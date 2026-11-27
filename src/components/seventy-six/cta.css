@@ -24,7 +24,7 @@
   .sv-cta__title {
     font-size: var(--sv-display-3);
     line-height: 1.15;
-    font-weight: 800;
+    font-weight: 700;
     letter-spacing: -0.025em;
     text-wrap: balance;
   }

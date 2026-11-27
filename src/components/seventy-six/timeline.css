@@ -125,7 +125,7 @@
 
   .sv-timeline__time {
     display: block;
-    color: var(--sv-ink-faint);
+    color: var(--sv-ink-soft);
   }
 
   .sv-timeline__title {
@@ -143,12 +143,12 @@
 
   .sv-timeline__actor {
     margin-top: var(--sv-s1);
-    color: var(--sv-ink-faint);
+    color: var(--sv-ink-soft);
   }
 
   .sv-timeline__day {
     padding: var(--sv-s3) 0 var(--sv-s2);
-    font-size: 9.5px;
+    font-size: 10px;
     color: var(--sv-ink-soft);
   }
 

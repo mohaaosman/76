@@ -21,7 +21,7 @@
      is the whole reason it was set large. */
   .sv-masthead__title {
     font-size: var(--sv-display-1);
-    font-weight: 800;
+    font-weight: 700;
     line-height: 1.05;
     letter-spacing: -0.03em;
     text-wrap: balance;

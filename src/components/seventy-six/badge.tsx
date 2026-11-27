@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import './badge.css';
 
@@ -7,16 +7,16 @@ import './badge.css';
  * plan, type, version. Never for live status — status is a StatusWord
  * (dot + word). Never for numbers that matter — those are stats.
  */
-export interface BadgeProps {
+export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   children: ReactNode;
   /** neutral (default) · seed — seed marks the CURRENT/active category. */
   tone?: 'neutral' | 'seed';
   className?: string;
 }
 
-export function Badge({ children, tone = 'neutral', className }: BadgeProps) {
+export function Badge({ children, tone = 'neutral', className, ...rest }: BadgeProps) {
   return (
-    <span className={cx('sv-badge sv-mono', tone === 'seed' && 'sv-badge--seed', className)}>
+    <span {...rest} className={cx('sv-badge sv-mono', tone === 'seed' && 'sv-badge--seed', className)}>
       {children}
     </span>
   );

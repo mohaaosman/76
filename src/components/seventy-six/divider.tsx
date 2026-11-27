@@ -1,3 +1,4 @@
+import type { HTMLAttributes } from 'react';
 import { cx } from '@/lib/cx';
 import './divider.css';
 
@@ -6,17 +7,18 @@ import './divider.css';
  * naming the group below it in mono uppercase. A labelled divider is a
  * section marker, not a heading: it never replaces an <h2>.
  */
-export interface DividerProps {
+export interface DividerProps extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
   /** Mono uppercase text sitting in the rule, e.g. "OR" or "ARCHIVED". */
   label?: string;
   align?: 'start' | 'center';
   className?: string;
 }
 
-export function Divider({ label, align = 'center', className }: DividerProps) {
-  if (!label) return <hr className={cx('sv-divider', className)} />;
+export function Divider({ label, align = 'center', className, ...rest }: DividerProps) {
+  if (!label) return <hr {...rest} className={cx('sv-divider', className)} />;
   return (
     <div
+      {...rest}
       className={cx('sv-divider__labelled', align === 'start' && 'sv-divider__labelled--start', className)}
       role="separator"
       aria-label={label}

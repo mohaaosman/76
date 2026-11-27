@@ -22,7 +22,7 @@
     flex-shrink: 0;
     width: 72px;
     padding-top: 1px;
-    color: var(--sv-ink-faint);
+    color: var(--sv-ink-soft); /* v0.11 · the time is read, not decoration */
   }
 
   .sv-activity__sentence {

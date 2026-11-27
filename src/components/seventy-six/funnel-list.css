@@ -54,7 +54,7 @@
      bar is drawn by transform alone — no width is ever set or animated. The
      origin is the inline start, mirrored for RTL. */
   .sv-funnel__track {
-    block-size: 3px;
+    block-size: var(--sv-bar);
     border-radius: 2px;
     background: var(--sv-wall);
   }
