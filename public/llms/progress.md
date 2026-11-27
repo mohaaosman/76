@@ -61,6 +61,7 @@ The fill clamps at 100% even when current exceeds target; the overage is stated 
 | `current / target` | `number` | — | The real values; also drive aria-valuenow/max. |
 | `format` | `(c, t) => string` | `localized "c / t"` | Renders the value line. |
 | `context` | `string` | — | Faint line under the bar — percentage lives here, never alone. |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the widget. className is appended. |
 
 ## Accessibility
 

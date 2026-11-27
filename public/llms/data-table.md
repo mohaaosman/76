@@ -15,7 +15,7 @@ Manual: copy components/seventy-six/data-table.tsx, components/seventy-six/data-
 
 ## Overview
 
-Column headers are Fragment Mono 9.5 uppercase; cells are 13/500 with 10.5px vertical padding; IDs render in mono soft; numeric columns are right-aligned, tabular, 600. Rows hover in seed-tint; a selected row adds the system's only 2px left rule. The last row is unruled.
+Column headers are IBM Plex Mono 10 uppercase; cells are 13/500 with 10.5px vertical padding; IDs render in mono soft; numeric columns are right-aligned, tabular, 600. Rows hover in seed-tint; a selected row adds the system's only 2px left rule. The last row is unruled.
 
 Column `kind` does the type discipline for you: `id` gets mono, `num` gets right/tabular, `status` expects a StatusWord. Sorting is the caller's job — the table renders `aria-sort` and header buttons, your code reorders the rows.
 
@@ -47,6 +47,14 @@ Subtotal, tax and total in a real <tfoot> — outside the row, focus, selection 
     { label: 'TOTAL DUE', cells: { total: '$21,888.00' }, strong: true },
   ]}
 />
+```
+
+### A long table in a dashboard card
+
+v0.11 · maxHeight: the body scrolls inside the card and the header holds, so row forty still says which column is which.
+
+```tsx
+<DataTable caption="Order queue" columns={columns} rows={orders} rowKey={(o) => o.id} maxHeight={280} />
 ```
 
 ### Orders table with selection and keyboard nav
@@ -203,6 +211,7 @@ const active = query !== '' || status !== 'all';
 | `leadHold` | `boolean` | — | v0.6 · holds the first column while the rest scrolls. IGNORED unless that column is <code>kind: "id"</code>. |
 | `rowSync` | `(row) => 'unsaved' | 'saving' | 'failed' | undefined` | — | v0.10 · states that a row's change has not landed, as a mono word + 6px dot under its identity. Undefined says nothing. |
 | `rowLabel` | `(row) => string` | `rowKey` | v0.10 · names each row's selection box: "Select INV-2291". |
+| `maxHeight` | `number | string` | — | v0.11 · the body scrolls inside this height and the header holds at its top. |
 | `isRowSelectable` | `(row) => boolean` | — | v0.10 · rows that may not be selected (the workspace owner); their box is disabled and ⇧-ranges skip them. |
 
 ### SelectionHead

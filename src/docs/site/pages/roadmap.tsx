@@ -12,6 +12,16 @@ interface Phase {
 const ROADMAP: Phase[] = [
   {
     title: 'Shipped',
+    note: 'v0.11.0 · sturdier, and every component reaches every use',
+    items: [
+      { t: 'IBM Plex', d: 'Sans for content, <b>Mono at weight 500</b> for metadata, and <b>Sans Arabic</b> as the companion in both stacks. Fragment Mono shipped one weight, which is why every label, header, ID and timestamp read as a hairline.' },
+      { t: 'The weight amendment', d: 'ink-soft 6.86:1 (the old step <b>failed AA on the wall</b>), faint reserved for disabled and decorative, firmer hairlines, a deeper wall, the one shadow at .08, <code>--sv-bar</code> at 4px, nothing below 10px.' },
+      { t: 'DataState (B64) · DataTable maxHeight', d: 'The four lifecycle states assembled once around any widget, and long tables that scroll inside their card with the header held.' },
+      { t: 'Every component reaches every use', d: 'Native attributes, refs, uncontrolled modes and per-item <code>disabled</code> on all components, backwards compatible — and MenuButton\'s missing <code>aria-expanded</code>, dead Home/End in menus, colliding palette ids and Tooltip handler clobbering, fixed.' },
+    ],
+  },
+  {
+    title: 'Shipped',
     note: 'v0.10.0 · the roadmap, finished — and every language',
     items: [
       { t: 'Posting the work (0.7)', d: '<b>EntryTable (B53)</b> types one bounded number into every line and posts the lot once — Enter moves down, never submits. <b>ScanField (B54)</b> takes one identifier at a time and states what it resolved to. <b>JobList (B58)</b> states what became of a background job and where its result landed. B7 gains <code>rowSync</code>: a word and a 6px dot for a row whose save has not landed.' },

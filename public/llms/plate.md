@@ -91,6 +91,7 @@ width="md" takes the card to 520px. Nothing else changes.
 | --- | --- | --- | --- |
 | `title` | `string` | — | The page's one h1. Names the task or the condition — never the app. |
 | `context` | `string` | — | One sentence: what this screen wants, or what went wrong and what is next. |
+| `…rest` | `HTMLAttributes<HTMLElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the <header>. className is appended. |
 
 ## Accessibility
 

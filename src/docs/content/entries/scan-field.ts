@@ -64,6 +64,7 @@ const [last, setLast] = useState<ScanResult>();
         { name: 'last', type: '{ id, tone, text }', description: "What the last identifier resolved to. tone is 'ok' | 'bad' | 'pending'; text is one sentence, pre-formatted." },
         { name: 'toneWords', type: 'Record<ScanTone, string>', defaultValue: 'Matched · Not matched · Checking', description: 'The tone words, until the catalog carries them.' },
         { name: '…input props', type: 'InputHTMLAttributes', description: 'id, name, disabled, autoFocus, onKeyDown (runs first; preventDefault stops the scan).' },
+        { name: 'aria-describedby', type: 'string', description: 'Merged with the hint and result ids, never replaced.' },
       ],
     },
   ],

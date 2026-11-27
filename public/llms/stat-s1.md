@@ -94,6 +94,7 @@ When no comparison period exists the delta is simply omitted — the label never
 | `icon` | `ReactNode` | — | 16px stroke icon; the tile provides the seed tint. |
 | `footnote` | `ReactNode` | — | The "so what" line; put the load-bearing figure in <b>. |
 | `footnoteText` | `string` | — | Plain-text footnote for the aria-label. |
+| `…rest` | `HTMLAttributes<HTMLElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the card; ref forwards to it. className is appended. |
 
 ### Delta
 
@@ -102,6 +103,7 @@ When no comparison period exists the delta is simply omitted — the label never
 | `value` | `number` | — | Signed change; +12.4 renders "▲ 12.4%". |
 | `suffix` | `string` | `'%'` | Appended to the figure. |
 | `polarity` | `'up-good' | 'down-good'` | `'up-good'` | Which direction colours ok. |
+| `…rest` | `HTMLAttributes<HTMLSpanElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the delta. className is appended. |
 
 ## Accessibility
 

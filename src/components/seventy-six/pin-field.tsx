@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useId, useRef, useState } from 'react';
-import type { ChangeEvent, ClipboardEvent, FocusEvent, KeyboardEvent } from 'react';
+import type { ChangeEvent, ClipboardEvent, FocusEvent, HTMLAttributes, KeyboardEvent } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import './pin-field.css';
@@ -25,7 +25,9 @@ const REJECT: Record<PinCharset, RegExp> = {
 
 export type PinCharset = 'numeric' | 'alphanumeric';
 
-export interface PinFieldProps {
+/** Native attributes apply to the root; the ref is the first box. */
+export interface PinFieldProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'defaultValue' | 'onChange' | 'autoFocus'> {
   label: string;
   /** Number of boxes, clamped to 4–8. Default 6. */
   length?: number;
@@ -71,6 +73,7 @@ export const PinField = forwardRef<HTMLInputElement, PinFieldProps>(function Pin
     name,
     id: explicitId,
     className,
+    ...rest
   },
   ref,
 ) {
@@ -208,7 +211,7 @@ export const PinField = forwardRef<HTMLInputElement, PinFieldProps>(function Pin
     [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(' ') || undefined;
 
   return (
-    <div className={cx('sv-field sv-pin', className)}>
+    <div {...rest} className={cx('sv-field sv-pin', className)}>
       <label className="sv-field__label" id={labelId} htmlFor={`${id}-0`}>
         {label}
         {required && (

@@ -77,6 +77,7 @@ export const crossTableEntry: DocEntry = {
         { name: 'highlight', type: '{ row, col, note? }', description: 'ONE cell in bold ink on the seed tint. note is announced with the figure.' },
         { name: 'totalLabel', type: 'string', defaultValue: "'Total'", description: 'Header of the totals column and row.' },
         { name: 'noValueLabel', type: 'string', defaultValue: "'No value'", description: 'Announced for an empty intersection.' },
+        { name: '…rest', type: 'HTMLAttributes<HTMLDivElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the scroll region; ref forwards to it. className is appended.' },
       ],
     },
   ],

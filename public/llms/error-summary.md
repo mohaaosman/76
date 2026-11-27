@@ -62,6 +62,7 @@ const [errors, setErrors] = useState<FieldError[]>([]);
 | `errors` | `FieldError[]` | — | fieldId · label · message. Renders nothing when empty. |
 | `title` | `string` | — | Overrides the generated tabular count sentence. Rarely needed. |
 | `autoFocus` | `boolean` | `true` | Moves focus here when a new set of errors arrives, per B11. |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the summary; ref forwards to it. className is appended. |
 
 ## Accessibility
 

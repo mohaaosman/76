@@ -84,6 +84,7 @@ export const auth: DocEntry[] = [
         rows: [
           { name: 'title', type: 'string', description: 'The page\'s one h1. Names the task or the condition — never the app.' },
           { name: 'context', type: 'string', description: 'One sentence: what this screen wants, or what went wrong and what is next.' },
+          { name: '…rest', type: 'HTMLAttributes<HTMLElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the <header>. className is appended.' },
         ],
       },
     ],
@@ -268,6 +269,7 @@ const [code, setCode] = useState('');
           { name: 'disabled / autoFocus', type: 'boolean / boolean', description: 'Locks every box; autoFocus applies to the first box only.' },
           { name: 'name', type: 'string', description: 'Renders a hidden input posting the whole code as one form value.' },
           { name: 'id', type: 'string', description: 'Base id; boxes are <code>{id}-0…n</code> and the label points at box 0.' },
+          { name: '…rest', type: 'HTMLAttributes<HTMLDivElement>', description: 'Spread onto the root. ref forwards to the first box.' },
         ],
       },
     ],

@@ -90,6 +90,7 @@ charset="alphanumeric" allows letters and drops the numeric keypad hint; length 
 | `disabled / autoFocus` | `boolean / boolean` | — | Locks every box; autoFocus applies to the first box only. |
 | `name` | `string` | — | Renders a hidden input posting the whole code as one form value. |
 | `id` | `string` | — | Base id; boxes are <code>{id}-0…n</code> and the label points at box 0. |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | Spread onto the root. ref forwards to the first box. |
 
 ## Accessibility
 

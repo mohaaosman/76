@@ -49,6 +49,7 @@ import { Skeleton, SkeletonGate, Card } from '@/components/seventy-six';
 | `width` | `number | string` | `'100%'` | Block width. |
 | `height` | `number | string` | `12` | Block height. |
 | `round` | `boolean` | `false` | 50% radius for avatar ghosts. |
+| `…rest` | `HTMLAttributes<HTMLSpanElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the bar. className is appended. |
 
 ### SkeletonGate
 

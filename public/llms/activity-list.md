@@ -65,6 +65,7 @@ Same widget, a different domain: deals, contacts, and amounts are the bold entit
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `items` | `ActivityItem[]` | — | { time, dateTime?, children } — children is the sentence with entities in <b>. |
+| `…rest` | `HTMLAttributes<HTMLOListElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the list; ref forwards to it. className is appended. |
 
 ## Accessibility
 

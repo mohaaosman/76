@@ -35,10 +35,12 @@ interface ToastItem extends Required<Pick<NotifyOptions, 'title' | 'tone' | 'siz
 }
 
 interface ToastApi {
-  /** Full notification: title, description, icon, tone, size, duration. */
-  notify: (options: NotifyOptions) => void;
-  /** 0.1.x shorthand — a one-line ok/info notification. */
-  toast: (message: string, tone?: Extract<ToastTone, 'ok' | 'info'>) => void;
+  /** Full notification: title, description, icon, tone, size, duration. Returns its id, for `dismiss`. */
+  notify: (options: NotifyOptions) => number;
+  /** 0.1.x shorthand — a one-line ok/info notification. Returns its id. */
+  toast: (message: string, tone?: Extract<ToastTone, 'ok' | 'info'>) => number;
+  /** Removes a toast early — e.g. the "Saving…" one once the save lands. */
+  dismiss: (id: number) => void;
 }
 
 const ToastContext = createContext<ToastApi | null>(null);
@@ -80,11 +82,17 @@ const TONE_ICONS: Record<ToastTone, ReactNode> = {
   ),
 };
 
-export function ToastProvider({ children }: { children: ReactNode }) {
+export interface ToastProviderProps {
+  children: ReactNode;
+  /** Applied to the toaster region. */
+  className?: string;
+}
+
+export function ToastProvider({ children, className }: ToastProviderProps) {
   const tr = useStrings();
   const [items, setItems] = useState<ToastItem[]>([]);
   const nextId = useRef(1);
-  const timers = useRef(new Map<number, { handle: number; remaining: number; started: number }>());
+  const timers = useRef(new Map<number, { handle: number; remaining: number; started: number; holds?: number }>());
 
   const remove = useCallback((id: number) => {
     setItems((prev) => prev.filter((t) => t.id !== id));
@@ -112,6 +120,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         { id, title, description, tone, icon: icon ?? TONE_ICONS[tone], size, duration: ms },
       ]);
       if (ms > 0) schedule(id, ms);
+      return id;
     },
     [schedule],
   );
@@ -125,11 +134,15 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   /* Both callbacks are stable, so the API object must be too — an inline
      literal would re-render every useToast() consumer in the tree each time
      a toast appears or expires. */
-  const api = useMemo<ToastApi>(() => ({ notify, toast }), [notify, toast]);
+  const api = useMemo<ToastApi>(() => ({ notify, toast, dismiss: remove }), [notify, toast, remove]);
 
   function pause(id: number) {
     const timer = timers.current.get(id);
     if (!timer) return;
+    /* Hover and focus can both hold one toast; only the first hold stops
+       the clock, or the elapsed time would be subtracted twice. */
+    timer.holds = (timer.holds ?? 0) + 1;
+    if (timer.holds > 1) return;
     window.clearTimeout(timer.handle);
     timer.remaining -= Date.now() - timer.started;
   }
@@ -137,13 +150,15 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   function resume(id: number) {
     const timer = timers.current.get(id);
     if (!timer) return;
+    timer.holds = Math.max(0, (timer.holds ?? 0) - 1);
+    if (timer.holds > 0) return;
     schedule(id, Math.max(timer.remaining, 800));
   }
 
   return (
     <ToastContext.Provider value={api}>
       {children}
-      <div className="sv-toaster" aria-label={tr.notifications}>
+      <div className={cx('sv-toaster', className)} aria-label={tr.notifications}>
         {items.map((t) => (
           <div
             key={t.id}
@@ -151,6 +166,10 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             className={cx('sv-toast', `sv-toast--${t.tone}`, t.size === 'lg' && 'sv-toast--lg')}
             onMouseEnter={() => pause(t.id)}
             onMouseLeave={() => resume(t.id)}
+            /* Keyboard users get the same pause: focus on the dismiss button
+               holds the timer exactly as a hovering pointer does. */
+            onFocus={() => pause(t.id)}
+            onBlur={() => resume(t.id)}
           >
             <span className="sv-toast__icon" aria-hidden="true">
               {t.icon}

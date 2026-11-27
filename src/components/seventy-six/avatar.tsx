@@ -26,9 +26,14 @@ function initials(name: string) {
   return (first + last).toUpperCase();
 }
 
+const PX = { sm: 24, md: 32, lg: 44 } as const;
+
 export function Avatar({ name, src, size = 'md', tone = 'neutral', className, ...rest }: AvatarProps) {
   const cls = cx('sv-avatar', `sv-avatar--${size}`, tone === 'seed' && 'sv-avatar--seed', className);
-  if (src) return <img {...rest} className={cls} src={src} alt={name} width={32} height={32} />;
+  /* The intrinsic size matches the drawn one, so the browser reserves the
+     right box before the photo loads (no layout shift) at every size. */
+  const px = PX[size];
+  if (src) return <img {...rest} className={cls} src={src} alt={name} width={px} height={px} />;
   return (
     <span {...rest} className={cls} role="img" aria-label={name}>
       <span aria-hidden="true">{initials(name)}</span>

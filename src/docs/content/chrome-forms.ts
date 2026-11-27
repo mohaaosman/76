@@ -64,6 +64,7 @@ export const chrome: DocEntry[] = [
           { name: 'app', type: 'string', description: 'App name after the wordmark hairline.' },
           { name: 'nav', type: 'ReactNode', description: 'A BandNav.' },
           { name: 'utilities', type: 'ReactNode', description: 'Right cluster: search trigger, notifications, avatar. The one place icon-only buttons are legal (with aria-label).' },
+          { name: '…rest', type: 'HTMLAttributes<HTMLDivElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the topbar. className is appended.' },
         ],
       },
       {
@@ -71,6 +72,7 @@ export const chrome: DocEntry[] = [
         rows: [
           { name: 'items', type: 'BandNavItem[]', description: '{ label, href, active? }. SubTabs render nothing when empty.' },
           { name: 'renderLink', type: '(item, className, ariaCurrent) => ReactNode', description: 'Adapter for router Links — keeps the component router-agnostic.' },
+          { name: '…rest', type: 'HTMLAttributes<HTMLElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the <nav>; an aria-label you pass replaces the built-in name. className is appended.' },
         ],
       },
       {
@@ -79,6 +81,7 @@ export const chrome: DocEntry[] = [
           { name: 'title / titleSoft', type: 'string', description: 'The h1 (27/800); the soft secondary word in band-soft.' },
           { name: 'context', type: 'string', description: 'One sentence max: date · scope · last sync.' },
           { name: 'actions', type: 'ReactNode', description: 'Max: one mono range control, two ghosts, ONE primary.' },
+          { name: '…rest', type: 'HTMLAttributes<HTMLDivElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the hero. className is appended.' },
         ],
       },
     ],
@@ -316,6 +319,7 @@ export const forms: DocEntry[] = [
           { name: 'errors', type: 'FieldError[]', description: 'fieldId · label · message. Renders nothing when empty.' },
           { name: 'title', type: 'string', description: 'Overrides the generated tabular count sentence. Rarely needed.' },
           { name: 'autoFocus', type: 'boolean', defaultValue: 'true', description: 'Moves focus here when a new set of errors arrives, per B11.' },
+          { name: '…rest', type: 'HTMLAttributes<HTMLDivElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the summary; ref forwards to it. className is appended.' },
         ],
       },
     ],

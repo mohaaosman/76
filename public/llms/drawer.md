@@ -61,7 +61,10 @@ const [open, setOpen] = useState(false);
 | `side` | `'right' | 'left'` | `'right'` | Owning screen edge. |
 | `size` | `'sm' | 'md' | 'lg' | 'full'` | `'md'` | 360 / 480 / 640 / takeover. Every size caps at 100vw. |
 | `dismissible` | `boolean` | `true` | Scrim click closes; disable for unsaved-work drawers (Esc still works). |
+| `preventEscape` | `boolean` | `false` | v0.11 · Esc does not close either — for unsaved work with an explicit Discard in the footer. The close control still works. |
 | `footer` | `ReactNode` | — | Sticky, right-aligned: ghost cancel + ONE primary/danger. |
+| `className` | `string` | — | Appended to the <dialog>. |
+| `…rest` | `DialogHTMLAttributes` | — | id, data-*, aria-*; onCancel and onClick are chained. ref forwards to the <dialog>. |
 
 ## Accessibility
 

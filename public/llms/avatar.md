@@ -41,6 +41,7 @@ import { Avatar, AvatarGroup } from '@/components/seventy-six';
 | `src` | `string` | — | Photo URL. Renders an <img> with the name as alt. |
 | `size` | `'sm' | 'md' | 'lg'` | `'md'` | 24 · 32 · 44px. |
 | `tone` | `'neutral' | 'seed'` | `'neutral'` | seed marks the current user — one per group. |
+| `…rest` | `HTMLAttributes<HTMLElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the <img> or the initials <span>. className is appended. |
 
 ### AvatarGroup
 
@@ -49,6 +50,7 @@ import { Avatar, AvatarGroup } from '@/components/seventy-six';
 | `people` | `{ name: string; src?: string }[]` | — | In display order — most relevant first. |
 | `max` | `number` | `4` | Faces shown before the mono overflow count. |
 | `size` | `'sm' | 'md'` | `'sm'` | Stacks stay small; 44px is for a profile head. |
+| `…rest` | `HTMLAttributes<HTMLSpanElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the group. className is appended. |
 
 ## Accessibility
 

@@ -61,6 +61,7 @@ The subtree came from a markdown renderer; nothing was styled by hand.
 | `children` | `ReactNode` | — | The subtree. Every element inside is styled by the stylesheet. |
 | `measure` | `boolean` | `true` | The ~66ch cap. Set false inside a column that is already narrow. |
 | `className` | `string` | — | Appended to sv-prose. |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the wrapper. className is appended. |
 
 ## Accessibility
 

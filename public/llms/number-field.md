@@ -58,7 +58,8 @@ The error names what and how to fix — never "invalid input" (A3).
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `label` | `string` | — | Above the field, always. Also names the − / + buttons. |
-| `value` | `number` | — | Controlled value. |
+| `value` | `number` | — | Controlled value. Omit it for an uncontrolled field. |
+| `defaultValue` | `number` | — | Uncontrolled: the starting value. |
 | `onValueChange` | `(value: number) => void` | — | Receives the CLAMPED value — never an out-of-bounds one, and never a parse of an empty box. |
 | `min` | `number` | `0` | Enforced, not just announced. |
 | `max` | `number` | — | Enforced. Defaults to the safe-integer ceiling. |
@@ -66,6 +67,7 @@ The error names what and how to fix — never "invalid input" (A3).
 | `unit` | `string` | — | Mono uppercase, beside the field — never a placeholder. |
 | `hint` | `string` | — | One line under the label stating the rule up front. |
 | `error` | `string` | — | What went wrong AND how to fix it. Wires aria-invalid + describedby. |
+| `…rest` | `InputHTMLAttributes` | — | Spread onto the input; aria-describedby is merged. ref forwards to the input. |
 
 ## Accessibility
 

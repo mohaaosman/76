@@ -1,5 +1,5 @@
-import { useId, useRef, useState } from 'react';
-import type { DragEvent } from 'react';
+import { forwardRef, useId, useRef, useState } from 'react';
+import type { DragEvent, HTMLAttributes } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 /* The row bar IS the B4 bar — its track, fill and single 160ms width
@@ -30,7 +30,11 @@ export interface FileRow {
   error?: string;
 }
 
-export interface FileFieldProps {
+/**
+ * Native attributes apply to the ROOT (data-*, style, aria-*); the ref is the
+ * hidden file input, so `ref.current.click()` opens the picker.
+ */
+export interface FileFieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'onDrop'> {
   label: string;
   hint?: string;
   /** Mono line naming what is accepted and the ceiling: "CSV · XLSX · MAX 10 MB". */
@@ -51,7 +55,7 @@ export interface FileFieldProps {
 
 const clampPercent = (percent?: number) => Math.round(Math.min(100, Math.max(0, percent ?? 0)));
 
-export function FileField({
+export const FileField = forwardRef<HTMLInputElement, FileFieldProps>(function FileField({
   label,
   hint,
   constraint,
@@ -64,7 +68,8 @@ export function FileField({
   disabled,
   id: explicitId,
   className,
-}: FileFieldProps) {
+  ...rest
+}, ref) {
   const tr = useStrings();
   const auto = useId();
   const id = explicitId ?? auto;
@@ -75,7 +80,7 @@ export function FileField({
     [hint ? hintId : null, constraint ? constraintId : null, error ? errorId : null].filter(Boolean).join(' ') ||
     undefined;
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [dragging, setDragging] = useState(false);
 
   function onDragOver(e: DragEvent<HTMLDivElement>) {
@@ -94,7 +99,7 @@ export function FileField({
   }
 
   return (
-    <div className={cx('sv-field sv-filefield', className)}>
+    <div {...rest} className={cx('sv-field sv-filefield', className)}>
       <label className="sv-field__label" htmlFor={id}>
         {label}
       </label>
@@ -123,7 +128,11 @@ export function FileField({
           {multiple ? tr.chooseFiles : tr.chooseFile}
         </button>
         <input
-          ref={inputRef}
+          ref={(node) => {
+            inputRef.current = node;
+            if (typeof ref === 'function') ref(node);
+            else if (ref) ref.current = node;
+          }}
           id={id}
           type="file"
           className="sv-visually-hidden sv-filefield__input"
@@ -187,7 +196,7 @@ export function FileField({
                     />
                   </svg>
                   {/* The WORD carries the state; the colour and tick only agree. */}
-                  Uploaded
+                  {tr.uploaded}
                 </span>
               )}
 
@@ -197,9 +206,10 @@ export function FileField({
                 type="button"
                 className="sv-btn sv-btn--link"
                 aria-label={tr.remove(file.name)}
+                disabled={disabled}
                 onClick={() => onRemove(file.id)}
               >
-                Remove
+                {tr.removeWord}
               </button>
             </li>
           );
@@ -213,4 +223,4 @@ export function FileField({
       )}
     </div>
   );
-}
+});

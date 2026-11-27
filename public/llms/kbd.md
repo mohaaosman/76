@@ -15,7 +15,7 @@ Manual: copy components/seventy-six/kbd.tsx, components/seventy-six/kbd.css into
 
 ## Overview
 
-Real `<kbd>` elements in Fragment Mono on a wall-toned cap with a slightly heavier bottom border — the only skeuomorphic gesture in 76°, and it earns its place because a key cap is a physical object. On the band the cap goes transparent and takes band tokens.
+Real `<kbd>` elements in IBM Plex Mono on a wall-toned cap with a slightly heavier bottom border — the only skeuomorphic gesture in 76°, and it earns its place because a key cap is a physical object. On the band the cap goes transparent and takes band tokens.
 
 It documents; it never acts. Every shortcut a Kbd prints must also have a visible control (C4) — the ⌘K cap in the search trigger sits beside a real button, and the Menu (B20) prints caps next to items that are also clickable.
 
@@ -38,6 +38,7 @@ import { Kbd } from '@/components/seventy-six';
 | --- | --- | --- | --- |
 | `keys` | `string[]` | — | One key per string — rendered as separate caps. |
 | `separator` | `string` | — | Shown between caps for a sequence ("then"). Omit for a chord. |
+| `…rest` | `HTMLAttributes<HTMLSpanElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the wrapper. className is appended. |
 
 ## Accessibility
 

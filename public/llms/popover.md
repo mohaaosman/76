@@ -67,6 +67,9 @@ import { Popover, ButtonLink } from '@/components/seventy-six';
 | `align` | `'start' | 'end'` | `'start'` | Panel edge alignment against the trigger; it is clamped 8px inside the viewport either way. |
 | `variant` | `'ghost' | 'primary' | 'link'` | `'ghost'` | Trigger variant — the panel is not an action, so the trigger is usually quiet. |
 | `disabled / className` | `boolean / string` | — | Both apply to the trigger; the panel is top-layer and owns its own box. |
+| `open / defaultOpen / onOpenChange` | `boolean / boolean / (open) => void` | — | Optional control of the panel. open drives showPopover()/hidePopover(); onOpenChange reports every open and close, by any route. |
+| `panelClassName` | `string` | — | Appended to the panel. |
+| `…rest` | `ButtonHTMLAttributes` | — | Spread onto the trigger (id, data-*, aria-*, onClick…). ref forwards to the trigger. |
 
 ## Accessibility
 

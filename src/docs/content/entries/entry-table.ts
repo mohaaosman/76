@@ -85,6 +85,7 @@ export const entryTableEntry: DocEntry = {
         { name: 'postingLabel', type: 'string', defaultValue: 't.working', description: 'The button label while posting: "Posting…".' },
         { name: 'summary', type: 'ReactNode', description: 'One soft sentence beside the button: "3 of 5 lines counted".' },
         { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'The whole receipt is closed: inputs and post disabled.' },
+        { name: '…rest / ref', type: 'HTMLAttributes<HTMLDivElement>', description: 'Spread onto the root. ref is a plain prop (React 19) because the component is generic.' },
       ],
     },
   ],

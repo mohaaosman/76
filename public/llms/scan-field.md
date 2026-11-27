@@ -74,6 +74,7 @@ Ready, matched, not matched, and a closed receipt.
 | `last` | `{ id, tone, text }` | — | What the last identifier resolved to. tone is 'ok' | 'bad' | 'pending'; text is one sentence, pre-formatted. |
 | `toneWords` | `Record<ScanTone, string>` | `Matched · Not matched · Checking` | The tone words, until the catalog carries them. |
 | `…input props` | `InputHTMLAttributes` | — | id, name, disabled, autoFocus, onKeyDown (runs first; preventDefault stops the scan). |
+| `aria-describedby` | `string` | — | Merged with the hint and result ids, never replaced. |
 
 ## Accessibility
 

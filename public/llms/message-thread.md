@@ -110,6 +110,7 @@ Inside a Card body, with day rows, avatars, an internal note, a message that was
 | `avatars` | `boolean` | `false` | An initials Avatar beside each author. The name stays the attribution; the face is not announced. |
 | `sendingWord` | `string` | `'Sending'` | The word for status sending. Override per locale until the catalog carries it. |
 | `failedWord` | `string` | `'Not sent'` | The word for status failed. Override per locale until the catalog carries it. |
+| `…rest` | `HTMLAttributes<HTMLOListElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the list; ref forwards to it. className is appended. |
 
 ### ThreadMessage
 

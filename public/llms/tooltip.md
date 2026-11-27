@@ -52,6 +52,8 @@ The natural home for a tooltip: an icon affordance carrying a line of metadata. 
 | `content` | `string` | — | The supplementary line. Plain text only, 11.5px white on ink. |
 | `children` | `ReactElement` | — | A single focusable trigger (button, a). Receives aria-describedby automatically. |
 | `delay` | `number` | `300` | Hover delay in ms. Focus shows immediately regardless. |
+| `disabled` | `boolean` | — | Suppresses the tooltip; the trigger renders untouched. |
+| `className / id` | `string` | — | Applied to the bubble. The trigger keeps its own; its aria-describedby, ref and handlers are merged, never replaced. |
 
 ## Accessibility
 

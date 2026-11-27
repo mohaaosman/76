@@ -79,4 +79,10 @@
     font-size: 13px;
     color: var(--sv-ink-soft);
   }
+
+  /* v0.11 · a result that cannot be opened from here. */
+  .sv-command__item[aria-disabled='true'] {
+    color: var(--sv-ink-faint);
+    cursor: not-allowed;
+  }
 }

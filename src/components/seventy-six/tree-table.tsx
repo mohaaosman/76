@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState } from 'react';
-import type { CSSProperties, KeyboardEvent } from 'react';
+import { forwardRef, useMemo, useRef, useState } from 'react';
+import type { CSSProperties, HTMLAttributes, KeyboardEvent } from 'react';
 import { cx } from '@/lib/cx';
 import { inlineStep, useDirection, useStrings } from '@/lib/i18n';
 import './tree-table.css';
@@ -53,7 +53,7 @@ export interface TreeTableTotal {
   strong?: boolean;
 }
 
-export interface TreeTableProps {
+export interface TreeTableProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   /** Accessible name for the treegrid, e.g. "Balance sheet, July 2026". */
   label: string;
   /** Header of the hierarchy column, e.g. "ACCOUNT". */
@@ -98,7 +98,7 @@ function flatten(
   return out;
 }
 
-export function TreeTable({
+export const TreeTable = forwardRef<HTMLDivElement, TreeTableProps>(function TreeTable({
   label,
   labelHeader,
   columns,
@@ -109,7 +109,8 @@ export function TreeTable({
   onRowOpen,
   totals,
   className,
-}: TreeTableProps) {
+  ...rest
+}, ref) {
   const t = useStrings();
   const dir = useDirection();
   const [own, setOwn] = useState<Set<string>>(() => new Set(defaultExpanded ?? []));
@@ -178,7 +179,7 @@ export function TreeTable({
     (col.kind ?? 'num') === 'num' ? 'sv-ttable__cell--num sv-num' : undefined;
 
   return (
-    <div className={cx('sv-ttable', className)}>
+    <div {...rest} ref={ref} className={cx('sv-ttable', className)}>
       <div className="sv-ttable__scroll">
         <table role="treegrid" aria-label={label} className="sv-ttable__table">
           <thead>
@@ -277,4 +278,4 @@ export function TreeTable({
       </div>
     </div>
   );
-}
+});

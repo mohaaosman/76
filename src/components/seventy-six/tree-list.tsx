@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState } from 'react';
-import type { CSSProperties, KeyboardEvent } from 'react';
+import { forwardRef, useMemo, useRef, useState } from 'react';
+import type { CSSProperties, HTMLAttributes, KeyboardEvent } from 'react';
 import { cx } from '@/lib/cx';
 import { useDirection } from '@/lib/i18n';
 import './tree-list.css';
@@ -26,17 +26,25 @@ export interface TreeNode {
   /** Mono metadata right of the label — a count, a code, a total. */
   meta?: string;
   children?: TreeNode[];
+  /** Still focusable and expandable, never selectable (aria-disabled). */
+  disabled?: boolean;
 }
 
-export interface TreeListProps {
+export interface TreeListProps extends Omit<HTMLAttributes<HTMLUListElement>, 'children' | 'onSelect'> {
   /** Accessible name for the tree, e.g. "Chart of accounts". */
   label: string;
   nodes: TreeNode[];
-  /** Ids of the OPEN parents. Fully controlled — the tree owns no data state. */
-  expanded: Set<string>;
-  onExpandedChange: (next: Set<string>) => void;
+  /** Ids of the OPEN parents. Controlled: when passed it wins over internal state. */
+  expanded?: Set<string>;
+  /** Uncontrolled: the parents open on first render. */
+  defaultExpanded?: Iterable<string>;
+  /** Called with the next open set — in both modes. */
+  onExpandedChange?: (next: Set<string>) => void;
   /** The selected node's id, or null for "a selection exists, none made". */
   selected?: string | null;
+  /** Uncontrolled selection: the row selected on first render (null = none
+      yet). Turns the selection model on without the caller holding state. */
+  defaultSelected?: string | null;
   onSelect?: (id: string, node: TreeNode) => void;
   className?: string;
 }
@@ -77,16 +85,28 @@ function flatten(
   return out;
 }
 
-export function TreeList({
+export const TreeList = forwardRef<HTMLUListElement, TreeListProps>(function TreeList({
   label,
   nodes,
-  expanded,
+  expanded: expandedProp,
+  defaultExpanded,
   onExpandedChange,
-  selected,
-  onSelect,
+  selected: selectedProp,
+  defaultSelected,
+  onSelect: onSelectProp,
   className,
-}: TreeListProps) {
+  ...rest
+}, ref) {
   const dir = useDirection();
+  const [ownExpanded, setOwnExpanded] = useState(() => new Set(defaultExpanded ?? []));
+  const expanded = expandedProp ?? ownExpanded;
+  const [ownSelected, setOwnSelected] = useState<string | null | undefined>(defaultSelected);
+  const selected = selectedProp !== undefined ? selectedProp : ownSelected;
+  function onSelect(id: string, node: TreeNode) {
+    if (node.disabled) return;
+    if (selectedProp === undefined && defaultSelected !== undefined) setOwnSelected(id);
+    onSelectProp?.(id, node);
+  }
   const rows = useMemo(() => flatten(nodes, expanded), [nodes, expanded]);
   const byId = useMemo(() => new Map(rows.map((r) => [r.node.id, r])), [rows]);
   const [focusedId, setFocusedId] = useState<string | null>(null);
@@ -111,7 +131,8 @@ export function TreeList({
     const next = new Set(expanded);
     if (open) next.add(id);
     else next.delete(id);
-    onExpandedChange(next);
+    if (expandedProp === undefined) setOwnExpanded(next);
+    onExpandedChange?.(next);
   }
 
   function onKeyDown(e: KeyboardEvent<HTMLLIElement>, row: Row) {
@@ -153,7 +174,7 @@ export function TreeList({
         break;
       case 'Enter':
       case ' ':
-        onSelect?.(node.id, node);
+        onSelect(node.id, node);
         break;
     }
   }
@@ -177,6 +198,7 @@ export function TreeList({
           tabIndex={active === node.id ? 0 : -1}
           aria-expanded={parent ? open : undefined}
           aria-selected={isSelected}
+          aria-disabled={node.disabled || undefined}
           aria-level={depth + 1}
           aria-setsize={list.length}
           aria-posinset={i + 1}
@@ -187,7 +209,7 @@ export function TreeList({
                a treeitem breaks the one-tab-stop contract. */
             e.stopPropagation();
             move(row);
-            onSelect?.(node.id, node);
+            onSelect(node.id, node);
             if (parent) setOpen(node.id, !open);
           }}
         >
@@ -210,8 +232,8 @@ export function TreeList({
   }
 
   return (
-    <ul role="tree" aria-label={label} className={cx('sv-tree', className)}>
+    <ul {...rest} ref={ref} role="tree" aria-label={label} className={cx('sv-tree', className)}>
       {renderLevel(nodes, 0)}
     </ul>
   );
-}
+});

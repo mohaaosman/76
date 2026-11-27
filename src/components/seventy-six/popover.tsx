@@ -205,7 +205,7 @@ export const Popover = forwardRef<HTMLButtonElement, PopoverProps>(function Popo
               aria-label={tr.close(title ?? label)}
               onClick={() => panelRef.current?.hidePopover()}
             >
-              Close
+              {tr.closeWord}
             </button>
           </div>
         )}

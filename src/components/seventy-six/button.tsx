@@ -91,10 +91,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
 /** Text-link that looks like a button action (B10 "text link action"). */
 export type ButtonLinkProps = AnchorHTMLAttributes<HTMLAnchorElement>;
 
-export function ButtonLink({ className, children, ...rest }: ButtonLinkProps) {
+export const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(function ButtonLink(
+  { className, children, ...rest },
+  ref,
+) {
   return (
-    <a {...rest} className={cx('sv-btn sv-btn--link', className)}>
+    <a {...rest} ref={ref} className={cx('sv-btn sv-btn--link', className)}>
       {children}
     </a>
   );
-}
+});

@@ -55,13 +55,17 @@ A start after the end is caught by the field itself, in B11 voice.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `label` | `string` | — | The legend of the fieldset; also names each input for screen readers. |
-| `value` | `{ from: string; to: string }` | — | ISO YYYY-MM-DD pair. |
+| `value` | `{ from: string; to: string }` | — | ISO YYYY-MM-DD pair. Controlled; omit it for an uncontrolled field. |
+| `defaultValue` | `DateRange` | — | Uncontrolled: the starting range. Defaults to two empty ends. |
+| `disabled / required` | `boolean` | — | disabled is the native fieldset one — presets and both inputs; required marks both ends. |
+| `fromName / toName` | `string` | — | Form names for the two ends, so the range submits with a form. |
 | `onValueChange` | `(value: DateRange) => void` | — | Fires on preset click and on either input. |
 | `presets` | `DateRangePreset[]` | `['7D','30D','QTD','YTD','CUSTOM']` | Pass a subset to drop any. CUSTOM is always last. |
 | `today` | `string` | `today's date` | ISO date the presets count back from — pass it to keep renders deterministic. |
 | `context` | `string` | — | Replaces the derived "24 days · ends today" line. |
 | `error` | `string` | — | Overrides the built-in start-after-end check. |
 | `min / max` | `string` | — | ISO bounds passed to both native inputs. |
+| `…rest` | `FieldsetHTMLAttributes` | — | Spread onto the <fieldset>. ref forwards to it. |
 
 ## Accessibility
 

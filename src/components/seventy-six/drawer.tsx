@@ -30,6 +30,12 @@ export interface DrawerProps
   footer?: ReactNode;
   /** Scrim click closes by default; disable for unsaved-work drawers. */
   dismissible?: boolean;
+  /**
+   * v0.11 · Escape stays put too. For a drawer holding unsaved work whose
+   * footer offers an explicit "Discard changes" — the same prop B13 has.
+   * The visible close control still works, so the reader is never trapped.
+   */
+  preventEscape?: boolean;
   children: ReactNode;
 }
 
@@ -42,6 +48,7 @@ export const Drawer = forwardRef<HTMLDialogElement, DrawerProps>(function Drawer
   size = 'md',
   footer,
   dismissible = true,
+  preventEscape = false,
   children,
   className,
   onCancel,
@@ -78,7 +85,7 @@ export const Drawer = forwardRef<HTMLDialogElement, DrawerProps>(function Drawer
       onCancel={(e) => {
         onCancel?.(e);
         e.preventDefault();
-        onClose();
+        if (!preventEscape) onClose();
       }}
       onClick={handleClick}
       onClose={() => open && onClose()}

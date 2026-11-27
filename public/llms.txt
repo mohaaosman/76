@@ -74,6 +74,7 @@
 - [FunnelList](https://76.zifala.com/llms/funnel-list.md): The narrowing — one total through an ordered sequence of steps, on B6's straight bars. One job: State how one total narrows through an ordered sequence of steps.
 - [MessageThread](https://76.zifala.com/llms/message-thread.md): One conversation — every message attributed to a person and marked with its direction, in words. One job: State one conversation as an ordered list of messages, each attributed to a person and marked with its direction.
 - [SettingList](https://76.zifala.com/llms/setting-list.md): Settings that say what they do — a consequence sentence beside the instant-effect control that changes it. One job: State one setting’s consequence beside the instant-effect control that changes it.
+- [DataState](https://76.zifala.com/llms/data-state.md): The four lifecycle states of a data region — loading, empty, error, ready — assembled once, around any widget. One job: State which of the four lifecycle states a data region is in, and draw the right one.
 
 ## Blocks
 

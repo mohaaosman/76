@@ -100,7 +100,10 @@ const [picked, setPicked] = useState<string[]>(['c-127', 'c-152']);
 | `label` | `string` | — | Field label above the input — never replaced by the placeholder (B11). |
 | `options` | `ComboOption[]` | — | { value, label, meta?, disabled? }. meta renders mono, right-aligned, and is searched. |
 | `multiple` | `boolean` | — | Switches the props to the multi union: value becomes string[] and onChange receives (values, options). |
-| `value` | `string | null | string[]` | — | Controlled selection. string | null in single mode, string[] in pick order when multiple. |
+| `value` | `string | null | string[]` | — | Controlled selection. string | null in single mode, string[] in pick order when multiple. Omit it for an uncontrolled field. |
+| `defaultValue` | `string | null | string[]` | — | Uncontrolled: the selection on first render. |
+| `name` | `string` | — | Submits the VALUE with a form, as hidden inputs (one per value in multi mode). The visible input holds a label. |
+| `…rest` | `InputHTMLAttributes` | — | Spread onto the visible input (autoFocus, onBlur, data-*…); onKeyDown and onClick are chained, aria-describedby is merged. |
 | `onChange` | `(value, option) => void` | — | Single: fires on commit and on clear (null). Multi: fires on every toggle with the full array. |
 | `noun` | `string` | `'selected'` | Multi only. The singular noun the selection line counts: "account". |
 | `nounPlural` | `string` | `noun + "s" (English only)` | Multi only. The plural form: "accounts" reads "3 ACCOUNTS". Chosen by the locale's plural rules. |

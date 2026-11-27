@@ -58,6 +58,7 @@ export const jobListEntry: DocEntry = {
       rows: [
         { name: 'jobs', type: 'Job[]', description: 'This reader\'s operations, newest first. Each row changes in place.' },
         { name: 'announcement', type: 'string', description: 'Polite live announcement of the latest change: "Export November receipts finished".' },
+        { name: '…rest', type: 'HTMLAttributes<HTMLDivElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the root; ref forwards to it. className is appended.' },
       ],
     },
     {

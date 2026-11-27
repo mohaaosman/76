@@ -72,6 +72,7 @@ The three named queues hold 3,180 of 4,720 tickets. `total` becomes the denomina
 | `parts` | `DistributionPart[]` | — | { label, value } — five at most; the fifth reuses the fourth tone. |
 | `total` | `number` | `sum of parts` | The denominator. Pass it when the parts are a subset; the remainder shows as wall. |
 | `format` | `(value: number) => string` | `grouped integer` | Formats the total and every absolute figure. Resolved per call, never at module scope. |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the strip; ref forwards to it. className is appended. |
 
 ## Accessibility
 

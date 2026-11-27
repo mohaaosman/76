@@ -1,5 +1,5 @@
 import { useId, useRef, useState } from 'react';
-import type { KeyboardEvent, ReactNode } from 'react';
+import type { HTMLAttributes, KeyboardEvent, ReactNode, Ref } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import { Button } from './button';
@@ -54,7 +54,7 @@ export interface EntryTotalsRow {
   strong?: boolean;
 }
 
-export interface EntryTableProps<Row> {
+export interface EntryTableProps<Row> extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   caption: string;
   columns: EntryColumn<Row>[];
   rows: Row[];
@@ -85,6 +85,8 @@ export interface EntryTableProps<Row> {
   summary?: ReactNode;
   disabled?: boolean;
   className?: string;
+  /** React 19 ref-as-prop (the component is generic, so no forwardRef): the root element. */
+  ref?: Ref<HTMLDivElement>;
 }
 
 function outOfBounds(raw: string, min: number, max: number): boolean {
@@ -113,6 +115,8 @@ export function EntryTable<Row>({
   summary,
   disabled = false,
   className,
+  ref,
+  ...rest
 }: EntryTableProps<Row>) {
   const t = useStrings();
   const base = useId();
@@ -170,7 +174,7 @@ export function EntryTable<Row>({
   }
 
   return (
-    <div className={cx('sv-entry', className)}>
+    <div {...rest} ref={ref} className={cx('sv-entry', className)}>
       <div className="sv-entry__scroll">
         <table className="sv-entry__table">
           <caption className="sv-visually-hidden">{caption}</caption>

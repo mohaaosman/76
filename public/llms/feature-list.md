@@ -48,6 +48,7 @@ import { FeatureList } from '@/components/seventy-six';
 | `columns` | `2 | 3` | `3` | Across at full width. Steps to 2 below 1000px and 1 below 620px. |
 | `numbered` | `boolean` | `true` | Mono ordinals derived from the index — never passed in. |
 | `ariaLabel` | `string` | — | Names the list when its section heading is elsewhere. |
+| `…rest` | `HTMLAttributes<HTMLUListElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the list; ref forwards to it. className is appended. |
 
 ## Accessibility
 

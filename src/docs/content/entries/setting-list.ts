@@ -82,6 +82,7 @@ const [role, setRole] = useState('viewer');
       rows: [
         { name: 'rows', type: 'SettingRow[]', description: 'One row per setting, in the order a reader should meet them.' },
         { name: 'label', type: 'string', description: 'Accessible name of the list. Usually the CardHead title.' },
+        { name: '…rest', type: 'HTMLAttributes<HTMLUListElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the list; ref forwards to it. className is appended.' },
       ],
     },
     {

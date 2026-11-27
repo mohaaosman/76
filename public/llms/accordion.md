@@ -54,6 +54,10 @@ Native exclusive grouping via the shared name — no JavaScript.
 | `sections` | `AccordionSection[]` | — | id · title · optional mono meta · children · defaultOpen. |
 | `exclusive` | `boolean` | `false` | One open at a time, via the native name group. |
 | `name` | `string` | — | The shared native group name. Required when exclusive. |
+| `sections[].open` | `boolean` | — | Controlled open state for that section: a click only calls onOpenChange. Omit for the native uncontrolled behaviour (defaultOpen). |
+| `sections[].disabled` | `boolean` | — | The section cannot be toggled; its summary reports aria-disabled. |
+| `onOpenChange` | `(id, open) => void` | — | Uncontrolled: reports each native toggle. Controlled sections: the only thing that changes them. |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the wrapper; ref forwards to it. className is appended. |
 
 ## Accessibility
 

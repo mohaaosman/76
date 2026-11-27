@@ -49,6 +49,7 @@ import { ProofRow } from '@/components/seventy-six';
 | --- | --- | --- | --- |
 | `items` | `ProofItem[]` | — | id · figure (PRE-FORMATTED) · label · optional note. Two to four. |
 | `ariaLabel` | `string` | — | Names the row when its section heading is elsewhere. |
+| `…rest` | `HTMLAttributes<HTMLDListElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the <dl>. className is appended. |
 
 ## Accessibility
 

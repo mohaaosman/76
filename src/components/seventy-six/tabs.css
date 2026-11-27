@@ -94,4 +94,11 @@
   .sv-tabs__tab--active:dir(rtl)::after {
     transform-origin: right center;
   }
+
+  /* v0.11 · a disabled tab: faint ink, not-allowed, no hover change.
+     Arrow keys skip it. */
+  .sv-tabs__tab:disabled {
+    color: var(--sv-ink-faint);
+    cursor: not-allowed;
+  }
 }

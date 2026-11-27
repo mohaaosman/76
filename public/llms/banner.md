@@ -56,6 +56,7 @@ import { Banner, ButtonLink } from '@/components/seventy-six';
 | `children` | `ReactNode` | — | Full sentences: what happened and how to fix it. |
 | `action` | `ReactNode` | — | ONE text-link action, e.g. a ButtonLink "Retry sync". |
 | `onDismiss` | `() => void` | — | Renders a dismiss control. Persistent conditions omit it. |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the banner. className is appended. |
 
 ## Accessibility
 

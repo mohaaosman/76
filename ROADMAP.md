@@ -4,6 +4,13 @@ What has shipped, what is next, and what we are still weighing. The visual
 system is settled; the work now is reach and rigor — never new chrome for its
 own sake. Live version: <https://76.zifala.com/#/roadmap>.
 
+## Shipped — v0.11.0 · sturdier, and every component reaches every use
+
+- **IBM Plex** — Sans for content, Mono for metadata at weight 500, Sans Arabic as the companion in both stacks. Fragment Mono's single weight was why every label read as a hairline.
+- **The weight amendment** — a darker ink ladder (ink-soft 6.86:1; the old step failed AA on the wall), firmer hairlines, a deeper wall, the shadow at .08, faint reserved for disabled and decorative, `--sv-bar` at 4px, nothing below 10px.
+- **`DataState` (B64)** and **`DataTable maxHeight`** — the four lifecycle states assembled once, and long tables that hold their header.
+- **The API audit** — native attributes, refs, uncontrolled modes and per-item `disabled` on every component, backwards compatible; plus fixes for MenuButton's missing `aria-expanded`, dead Home/End in menus, colliding palette ids and Tooltip handler clobbering.
+
 ## Shipped — v0.10.0 · the roadmap, finished — and every language
 
 0.7, 0.8 and 0.9 were planned as three releases. They land as one, because
@@ -122,6 +129,7 @@ leaks.
 | **0.8** | The number in relation | Shipped (v0.10) |
 | **0.9** | The record and the console | Shipped (v0.10) |
 | **0.10** | Every language, both directions | Shipped |
+| **0.11** | Sturdier type and weight; every component reaches every use | Shipped |
 
 ---
 
@@ -353,7 +361,6 @@ sub-taxonomy, it is a screen composed of 76° parts — not a component.**
 ## Exploring — later
 
 - **Native-speaker review of the catalogs** — French, Arabic and Somali ship machine-drafted from the English source. Each needs a native reviewer before a product ships it. Hebrew and Persian are the next RTL catalogs.
-- **Arabic in the faces** — Hanken Grotesk and Fragment Mono carry no Arabic, so the script falls through to the platform face. A registered Arabic companion face would make that voice the system's own.
 - **8-state preview files** — the fundamentals state contract shipped as a preview per component.
 - **Full type tokenization** — a complete `--sv-text-*` scale. Density already moved `--sv-body-size` into the token layer, which makes the rest cheaper.
 - **More templates** — billing, onboarding and the inbox (now unblocked by `MessageThread`).

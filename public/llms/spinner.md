@@ -49,6 +49,7 @@ The stale table stays readable — it is still true until it changes.
 | --- | --- | --- | --- |
 | `size` | `12 | 16 | 20` | `12` | Matches the type it sits beside. |
 | `label` | `string` | — | Announced via role="status". Omit only when an adjacent live region says it. |
+| `…rest` | `HTMLAttributes<HTMLSpanElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the mark. className is appended. |
 
 ### Busy
 
@@ -57,6 +58,7 @@ The stale table stays readable — it is still true until it changes.
 | `label` | `string` | — | REQUIRED sentence naming what is loading. |
 | `minHeight` | `number` | `160` | Region height while empty — match the component it replaces so nothing jumps. |
 | `children` | `ReactNode` | — | Existing content, kept legible underneath while it refreshes. |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the region; style merges with minHeight. className is appended. |
 
 ## Accessibility
 

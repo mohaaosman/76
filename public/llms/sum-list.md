@@ -49,6 +49,7 @@ import { SumList } from '@/components/seventy-six';
 | --- | --- | --- | --- |
 | `rows` | `SumRow[]` | — | label (mono uppercase) · amount (PRE-FORMATTED) · optional note · optional strong. |
 | `rows[].strong` | `boolean` | — | The closing figure: stronger rule above it, 700 figures, a larger step. One per list. |
+| `…rest` | `HTMLAttributes<HTMLDListElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the <dl>; ref forwards to it. className is appended. |
 
 ## Accessibility
 

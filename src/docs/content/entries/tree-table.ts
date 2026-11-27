@@ -94,6 +94,7 @@ export const treeTableEntry: DocEntry = {
         { name: 'onExpandedChange', type: '(next: Set<string>) => void', description: 'Called on every open and close, controlled or not.' },
         { name: 'onRowOpen', type: '(node) => void', description: 'Enter or double-click on a row. Without it, Enter toggles a parent.' },
         { name: 'totals', type: 'TreeTableTotal[]', description: 'label · cells (PRE-FORMATTED) · strong. A real <tfoot>, outside the tree.' },
+        { name: '…rest', type: 'HTMLAttributes<HTMLDivElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the root; ref forwards to it. className is appended.' },
       ],
     },
   ],

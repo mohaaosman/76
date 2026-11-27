@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState } from 'react';
-import type { CSSProperties, KeyboardEvent, PointerEvent as ReactPointerEvent } from 'react';
+import { forwardRef, useMemo, useRef, useState } from 'react';
+import type { CSSProperties, HTMLAttributes, KeyboardEvent, PointerEvent as ReactPointerEvent, SVGAttributes } from 'react';
 import { cx } from '@/lib/cx';
 import { useStrings } from '@/lib/i18n';
 import './trend.css';
@@ -40,7 +40,7 @@ export interface TrendColumn {
   figures: string;
 }
 
-export interface TrendProps {
+export interface TrendProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   /** REQUIRED: the takeaway, e.g. "Revenue trending up, $482K MTD vs $431K in June". */
   ariaLabel: string;
   series: TrendSeries[];
@@ -90,7 +90,7 @@ const STACK_TONES = ['seed', 'compare', 'faint'] as const;
  * BESIDE a printed figure, because a line with no scale states nothing on
  * its own (B4's rule: the numbers inform, the bar illustrates).
  */
-export interface SparklineProps {
+export interface SparklineProps extends Omit<SVGAttributes<SVGSVGElement>, 'children' | 'width' | 'height'> {
   data: number[];
   /** REQUIRED takeaway, e.g. "Orders per day, trending up over 14 days". */
   ariaLabel: string;
@@ -100,7 +100,7 @@ export interface SparklineProps {
   className?: string;
 }
 
-export function Sparkline({ data, ariaLabel, width = 72, height = 20, tone = 'seed', className }: SparklineProps) {
+export function Sparkline({ data, ariaLabel, width = 72, height = 20, tone = 'seed', className, ...rest }: SparklineProps) {
   const lo = Math.min(...data);
   const hi = Math.max(...data);
   const span = hi - lo || 1;
@@ -110,6 +110,7 @@ export function Sparkline({ data, ariaLabel, width = 72, height = 20, tone = 'se
 
   return (
     <svg
+      {...rest}
       className={cx('sv-spark', tone === 'faint' && 'sv-spark--faint', className)}
       viewBox={`0 0 ${width} ${height}`}
       width={width}
@@ -128,7 +129,7 @@ export function Sparkline({ data, ariaLabel, width = 72, height = 20, tone = 'se
   );
 }
 
-export function Trend({
+export const Trend = forwardRef<HTMLDivElement, TrendProps>(function Trend({
   ariaLabel,
   series,
   xLabels,
@@ -139,7 +140,9 @@ export function Trend({
   highlight,
   readouts,
   className,
-}: TrendProps) {
+  style,
+  ...rest
+}, ref) {
   const tr = useStrings();
   const capped = series.slice(0, 3); // max 3 series (B5)
   const width = 560;
@@ -245,11 +248,13 @@ export function Trend({
 
   return (
     <div
+      {...rest}
+      ref={ref}
       className={cx('sv-trend', chipAt && 'sv-trend--chipped', live && 'sv-trend--live', className)}
       /* The plot's ratio, published to CSS. It is what lets a chart card
          GROW into the height the grid gave it without the stylesheet having
          to know the viewBox — see trend.css, "a chart card grows". */
-      style={{ '--sv-trend-ratio': `${width} / ${height}` } as CSSProperties}
+      style={{ '--sv-trend-ratio': `${width} / ${height}`, ...style } as CSSProperties}
     >
       {legend && (
         <div className="sv-trend__legend">
@@ -462,4 +467,4 @@ export function Trend({
       )}
     </div>
   );
-}
+});

@@ -64,6 +64,7 @@ There is no red "danger" fill (A2) — a zone about to run out carries its warni
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `items` | `MeterItem[]` | — | { label, current, max, value, subtitle } — subtitle (absolute numbers) is required by the type. |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the list; ref forwards to it. className is appended. |
 
 ## Accessibility
 

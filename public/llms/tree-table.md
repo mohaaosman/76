@@ -105,6 +105,7 @@ const [expanded, setExpanded] = useState(new Set(['6000']));
 | `onExpandedChange` | `(next: Set<string>) => void` | — | Called on every open and close, controlled or not. |
 | `onRowOpen` | `(node) => void` | — | Enter or double-click on a row. Without it, Enter toggles a parent. |
 | `totals` | `TreeTableTotal[]` | — | label · cells (PRE-FORMATTED) · strong. A real <tfoot>, outside the tree. |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the root; ref forwards to it. className is appended. |
 
 ## Accessibility
 

@@ -108,6 +108,7 @@ Thursday is the point, so Thursday is stated: the chip is printed above the peak
 | `legend` | `boolean` | `false` | Show 14×2px swatch legend when the seed/gray convention is not enough. |
 | `yTicks` | `string[]` | — | Up to four PRE-FORMATTED labels, bottom-to-top, pinned to the 25/50/75/100% gridlines. The chart never formats a number (C9); the column is aria-hidden. |
 | `highlight` | `{ index: number; label: string }` | — | The one column the chart is about. Prints a chip above it, recedes the rest to compare, and takes its x label to ink/700. Never a hover state (C8). |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the chart root; style merges, ref forwards to it. className is appended. |
 
 ### Sparkline
 
@@ -117,6 +118,7 @@ Thursday is the point, so Thursday is stated: the chip is printed above the peak
 | `ariaLabel` | `string` | — | REQUIRED takeaway, as on Trend. |
 | `width / height` | `number` | `72 / 20` | Cell-sized by default. |
 | `tone` | `'seed' | 'faint'` | `'seed'` | faint for a secondary row in a dense table. |
+| `…rest` | `SVGAttributes<SVGSVGElement>` | — | id, style, data-*, event handlers — spread onto the <svg>. |
 
 ## Accessibility
 

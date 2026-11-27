@@ -54,6 +54,8 @@ const search = useSearchCommand(); // ⌘K binds automatically
 | `placeholder` | `string` | `'Search…'` | Mono placeholder; also the input's aria-label. |
 | `onOpen` | `() => void` | — | Called when ⌘K opens the palette — pass the same setter that drives <code>open</code>, or the shortcut and the state desync. |
 | `bindShortcut` | `boolean` | `true` | Binds ⌘K / Ctrl-K globally while mounted. |
+| `items[].disabled` | `boolean` | — | Listed but not pickable: arrow keys skip it, click and Enter do nothing. |
+| `className / …rest` | `string / DialogHTMLAttributes` | — | Applied to the <dialog>; onCancel and onClick are chained. ref forwards to the <dialog>. |
 
 ## Accessibility
 

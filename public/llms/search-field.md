@@ -72,13 +72,15 @@ labelHidden is legal here: the FilterBar already names the set on screen (B7).
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `label` | `string` | — | Names the set being filtered: "Search orders", not "Search". Also names the clear button. |
-| `value` | `string` | — | Controlled value. |
+| `value` | `string` | — | Controlled value. Omit it for an uncontrolled field. |
+| `defaultValue` | `string` | — | Uncontrolled: the starting query. Defaults to empty. |
 | `onValueChange` | `(value: string) => void` | — | Fires on every keystroke, and with an empty string on clear and on Esc. |
 | `placeholder` | `string` | `'Search'` | States the scope. Never the label — it vanishes on the first keystroke. |
 | `labelHidden` | `boolean` | — | Registered exception. Hides the label visually, legal only where a CardHead or a FilterBar already names the set. |
 | `hint` | `string` | — | One line under the label stating what the field filters. |
 | `resultText` | `string` | — | Mono count under the field, announced politely: "12 OF 248 MATCH". The caller counts; the field states. |
 | `error` | `string` | — | What went wrong AND how to fix it. Wires aria-invalid + describedby. |
+| `…rest` | `InputHTMLAttributes` | — | Spread onto the input; aria-describedby is merged. ref forwards to the input. |
 
 ## Accessibility
 

@@ -68,4 +68,10 @@
   .sv-cardtabs__tab--active:dir(rtl)::after {
     transform-origin: right center;
   }
+
+  /* v0.11 · a disabled card tab: faint ink, not-allowed; arrows skip it. */
+  .sv-cardtabs__tab:disabled {
+    color: var(--sv-ink-faint);
+    cursor: not-allowed;
+  }
 }

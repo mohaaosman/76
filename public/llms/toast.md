@@ -76,6 +76,8 @@ const { notify } = useToast();
 | `icon` | `ReactNode` | — | 16px stroke icon; defaults to the tone icon. |
 | `size` | `'default' | 'lg'` | `'default'` | 360px · 440px for two-line descriptions. |
 | `duration` | `number` | — | ms before auto-dismiss. Defaults: 5000 for ok/info; 0 (sticky) for warn/bad. |
+| `returns` | `number` | — | The toast's id — pass it to dismiss(id) to remove it early. |
+| `dismiss(id)` | `(id: number) => void` | — | Also on the useToast() API: removes a toast before its timer, e.g. "Saving…" once the save lands. |
 
 ### useToast → toast() (0.1.x shorthand)
 

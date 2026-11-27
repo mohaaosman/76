@@ -1,0 +1,51 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "data-state",
+  "type": "registry:ui",
+  "title": "DataState",
+  "description": "The four lifecycle states of a data region — loading, empty, error, ready — assembled once, around any widget. One job: State which of the four lifecycle states a data region is in, and draw the right one.",
+  "registryDependencies": [
+    "https://76.zifala.com/r/tokens.json",
+    "https://76.zifala.com/r/skeleton.json",
+    "https://76.zifala.com/r/empty-state.json",
+    "https://76.zifala.com/r/banner.json"
+  ],
+  "files": [
+    {
+      "path": "registry/seventy-six/data-state.tsx",
+      "content": "import { useEffect, useState } from 'react';\nimport type { HTMLAttributes, ReactNode } from 'react';\nimport { cx } from '@/lib/cx';\nimport { useStrings } from '@/lib/i18n';\nimport { Skeleton } from './skeleton';\nimport { EmptyState } from './empty-state';\nimport { Banner } from './banner';\nimport './data-state.css';\n\n/**\n * B64 · DataState (v0.11) — one job: state which of the four lifecycle\n * states a data region is in, and draw the right one.\n *\n * The Craft Floor has always required every data region to ship all four —\n * loading (a skeleton, gated at 300ms), empty, inline error, loaded — and\n * every screen re-assembled them by hand from B16 Skeleton, B15 EmptyState\n * and B22 Banner, so most screens shipped one or two. This is that\n * assembly, once, around ANY widget: a DataTable, a MeterList, a Trend.\n * It adds no state of its own; the caller says which state the data is in.\n *\n * - **loading** — nothing for the first 300ms (a fast answer never flashes\n *   a skeleton), then skeleton rows. The region is `aria-busy` and a\n *   visually hidden line names what is loading. Its height is reserved\n *   with `minHeight`, so the card does not jump when the data lands.\n * - **empty** — B15's one sentence and one action.\n * - **error** — B22 inline, at the region, in --sv-bad: what happened and\n *   how to fix it, with the caller's named retry action. Never a toast.\n * - **ready** — the children, exactly as given.\n *\n * Inside a `<Card>` it sits directly, like the full-bleed B7 it usually\n * wraps; its own loading, empty and error states carry the card inset. A\n * widget that has no inset of its own (B6, B41) still takes `sv-card__body`\n * inside it when ready.\n *\n * Don't: never a spinner as the first paint (that is a skeleton); never an\n * error without what to do; never \"No data\" — say what is empty and why.\n */\nexport type DataStatus = 'loading' | 'empty' | 'error' | 'ready';\n\nexport interface DataStateProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {\n  status: DataStatus;\n  /** What is loading, for the announcement: \"Loading orders\". Defaults to the catalog's \"Loading…\". */\n  loadingLabel?: string;\n  /** Skeleton rows while loading (default 4), or a skeleton of your own via `skeleton`. */\n  rows?: number;\n  skeleton?: ReactNode;\n  /** The empty state: one sentence saying WHAT is empty, and one action. */\n  empty?: { sentence: string; action?: ReactNode };\n  /** The inline error: what happened, how to fix it, and a named retry. */\n  error?: { title: string; body?: ReactNode; action?: ReactNode };\n  /** Reserved height while loading, so the region does not jump. */\n  minHeight?: number | string;\n  children?: ReactNode;\n}\n\n/* The gate: a skeleton that appears for 80ms is a flicker, not a state. */\nfunction useGate(active: boolean, ms = 300) {\n  const [open, setOpen] = useState(false);\n  useEffect(() => {\n    if (!active) {\n      setOpen(false);\n      return;\n    }\n    const t = window.setTimeout(() => setOpen(true), ms);\n    return () => window.clearTimeout(t);\n  }, [active, ms]);\n  return open;\n}\n\nexport function DataState({\n  status,\n  loadingLabel,\n  rows = 4,\n  skeleton,\n  empty,\n  error,\n  minHeight,\n  className,\n  style,\n  children,\n  ...rest\n}: DataStateProps) {\n  const tr = useStrings();\n  const loading = status === 'loading';\n  const showSkeleton = useGate(loading);\n\n  return (\n    <div\n      {...rest}\n      className={cx('sv-datastate', `sv-datastate--${status}`, className)}\n      aria-busy={loading || undefined}\n      style={loading && minHeight !== undefined ? { minHeight, ...style } : style}\n    >\n      {loading && (\n        <div className=\"sv-datastate__pad\">\n          <p className=\"sv-visually-hidden\" role=\"status\">\n            {loadingLabel ?? tr.loading}\n          </p>\n          {showSkeleton &&\n            (skeleton ?? (\n              <div className=\"sv-datastate__rows\" aria-hidden=\"true\">\n                {Array.from({ length: rows }, (_, i) => (\n                  <div className=\"sv-datastate__row\" key={i}>\n                    <Skeleton width=\"18%\" height={10} />\n                    <Skeleton width={`${46 - (i % 3) * 8}%`} height={10} />\n                    <Skeleton width=\"14%\" height={10} />\n                  </div>\n                ))}\n              </div>\n            ))}\n        </div>\n      )}\n      {status === 'empty' && empty && <EmptyState sentence={empty.sentence} action={empty.action} />}\n      {status === 'error' && error && (\n        <div className=\"sv-datastate__pad\">\n          <Banner tone=\"bad\" title={error.title} action={error.action}>\n            {error.body}\n          </Banner>\n        </div>\n      )}\n      {status === 'ready' && children}\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/seventy-six/data-state.tsx"
+    },
+    {
+      "path": "registry/seventy-six/data-state.css",
+      "content": "/* B64 · DataState — the four lifecycle states of one data region.\n   Full-bleed when ready (it renders its children as given); its own\n   loading and error states carry the card's 18px inline inset. EmptyState\n   pads itself (B15). */\n\n@layer sv-components {\n  .sv-datastate {\n    min-width: 0;\n  }\n\n  .sv-datastate__pad {\n    padding: var(--sv-s4) 18px 18px;\n  }\n\n  .sv-datastate__rows {\n    display: flex;\n    flex-direction: column;\n  }\n\n  /* Skeleton rows take the table's own rhythm — hairline, row inset — so\n     the region the data lands in is the region the skeleton drew. */\n  .sv-datastate__row {\n    display: grid;\n    grid-template-columns: minmax(0, 1fr) minmax(0, 2.4fr) minmax(0, 1fr);\n    gap: var(--sv-s4);\n    align-items: center;\n    padding-block: var(--sv-row-y);\n    border-bottom: 1px solid var(--sv-line);\n  }\n\n  .sv-datastate__row:last-child {\n    border-bottom: 0;\n  }\n\n  .sv-datastate__row > :last-child {\n    justify-self: end;\n  }\n}\n",
+      "type": "registry:file",
+      "target": "components/seventy-six/data-state.css"
+    }
+  ],
+  "categories": [
+    "widgets"
+  ],
+  "docs": "https://76.zifala.com/llms/data-state.md",
+  "meta": {
+    "system": "76° — Seventy Six Degrees",
+    "book": "B64",
+    "job": "State which of the four lifecycle states a data region is in, and draw the right one.",
+    "tags": [
+      "loading",
+      "skeleton",
+      "empty state",
+      "error",
+      "lifecycle",
+      "async",
+      "fetch",
+      "region"
+    ],
+    "exports": [
+      "DataState",
+      "DataStateProps",
+      "DataStatus"
+    ]
+  }
+}

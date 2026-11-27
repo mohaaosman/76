@@ -39,6 +39,7 @@ import { Badge } from '@/components/seventy-six';
 | --- | --- | --- | --- |
 | `children` | `ReactNode` | — | Short mono uppercase text — 1–3 words. |
 | `tone` | `'neutral' | 'seed'` | `'neutral'` | seed marks the current/active category — one per group. |
+| `…rest` | `HTMLAttributes<HTMLSpanElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the badge. className is appended. |
 
 ## Accessibility
 

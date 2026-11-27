@@ -44,6 +44,7 @@ import { DescriptionList } from '@/components/seventy-six';
 | --- | --- | --- | --- |
 | `rows` | `DescriptionRow[]` | — | term · children · optional kind (text | id | num). |
 | `layout` | `'columns' | 'stacked'` | `'columns'` | stacked puts the value under its term; below 520px columns stack on their own (C7). |
+| `…rest` | `HTMLAttributes<HTMLDListElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the <dl>; ref forwards to it. className is appended. |
 
 ## Accessibility
 

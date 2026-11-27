@@ -106,6 +106,11 @@ export interface SvMessages {
   loading: string;
   total: string;
   noValue: string;
+  closeWord: string;
+  removeWord: string;
+  uploaded: string;
+  noResultsFor: (q: string) => string;
+  daySpan: (n: number, endsToday: boolean, end: string) => string;
   /* 0.7 – 0.9 widgets */
   scanReady: string;
   scanOk: string;
@@ -196,6 +201,11 @@ const en: SvMessages = {
   loading: 'Loading…',
   total: 'Total',
   noValue: 'No value',
+  closeWord: 'Close',
+  removeWord: 'Remove',
+  uploaded: 'Uploaded',
+  noResultsFor: (q) => `No results for “${q}”. Try a component or page name.`,
+  daySpan: (n, today, end) => `${n} ${n === 1 ? 'day' : 'days'} · ends ${today ? 'today' : end}`,
   scanReady: 'Ready to scan',
   scanOk: 'Matched',
   scanBad: 'Not matched',
@@ -286,6 +296,11 @@ const fr: SvMessages = {
   loading: 'Chargement…',
   total: 'Total',
   noValue: 'Aucune valeur',
+  closeWord: 'Fermer',
+  removeWord: 'Retirer',
+  uploaded: 'Envoyé',
+  noResultsFor: (q) => `Aucun résultat pour « ${q} ». Essayez un nom de composant ou de page.`,
+  daySpan: (n, today, end) => `${n} ${n === 1 ? 'jour' : 'jours'} · se termine ${today ? 'aujourd’hui' : `le ${end}`}`,
   scanReady: 'Prêt à scanner',
   scanOk: 'Reconnu',
   scanBad: 'Non reconnu',
@@ -390,6 +405,11 @@ const ar: SvMessages = {
   loading: 'جارٍ التحميل…',
   total: 'الإجمالي',
   noValue: 'لا توجد قيمة',
+  closeWord: 'إغلاق',
+  removeWord: 'إزالة',
+  uploaded: 'تم الرفع',
+  noResultsFor: (q) => `لا توجد نتائج لـ «${q}». جرّب اسم مكوّن أو صفحة.`,
+  daySpan: (n, today, end) => `${n} يوم · ينتهي ${today ? 'اليوم' : end}`,
   scanReady: 'جاهز للمسح',
   scanOk: 'مطابق',
   scanBad: 'غير مطابق',
@@ -488,6 +508,11 @@ const so: SvMessages = {
   loading: 'Waa la soo rarayaa…',
   total: 'Wadarta',
   noValue: 'Qiime ma leh',
+  closeWord: 'Xir',
+  removeWord: 'Ka saar',
+  uploaded: 'Waa la soo geliyay',
+  noResultsFor: (q) => `Natiijo looma helin “${q}”. Isku day magac qayb ama bog.`,
+  daySpan: (n, today, end) => `${n} maalmood · wuxuu dhammaanayaa ${today ? 'maanta' : end}`,
   scanReady: 'Diyaar u ah iskaanka',
   scanOk: 'Waa la helay',
   scanBad: 'Lama helin',

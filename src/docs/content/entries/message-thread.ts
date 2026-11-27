@@ -98,6 +98,7 @@ export const messageThreadEntry: DocEntry = {
         { name: 'avatars', type: 'boolean', defaultValue: 'false', description: 'An initials Avatar beside each author. The name stays the attribution; the face is not announced.' },
         { name: 'sendingWord', type: 'string', defaultValue: "'Sending'", description: 'The word for status sending. Override per locale until the catalog carries it.' },
         { name: 'failedWord', type: 'string', defaultValue: "'Not sent'", description: 'The word for status failed. Override per locale until the catalog carries it.' },
+        { name: '…rest', type: 'HTMLAttributes<HTMLOListElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the list; ref forwards to it. className is appended.' },
       ],
     },
     {

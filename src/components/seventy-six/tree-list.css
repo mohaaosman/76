@@ -93,4 +93,11 @@
   .sv-tree__item[aria-expanded='true'] > .sv-tree__row > .sv-tree__chevron:dir(rtl) {
     transform: rotate(45deg);
   }
+
+  /* v0.11 · a node that can be reached but not chosen: it still takes
+     focus (so the tree's order is intact) and states itself in faint ink. */
+  .sv-tree__item[aria-disabled='true'] > .sv-tree__row {
+    color: var(--sv-ink-faint);
+    cursor: not-allowed;
+  }
 }

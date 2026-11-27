@@ -63,6 +63,8 @@ onStepSelect turns the earned steps into buttons. The current step and everythin
 | `current` | `number` | — | Index of the current step, 0-based. Everything before it is done. |
 | `onStepSelect` | `(index: number) => void` | — | Makes COMPLETED steps buttons. Omit and the stepper is a statement. |
 | `label` | `string` | — | REQUIRED accessible name for the list, e.g. "Onboarding progress". |
+| `steps[].disabled` | `boolean` | — | A completed step that cannot be revisited stays a statement, not a button. |
+| `…rest` | `HTMLAttributes<HTMLOListElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the list; ref forwards to it. className is appended. |
 
 ## Accessibility
 

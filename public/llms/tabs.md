@@ -55,9 +55,12 @@ const [section, setSection] = useState('summary');
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `tabs` | `Tab[]` | — | id · label · optional mono tabular count. Cap: five. |
-| `active / onChange` | `string / (id) => void` | — | Controlled active tab. |
+| `active / onChange` | `string / (id) => void` | — | Active tab. Pass active to control it; omit it and the tablist owns the state. onChange fires in both modes. |
+| `defaultActive` | `string` | — | Uncontrolled: the tab active on first render. Defaults to the first enabled tab. |
+| `tabs[].disabled` | `boolean` | — | The tab cannot be chosen; arrow keys, Home and End step over it. |
 | `label` | `string` | — | REQUIRED accessible name for the tablist, e.g. "Report sections". |
 | `idBase` | `string` | — | Ties each tab to its OWN panel. Defaults to a generated id — pass it explicitly whenever TabPanel is used. |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the tablist; ref forwards to it. className is appended. |
 
 ### TabPanel
 
@@ -65,7 +68,8 @@ const [section, setSection] = useState('summary');
 | --- | --- | --- | --- |
 | `idBase` | `string` | — | REQUIRED — the same base the Tabs carries, or aria-controls points at nothing. |
 | `tabId` | `string` | — | The id of the tab this panel belongs to. |
-| `active` | `boolean` | — | False renders the panel hidden. Render every panel and let this decide. |
+| `active` | `boolean` | — | False renders the panel hidden. Render every panel and let this decide. Omit it with an uncontrolled Tabs of the same idBase and the tablist shows and hides the panel itself. |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the panel. className is appended. |
 
 ## Accessibility
 

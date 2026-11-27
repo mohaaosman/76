@@ -105,4 +105,11 @@
   .sv-accordion__item[open] .sv-accordion__chevron:dir(rtl) {
     transform: rotate(45deg);
   }
+
+  /* v0.11 · a section that cannot open. Faint ink, no pointer, and the
+     chevron stays put — never bare opacity (Craft Floor). */
+  .sv-accordion__summary[aria-disabled='true'] {
+    color: var(--sv-ink-faint);
+    cursor: not-allowed;
+  }
 }

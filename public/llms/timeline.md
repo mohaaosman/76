@@ -63,6 +63,7 @@ The bad row names what failed. "The run failed" states that something went wrong
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `items` | `TimelineItem[]` | — | In display order — the component renders the order it is given. |
+| `…rest` | `HTMLAttributes<HTMLOListElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the list; ref forwards to it. className is appended. |
 
 ### TimelineItem
 

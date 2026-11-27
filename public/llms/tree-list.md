@@ -61,9 +61,13 @@ const [selected, setSelected] = useState<string | null>('current');
 | --- | --- | --- | --- |
 | `label` | `string` | — | REQUIRED accessible name for the tree, e.g. "Chart of accounts". |
 | `nodes` | `TreeNode[]` | — | id · label · optional mono meta · children. |
-| `expanded / onExpandedChange` | `Set<string> / (next) => void` | — | Ids of the OPEN parents. Fully controlled — the tree owns no data state. |
+| `expanded / onExpandedChange` | `Set<string> / (next) => void` | — | Ids of the OPEN parents. Pass expanded to control the tree; omit it and the tree owns the set. onExpandedChange fires in both modes. |
+| `defaultExpanded` | `Iterable<string>` | — | Uncontrolled: the parents open on first render. |
+| `defaultSelected` | `string | null` | — | Uncontrolled selection: turns the selection model on without the caller holding state. |
+| `nodes[].disabled` | `boolean` | — | Still focusable and expandable, never selectable (aria-disabled). |
 | `selected` | `string | null` | — | The selected id, or null for "a selection exists, none made". Omit it entirely and rows carry no aria-selected. |
 | `onSelect` | `(id: string, node: TreeNode) => void` | — | Fired by Enter, Space and a pointer. A pointer on a parent also toggles its branch. |
+| `…rest` | `HTMLAttributes<HTMLUListElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the tree; ref forwards to it. className is appended. |
 
 ## Accessibility
 

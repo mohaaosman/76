@@ -51,6 +51,7 @@ import { SiteFooter } from '@/components/seventy-six';
 | `legal` | `string` | — | The mono legal line. Required — a footer without it is not one. |
 | `secondary` | `FooterLink[]` | — | Bottom-right links: privacy, terms, status. |
 | `renderLink` | `(link, className) => ReactNode` | — | Router adapter, exactly as BandNav takes one. Falls back to a plain anchor. |
+| `…rest` | `HTMLAttributes<HTMLElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the <footer>. className is appended. |
 
 ## Accessibility
 

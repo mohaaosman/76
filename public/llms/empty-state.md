@@ -51,6 +51,7 @@ The other empty case: not first-run, but a filter that matched nothing. The sent
 | --- | --- | --- | --- |
 | `sentence` | `string` | — | What would appear here and why it is empty. Max two lines rendered. |
 | `action` | `ReactNode` | — | Exactly one primary Button. Optional when no action exists. |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the wrapper. className is appended. |
 
 ## Accessibility
 

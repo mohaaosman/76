@@ -1234,6 +1234,25 @@
       ]
     },
     {
+      "name": "data-state",
+      "type": "registry:ui",
+      "title": "DataState",
+      "description": "The four lifecycle states of a data region — loading, empty, error, ready — assembled once, around any widget. One job: State which of the four lifecycle states a data region is in, and draw the right one.",
+      "categories": [
+        "widgets"
+      ],
+      "files": [
+        {
+          "path": "components/seventy-six/data-state.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/seventy-six/data-state.css",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "block-stats-row",
       "type": "registry:block",
       "title": "Stats row",

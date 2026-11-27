@@ -88,6 +88,7 @@ A carrier that does not serve a warehouse is an em dash. Six carriers in a narro
 | `highlight` | `{ row, col, note? }` | — | ONE cell in bold ink on the seed tint. note is announced with the figure. |
 | `totalLabel` | `string` | `'Total'` | Header of the totals column and row. |
 | `noValueLabel` | `string` | `'No value'` | Announced for an empty intersection. |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the scroll region; ref forwards to it. className is appended. |
 
 ## Accessibility
 

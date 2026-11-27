@@ -46,7 +46,48 @@ is too — every component moves together, and no component branches.
 - **`DataTable maxHeight`** — a long table scrolls inside its card with its
   header held at the top.
 
+### Added — every component reaches every use
+A line-by-line API audit of all 66 components against one checklist —
+`className`, native attribute passthrough, refs, controlled AND
+uncontrolled, `disabled` — with every change backwards compatible: no prop
+renamed or removed, no default changed, and a controlled prop always wins.
+- **Native attributes everywhere.** Every component's props extend its root
+  element's HTML attributes and spread them on the root, so `id`, `data-*`,
+  `aria-*`, `style` and handlers reach the DOM. Where a component computes
+  `aria-describedby` it merges the caller's; where it owns a handler it
+  chains the caller's first.
+- **Refs** on every interactive and measurable component (`forwardRef`;
+  `ref` as a prop on the generic EntryTable).
+- **Uncontrolled modes**: Tabs and CardTabs (`defaultActive`), TreeList
+  (`defaultExpanded`, `defaultSelected`), NumberField, Slider, SearchField,
+  Combobox and DateRangeField (`defaultValue`), Popover (`defaultOpen`,
+  `open`, `onOpenChange`), Accordion (per-section `open` + `onOpenChange`).
+  A `TabPanel` with no `active` is shown and hidden by its Tabs.
+- **Per-item `disabled`**: tabs, card tabs, tree nodes, steps, palette
+  results and accordion sections — arrow keys skip them, and each has a
+  faint, not-allowed style rather than bare opacity.
+- **Forms submit**: Combobox `name` posts the value (it posted the label
+  text before); DateRangeField takes `fromName`/`toName`, `required` and
+  `disabled`.
+- **Toast** `notify()` returns an id and `useToast().dismiss(id)` removes one;
+  a toast pauses while it holds keyboard focus.
+- **Drawer `preventEscape`**, matching Dialog's, for unsaved work.
+
 ### Fixed
+- **MenuButton had no `aria-expanded`**, and SplitButton's chevron neither.
+- **Home and End did nothing in a Menu** once an item had focus (NaN index).
+- **Two SearchCommands on one page collided** on hardcoded ids; they use
+  `useId`. Its listbox now groups options under named `role="group"`s
+  instead of loose `<li><p>`, and a new query lands on the first ENABLED
+  result.
+- **Tooltip overwrote its child's** `aria-describedby`, ref and handlers;
+  they merge, and Escape hides it (WCAG 1.4.13).
+- **Combobox arrow keys stopped on disabled options.**
+- **Avatar photos reserved a 32px box at every size** — layout shift on sm
+  and lg.
+- **Four more built-in strings** were English-only (Popover's Close,
+  FileField's Uploaded and Remove, the palette's no-results line, the date
+  range's day span); they come from the catalogs.
 - **Doc prose nesting `<code>` inside `<b>` printed the inner tags.** The
   renderer is recursive.
 

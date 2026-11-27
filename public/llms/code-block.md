@@ -65,6 +65,7 @@ const snippet = `<DataTable
 | `copyable` | `boolean` | `true` | Offers the copy control — and only when the clipboard API exists. |
 | `ariaLabel` | `string` | — | Names the block; defaults to "Code, {label}", or "Code" when unlabelled. |
 | `className` | `string` | — | Applied to the outer panel. |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the outer panel. className is appended. |
 
 ## Accessibility
 

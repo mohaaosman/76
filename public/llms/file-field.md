@@ -82,6 +82,7 @@ The row states the ceiling and the fix — never "Upload failed" (B11).
 | `onRemove` | `(id: string) => void` | — | What "Remove" means — cancel, delete, forget — is the product's decision. |
 | `error` | `string` | — | Field-level error: what is wrong AND how to fix it (B11). |
 | `disabled` | `boolean` | — | Disables the button and the input, and refuses drops. |
+| `…rest / ref` | `HTMLAttributes<HTMLDivElement> / Ref<HTMLInputElement>` | — | Native attributes go to the root; the ref is the hidden file input, so ref.current.click() opens the picker. Remove buttons now honour disabled too. |
 
 ### FileRow
 

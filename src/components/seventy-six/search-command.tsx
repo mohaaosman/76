@@ -113,6 +113,12 @@ export const SearchCommand = forwardRef<HTMLDialogElement, SearchCommandProps & 
     return from;
   }
 
+  /* v0.11 · a new query resets to the FIRST ENABLED result, not row 0 —
+     a disabled row 0 left Enter doing nothing on the very first keystroke. */
+  useEffect(() => {
+    if (results[activeIdx]?.disabled) setActiveIdx(stepTo(-1, 1));
+  }, [results]);
+
   function onKeyDown(e: KeyboardEvent) {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -170,9 +176,14 @@ export const SearchCommand = forwardRef<HTMLDialogElement, SearchCommandProps & 
         />
         <ul className="sv-command__list" id={listId} role="listbox" aria-label={tr.results}>
           {groups.map(([group, groupItems]) => (
-            <li key={group}>
-              <p className="sv-command__group sv-mono">{group}</p>
-              <ul role="presentation">
+            /* v0.11 · a listbox may contain groups of options, and a group
+               is named by its header — the old <li><p> sat in the listbox as
+               content no option role could describe. */
+            <li key={group} role="presentation">
+              <p className="sv-command__group sv-mono" id={`${listId}-g-${group.replace(/\W+/g, '-')}`}>
+                {group}
+              </p>
+              <ul role="group" aria-labelledby={`${listId}-g-${group.replace(/\W+/g, '-')}`}>
                 {groupItems.map((item) => {
                   flatIdx += 1;
                   const idx = flatIdx;
@@ -201,7 +212,9 @@ export const SearchCommand = forwardRef<HTMLDialogElement, SearchCommandProps & 
             </li>
           ))}
           {results.length === 0 && (
-            <li className="sv-command__none">No results for “{query}”. Try a component or page name.</li>
+            <li className="sv-command__none" role="presentation">
+              {tr.noResultsFor(query)}
+            </li>
           )}
         </ul>
       </div>

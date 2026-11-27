@@ -71,6 +71,7 @@ import { Band, BandTopbar, BandNav, BandSubTabs, PageHero, Button } from '@/comp
 | `app` | `string` | — | App name after the wordmark hairline. |
 | `nav` | `ReactNode` | — | A BandNav. |
 | `utilities` | `ReactNode` | — | Right cluster: search trigger, notifications, avatar. The one place icon-only buttons are legal (with aria-label). |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the topbar. className is appended. |
 
 ### BandNav / BandSubTabs
 
@@ -78,6 +79,7 @@ import { Band, BandTopbar, BandNav, BandSubTabs, PageHero, Button } from '@/comp
 | --- | --- | --- | --- |
 | `items` | `BandNavItem[]` | — | { label, href, active? }. SubTabs render nothing when empty. |
 | `renderLink` | `(item, className, ariaCurrent) => ReactNode` | — | Adapter for router Links — keeps the component router-agnostic. |
+| `…rest` | `HTMLAttributes<HTMLElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the <nav>; an aria-label you pass replaces the built-in name. className is appended. |
 
 ### PageHero
 
@@ -86,6 +88,7 @@ import { Band, BandTopbar, BandNav, BandSubTabs, PageHero, Button } from '@/comp
 | `title / titleSoft` | `string` | — | The h1 (27/800); the soft secondary word in band-soft. |
 | `context` | `string` | — | One sentence max: date · scope · last sync. |
 | `actions` | `ReactNode` | — | Max: one mono range control, two ghosts, ONE primary. |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the hero. className is appended. |
 
 ## Accessibility
 

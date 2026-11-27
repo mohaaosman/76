@@ -81,6 +81,7 @@ The deltas are step rates against Q2, and the head says so once.
 | `steps[].share` | `number` | — | 0–1 of the FIRST step, for drawing the bar only. The first step is 1. |
 | `steps[].conversion` | `string` | — | PRE-FORMATTED, from the previous step: "41.2% of previous · 7,370 lost". |
 | `baseline` | `string` | — | What the comparisons are against, printed once at the head via the localized "vs …". |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the root; ref forwards to it. className is appended. |
 
 ## Accessibility
 

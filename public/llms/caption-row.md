@@ -43,6 +43,7 @@ import { CaptionRow } from '@/components/seventy-six';
 | --- | --- | --- | --- |
 | `captions` | `string[]` | — | Two to four short fragments. Each is a phrase, not a sentence. |
 | `rule` | `'top' | 'bottom' | 'none'` | `'top'` | Which edge carries the hairline. Top captions the block above. |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the row. className is appended. |
 
 ## Accessibility
 

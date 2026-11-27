@@ -127,7 +127,7 @@ export const DateRangeField = forwardRef<HTMLFieldSetElement, DateRangeFieldProp
 
   const days = inverted || !value.from || !value.to ? 0 : Math.round((toMs(value.to) - toMs(value.from)) / DAY) + 1;
   const derived =
-    days > 0 ? `${days} ${days === 1 ? 'day' : 'days'} · ends ${value.to === today ? 'today' : monoDate(value.to)}` : '';
+    days > 0 ? tr.daySpan(days, value.to === today, monoDate(value.to)) : '';
   const contextLine = context ?? derived;
 
   return (

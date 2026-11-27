@@ -55,6 +55,10 @@ export const structure: DocEntry[] = [
           { name: 'sections', type: 'AccordionSection[]', description: 'id · title · optional mono meta · children · defaultOpen.' },
           { name: 'exclusive', type: 'boolean', defaultValue: 'false', description: 'One open at a time, via the native name group.' },
           { name: 'name', type: 'string', description: 'The shared native group name. Required when exclusive.' },
+          { name: 'sections[].open', type: 'boolean', description: 'Controlled open state for that section: a click only calls onOpenChange. Omit for the native uncontrolled behaviour (defaultOpen).' },
+          { name: 'sections[].disabled', type: 'boolean', description: 'The section cannot be toggled; its summary reports aria-disabled.' },
+          { name: 'onOpenChange', type: '(id, open) => void', description: 'Uncontrolled: reports each native toggle. Controlled sections: the only thing that changes them.' },
+          { name: '…rest', type: 'HTMLAttributes<HTMLDivElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the wrapper; ref forwards to it. className is appended.' },
         ],
       },
     ],
@@ -119,6 +123,7 @@ export const structure: DocEntry[] = [
         rows: [
           { name: 'rows', type: 'DescriptionRow[]', description: 'term · children · optional kind (text | id | num).' },
           { name: 'layout', type: "'columns' | 'stacked'", defaultValue: "'columns'", description: 'stacked puts the value under its term; below 520px columns stack on their own (C7).' },
+          { name: '…rest', type: 'HTMLAttributes<HTMLDListElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the <dl>; ref forwards to it. className is appended.' },
         ],
       },
     ],
@@ -174,6 +179,7 @@ export const structure: DocEntry[] = [
         rows: [
           { name: 'label', type: 'string', description: 'Mono uppercase text in the rule. Omit for a plain hairline.' },
           { name: 'align', type: "'start' | 'center'", defaultValue: "'center'", description: 'start keeps the label flush left and runs the rule past it.' },
+          { name: '…rest', type: 'HTMLAttributes<HTMLElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the <hr> or the labelled separator. className is appended.' },
         ],
       },
     ],
@@ -230,6 +236,7 @@ export const structure: DocEntry[] = [
           { name: 'src', type: 'string', description: 'Photo URL. Renders an <img> with the name as alt.' },
           { name: 'size', type: "'sm' | 'md' | 'lg'", defaultValue: "'md'", description: '24 · 32 · 44px.' },
           { name: 'tone', type: "'neutral' | 'seed'", defaultValue: "'neutral'", description: 'seed marks the current user — one per group.' },
+          { name: '…rest', type: 'HTMLAttributes<HTMLElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the <img> or the initials <span>. className is appended.' },
         ],
       },
       {
@@ -238,6 +245,7 @@ export const structure: DocEntry[] = [
           { name: 'people', type: '{ name: string; src?: string }[]', description: 'In display order — most relevant first.' },
           { name: 'max', type: 'number', defaultValue: '4', description: 'Faces shown before the mono overflow count.' },
           { name: 'size', type: "'sm' | 'md'", defaultValue: "'sm'", description: 'Stacks stay small; 44px is for a profile head.' },
+          { name: '…rest', type: 'HTMLAttributes<HTMLSpanElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the group. className is appended.' },
         ],
       },
     ],
@@ -303,6 +311,7 @@ export const structure: DocEntry[] = [
         rows: [
           { name: 'size', type: '12 | 16 | 20', defaultValue: '12', description: 'Matches the type it sits beside.' },
           { name: 'label', type: 'string', description: 'Announced via role="status". Omit only when an adjacent live region says it.' },
+          { name: '…rest', type: 'HTMLAttributes<HTMLSpanElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the mark. className is appended.' },
         ],
       },
       {
@@ -311,6 +320,7 @@ export const structure: DocEntry[] = [
           { name: 'label', type: 'string', description: 'REQUIRED sentence naming what is loading.' },
           { name: 'minHeight', type: 'number', defaultValue: '160', description: 'Region height while empty — match the component it replaces so nothing jumps.' },
           { name: 'children', type: 'ReactNode', description: 'Existing content, kept legible underneath while it refreshes.' },
+          { name: '…rest', type: 'HTMLAttributes<HTMLDivElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the region; style merges with minHeight. className is appended.' },
         ],
       },
     ],
@@ -366,6 +376,7 @@ export const structure: DocEntry[] = [
         rows: [
           { name: 'keys', type: 'string[]', description: 'One key per string — rendered as separate caps.' },
           { name: 'separator', type: 'string', description: 'Shown between caps for a sequence ("then"). Omit for a chord.' },
+          { name: '…rest', type: 'HTMLAttributes<HTMLSpanElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the wrapper. className is appended.' },
         ],
       },
     ],
@@ -435,9 +446,12 @@ const [section, setSection] = useState('summary');
         component: 'Tabs',
         rows: [
           { name: 'tabs', type: 'Tab[]', description: 'id · label · optional mono tabular count. Cap: five.' },
-          { name: 'active / onChange', type: 'string / (id) => void', description: 'Controlled active tab.' },
+          { name: 'active / onChange', type: 'string / (id) => void', description: 'Active tab. Pass active to control it; omit it and the tablist owns the state. onChange fires in both modes.' },
+          { name: 'defaultActive', type: 'string', description: 'Uncontrolled: the tab active on first render. Defaults to the first enabled tab.' },
+          { name: 'tabs[].disabled', type: 'boolean', description: 'The tab cannot be chosen; arrow keys, Home and End step over it.' },
           { name: 'label', type: 'string', description: 'REQUIRED accessible name for the tablist, e.g. "Report sections".' },
           { name: 'idBase', type: 'string', description: 'Ties each tab to its OWN panel. Defaults to a generated id — pass it explicitly whenever TabPanel is used.' },
+          { name: '…rest', type: 'HTMLAttributes<HTMLDivElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the tablist; ref forwards to it. className is appended.' },
         ],
       },
       {
@@ -445,7 +459,8 @@ const [section, setSection] = useState('summary');
         rows: [
           { name: 'idBase', type: 'string', description: 'REQUIRED — the same base the Tabs carries, or aria-controls points at nothing.' },
           { name: 'tabId', type: 'string', description: 'The id of the tab this panel belongs to.' },
-          { name: 'active', type: 'boolean', description: 'False renders the panel hidden. Render every panel and let this decide.' },
+          { name: 'active', type: 'boolean', description: 'False renders the panel hidden. Render every panel and let this decide. Omit it with an uncontrolled Tabs of the same idBase and the tablist shows and hides the panel itself.' },
+          { name: '…rest', type: 'HTMLAttributes<HTMLDivElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the panel. className is appended.' },
         ],
       },
     ],
@@ -533,6 +548,8 @@ const [section, setSection] = useState('summary');
           { name: 'current', type: 'number', description: 'Index of the current step, 0-based. Everything before it is done.' },
           { name: 'onStepSelect', type: '(index: number) => void', description: 'Makes COMPLETED steps buttons. Omit and the stepper is a statement.' },
           { name: 'label', type: 'string', description: 'REQUIRED accessible name for the list, e.g. "Onboarding progress".' },
+          { name: 'steps[].disabled', type: 'boolean', description: 'A completed step that cannot be revisited stays a statement, not a button.' },
+          { name: '…rest', type: 'HTMLAttributes<HTMLOListElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the list; ref forwards to it. className is appended.' },
         ],
       },
     ],
@@ -618,9 +635,13 @@ const [selected, setSelected] = useState<string | null>('current');
         rows: [
           { name: 'label', type: 'string', description: 'REQUIRED accessible name for the tree, e.g. "Chart of accounts".' },
           { name: 'nodes', type: 'TreeNode[]', description: 'id · label · optional mono meta · children.' },
-          { name: 'expanded / onExpandedChange', type: 'Set<string> / (next) => void', description: 'Ids of the OPEN parents. Fully controlled — the tree owns no data state.' },
+          { name: 'expanded / onExpandedChange', type: 'Set<string> / (next) => void', description: 'Ids of the OPEN parents. Pass expanded to control the tree; omit it and the tree owns the set. onExpandedChange fires in both modes.' },
+          { name: 'defaultExpanded', type: 'Iterable<string>', description: 'Uncontrolled: the parents open on first render.' },
+          { name: 'defaultSelected', type: 'string | null', description: 'Uncontrolled selection: turns the selection model on without the caller holding state.' },
+          { name: 'nodes[].disabled', type: 'boolean', description: 'Still focusable and expandable, never selectable (aria-disabled).' },
           { name: 'selected', type: 'string | null', description: 'The selected id, or null for "a selection exists, none made". Omit it entirely and rows carry no aria-selected.' },
           { name: 'onSelect', type: '(id: string, node: TreeNode) => void', description: 'Fired by Enter, Space and a pointer. A pointer on a parent also toggles its branch.' },
+          { name: '…rest', type: 'HTMLAttributes<HTMLUListElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the tree; ref forwards to it. className is appended.' },
         ],
       },
     ],
@@ -711,6 +732,7 @@ const [selected, setSelected] = useState<string | null>('current');
         component: 'Timeline',
         rows: [
           { name: 'items', type: 'TimelineItem[]', description: 'In display order — the component renders the order it is given.' },
+          { name: '…rest', type: 'HTMLAttributes<HTMLOListElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the list; ref forwards to it. className is appended.' },
         ],
       },
       {

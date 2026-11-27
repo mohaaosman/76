@@ -68,6 +68,7 @@ The measure caps and the column centres — everything else is unchanged.
 | `actions` | `ReactNode` | — | ONE or TWO buttons, one of them primary. A third is a menu or a page (F12). |
 | `align` | `'start' | 'center'` | `'start'` | Left-aligned by default, because that is how the rest of the system sets type. |
 | `headingLevel` | `1 | 2` | `1` | 2 only when the page already owns its h1. |
+| `…rest` | `HTMLAttributes<HTMLElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the <header>. className is appended. |
 
 ## Accessibility
 

@@ -64,6 +64,7 @@ The page closes on the same ink it opened under.
 | `actions` | `ReactNode` | — | ONE primary. A ghost beside it is permitted; a second primary is not. |
 | `tone` | `'paper' | 'band'` | `'paper'` | A card on the wall, or the ink surface edge to edge. |
 | `headingLevel` | `2 | 3` | `2` | A public page's h1 belongs to its Masthead (B47). |
+| `…rest` | `HTMLAttributes<HTMLElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the <section>. className is appended. |
 
 ## Accessibility
 

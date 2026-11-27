@@ -3,7 +3,7 @@
  * One component per widget type: the taxonomy is the component API.
  */
 export { Band, BandTopbar, BandNav, BandSubTabs, PageHero } from './band';
-export type { BandNavItem, PageHeroProps } from './band';
+export type { BandNavItem, BandNavProps, BandSubTabsProps, PageHeroProps } from './band';
 export { Plate, PlateHead } from './plate';
 export type { PlateProps, PlateHeadProps } from './plate';
 export { Split } from './split';
@@ -64,6 +64,7 @@ export { Dialog } from './dialog';
 export { Drawer } from './drawer';
 export type { DrawerProps } from './drawer';
 export { ToastProvider, useToast } from './toast';
+export type { ToastProviderProps } from './toast';
 export type { NotifyOptions, ToastTone } from './toast';
 export { Banner } from './banner';
 export type { BannerProps, BannerTone } from './banner';

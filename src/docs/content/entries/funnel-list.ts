@@ -69,6 +69,7 @@ export const funnelListEntry: DocEntry = {
         { name: 'steps[].share', type: 'number', description: '0–1 of the FIRST step, for drawing the bar only. The first step is 1.' },
         { name: 'steps[].conversion', type: 'string', description: 'PRE-FORMATTED, from the previous step: "41.2% of previous · 7,370 lost".' },
         { name: 'baseline', type: 'string', description: 'What the comparisons are against, printed once at the head via the localized "vs …".' },
+        { name: '…rest', type: 'HTMLAttributes<HTMLDivElement>', description: 'id, style, data-*, aria-*, event handlers — spread onto the root; ref forwards to it. className is appended.' },
       ],
     },
   ],

@@ -44,6 +44,7 @@ import { Card, CardHead, ButtonLink } from '@/components/seventy-six';
 | --- | --- | --- | --- |
 | `as` | `'div' | 'section' | 'article'` | `'section'` | Semantic element. Cards that link wrap the whole card in the anchor instead. |
 | `…rest` | `HTMLAttributes` | — | className, aria-label, etc. |
+| `…rest` | `HTMLAttributes<HTMLElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the card; ref forwards to it. className is appended. |
 
 ### CardHead
 
@@ -52,6 +53,7 @@ import { Card, CardHead, ButtonLink } from '@/components/seventy-six';
 | `title` | `string` | — | Bold 13.5/700 title. Required. |
 | `subtitle` | `string` | — | Faint 11.5 subtitle under the title. |
 | `action` | `ReactNode` | — | ONE action, right-aligned — a ButtonLink or mono range control. |
+| `…rest` | `HTMLAttributes<HTMLElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the <header>. className is appended. |
 
 ## Accessibility
 

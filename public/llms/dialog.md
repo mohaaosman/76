@@ -107,6 +107,8 @@ destructive disables scrim-click close; the red fill appears here and nowhere el
 | `destructive` | `boolean` | `false` | Scrim click no longer closes; Esc still works unless preventEscape. |
 | `preventEscape` | `boolean` | `false` | Blocks Esc while a destructive action is mid-flight. |
 | `footer` | `ReactNode` | — | Right-aligned actions: ghost cancel + ONE primary/danger. |
+| `className` | `string` | — | Appended to the <dialog>. |
+| `…rest` | `DialogHTMLAttributes` | — | id, data-*, aria-*; onCancel and onClick are chained before the built-in Esc and scrim handling. ref forwards to the <dialog>. |
 
 ## Accessibility
 

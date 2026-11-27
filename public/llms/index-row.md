@@ -50,6 +50,7 @@ import { IndexRow } from '@/components/seventy-six';
 | `items` | `IndexItem[]` | — | id · label · href · optional mono meta. Two to eight. |
 | `ariaLabel` | `string` | — | Required — it is navigation, and navigation is named. |
 | `renderLink` | `(item, className) => ReactNode` | — | Router adapter, exactly as BandNav takes one. |
+| `…rest` | `HTMLAttributes<HTMLElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the <nav>; ref forwards to it. className is appended. |
 
 ## Accessibility
 

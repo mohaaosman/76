@@ -77,9 +77,12 @@ const filtered = filter === 'all' ? invoices : invoices.filter(byStatus(filter))
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `tabs` | `CardTab[]` | — | { id, label, count? } — count renders as a mono figure. |
-| `active / onChange` | `string / (id) => void` | — | Controlled active tab. |
+| `active / onChange` | `string / (id) => void` | — | Active tab. Pass active to control it; omit it and the component owns the state. onChange fires in both modes. |
+| `defaultActive` | `string` | — | Uncontrolled: the tab active on first render. Defaults to the first enabled tab. |
+| `tabs[].disabled` | `boolean` | — | The tab or filter cannot be chosen; arrow keys step over it. |
 | `mode` | `'tabs' | 'filters'` | `'tabs'` | tabs = ARIA tablist with arrow keys; filters = aria-pressed buttons. |
 | `idBase` | `string` | — | In tabs mode, ties tabs to your panel: panel id={`${idBase}-panel`}. |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the tab row; ref forwards to it. className is appended. |
 
 ## Accessibility
 

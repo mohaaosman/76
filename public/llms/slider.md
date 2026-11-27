@@ -46,13 +46,15 @@ import { Slider } from '@/components/seventy-six';
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `label` | `string` | — | Above the track, with the readout on the same line. |
-| `value` | `number` | — | Controlled value. |
+| `value` | `number` | — | Controlled value. Omit it for an uncontrolled field. |
+| `defaultValue` | `number` | — | Uncontrolled: the starting value. |
 | `onValueChange` | `(value: number) => void` | — | Fires on every input event. |
 | `min` | `number` | `0` | Range floor. |
 | `max` | `number` | `100` | Range ceiling. |
 | `step` | `number` | `1` | Granularity — coarse steps beat false precision. |
 | `format` | `(value: number) => string` | — | Formats the readout AND aria-valuetext. |
 | `hint` | `string` | — | One line stating what the value does. |
+| `…rest` | `InputHTMLAttributes` | — | Spread onto the range input; aria-describedby is merged. ref forwards to the input. |
 
 ## Accessibility
 

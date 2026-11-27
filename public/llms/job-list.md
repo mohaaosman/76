@@ -71,6 +71,7 @@ Start the export: the row is queued, runs through 4,700 rows, and lands with its
 | --- | --- | --- | --- |
 | `jobs` | `Job[]` | — | This reader's operations, newest first. Each row changes in place. |
 | `announcement` | `string` | — | Polite live announcement of the latest change: "Export November receipts finished". |
+| `…rest` | `HTMLAttributes<HTMLDivElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the root; ref forwards to it. className is appended. |
 
 ### Job
 

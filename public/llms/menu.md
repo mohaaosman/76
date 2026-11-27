@@ -65,6 +65,9 @@ import { SplitButton } from '@/components/seventy-six';
 | `items` | `MenuItem[]` | — | { label, onSelect, icon?, meta?, danger?, disabled? } or 'separator'. |
 | `align` | `'start' | 'end'` | `'start'` | Panel edge alignment against the trigger. |
 | `variant` | `ButtonVariant` | `'ghost'` | Trigger variant. |
+| `disabled / className` | `boolean / string` | — | Apply to the trigger. |
+| `onOpenChange` | `(open: boolean) => void` | — | Reports every open and close. The trigger now also carries aria-expanded. |
+| `…rest` | `ButtonHTMLAttributes` | — | Spread onto the trigger. ref forwards to it. |
 
 ### SplitButton
 
@@ -74,6 +77,7 @@ import { SplitButton } from '@/components/seventy-six';
 | `items` | `MenuItem[]` | — | Variants of the same job behind the chevron. |
 | `menuLabel` | `string` | — | Accessible name for the chevron trigger. |
 | `isLoading / loadingLabel` | `boolean / string` | — | B10 loading contract on the primary half; the chevron disables too. |
+| `…rest` | `HTMLAttributes<HTMLSpanElement>` | — | Spread onto the wrapper (onClick is the primary verb, above). ref forwards to the wrapper. |
 
 ## Accessibility
 

@@ -95,6 +95,7 @@ The three states a row can be in besides settled.
 | --- | --- | --- | --- |
 | `rows` | `SettingRow[]` | — | One row per setting, in the order a reader should meet them. |
 | `label` | `string` | — | Accessible name of the list. Usually the CardHead title. |
+| `…rest` | `HTMLAttributes<HTMLUListElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the list; ref forwards to it. className is appended. |
 
 ### SettingRow
 

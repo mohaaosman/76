@@ -233,30 +233,41 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
     el?.scrollIntoView({ block: 'nearest' });
   }, [active, open]);
 
+  /* The next enabled option from `from` in direction `dir`; stays put at
+     either end rather than wrapping (a listbox, not a carousel). */
+  function nextEnabled(from: number, dir: 1 | -1) {
+    for (let i = from + dir; i >= 0 && i < filtered.length; i += dir) {
+      if (!filtered[i].disabled) return i;
+    }
+    return Math.min(Math.max(from, 0), Math.max(filtered.length - 1, 0));
+  }
+
   function onKeyDown(e: KeyboardEvent<HTMLInputElement>) {
     onKeyDownProp?.(e);
     if (e.defaultPrevented) return;
     switch (e.key) {
+      /* v0.11 · the active row never lands on a disabled option — Enter on
+         one was already ignored, so stopping there was a dead keystroke. */
       case 'ArrowDown':
         e.preventDefault();
         if (!open) return openList();
-        setActive((i) => Math.min(i + 1, filtered.length - 1));
+        setActive((i) => nextEnabled(i, 1));
         break;
       case 'ArrowUp':
         e.preventDefault();
         if (!open) return openList();
-        setActive((i) => Math.max(i - 1, 0));
+        setActive((i) => nextEnabled(i, -1));
         break;
       case 'Home':
         if (open) {
           e.preventDefault();
-          setActive(0);
+          setActive(nextEnabled(-1, 1));
         }
         break;
       case 'End':
         if (open) {
           e.preventDefault();
-          setActive(filtered.length - 1);
+          setActive(nextEnabled(filtered.length, -1));
         }
         break;
       case 'Enter':

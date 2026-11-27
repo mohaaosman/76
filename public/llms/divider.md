@@ -39,6 +39,7 @@ import { Divider } from '@/components/seventy-six';
 | --- | --- | --- | --- |
 | `label` | `string` | — | Mono uppercase text in the rule. Omit for a plain hairline. |
 | `align` | `'start' | 'center'` | `'center'` | start keeps the label flush left and runs the rule past it. |
+| `…rest` | `HTMLAttributes<HTMLElement>` | — | id, style, data-*, aria-*, event handlers — spread onto the <hr> or the labelled separator. className is appended. |
 
 ## Accessibility
 

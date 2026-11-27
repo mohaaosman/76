@@ -96,6 +96,7 @@ One line waiting to save, one saving, one rejected by the server with the fix, o
 | `postingLabel` | `string` | `t.working` | The button label while posting: "Posting…". |
 | `summary` | `ReactNode` | — | One soft sentence beside the button: "3 of 5 lines counted". |
 | `disabled` | `boolean` | `false` | The whole receipt is closed: inputs and post disabled. |
+| `…rest / ref` | `HTMLAttributes<HTMLDivElement>` | — | Spread onto the root. ref is a plain prop (React 19) because the component is generic. |
 
 ## Accessibility
 

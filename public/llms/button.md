@@ -68,6 +68,7 @@ Same bones at ≥48px. Press feedback is a seed-tint flash on product buttons; t
 | `loadingLabel` | `string` | `'Working…'` | Label shown while loading — name the operation ("Saving…"). |
 | `iconLeading` | `ReactNode` | — | 16px stroke icon before the label. Icon-only buttons must add <code>aria-label</code>. |
 | `…rest` | `ButtonHTMLAttributes` | — | Everything a native button takes: type, onClick, disabled, aria-*. |
+| `ButtonLink ref` | `Ref<HTMLAnchorElement>` | — | ButtonLink now forwards its ref to the <a>. |
 
 ## Accessibility
 
